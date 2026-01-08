@@ -1,0 +1,2609 @@
+{% comment %}
+  ============================================
+  CYRASOUL - Visual Bundle Builder v2
+  Features: Kesfet Cards, Synergy Map, Achievements
+  Mobile-first design
+  ============================================
+{% endcomment %}
+
+<section
+  id="wellness-architect"
+  class="wellness-architect"
+  data-section-id="{{ section.id }}"
+>
+  <!-- Header -->
+  <div class="wa-header">
+    <span class="wa-header__eyebrow">{{ section.settings.eyebrow_text }}</span>
+    <h2 class="wa-header__title">{{ section.settings.title }}</h2>
+    <p class="wa-header__subtitle">{{ section.settings.subtitle }}</p>
+  </div>
+
+  <div class="wa-container">
+    <!-- Product Grid -->
+    <div class="wa-products" role="region" aria-label="Mevcut urunler">
+      {% assign collection = collections[section.settings.collection] %}
+      {% for product in collection.products limit: section.settings.product_limit %}
+        <article
+          class="wa-product-card"
+          data-product-id="{{ product.id }}"
+          data-product-handle="{{ product.handle }}"
+          data-product-title="{{ product.title }}"
+          data-product-price="{{ product.price }}"
+          data-product-image="{{ product.featured_image | image_url: width: 400 }}"
+          data-variant-id="{{ product.first_available_variant.id }}"
+          data-product-url="{{ product.url }}"
+          tabindex="0"
+          role="button"
+          aria-label="{{ product.title }} urununu ritueline ekle"
+        >
+          <div class="wa-product-card__image-wrapper">
+            <img
+              src="{{ product.featured_image | image_url: width: 400 }}"
+              alt="{{ product.title }}"
+              class="wa-product-card__image"
+              loading="lazy"
+            >
+          </div>
+
+          <div class="wa-product-card__content">
+            <h3 class="wa-product-card__title">{{ product.title }}</h3>
+            <p class="wa-product-card__price">{{ product.price | money }}</p>
+          </div>
+
+          <!-- Kesfet Button -->
+          <button class="wa-product-card__kesfet-btn" data-kesfet-toggle aria-label="Urun detaylarini kesfet">
+            <span>Kesfet</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          <!-- Kesfet Drawer -->
+          <div class="wa-product-card__drawer" aria-hidden="true">
+            <div class="wa-product-card__drawer-tabs">
+              <button class="wa-tab wa-tab--active" data-tab="benefits">Faydalar</button>
+              <button class="wa-tab" data-tab="ingredients">Icindekiler</button>
+              <button class="wa-tab" data-tab="science">Bilim</button>
+            </div>
+            <div class="wa-product-card__drawer-content"></div>
+          </div>
+
+          <button class="wa-product-card__add-btn" aria-label="{{ product.title }} ekle">
+            <svg class="wa-product-card__icon-add" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <svg class="wa-product-card__icon-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </button>
+        </article>
+      {% endfor %}
+    </div>
+
+    <!-- Desktop Sidebar -->
+    <aside class="wa-sidebar">
+      <div class="wa-sidebar__header">
+        <h3 class="wa-sidebar__title">Rituel Kutunuz</h3>
+        <span class="wa-sidebar__count">0 urun</span>
+      </div>
+
+      <!-- Selected Items -->
+      <div class="wa-sidebar__items-container">
+        <div class="wa-sidebar__empty-state">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          </svg>
+          <p>Rituelinizi olusturmak icin<br>urun secin</p>
+        </div>
+        <div class="wa-sidebar__items"></div>
+      </div>
+
+      <!-- Synergy Map (v2) -->
+      <div class="wa-synergy-map" style="display: none;">
+        <div class="wa-synergy-map__header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+          </svg>
+          <span>Sinerji Haritasi</span>
+        </div>
+        <div class="wa-synergy-map__scroll">
+          <svg class="wa-synergy-map__svg" viewBox="0 0 350 180"></svg>
+          <div class="wa-synergy-map__labels"></div>
+        </div>
+      </div>
+
+      <!-- Achievement Progress (v2) -->
+      <div class="wa-achievement-progress" style="display: none;">
+        <div class="wa-achievement-progress__header">
+          <span class="wa-achievement-progress__title">Basarimlar</span>
+          <span class="wa-achievement-progress__count">0/5</span>
+        </div>
+        <div class="wa-achievement-progress__bar">
+          <div class="wa-achievement-progress__fill" style="width: 0%"></div>
+        </div>
+        <div class="wa-achievement-progress__badges"></div>
+      </div>
+
+      <!-- Recommendation Box -->
+      <div class="wa-recommendation" style="display: none;">
+        <div class="wa-recommendation__header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+          </svg>
+          <span>Akilli Oneri</span>
+        </div>
+        <div class="wa-recommendation__content">
+          <div class="wa-recommendation__product">
+            <img src="" alt="" class="wa-recommendation__image">
+            <div class="wa-recommendation__info">
+              <span class="wa-recommendation__label">Onerilen Urun</span>
+              <span class="wa-recommendation__name"></span>
+            </div>
+          </div>
+          <div class="wa-recommendation__bundle-name"></div>
+          <p class="wa-recommendation__reason"></p>
+          <button class="wa-recommendation__add-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Onerilen Urunu Ekle
+          </button>
+        </div>
+      </div>
+
+      <!-- Synergy Explanation -->
+      <div class="wa-synergy-explanation" style="display: none;"></div>
+
+      <!-- Ritual Guide -->
+      <div class="wa-ritual-guide" style="display: none;">
+        <div class="wa-ritual-guide__header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>Kullanim Rehberi</span>
+        </div>
+        <div class="wa-ritual-guide__content"></div>
+      </div>
+
+      <!-- Discount Steps -->
+      <div class="wa-sidebar__synergy">
+        <div class="wa-sidebar__synergy-header">
+          <span>Indirim Seviyesi</span>
+          <span class="wa-sidebar__synergy-text">Baslayin</span>
+        </div>
+        <div class="wa-steps">
+          <div class="wa-step" data-step="1"><span class="wa-step__dot"></span><span class="wa-step__label"></span></div>
+          <div class="wa-step" data-step="2"><span class="wa-step__dot"></span><span class="wa-step__label">%15</span></div>
+          <div class="wa-step" data-step="3"><span class="wa-step__dot"></span><span class="wa-step__label">%20</span></div>
+          <div class="wa-step" data-step="4"><span class="wa-step__dot"></span><span class="wa-step__label">%25</span></div>
+          <div class="wa-step" data-step="5"><span class="wa-step__dot"></span><span class="wa-step__label">%30</span></div>
+        </div>
+      </div>
+
+      <!-- Pricing -->
+      <div class="wa-sidebar__pricing">
+        <div class="wa-sidebar__price-row">
+          <span>Ara Toplam</span>
+          <span class="wa-sidebar__subtotal">₺0</span>
+        </div>
+        <div class="wa-sidebar__price-row wa-sidebar__price-row--discount" style="display: none;">
+          <span>Paket Indirimi</span>
+          <span class="wa-sidebar__discount">-₺0</span>
+        </div>
+        <div class="wa-sidebar__price-row wa-sidebar__price-row--total">
+          <span>Toplam</span>
+          <span class="wa-sidebar__total">₺0</span>
+        </div>
+      </div>
+
+      <button class="wa-sidebar__checkout-btn" disabled>
+        <span class="wa-sidebar__checkout-text">Odemeye Git</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </aside>
+  </div>
+
+  <!-- Mobile Dock -->
+  <div class="wa-dock wa-dock--empty">
+    <div class="wa-dock__handle"><span></span></div>
+
+    <div class="wa-dock__collapsed">
+      <div class="wa-dock__collapsed-left">
+        <div class="wa-dock__preview">
+          <span class="wa-dock__empty-text">Urun Secin</span>
+          <div class="wa-dock__thumbnails"></div>
+        </div>
+        <div class="wa-dock__collapsed-info">
+          <span class="wa-dock__item-count">0 urun</span>
+          <span class="wa-dock__synergy-badge">Baslayin</span>
+        </div>
+      </div>
+      <div class="wa-dock__collapsed-right">
+        <div class="wa-dock__mini-total">₺0</div>
+        <button class="wa-dock__expand-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Synergy Summary -->
+    <div class="wa-dock__synergy-summary" style="display: none;">
+      <div class="wa-steps wa-steps--mini">
+        <span class="wa-step" data-step="1" title="%15"></span>
+        <span class="wa-step" data-step="2" title="%20"></span>
+        <span class="wa-step" data-step="3" title="%25"></span>
+        <span class="wa-step" data-step="4" title="%30"></span>
+        <span class="wa-step" data-step="5" title="MAX"></span>
+      </div>
+      <p class="wa-dock__synergy-summary-text"></p>
+    </div>
+
+    <!-- Mobile Expanded View -->
+    <div class="wa-dock__expanded">
+      <div class="wa-dock__expanded-header">
+        <h3>Ritueliniz</h3>
+        <button class="wa-dock__close-btn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="wa-dock__items"></div>
+
+      <!-- Mobile Synergy Map (v2) -->
+      <div class="wa-dock__synergy-map" style="display: none;">
+        <div class="wa-synergy-map__header">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+          </svg>
+          <span>Sinerji Haritasi</span>
+        </div>
+        <div class="wa-synergy-map__scroll">
+          <svg class="wa-synergy-map__svg" viewBox="0 0 350 180"></svg>
+          <div class="wa-synergy-map__labels"></div>
+        </div>
+      </div>
+
+      <!-- Mobile Achievement Progress (v2) -->
+      <div class="wa-dock__achievement-progress" style="display: none;">
+        <div class="wa-achievement-progress__header">
+          <span class="wa-achievement-progress__title">Basarimlar</span>
+          <span class="wa-achievement-progress__count">0/5</span>
+        </div>
+        <div class="wa-achievement-progress__bar">
+          <div class="wa-achievement-progress__fill" style="width: 0%"></div>
+        </div>
+        <div class="wa-achievement-progress__badges"></div>
+      </div>
+
+      <!-- Mobile Recommendation -->
+      <div class="wa-dock__recommendation" style="display: none;">
+        <div class="wa-dock__recommendation-header">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+          </svg>
+          <span>Onerilen</span>
+        </div>
+        <div class="wa-dock__recommendation-content">
+          <img src="" alt="" class="wa-dock__recommendation-img">
+          <div class="wa-dock__recommendation-info">
+            <span class="wa-dock__recommendation-name"></span>
+            <span class="wa-dock__recommendation-bundle"></span>
+          </div>
+          <button class="wa-dock__recommendation-add">Ekle</button>
+        </div>
+      </div>
+
+      <!-- Mobile Synergy Explanation -->
+      <div class="wa-dock__synergy-explanation" style="display: none;"></div>
+
+      <!-- Mobile Ritual Guide -->
+      <div class="wa-dock__ritual" style="display: none;"></div>
+
+      <!-- Mobile Steps -->
+      <div class="wa-dock__synergy">
+        <div class="wa-dock__synergy-header">
+          <span>Indirim Seviyesi</span>
+          <span class="wa-dock__synergy-text">Baslayin</span>
+        </div>
+        <div class="wa-steps">
+          <div class="wa-step" data-step="1"><span class="wa-step__dot"></span><span class="wa-step__label"></span></div>
+          <div class="wa-step" data-step="2"><span class="wa-step__dot"></span><span class="wa-step__label">%15</span></div>
+          <div class="wa-step" data-step="3"><span class="wa-step__dot"></span><span class="wa-step__label">%20</span></div>
+          <div class="wa-step" data-step="4"><span class="wa-step__dot"></span><span class="wa-step__label">%25</span></div>
+          <div class="wa-step" data-step="5"><span class="wa-step__dot"></span><span class="wa-step__label">%30</span></div>
+        </div>
+      </div>
+
+      <!-- Mobile Pricing -->
+      <div class="wa-dock__pricing">
+        <div class="wa-dock__price-row">
+          <span>Ara Toplam</span>
+          <span class="wa-dock__subtotal">₺0</span>
+        </div>
+        <div class="wa-dock__price-row wa-dock__price-row--discount" style="display: none;">
+          <span>Indirim</span>
+          <span class="wa-dock__discount">-₺0</span>
+        </div>
+        <div class="wa-dock__price-row wa-dock__price-row--total">
+          <span>Toplam</span>
+          <span class="wa-dock__total">₺0</span>
+        </div>
+      </div>
+
+      <button class="wa-dock__checkout-btn" disabled>
+        Odemeye Git
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="wa-particles"></div>
+</section>
+
+<style>
+  :root {
+    --wa-black: #000000;
+    --wa-dark: #111111;
+    --wa-gray-900: #1a1a1a;
+    --wa-gray-800: #2d2d2d;
+    --wa-gray-700: #404040;
+    --wa-gray-600: #525252;
+    --wa-gray-500: #737373;
+    --wa-gray-400: #a3a3a3;
+    --wa-gray-300: #d4d4d4;
+    --wa-gray-200: #e5e5e5;
+    --wa-gray-100: #f5f5f5;
+    --wa-white: #ffffff;
+    --wa-success: #22c55e;
+    --wa-gold: #FFD700;
+    --wa-radius: 12px;
+    --wa-radius-sm: 8px;
+    --wa-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    --wa-shadow-lg: 0 4px 20px rgba(0,0,0,0.15);
+    --wa-transition: 0.2s ease;
+    --wa-dock-height: 85px;
+  }
+
+  .wellness-architect {
+    position: relative;
+    padding: 2rem 1rem;
+    padding-bottom: calc(var(--wa-dock-height) + 2rem);
+    background: var(--wa-white);
+    min-height: 100vh;
+    font-family: inherit;
+    color: var(--wa-black);
+  }
+
+  .wellness-architect * { box-sizing: border-box; }
+
+  /* Header */
+  .wa-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    max-width: 500px;
+    margin-inline: auto;
+  }
+
+  .wa-header__eyebrow {
+    display: inline-block;
+    background: var(--wa-black);
+    color: var(--wa-white);
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 1rem;
+  }
+
+  .wa-header__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--wa-black);
+    margin: 0 0 0.75rem 0;
+    letter-spacing: -0.02em;
+  }
+
+  .wa-header__subtitle {
+    font-size: 0.9rem;
+    color: var(--wa-gray-500);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Container */
+  .wa-container { max-width: 1200px; margin: 0 auto; }
+
+  /* Product Grid */
+  .wa-products {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  /* Product Card */
+  .wa-product-card {
+    position: relative;
+    background: var(--wa-white);
+    border: 2px solid var(--wa-gray-200);
+    border-radius: var(--wa-radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all var(--wa-transition);
+  }
+
+  .wa-product-card:hover { border-color: var(--wa-gray-300); }
+  .wa-product-card:active { transform: scale(0.98); }
+
+  .wa-product-card--added {
+    border-color: var(--wa-black);
+    background: var(--wa-gray-100);
+  }
+
+  .wa-product-card--added .wa-product-card__add-btn { background: var(--wa-success); }
+  .wa-product-card--added .wa-product-card__icon-add { display: none; }
+  .wa-product-card--added .wa-product-card__icon-check { display: block; }
+  .wa-product-card__icon-check { display: none; }
+
+  .wa-product-card--recommended {
+    border-color: var(--wa-black);
+    box-shadow: 0 0 0 1px var(--wa-black);
+  }
+
+  .wa-product-card--recommended::before {
+    content: 'Onerilen';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--wa-black);
+    color: var(--wa-white);
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    z-index: 5;
+  }
+
+  .wa-product-card--loading { pointer-events: none; opacity: 0.7; }
+
+  .wa-product-card__image-wrapper {
+    aspect-ratio: 1;
+    background: var(--wa-gray-100);
+    overflow: hidden;
+  }
+
+  .wa-product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--wa-transition);
+  }
+
+  .wa-product-card:hover .wa-product-card__image { transform: scale(1.03); }
+
+  .wa-product-card__content { padding: 0.75rem; }
+
+  .wa-product-card__title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--wa-black);
+    margin: 0 0 0.25rem 0;
+    line-height: 1.3;
+  }
+
+  .wa-product-card__price {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--wa-gray-500);
+    margin: 0;
+  }
+
+  .wa-product-card__add-btn {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--wa-black);
+    color: var(--wa-white);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--wa-transition);
+    z-index: 2;
+  }
+
+  .wa-product-card__add-btn:hover { transform: scale(1.1); }
+
+  /* Kesfet Button & Drawer */
+  .wa-product-card__kesfet-btn {
+    position: absolute;
+    bottom: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    background: var(--wa-white);
+    border: 1px solid var(--wa-gray-300);
+    border-radius: 16px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--wa-gray-600);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    z-index: 3;
+  }
+
+  .wa-product-card:hover .wa-product-card__kesfet-btn,
+  .wa-product-card--drawer-open .wa-product-card__kesfet-btn { opacity: 1; }
+
+  .wa-product-card__kesfet-btn svg { transition: transform 0.3s ease; }
+  .wa-product-card--drawer-open .wa-product-card__kesfet-btn svg { transform: rotate(180deg); }
+
+  .wa-product-card__drawer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--wa-white);
+    border-top: 1px solid var(--wa-gray-200);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    z-index: 10;
+  }
+
+  .wa-product-card--drawer-open .wa-product-card__drawer { max-height: 250px; }
+
+  .wa-product-card__drawer-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--wa-gray-200);
+    padding: 0 6px;
+  }
+
+  .wa-tab {
+    flex: 1;
+    padding: 8px 4px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--wa-gray-500);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .wa-tab--active {
+    color: var(--wa-black);
+    border-bottom-color: var(--wa-black);
+  }
+
+  .wa-product-card__drawer-content {
+    padding: 10px;
+    max-height: 180px;
+    overflow-y: auto;
+    font-size: 0.7rem;
+  }
+
+  /* Benefit Items */
+  .wa-benefit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--wa-gray-100);
+  }
+
+  .wa-benefit-item:last-child { border-bottom: none; }
+
+  .wa-benefit-icon {
+    width: 22px;
+    height: 22px;
+    background: var(--wa-gray-100);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .wa-benefit-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin: 0 0 2px 0;
+  }
+
+  .wa-benefit-desc {
+    font-size: 0.65rem;
+    color: var(--wa-gray-500);
+    margin: 0;
+  }
+
+  /* Ingredient Items */
+  .wa-ingredient-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--wa-gray-100);
+  }
+
+  .wa-ingredient-name { font-weight: 600; }
+  .wa-ingredient-amount { color: var(--wa-gray-500); font-size: 0.65rem; }
+  .wa-ingredient-benefit { font-size: 0.6rem; color: var(--wa-gray-400); }
+
+  /* Science Content */
+  .wa-science-content { line-height: 1.5; color: var(--wa-gray-600); }
+  .wa-science-title { font-weight: 600; color: var(--wa-black); margin-bottom: 6px; }
+
+  /* Desktop Sidebar - Hidden on mobile */
+  .wa-sidebar { display: none; }
+
+  /* Mobile Dock */
+  .wa-dock {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--wa-white);
+    border-top: 1px solid var(--wa-gray-200);
+    z-index: 999;
+    transition: height 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+    height: var(--wa-dock-height);
+    overflow: hidden;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+  }
+
+  .wa-dock--empty {
+    transform: translateY(100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .wa-dock--expanded {
+    height: 85vh;
+    border-radius: var(--wa-radius) var(--wa-radius) 0 0;
+    border-top: none;
+    box-shadow: var(--wa-shadow-lg);
+    overflow-y: auto;
+  }
+
+  .wa-dock__handle {
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+
+  .wa-dock__handle span {
+    width: 36px;
+    height: 4px;
+    background: var(--wa-gray-300);
+    border-radius: 2px;
+  }
+
+  .wa-dock__collapsed {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    min-height: 50px;
+  }
+
+  .wa-dock--expanded .wa-dock__collapsed { display: none; }
+
+  .wa-dock__collapsed-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .wa-dock__preview {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .wa-dock__empty-text {
+    font-size: 0.85rem;
+    color: var(--wa-gray-500);
+  }
+
+  .wa-dock__thumbnails { display: flex; }
+
+  .wa-dock__thumbnail {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--wa-white);
+    object-fit: cover;
+    margin-left: -6px;
+    box-shadow: var(--wa-shadow);
+  }
+
+  .wa-dock__thumbnail:first-child { margin-left: 0; }
+
+  .wa-dock__collapsed-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .wa-dock__item-count {
+    font-size: 0.7rem;
+    color: var(--wa-gray-500);
+  }
+
+  .wa-dock__synergy-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    background: var(--wa-gray-100);
+    color: var(--wa-gray-600);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .wa-dock__synergy-badge--active {
+    background: var(--wa-black);
+    color: var(--wa-white);
+  }
+
+  .wa-dock__collapsed-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .wa-dock__mini-total {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--wa-black);
+  }
+
+  .wa-dock__expand-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--wa-black);
+    color: var(--wa-white);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobile Synergy Summary */
+  .wa-dock__synergy-summary {
+    padding: 0.25rem 1rem 0.5rem;
+    border-top: 1px solid var(--wa-gray-100);
+  }
+
+  .wa-dock--expanded .wa-dock__synergy-summary { display: none !important; }
+
+  .wa-dock__synergy-summary-text {
+    font-size: 0.65rem;
+    color: var(--wa-gray-600);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  /* Dock Expanded */
+  .wa-dock__expanded {
+    display: none;
+    padding: 0 1rem 1.5rem;
+  }
+
+  .wa-dock--expanded .wa-dock__expanded { display: block; }
+
+  .wa-dock__expanded-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .wa-dock__expanded-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .wa-dock__close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--wa-gray-100);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--wa-gray-600);
+  }
+
+  .wa-dock__items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .wa-dock__item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--wa-gray-100);
+    border-radius: var(--wa-radius-sm);
+  }
+
+  .wa-dock__item-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .wa-dock__item-image {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--wa-radius-sm);
+    object-fit: cover;
+  }
+
+  .wa-dock__item-info { flex: 1; min-width: 0; }
+
+  .wa-dock__item-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 0 0 0.125rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .wa-dock__item-timing {
+    font-size: 0.7rem;
+    color: var(--wa-gray-500);
+    margin: 0;
+  }
+
+  .wa-dock__item-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .wa-dock__item-qty {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: var(--wa-white);
+    border-radius: 6px;
+    padding: 0.25rem;
+  }
+
+  .wa-dock__item-qty-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: none;
+    background: transparent;
+    color: var(--wa-gray-600);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .wa-dock__item-qty-btn:hover { background: var(--wa-gray-100); }
+
+  .wa-dock__item-qty-value {
+    min-width: 20px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .wa-dock__item-remove {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--wa-gray-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wa-dock__item-remove:hover {
+    background: #fee2e2;
+    color: #ef4444;
+  }
+
+  /* Synergy Map */
+  .wa-synergy-map {
+    margin: 1rem 0;
+    background: var(--wa-gray-100);
+    border-radius: var(--wa-radius-sm);
+    overflow: hidden;
+  }
+
+  .wa-synergy-map__header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--wa-black);
+    border-bottom: 1px solid var(--wa-gray-200);
+  }
+
+  .wa-synergy-map__scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    padding: 12px;
+  }
+
+  .wa-synergy-map__svg {
+    min-width: 320px;
+    height: 160px;
+    display: block;
+  }
+
+  .wa-synergy-node__bg {
+    fill: var(--wa-white);
+    stroke: var(--wa-gray-200);
+    stroke-width: 2;
+  }
+
+  .wa-synergy-node__ring {
+    fill: none;
+    stroke: var(--wa-black);
+    stroke-width: 2;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .wa-synergy-node--active .wa-synergy-node__ring { opacity: 1; }
+
+  .wa-synergy-map__labels {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+  }
+
+  .wa-synergy-label {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  }
+
+  .wa-synergy-node--selected .wa-synergy-node__bg {
+    stroke: var(--wa-black);
+    stroke-width: 3;
+  }
+
+  .wa-synergy-node--inactive {
+    opacity: 0.4;
+  }
+
+  .wa-synergy-node__glow {
+    fill: none;
+    stroke: var(--wa-black);
+    stroke-width: 2;
+    opacity: 0.3;
+    animation: node-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes node-glow {
+    0%, 100% { opacity: 0.2; r: attr(r); }
+    50% { opacity: 0.5; }
+  }
+
+  .wa-synergy-node__label {
+    font-size: 9px;
+    font-weight: 600;
+    fill: var(--wa-gray-600);
+  }
+
+  .wa-synergy-node--selected .wa-synergy-node__label {
+    fill: var(--wa-black);
+  }
+
+  .wa-synergy-line {
+    stroke-width: 2;
+    opacity: 0.6;
+    stroke-dasharray: 6 4;
+    animation: line-dash 1s linear infinite;
+  }
+
+  @keyframes line-dash {
+    to { stroke-dashoffset: -10; }
+  }
+
+  .wa-synergy-line--strong { stroke-width: 3; opacity: 0.8; }
+  .wa-synergy-line--medium { stroke-width: 2; opacity: 0.7; }
+
+  /* Achievement System */
+  .wa-achievement-progress {
+    margin: 1rem 0;
+    padding: 12px;
+    background: var(--wa-gray-100);
+    border-radius: var(--wa-radius-sm);
+  }
+
+  .wa-achievement-progress__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .wa-achievement-progress__title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--wa-black);
+  }
+
+  .wa-achievement-progress__count {
+    font-size: 0.7rem;
+    color: var(--wa-gray-500);
+  }
+
+  .wa-achievement-progress__bar {
+    height: 6px;
+    background: var(--wa-gray-200);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .wa-achievement-progress__fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--wa-gold), #FFA500);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+
+  .wa-achievement-progress__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .wa-achievement-badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--wa-gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.4;
+    transition: all 0.3s ease;
+  }
+
+  .wa-achievement-badge--unlocked {
+    background: var(--wa-gold);
+    opacity: 1;
+    box-shadow: 0 2px 6px rgba(255, 215, 0, 0.4);
+  }
+
+  .wa-achievement-badge svg { width: 14px; height: 14px; }
+
+  /* Achievement Notification */
+  .wa-achievement-notification {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--wa-black);
+    color: var(--wa-white);
+    padding: 10px 16px;
+    border-radius: var(--wa-radius);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 10000;
+  }
+
+  .wa-achievement-notification--visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .wa-achievement-notification--hiding {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+
+  .wa-achievement-notification__icon {
+    width: 36px;
+    height: 36px;
+    background: var(--wa-gray-800);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .wa-achievement-notification__icon--locked { background: var(--wa-gray-600); }
+
+  .wa-achievement-notification__icon--unlocking {
+    background: var(--wa-gold);
+    animation: unlock-bounce 0.5s ease;
+  }
+
+  @keyframes unlock-bounce {
+    0% { transform: rotate(-30deg) scale(0.8); }
+    50% { transform: rotate(15deg) scale(1.2); }
+    100% { transform: rotate(0deg) scale(1); }
+  }
+
+  .wa-achievement-notification__icon svg { stroke: var(--wa-white); }
+  .wa-achievement-notification__icon--unlocking svg { stroke: var(--wa-black); }
+
+  .wa-achievement-notification__label {
+    display: block;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--wa-gold);
+    margin-bottom: 2px;
+  }
+
+  .wa-achievement-notification__title {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  /* Confetti */
+  .wa-confetti {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 10001;
+    animation: confetti-fly 1s ease-out forwards;
+  }
+
+  @keyframes confetti-fly {
+    to {
+      opacity: 0;
+      transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0);
+    }
+  }
+
+  /* Step Indicators */
+  .wa-steps {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  .wa-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    max-width: 60px;
+  }
+
+  .wa-steps--mini {
+    gap: 8px;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 4px 0 2px 0;
+  }
+
+  .wa-steps--mini .wa-step {
+    display: block;
+    flex: none;
+    width: 12px;
+    height: 12px;
+    max-width: none;
+    border-radius: 50%;
+    background: var(--wa-gray-300);
+    transition: all 0.3s ease;
+  }
+
+  .wa-steps--mini .wa-step.active {
+    background: #000;
+    transform: scale(1.15);
+  }
+
+  .wa-step__dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--wa-gray-200);
+    border: 3px solid var(--wa-gray-300);
+    transition: all 0.3s ease;
+  }
+
+  .wa-step.active .wa-step__dot {
+    background: #000;
+    border-color: #000;
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+
+  .wa-step__label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--wa-gray-400);
+    margin-top: 4px;
+    transition: color 0.3s ease;
+  }
+
+  .wa-step.active .wa-step__label { color: #000; }
+
+  /* Recommendation, Synergy Explanation, Ritual Guide - Dock */
+  .wa-dock__recommendation,
+  .wa-dock__synergy-explanation,
+  .wa-dock__ritual {
+    background: var(--wa-gray-100);
+    border-radius: var(--wa-radius-sm);
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+  }
+
+  .wa-dock__synergy-explanation {
+    background: linear-gradient(135deg, var(--wa-gray-100) 0%, #fafafa 100%);
+    border: 1px solid var(--wa-gray-200);
+  }
+
+  .wa-dock__synergy {
+    margin-bottom: 1rem;
+  }
+
+  .wa-dock__synergy-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .wa-dock__synergy-header span:first-child { color: var(--wa-gray-500); }
+  .wa-dock__synergy-text { font-weight: 600; color: var(--wa-black); }
+
+  /* Dock Pricing */
+  .wa-dock__pricing { margin-bottom: 1rem; }
+
+  .wa-dock__price-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    padding: 0.375rem 0;
+    color: var(--wa-gray-500);
+  }
+
+  .wa-dock__price-row--discount { color: var(--wa-success); }
+
+  .wa-dock__price-row--total {
+    font-weight: 700;
+    color: var(--wa-black);
+    border-top: 1px solid var(--wa-gray-200);
+    padding-top: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .wa-dock__checkout-btn {
+    width: 100%;
+    height: 48px;
+    background: var(--wa-black);
+    color: var(--wa-white);
+    border: none;
+    border-radius: var(--wa-radius-sm);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wa-dock__checkout-btn:disabled {
+    background: var(--wa-gray-300);
+    cursor: not-allowed;
+  }
+
+  .wa-dock__checkout-btn:not(:disabled):hover { background: var(--wa-gray-800); }
+
+  /* Flying Ghost & Particles */
+  .wa-flying-ghost {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: var(--wa-radius-sm);
+    box-shadow: var(--wa-shadow-lg);
+  }
+
+  .wa-particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  .wa-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--wa-black);
+    border-radius: 50%;
+    animation: particleFly 0.8s ease-out forwards;
+  }
+
+  @keyframes particleFly {
+    to {
+      opacity: 0;
+      transform: translate(var(--tx), var(--ty)) scale(0);
+    }
+  }
+
+  /* ========== DESKTOP ========== */
+  @media (min-width: 768px) {
+    .wellness-architect { padding: 3rem 2rem; }
+    .wa-header__title { font-size: 2.25rem; }
+
+    .wa-container {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .wa-products {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .wa-product-card__title { font-size: 0.85rem; }
+    .wa-dock { display: none; }
+
+    .wa-sidebar {
+      display: block;
+      position: sticky;
+      top: 20px;
+      background: var(--wa-white);
+      border: 1px solid var(--wa-gray-200);
+      border-radius: var(--wa-radius);
+      padding: 1.25rem;
+    }
+
+    .wa-sidebar__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .wa-sidebar__title { font-size: 1rem; font-weight: 600; margin: 0; }
+    .wa-sidebar__count { font-size: 0.75rem; color: var(--wa-gray-500); }
+
+    .wa-sidebar__items-container { min-height: 100px; margin-bottom: 1rem; }
+
+    .wa-sidebar__empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100px;
+      color: var(--wa-gray-400);
+      text-align: center;
+    }
+
+    .wa-sidebar__empty-state p { margin: 0.75rem 0 0; font-size: 0.8rem; line-height: 1.4; }
+    .wa-sidebar--has-items .wa-sidebar__empty-state { display: none; }
+
+    .wa-sidebar__items {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .wa-sidebar__item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: var(--wa-gray-100);
+      border-radius: var(--wa-radius-sm);
+    }
+
+    .wa-sidebar__item-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .wa-sidebar__item-image {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--wa-radius-sm);
+      object-fit: cover;
+    }
+
+    .wa-sidebar__item-info { flex: 1; min-width: 0; }
+    .wa-sidebar__item-title { font-size: 0.85rem; font-weight: 600; margin: 0 0 0.125rem; }
+    .wa-sidebar__item-timing { font-size: 0.7rem; color: var(--wa-gray-500); margin: 0; }
+
+    .wa-sidebar__item-controls { display: flex; align-items: center; gap: 0.5rem; }
+
+    .wa-sidebar__item-qty {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: var(--wa-white);
+      border-radius: 6px;
+      padding: 0.25rem;
+    }
+
+    .wa-sidebar__item-qty-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      border: none;
+      background: transparent;
+      color: var(--wa-gray-600);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .wa-sidebar__item-qty-btn:hover { background: var(--wa-gray-200); }
+    .wa-sidebar__item-qty-value { min-width: 20px; text-align: center; font-size: 0.8rem; font-weight: 600; }
+
+    .wa-sidebar__item-remove {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--wa-gray-400);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wa-sidebar__item-remove:hover { background: #fee2e2; color: #ef4444; }
+
+    /* Sidebar Boxes */
+    .wa-recommendation,
+    .wa-synergy-explanation,
+    .wa-ritual-guide {
+      background: var(--wa-gray-100);
+      border-radius: var(--wa-radius-sm);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .wa-synergy-explanation {
+      background: linear-gradient(135deg, var(--wa-gray-100) 0%, #fafafa 100%);
+      border: 1px solid var(--wa-gray-200);
+    }
+
+    .wa-recommendation { border: 1px dashed var(--wa-gray-300); }
+
+    .wa-recommendation__header,
+    .wa-ritual-guide__header {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--wa-gray-600);
+      margin-bottom: 0.75rem;
+    }
+
+    .wa-recommendation__product {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .wa-recommendation__image {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--wa-radius-sm);
+      object-fit: cover;
+    }
+
+    .wa-recommendation__info { flex: 1; }
+    .wa-recommendation__label { display: block; font-size: 0.65rem; text-transform: uppercase; color: var(--wa-gray-500); margin-bottom: 0.125rem; }
+    .wa-recommendation__name { display: block; font-size: 0.9rem; font-weight: 600; color: var(--wa-black); }
+
+    .wa-recommendation__bundle-name {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.375rem 0.625rem;
+      background: var(--wa-white);
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+
+    .wa-recommendation__reason { font-size: 0.75rem; color: var(--wa-gray-600); line-height: 1.4; margin: 0 0 0.75rem; }
+
+    .wa-recommendation__add-btn {
+      width: 100%;
+      padding: 0.625rem;
+      background: var(--wa-black);
+      color: var(--wa-white);
+      border: none;
+      border-radius: var(--wa-radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.375rem;
+      font-family: inherit;
+    }
+
+    .wa-recommendation__add-btn:hover { background: var(--wa-gray-800); }
+
+    .wa-ritual-guide__content { font-size: 0.8rem; }
+
+    .wa-ritual-guide__item {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--wa-gray-200);
+    }
+
+    .wa-ritual-guide__item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .wa-ritual-guide__time { font-weight: 600; color: var(--wa-black); min-width: 55px; }
+    .wa-ritual-guide__text { color: var(--wa-gray-600); line-height: 1.4; }
+    .wa-ritual-guide__product { font-weight: 600; color: var(--wa-black); }
+
+    /* Sidebar Synergy */
+    .wa-sidebar__synergy { margin-bottom: 1rem; }
+
+    .wa-sidebar__synergy-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .wa-sidebar__synergy-header span:first-child { color: var(--wa-gray-500); }
+    .wa-sidebar__synergy-text { font-weight: 600; color: var(--wa-black); }
+
+    /* Sidebar Pricing */
+    .wa-sidebar__pricing { margin-bottom: 1rem; }
+
+    .wa-sidebar__price-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      padding: 0.5rem 0;
+      color: var(--wa-gray-500);
+    }
+
+    .wa-sidebar__price-row--discount { color: var(--wa-success); }
+
+    .wa-sidebar__price-row--total {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--wa-black);
+      border-top: 1px solid var(--wa-gray-200);
+      padding-top: 0.75rem;
+      margin-top: 0.25rem;
+    }
+
+    .wa-sidebar__checkout-btn {
+      width: 100%;
+      height: 48px;
+      background: var(--wa-black);
+      color: var(--wa-white);
+      border: none;
+      border-radius: var(--wa-radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--wa-transition);
+      font-family: inherit;
+    }
+
+    .wa-sidebar__checkout-btn:hover:not(:disabled) { background: var(--wa-gray-800); }
+    .wa-sidebar__checkout-btn:disabled { background: var(--wa-gray-300); cursor: not-allowed; }
+  }
+
+  @media (min-width: 1024px) {
+    .wa-container { grid-template-columns: 1fr 400px; gap: 2.5rem; }
+  }
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  // ============================================
+  // ICON REGISTRY (DRY)
+  // ============================================
+  const ICONS = {
+    close: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>',
+    lightning: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>',
+    clock: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>',
+    star: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path></svg>',
+    lock: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg>',
+    unlock: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 019.9-1"></path></svg>',
+    moon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>',
+    sun: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>',
+    sparkle: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"></path></svg>',
+    trophy: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 22V8a4 4 0 0 1 8 0v14"></path></svg>'
+  };
+
+  // ============================================
+  // EXTENDED PRODUCT DATA (v2)
+  // ============================================
+  const EXTENDED_PRODUCT_DATA = {
+    'dreamglow': {
+      name: 'DreamGlow',
+      timing: 'Uykudan 45 dk once',
+      category: 'night',
+      benefits: [
+        { icon: 'moon', title: 'Derin Uyku', description: 'Uyku kalitesini destekler' },
+        { icon: 'sparkle', title: 'Cilt Onarimi', description: 'Gece kolajen sentezini destekler' },
+        { icon: 'clock', title: 'Gece Yenilenmesi', description: 'Hucre yenilenmesine katki saglar' }
+      ],
+      ingredients: [
+        { name: 'Tip 1&3 Kolajen', amount: '5g', benefit: 'Cilt elastikiyeti' },
+        { name: 'Magnezyum', amount: '300mg', benefit: 'Kas gevsetici' },
+        { name: 'L-Theanine', amount: '200mg', benefit: 'Zihinsel sakinlik' },
+        { name: 'Vitamin C', amount: '80mg', benefit: 'Kolajen sentezi' }
+      ],
+      science: {
+        title: 'Nasil Calisir?',
+        description: 'Sirkadiyen ritminize uygun formul. Magnezyum GABA reseptorlerini aktive eder, L-Theanine alfa beyin dalgalarini artirir. Kolajen peptitleri uyku sirasinda cildin dogal onarim surecini destekler.'
+      }
+    },
+    'dailyglow': {
+      name: 'DailyGlow',
+      timing: 'Kahvalti sonrasi',
+      category: 'morning',
+      benefits: [
+        { icon: 'sun', title: 'Gun Boyu Enerji', description: 'Hucresel enerji uretimini destekler' },
+        { icon: 'sparkle', title: 'Cilt Parlaklik', description: 'Iceriden gelen isilti' },
+        { icon: 'lightning', title: 'Antioksidan Koruma', description: 'Serbest radikallere karsi savunma' }
+      ],
+      ingredients: [
+        { name: 'Hyaluronik Asit', amount: '120mg', benefit: 'Cilt nemlendirme' },
+        { name: 'Vitamin C', amount: '500mg', benefit: 'Kolajen destegi' },
+        { name: 'Biotin', amount: '2500mcg', benefit: 'Sac ve tirnak sagligi' },
+        { name: 'CoQ10', amount: '100mg', benefit: 'Hucresel enerji' }
+      ],
+      science: {
+        title: 'Nasil Calisir?',
+        description: 'Gunduz formulu cildi dis faktorlere karsi korur. Hyaluronik asit nem tutmaya yardimci olur, Vitamin C kolajen sentezini ve antioksidan savunmayi destekler.'
+      }
+    },
+    'mindfuel': {
+      name: 'MindFuel',
+      timing: 'Kahvalti sonrasi',
+      category: 'morning',
+      benefits: [
+        { icon: 'lightning', title: 'Zihinsel Netlik', description: 'Konsantrasyonu destekler' },
+        { icon: 'clock', title: 'Uzun Sureli Odak', description: 'Gun boyu dikkat destegi' },
+        { icon: 'sparkle', title: 'Hafiza Destegi', description: 'Bilissel fonksiyonlara katki' }
+      ],
+      ingredients: [
+        { name: 'L-Tyrosine', amount: '500mg', benefit: 'Norotransmitter oncusu' },
+        { name: 'Ginkgo Biloba', amount: '120mg', benefit: 'Beyin kan akisi' },
+        { name: 'Panax Ginseng', amount: '200mg', benefit: 'Mental dayaniklilik' },
+        { name: 'B12 Vitamini', amount: '1000mcg', benefit: 'Sinir sistemi destegi' }
+      ],
+      science: {
+        title: 'Nasil Calisir?',
+        description: 'L-Tyrosine dopamin oncusudur ve motivasyonu destekler. Ginkgo Biloba beyin kan akisini artirarak oksijen ve besin tasimaciligi saglar. Ginseng adaptojenik etkileriyle stres altinda performans saglar.'
+      }
+    },
+    'thechill': {
+      name: 'TheChill',
+      timing: 'Aksam yemegi sonrasi',
+      category: 'night',
+      benefits: [
+        { icon: 'moon', title: 'Stres Azaltma', description: 'Gerginligi hafifletmeye yardimci olur' },
+        { icon: 'sparkle', title: 'Zihinsel Sakinlik', description: 'Huzurlu bir ruh hali' },
+        { icon: 'clock', title: 'Rahat Gecis', description: 'Uykuya gecisi kolaylastirir' }
+      ],
+      ingredients: [
+        { name: 'Ashwagandha', amount: '600mg', benefit: 'Kortizol dengeleme' },
+        { name: 'L-Theanine', amount: '200mg', benefit: 'Sakinlik' },
+        { name: 'Magnezyum', amount: '200mg', benefit: 'Kas gevsetme' },
+        { name: 'GABA', amount: '250mg', benefit: 'Sinirsel rahatlama' }
+      ],
+      science: {
+        title: 'Nasil Calisir?',
+        description: 'Ashwagandha adaptojenik etkileriyle kortizol seviyelerini dengelemeye yardimci olur. L-Theanine kafein olmadan sakinlik saglar. GABA inhibitor norotransmitter olarak asiri uyarilmayi azaltir.'
+      }
+    },
+    'reset-button': {
+      name: 'Reset Button',
+      timing: 'Ogle yemegi sonrasi',
+      category: 'noon',
+      benefits: [
+        { icon: 'sparkle', title: 'Detoks Destegi', description: 'Karaciger fonksiyonlarini destekler' },
+        { icon: 'lightning', title: 'Metabolizma', description: 'Metabolik sureclere katki' },
+        { icon: 'sun', title: 'Hafiflik Hissi', description: 'Siskinlik ve agirligi azaltir' }
+      ],
+      ingredients: [
+        { name: 'Deve Dikeni', amount: '250mg', benefit: 'Karaciger koruma' },
+        { name: 'Enginar', amount: '400mg', benefit: 'Safra akisi' },
+        { name: 'Karahindiba', amount: '300mg', benefit: 'Su dengeleme' },
+        { name: 'Zerdecal', amount: '500mg', benefit: 'Anti-inflamatuar' }
+      ],
+      science: {
+        title: 'Nasil Calisir?',
+        description: 'Deve Dikeni (Silymarin) karaciger hucrelerini korur ve yenilenmelerine katki saglar. Enginar safra uretimini destekler, sindirim ve yag metabolizmasina yardimci olur. Zerdecal guclu antioksidan ve anti-inflamatuar etki saglar.'
+      }
+    }
+  };
+
+  // ============================================
+  // SYNERGY DATA
+  // ============================================
+  const SYNERGY_MAP = {
+    'dreamglow': { name: 'DreamGlow', timing: 'Uykudan 45 dk once', tip: '1 olcek tozu ilik suyla karistirin.', category: 'night' },
+    'dailyglow': { name: 'DailyGlow', timing: 'Kahvalti sonrasi', tip: 'Tok karnina 1 kapsul. Isilti iceriden baslar.', category: 'morning' },
+    'mindfuel': { name: 'MindFuel', timing: 'Kahvalti sonrasi', tip: 'Tok karnina alin. Kahveden etkili odaklanma.', category: 'morning' },
+    'thechill': { name: 'TheChill', timing: 'Aksam yemegi sonrasi', tip: 'Uykudan 1-2 saat once gevsemek icin.', category: 'night' },
+    'reset-button': { name: 'Reset Button', timing: 'Ogle yemegi sonrasi', tip: 'Bol su ile tok karnina.', category: 'noon' }
+  };
+
+  const SYNERGY_CONNECTIONS = {
+    'dailyglow+dreamglow': { label: '24 Saat Cilt', strength: 'strong', color: '#8B5CF6' },
+    'dailyglow+mindfuel': { label: 'Power Morning', strength: 'strong', color: '#3B82F6' },
+    'dailyglow+reset-button': { label: 'Detox & Glow', strength: 'medium', color: '#10B981' },
+    'dailyglow+thechill': { label: 'Denge Paketi', strength: 'medium', color: '#6366F1' },
+    'dreamglow+mindfuel': { label: 'Smart Beauty', strength: 'medium', color: '#EC4899' },
+    'dreamglow+reset-button': { label: 'Gece Terapisi', strength: 'medium', color: '#8B5CF6' },
+    'dreamglow+thechill': { label: 'Uyku Ritueli', strength: 'strong', color: '#6366F1' },
+    'mindfuel+reset-button': { label: 'Berrak Zihin', strength: 'medium', color: '#14B8A6' },
+    'mindfuel+thechill': { label: 'Zen Performans', strength: 'strong', color: '#10B981' },
+    'reset-button+thechill': { label: 'Tam Reset', strength: 'medium', color: '#F59E0B' }
+  };
+
+  const SYNERGY_EXPLANATIONS = {
+    'dailyglow+dreamglow': { title: '7/24 Guzellik Kiti', benefit: 'Kesintisiz cilt onarimi', detail: 'Gunduz cildinizi koruyun, gece uykuda onarin.' },
+    'dailyglow+mindfuel': { title: 'Power Morning', benefit: 'Enerji + Odaklanma', detail: 'Hem fiziksel isilti hem zihinsel netlik.' },
+    'dailyglow+reset-button': { title: 'Detox & Glow', benefit: 'Arinma + Canlilik', detail: 'Iceriden temizlenin, disariya isik sacin.' },
+    'dailyglow+thechill': { title: 'Denge Paketi', benefit: 'Sabah Enerjisi, Aksam Huzuru', detail: 'Modern hayatin panzehiri.' },
+    'dreamglow+mindfuel': { title: 'Smart & Beautiful', benefit: 'Gunduz Odak, Gece Bakim', detail: 'Ne gorunumunuzden ne basarinizdan odun vermeyin.' },
+    'dreamglow+reset-button': { title: 'Gece Terapisi', benefit: 'Arinma + Yenilenme', detail: 'Siz uyurken bedeniniz toksinleri atsin.' },
+    'dreamglow+thechill': { title: 'Uyku Ritueli', benefit: 'Derin Uyku + Onarim', detail: 'TheChill zihni susturur, DreamGlow bedeni onarir.' },
+    'mindfuel+reset-button': { title: 'Berrak Zihin', benefit: 'Toksin Atimi + Konsantrasyon', detail: 'Beyin sisine son. Arinmis metabolizma ile performans.' },
+    'mindfuel+thechill': { title: 'Zen Performans', benefit: 'Kontrollu Guc', detail: 'Stres yapmadan odaklanin.' },
+    'reset-button+thechill': { title: 'Tam Reset', benefit: 'Zihinsel & Bedensel Arinma', detail: 'Fabrika Ayarlarina Donus.' },
+    'dailyglow+dreamglow+mindfuel': { title: 'CEO Paketi', benefit: 'Gorunum + Zeka + Enerji', detail: 'Profesyoneller icin tasarlandi.' },
+    'dailyglow+dreamglow+thechill': { title: 'Stress-Free Beauty', benefit: 'Stres Karsiti Guzellik', detail: 'En populer uclumuz.' },
+    'mindfuel+reset-button+thechill': { title: 'Zihinsel Berraklik', benefit: 'Arinma + Odak + Denge', detail: 'Temiz beden, berrak zihin.' },
+    'dailyglow+dreamglow+mindfuel+thechill': { title: 'Premium Wellness', benefit: '%25 Indirim', detail: 'Luks bir yasam tarzinin temeli.' },
+    'dailyglow+dreamglow+mindfuel+reset-button+thechill': { title: 'The Cyrasoul Ritual', benefit: '%30 Indirim - TAM DONANIM', detail: 'Butuncul iyilik hali icin eksiksiz set.' }
+  };
+
+  const SINGLE_PRODUCT_BENEFITS = {
+    'dreamglow': { title: 'DreamGlow', benefit: 'Gece cilt onarim destegi', detail: 'Uyku sirasinda kolajen uretimini ve cilt yenilenmesini destekler.' },
+    'dailyglow': { title: 'DailyGlow', benefit: 'Gunduz enerji ve cilt destegi', detail: 'Hucresel enerji uretimini destekler, cildi dis faktorlere karsi korur.' },
+    'mindfuel': { title: 'MindFuel', benefit: 'Odaklanma ve konsantrasyon destegi', detail: 'Zihinsel berrakligi ve odaklanmayi destekler.' },
+    'thechill': { title: 'TheChill', benefit: 'Sakinlik ve rahatlama destegi', detail: 'Stresi azaltmaya ve zihinsel sakinligi desteklemeye yardimci olur.' },
+    'reset-button': { title: 'Reset Button', benefit: 'Detoks ve arinma destegi', detail: 'Karaciger fonksiyonlarini destekler, toksin atimina yardimci olur.' }
+  };
+
+  const RECOMMENDATIONS = {
+    'dreamglow': [
+      { handle: 'dailyglow', bundle: '7/24 Guzellik', reason: 'Gece onarimina gunduz korumasini ekleyin.' },
+      { handle: 'thechill', bundle: 'Derin Uyku Ritueli', reason: 'Zihni sakinlestirin ki guzellik uykunuz bolunmesin.' }
+    ],
+    'dailyglow': [
+      { handle: 'dreamglow', bundle: 'Gece & Gunduz', reason: '24 saat suren kesintisiz cilt destegi.' },
+      { handle: 'mindfuel', bundle: 'Start-Up Enerjisi', reason: 'Hem cildiniz hem zihniniz gune hazir olsun.' }
+    ],
+    'mindfuel': [
+      { handle: 'thechill', bundle: 'Flow State', reason: 'Gunduz keskin zihin, aksam huzurlu dinginlik.' },
+      { handle: 'reset-button', bundle: 'Berrak Zihin', reason: 'Toksinlerden arinmis beden, daha net dusunur.' }
+    ],
+    'thechill': [
+      { handle: 'mindfuel', bundle: 'Denge Ustasi', reason: 'Stres yok, sadece odaklanma ve sakinlik.' },
+      { handle: 'dreamglow', bundle: 'Huzurlu Gece', reason: 'Sakin zihinle yatagin girin, yenilenmis uyanin.' }
+    ],
+    'reset-button': [
+      { handle: 'dailyglow', bundle: 'Temiz Baslangic', reason: 'Arinmis bedenin uzerine cilt isiltisini ekleyin.' },
+      { handle: 'thechill', bundle: 'Butunsel Hafiflik', reason: 'Bedensel detoks ve zihinsel rahatlama bir arada.' }
+    ]
+  };
+
+  const SYNERGY_CONFIG = {
+    1: { percent: 20, text: 'Baslangic', discount: 0 },
+    2: { percent: 40, text: '%15 Ikili Guc', discount: 0.15 },
+    3: { percent: 60, text: '%20 Populer', discount: 0.20 },
+    4: { percent: 80, text: '%25 Pro', discount: 0.25 },
+    5: { percent: 100, text: '%30 Efsane', discount: 0.30 }
+  };
+
+  // ============================================
+  // ACHIEVEMENTS (v2)
+  // ============================================
+  const ACHIEVEMENTS = {
+    'first-step': { id: 'first-step', title: 'Ilk Adim', icon: 'star', condition: s => s.items.length >= 1 },
+    'power-duo': { id: 'power-duo', title: 'Guclu Ikili', icon: 'lightning', condition: s => s.items.length >= 2 },
+    'power-morning': { id: 'power-morning', title: 'Power Morning', icon: 'sun', condition: s => hasProducts(s, ['dailyglow', 'mindfuel']) },
+    'sleep-beauty': { id: 'sleep-beauty', title: 'Guzellik Uykusu', icon: 'moon', condition: s => hasProducts(s, ['dreamglow', 'thechill']) },
+    'full-ritual': { id: 'full-ritual', title: 'Tam Ritual', icon: 'trophy', condition: s => s.items.length >= 5 }
+  };
+
+  const achievementState = { unlocked: new Set(), pending: [] };
+
+  function hasProducts(state, handles) {
+    const itemHandles = state.items.map(i => matchHandle(i.title));
+    return handles.every(h => itemHandles.includes(h));
+  }
+
+  // ============================================
+  // STATE
+  // ============================================
+  const state = {
+    items: [],
+    isExpanded: false,
+    isMobile: window.innerWidth < 768
+  };
+
+  // ============================================
+  // DOM ELEMENTS
+  // ============================================
+  const section = document.getElementById('wellness-architect');
+  if (!section) return;
+
+  const productCards = section.querySelectorAll('.wa-product-card');
+  const dock = section.querySelector('.wa-dock');
+  const sidebar = section.querySelector('.wa-sidebar');
+  const particles = section.querySelector('.wa-particles');
+
+  // ============================================
+  // HELPERS
+  // ============================================
+  const MONEY_FORMATTER = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 0 });
+  const formatMoney = cents => MONEY_FORMATTER.format(cents / 100);
+  const vibrate = (pattern = 10) => { if ('vibrate' in navigator) navigator.vibrate(pattern); };
+
+  function matchHandle(title) {
+    const normalized = title.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const handles = ['dreamglow', 'dailyglow', 'mindfuel', 'thechill', 'resetbutton'];
+    for (const h of handles) {
+      if (normalized.includes(h.replace('-', ''))) return h === 'resetbutton' ? 'reset-button' : h;
+    }
+    return normalized;
+  }
+
+  function getTotalQuantity() {
+    return state.items.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  }
+
+  // ============================================
+  // PRODUCT DATA CACHE
+  // ============================================
+  const productDataCache = new Map();
+  const handleToProductMap = new Map();
+
+  productCards.forEach(card => {
+    const data = {
+      id: card.dataset.productId,
+      handle: card.dataset.productHandle,
+      title: card.dataset.productTitle,
+      price: parseInt(card.dataset.productPrice),
+      image: card.dataset.productImage,
+      variantId: card.dataset.variantId,
+      url: card.dataset.productUrl
+    };
+    productDataCache.set(data.id, { ...data, card });
+    const handle = matchHandle(data.title);
+    handleToProductMap.set(handle, { ...data, card });
+  });
+
+  function getProductDataByHandle(handle) {
+    const cached = handleToProductMap.get(handle);
+    return cached ? { ...cached, quantity: 1 } : null;
+  }
+
+  // ============================================
+  // SYNERGY MAP RENDERER (v2)
+  // ============================================
+  const SynergyMapRenderer = {
+    // Product positions in horizontal layout (x, y coordinates in SVG viewBox 350x180)
+    POSITIONS: {
+      'dailyglow': { x: 55, y: 90 },
+      'mindfuel': { x: 125, y: 50 },
+      'reset-button': { x: 175, y: 130 },
+      'thechill': { x: 225, y: 50 },
+      'dreamglow': { x: 295, y: 90 }
+    },
+    NODE_RADIUS: 28,
+
+    render(container, selectedHandles) {
+      const svg = container.querySelector('.wa-synergy-map__svg');
+      const labelsContainer = container.querySelector('.wa-synergy-map__labels');
+      if (!svg || !labelsContainer) return;
+
+      // Clear previous
+      svg.innerHTML = '';
+      labelsContainer.innerHTML = '';
+
+      if (selectedHandles.length === 0) {
+        container.style.display = 'none';
+        return;
+      }
+
+      container.style.display = 'block';
+
+      // Render connections first (so they appear behind nodes)
+      const connections = this.getActiveConnections(selectedHandles);
+      connections.forEach(conn => this.renderConnection(svg, labelsContainer, conn));
+
+      // Render all product nodes
+      Object.entries(this.POSITIONS).forEach(([handle, pos]) => {
+        const isSelected = selectedHandles.includes(handle);
+        this.renderNode(svg, handle, pos, isSelected);
+      });
+    },
+
+    getActiveConnections(selectedHandles) {
+      const connections = [];
+      for (let i = 0; i < selectedHandles.length; i++) {
+        for (let j = i + 1; j < selectedHandles.length; j++) {
+          const h1 = selectedHandles[i], h2 = selectedHandles[j];
+          const key = [h1, h2].sort().join('+');
+          const conn = SYNERGY_CONNECTIONS[key];
+          if (conn) {
+            connections.push({
+              ...conn,
+              from: this.POSITIONS[h1],
+              to: this.POSITIONS[h2],
+              handles: [h1, h2]
+            });
+          }
+        }
+      }
+      return connections;
+    },
+
+    renderNode(svg, handle, pos, isSelected) {
+      const product = handleToProductMap.get(handle);
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('class', `wa-synergy-node ${isSelected ? 'wa-synergy-node--selected' : 'wa-synergy-node--inactive'}`);
+
+      // Background circle
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', pos.x);
+      circle.setAttribute('cy', pos.y);
+      circle.setAttribute('r', this.NODE_RADIUS);
+      circle.setAttribute('class', 'wa-synergy-node__bg');
+      g.appendChild(circle);
+
+      // Clip path for image
+      const clipId = `clip-${handle}`;
+      const clipPath = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
+      clipPath.setAttribute('id', clipId);
+      const clipCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      clipCircle.setAttribute('cx', pos.x);
+      clipCircle.setAttribute('cy', pos.y);
+      clipCircle.setAttribute('r', this.NODE_RADIUS - 2);
+      clipPath.appendChild(clipCircle);
+      svg.appendChild(clipPath);
+
+      // Product image
+      if (product && product.image) {
+        const img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+        img.setAttribute('href', product.image);
+        img.setAttribute('x', pos.x - this.NODE_RADIUS + 2);
+        img.setAttribute('y', pos.y - this.NODE_RADIUS + 2);
+        img.setAttribute('width', (this.NODE_RADIUS - 2) * 2);
+        img.setAttribute('height', (this.NODE_RADIUS - 2) * 2);
+        img.setAttribute('clip-path', `url(#${clipId})`);
+        img.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+        g.appendChild(img);
+      }
+
+      // Glow effect for selected nodes
+      if (isSelected) {
+        const glow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        glow.setAttribute('cx', pos.x);
+        glow.setAttribute('cy', pos.y);
+        glow.setAttribute('r', this.NODE_RADIUS + 4);
+        glow.setAttribute('class', 'wa-synergy-node__glow');
+        g.insertBefore(glow, g.firstChild);
+      }
+
+      // Product name label below node
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', pos.x);
+      text.setAttribute('y', pos.y + this.NODE_RADIUS + 14);
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('class', 'wa-synergy-node__label');
+      text.textContent = SYNERGY_MAP[handle]?.name || handle;
+      g.appendChild(text);
+
+      svg.appendChild(g);
+    },
+
+    renderConnection(svg, labelsContainer, conn) {
+      const { from, to, color, label, strength } = conn;
+
+      // Create curved path between nodes
+      const midX = (from.x + to.x) / 2;
+      const midY = (from.y + to.y) / 2;
+      const dx = to.x - from.x, dy = to.y - from.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      // Curve away from center (perpendicular offset)
+      const perpX = -dy / dist * 20, perpY = dx / dist * 20;
+      const ctrlX = midX + perpX, ctrlY = midY + perpY;
+
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', `M ${from.x} ${from.y} Q ${ctrlX} ${ctrlY} ${to.x} ${to.y}`);
+      path.setAttribute('class', `wa-synergy-line wa-synergy-line--${strength}`);
+      path.setAttribute('stroke', color);
+      path.setAttribute('fill', 'none');
+      svg.insertBefore(path, svg.firstChild);
+
+      // Add label in HTML (positioned relative to SVG)
+      const labelEl = document.createElement('div');
+      labelEl.className = 'wa-synergy-label';
+      labelEl.style.left = `${(ctrlX / 350) * 100}%`;
+      labelEl.style.top = `${(ctrlY / 180) * 100}%`;
+      labelEl.style.background = color;
+      labelEl.innerHTML = `<span>${label}</span>`;
+      labelsContainer.appendChild(labelEl);
+    },
+
+    update(selectedHandles) {
+      // Update both mobile and desktop synergy maps
+      const dockMap = dock?.querySelector('.wa-dock__synergy-map');
+      const sidebarMap = sidebar?.querySelector('.wa-synergy-map');
+      if (dockMap) this.render(dockMap, selectedHandles);
+      if (sidebarMap) this.render(sidebarMap, selectedHandles);
+    }
+  };
+
+  // ============================================
+  // PRICING & SYNERGY LOGIC
+  // ============================================
+  function calculatePricing() {
+    const totalQty = getTotalQuantity();
+    const bundleTier = Math.min(totalQty, 5);
+    const bundleRate = bundleTier > 0 ? (SYNERGY_CONFIG[bundleTier]?.discount || 0) : 0;
+    let subtotal = 0, totalDiscount = 0;
+
+    state.items.forEach(item => {
+      const qty = item.quantity || 1;
+      const itemSub = item.price * qty;
+      subtotal += itemSub;
+      let rate = qty >= 6 ? 0.35 : qty >= 3 ? 0.30 : bundleRate;
+      totalDiscount += Math.round(itemSub * rate);
+    });
+
+    return { subtotal, discount: totalDiscount, total: subtotal - totalDiscount };
+  }
+
+  function getSynergyExplanation() {
+    if (state.items.length === 0) return null;
+    if (state.items.length === 1) {
+      const h = matchHandle(state.items[0].title);
+      return SINGLE_PRODUCT_BENEFITS[h] || null;
+    }
+    const key = state.items.map(i => matchHandle(i.title)).sort().join('+');
+    return SYNERGY_EXPLANATIONS[key] || { title: `${state.items.length}'li Paket`, benefit: `%${Math.round(SYNERGY_CONFIG[Math.min(state.items.length, 5)]?.discount * 100 || 0)} indirim`, detail: 'Urunler birlikte daha etkili.' };
+  }
+
+  function getRecommendation() {
+    if (state.items.length === 0 || state.items.length >= 5) return null;
+    const addedHandles = state.items.map(i => matchHandle(i.title));
+    const recs = RECOMMENDATIONS[addedHandles[0]] || [];
+    for (const r of recs) if (!addedHandles.includes(r.handle)) return r;
+    for (const h of Object.keys(SYNERGY_MAP)) if (!addedHandles.includes(h)) return { handle: h, bundle: 'Ritueli Tamamla', reason: 'Indirim seviyenizi artirin.' };
+    return null;
+  }
+
+  function getRitualGuide() {
+    if (state.items.length === 0) return null;
+    const guide = [];
+    const items = state.items.map(i => ({ ...i, handle: matchHandle(i.title), syn: SYNERGY_MAP[matchHandle(i.title)] }));
+    items.filter(i => i.syn?.category === 'morning').forEach(p => guide.push({ time: 'Sabah', product: p.syn?.name || p.title, text: p.syn?.tip || '' }));
+    items.filter(i => i.syn?.category === 'noon').forEach(p => guide.push({ time: 'Ogle', product: p.syn?.name || p.title, text: p.syn?.tip || '' }));
+    items.filter(i => i.syn?.category === 'night').forEach(p => guide.push({ time: 'Aksam', product: p.syn?.name || p.title, text: p.syn?.tip || '' }));
+    return guide.length > 0 ? guide : null;
+  }
+
+  // ============================================
+  // SHOPIFY CART API
+  // ============================================
+  async function addToShopifyCart(variantId, qty = 1) {
+    try {
+      const res = await fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: qty }] }) });
+      return res.ok;
+    } catch { return false; }
+  }
+
+  async function removeFromShopifyCart(variantId) {
+    try {
+      const res = await fetch('/cart/change.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: variantId.toString(), quantity: 0 }) });
+      return res.ok;
+    } catch { return false; }
+  }
+
+  async function updateShopifyCartQty(variantId, qty) {
+    try {
+      const res = await fetch('/cart/change.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: variantId.toString(), quantity: qty }) });
+      return res.ok;
+    } catch { return false; }
+  }
+
+  // ============================================
+  // STATE MANAGEMENT
+  // ============================================
+  async function addItem(productData) {
+    const existing = state.items.find(i => i.id === productData.id);
+    if (existing) { await removeItem(productData.id); return false; }
+    if (state.items.length >= 5) { vibrate([30, 20, 30]); return false; }
+
+    const card = [...productCards].find(c => c.dataset.productId === productData.id);
+    if (card) card.classList.add('wa-product-card--loading');
+    const success = await addToShopifyCart(productData.variantId);
+    if (card) card.classList.remove('wa-product-card--loading');
+
+    if (success) {
+      state.items.push({ ...productData, quantity: 1 });
+      vibrate(10);
+      updateUI();
+      checkAchievements();
+      if (state.isMobile && !state.isExpanded) setTimeout(() => { state.isExpanded = true; dock.classList.add('wa-dock--expanded'); }, 400);
+      return true;
+    }
+    return false;
+  }
+
+  async function removeItem(productId) {
+    const item = state.items.find(i => i.id === productId);
+    if (item) await removeFromShopifyCart(item.variantId);
+    state.items = state.items.filter(i => i.id !== productId);
+    vibrate(10);
+    updateUI();
+  }
+
+  async function updateQuantity(productId, delta) {
+    const item = state.items.find(i => i.id === productId);
+    if (item) {
+      const newQty = Math.max(1, Math.min(10, item.quantity + delta));
+      if (await updateShopifyCartQty(item.variantId, newQty)) { item.quantity = newQty; vibrate(5); updateUI(); }
+    }
+  }
+
+  // ============================================
+  // ACHIEVEMENTS
+  // ============================================
+  function checkAchievements() {
+    Object.values(ACHIEVEMENTS).forEach(ach => {
+      if (!achievementState.unlocked.has(ach.id) && ach.condition(state)) {
+        achievementState.unlocked.add(ach.id);
+        achievementState.pending.push(ach);
+      }
+    });
+    if (achievementState.pending.length > 0) processAchievementQueue();
+    updateAchievementDisplay();
+  }
+
+  function processAchievementQueue() {
+    if (achievementState.pending.length === 0) return;
+    const ach = achievementState.pending.shift();
+    showAchievementUnlock(ach);
+  }
+
+  function showAchievementUnlock(ach) {
+    const notif = document.createElement('div');
+    notif.className = 'wa-achievement-notification';
+    notif.innerHTML = `<div class="wa-achievement-notification__icon wa-achievement-notification__icon--locked">${ICONS.lock}</div><div><span class="wa-achievement-notification__label">Kilidi Acildi!</span><span class="wa-achievement-notification__title">${ach.title}</span></div>`;
+    document.body.appendChild(notif);
+
+    requestAnimationFrame(() => {
+      notif.classList.add('wa-achievement-notification--visible');
+      setTimeout(() => {
+        const icon = notif.querySelector('.wa-achievement-notification__icon');
+        icon.classList.remove('wa-achievement-notification__icon--locked');
+        icon.classList.add('wa-achievement-notification__icon--unlocking');
+        icon.innerHTML = ICONS.unlock;
+        createMiniConfetti(notif);
+      }, 300);
+    });
+
+    setTimeout(() => {
+      notif.classList.add('wa-achievement-notification--hiding');
+      setTimeout(() => { notif.remove(); setTimeout(processAchievementQueue, 200); }, 300);
+    }, 2500);
+  }
+
+  function createMiniConfetti(el) {
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+    const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96E6A1'];
+    for (let i = 0; i < 12; i++) {
+      const c = document.createElement('div');
+      c.className = 'wa-confetti';
+      c.style.left = cx + 'px'; c.style.top = cy + 'px';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      const angle = (Math.PI * 2 * i) / 12, vel = 30 + Math.random() * 40;
+      c.style.setProperty('--tx', Math.cos(angle) * vel + 'px');
+      c.style.setProperty('--ty', Math.sin(angle) * vel + 'px');
+      c.style.setProperty('--rot', Math.random() * 720 - 360 + 'deg');
+      particles.appendChild(c);
+      setTimeout(() => c.remove(), 1000);
+    }
+  }
+
+  function updateAchievementDisplay() {
+    const unlocked = achievementState.unlocked.size;
+    const total = Object.keys(ACHIEVEMENTS).length;
+    const pct = (unlocked / total) * 100;
+
+    [sidebar, dock].forEach(container => {
+      if (!container) return;
+      const prog = container.querySelector('.wa-achievement-progress, .wa-dock__achievement-progress');
+      if (!prog) return;
+      prog.style.display = unlocked > 0 ? 'block' : 'none';
+      const countEl = prog.querySelector('.wa-achievement-progress__count');
+      const fillEl = prog.querySelector('.wa-achievement-progress__fill');
+      const badgesEl = prog.querySelector('.wa-achievement-progress__badges');
+      if (countEl) countEl.textContent = `${unlocked}/${total}`;
+      if (fillEl) fillEl.style.width = pct + '%';
+      if (badgesEl) {
+        badgesEl.innerHTML = Object.values(ACHIEVEMENTS).map(a => `<div class="wa-achievement-badge ${achievementState.unlocked.has(a.id) ? 'wa-achievement-badge--unlocked' : ''}" title="${a.title}">${ICONS[a.icon] || ICONS.star}</div>`).join('');
+      }
+    });
+  }
+
+  // ============================================
+  // UNIFIED RENDER FUNCTIONS (DRY)
+  // ============================================
+  function renderItemHTML(item, variant) {
+    const handle = matchHandle(item.title);
+    const timing = SYNERGY_MAP[handle]?.timing || '';
+    const prefix = variant === 'dock' ? 'wa-dock' : 'wa-sidebar';
+    return `<div class="${prefix}__item" data-product-id="${item.id}">
+      <a href="${item.url || '/products/' + item.handle}" class="${prefix}__item-link">
+        <img src="${item.image}" alt="${item.title}" class="${prefix}__item-image">
+        <div class="${prefix}__item-info">
+          <h4 class="${prefix}__item-title">${SYNERGY_MAP[handle]?.name || item.title}</h4>
+          ${timing ? `<p class="${prefix}__item-timing">${timing}</p>` : ''}
+        </div>
+      </a>
+      <div class="${prefix}__item-controls">
+        <div class="${prefix}__item-qty">
+          <button class="${prefix}__item-qty-btn" data-qty-minus="${item.id}">-</button>
+          <span class="${prefix}__item-qty-value">${item.quantity}</span>
+          <button class="${prefix}__item-qty-btn" data-qty-plus="${item.id}">+</button>
+        </div>
+        <button class="${prefix}__item-remove" data-remove="${item.id}">${ICONS.close}</button>
+      </div>
+    </div>`;
+  }
+
+  function updateStepIndicators(container, level) {
+    if (!container) return;
+    container.querySelectorAll('.wa-step').forEach((s, i) => s.classList.toggle('active', i + 1 <= level));
+  }
+
+  // ============================================
+  // UI UPDATE
+  // ============================================
+  function updateUI() {
+    const pricing = calculatePricing();
+    const totalQty = getTotalQuantity();
+    const tier = Math.min(totalQty, 5);
+    const synergy = totalQty > 0 ? SYNERGY_CONFIG[tier] : { percent: 0, text: 'Baslayin' };
+    const rec = getRecommendation();
+    const ritual = getRitualGuide();
+    const synExp = getSynergyExplanation();
+
+    // Update product cards
+    productCards.forEach(card => {
+      const isAdded = state.items.find(i => i.id === card.dataset.productId);
+      card.classList.toggle('wa-product-card--added', !!isAdded);
+      const cardHandle = matchHandle(card.dataset.productTitle);
+      card.classList.toggle('wa-product-card--recommended', rec && cardHandle === rec.handle && !isAdded);
+    });
+
+    // Update synergy map with selected product handles
+    const selectedHandles = state.items.map(i => matchHandle(i.title));
+    SynergyMapRenderer.update(selectedHandles);
+
+    if (state.isMobile) {
+      updateMobileUI(pricing, synergy, tier, rec, ritual, synExp);
+    } else {
+      updateDesktopUI(pricing, synergy, tier, rec, ritual, synExp);
+    }
+  }
+
+  function updateMobileUI(pricing, synergy, tier, rec, ritual, synExp) {
+    dock.classList.toggle('wa-dock--empty', state.items.length === 0);
+    if (state.items.length === 0 && state.isExpanded) { state.isExpanded = false; dock.classList.remove('wa-dock--expanded'); }
+
+    // Thumbnails
+    const thumbs = dock.querySelector('.wa-dock__thumbnails');
+    const emptyTxt = dock.querySelector('.wa-dock__empty-text');
+    thumbs.innerHTML = state.items.map(i => `<img src="${i.image}" class="wa-dock__thumbnail">`).join('');
+    emptyTxt.style.display = state.items.length ? 'none' : 'block';
+
+    // Info
+    const totalQty = getTotalQuantity();
+    dock.querySelector('.wa-dock__item-count').textContent = `${state.items.length} urun${totalQty > state.items.length ? ` (${totalQty} adet)` : ''}`;
+    const badge = dock.querySelector('.wa-dock__synergy-badge');
+    badge.textContent = synergy.text;
+    badge.classList.toggle('wa-dock__synergy-badge--active', tier >= 2);
+    dock.querySelector('.wa-dock__mini-total').textContent = formatMoney(pricing.total);
+
+    // Synergy summary
+    const summary = dock.querySelector('.wa-dock__synergy-summary');
+    summary.style.display = state.items.length > 0 ? 'block' : 'none';
+    updateStepIndicators(summary.querySelector('.wa-steps'), tier);
+    const sumTxt = dock.querySelector('.wa-dock__synergy-summary-text');
+    if (sumTxt) sumTxt.textContent = synExp ? `⚡ ${synExp.benefit}` : '';
+
+    // Items list
+    dock.querySelector('.wa-dock__items').innerHTML = state.items.map(i => renderItemHTML(i, 'dock')).join('');
+
+    // Synergy explanation
+    const synBox = dock.querySelector('.wa-dock__synergy-explanation');
+    if (synExp) {
+      synBox.style.display = 'block';
+      synBox.innerHTML = `<div style="display:flex;align-items:center;gap:6px;font-weight:600;margin-bottom:6px;">${ICONS.lightning}<span>${synExp.title}</span></div><div style="display:inline-block;background:#000;color:#fff;font-size:0.65rem;padding:2px 6px;border-radius:4px;margin-bottom:6px;">${synExp.benefit}</div><p style="margin:0;color:#525252;line-height:1.4;">${synExp.detail}</p>`;
+    } else { synBox.style.display = 'none'; }
+
+    // Recommendation
+    const recBox = dock.querySelector('.wa-dock__recommendation');
+    if (rec) {
+      const rp = getProductDataByHandle(rec.handle);
+      if (rp) {
+        recBox.style.display = 'block';
+        recBox.querySelector('.wa-dock__recommendation-img').src = rp.image;
+        recBox.querySelector('.wa-dock__recommendation-name').textContent = SYNERGY_MAP[rec.handle]?.name || rp.title;
+        recBox.querySelector('.wa-dock__recommendation-bundle').textContent = rec.bundle;
+        recBox.querySelector('.wa-dock__recommendation-add').dataset.recHandle = rec.handle;
+      }
+    } else { recBox.style.display = 'none'; }
+
+    // Ritual
+    const ritBox = dock.querySelector('.wa-dock__ritual');
+    if (ritual) {
+      ritBox.style.display = 'block';
+      ritBox.innerHTML = `<div style="font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px;">${ICONS.clock} Kullanim Rehberi</div>${ritual.map(r => `<div style="display:flex;gap:8px;margin-bottom:4px;"><span style="font-weight:600;min-width:50px;">${r.time}</span><span style="color:#525252;"><strong>${r.product}:</strong> ${r.text}</span></div>`).join('')}`;
+    } else { ritBox.style.display = 'none'; }
+
+    // Steps & Pricing
+    updateStepIndicators(dock.querySelector('.wa-dock__synergy .wa-steps'), tier);
+    dock.querySelector('.wa-dock__synergy-text').textContent = synergy.text;
+    dock.querySelector('.wa-dock__subtotal').textContent = formatMoney(pricing.subtotal);
+    dock.querySelector('.wa-dock__discount').textContent = '-' + formatMoney(pricing.discount);
+    dock.querySelector('.wa-dock__total').textContent = formatMoney(pricing.total);
+    dock.querySelector('.wa-dock__price-row--discount').style.display = pricing.discount > 0 ? 'flex' : 'none';
+    dock.querySelector('.wa-dock__checkout-btn').disabled = state.items.length === 0;
+  }
+
+  function updateDesktopUI(pricing, synergy, tier, rec, ritual, synExp) {
+    sidebar.classList.toggle('wa-sidebar--has-items', state.items.length > 0);
+    const totalQty = getTotalQuantity();
+    sidebar.querySelector('.wa-sidebar__count').textContent = `${state.items.length} urun${totalQty > state.items.length ? ` (${totalQty} adet)` : ''}`;
+    sidebar.querySelector('.wa-sidebar__items').innerHTML = state.items.map(i => renderItemHTML(i, 'sidebar')).join('');
+
+    // Synergy explanation
+    const synBox = sidebar.querySelector('.wa-synergy-explanation');
+    if (synExp) {
+      synBox.style.display = 'block';
+      synBox.innerHTML = `<div class="wa-synergy-explanation__header">${ICONS.lightning}<span>${synExp.title}</span></div><div class="wa-synergy-explanation__benefit">${synExp.benefit}</div><p class="wa-synergy-explanation__text">${synExp.detail}</p>`;
+    } else { synBox.style.display = 'none'; }
+
+    // Recommendation
+    const recBox = sidebar.querySelector('.wa-recommendation');
+    if (rec) {
+      const rp = getProductDataByHandle(rec.handle);
+      if (rp) {
+        recBox.style.display = 'block';
+        recBox.querySelector('.wa-recommendation__image').src = rp.image;
+        recBox.querySelector('.wa-recommendation__name').textContent = SYNERGY_MAP[rec.handle]?.name || rp.title;
+        recBox.querySelector('.wa-recommendation__bundle-name').textContent = rec.bundle;
+        recBox.querySelector('.wa-recommendation__reason').textContent = rec.reason;
+        recBox.querySelector('.wa-recommendation__add-btn').dataset.recHandle = rec.handle;
+      }
+    } else { recBox.style.display = 'none'; }
+
+    // Ritual
+    const ritBox = sidebar.querySelector('.wa-ritual-guide');
+    if (ritual) {
+      ritBox.style.display = 'block';
+      ritBox.querySelector('.wa-ritual-guide__content').innerHTML = ritual.map(r => `<div class="wa-ritual-guide__item"><span class="wa-ritual-guide__time">${r.time}</span><div><span class="wa-ritual-guide__product">${r.product}</span> <span class="wa-ritual-guide__text">${r.text}</span></div></div>`).join('');
+    } else { ritBox.style.display = 'none'; }
+
+    // Steps & Pricing
+    updateStepIndicators(sidebar.querySelector('.wa-sidebar__synergy .wa-steps'), tier);
+    sidebar.querySelector('.wa-sidebar__synergy-text').textContent = synergy.text;
+    sidebar.querySelector('.wa-sidebar__subtotal').textContent = formatMoney(pricing.subtotal);
+    sidebar.querySelector('.wa-sidebar__discount').textContent = '-' + formatMoney(pricing.discount);
+    sidebar.querySelector('.wa-sidebar__total').textContent = formatMoney(pricing.total);
+    sidebar.querySelector('.wa-sidebar__price-row--discount').style.display = pricing.discount > 0 ? 'flex' : 'none';
+    sidebar.querySelector('.wa-sidebar__checkout-btn').disabled = state.items.length === 0;
+  }
+
+  // ============================================
+  // KESFET DRAWER (v2)
+  // ============================================
+  function renderKesfetContent(handle, tab) {
+    const data = EXTENDED_PRODUCT_DATA[handle];
+    if (!data) return '<p>Bilgi bulunamadi.</p>';
+
+    if (tab === 'benefits') {
+      return data.benefits.map(b => `<div class="wa-benefit-item"><div class="wa-benefit-icon">${ICONS[b.icon] || ICONS.star}</div><div><div class="wa-benefit-title">${b.title}</div><p class="wa-benefit-desc">${b.description}</p></div></div>`).join('');
+    } else if (tab === 'ingredients') {
+      return data.ingredients.map(i => `<div class="wa-ingredient-item"><div><div class="wa-ingredient-name">${i.name}</div><div class="wa-ingredient-benefit">${i.benefit}</div></div><div class="wa-ingredient-amount">${i.amount}</div></div>`).join('');
+    } else if (tab === 'science') {
+      return `<div class="wa-science-content"><div class="wa-science-title">${data.science.title}</div><p>${data.science.description}</p></div>`;
+    }
+    return '';
+  }
+
+  function handleKesfetToggle(card) {
+    const isOpen = card.classList.toggle('wa-product-card--drawer-open');
+    if (isOpen) {
+      const handle = matchHandle(card.dataset.productTitle);
+      const content = card.querySelector('.wa-product-card__drawer-content');
+      content.innerHTML = renderKesfetContent(handle, 'benefits');
+      card.querySelectorAll('.wa-tab').forEach((t, i) => t.classList.toggle('wa-tab--active', i === 0));
+    }
+  }
+
+  function handleKesfetTab(card, tab) {
+    const handle = matchHandle(card.dataset.productTitle);
+    card.querySelector('.wa-product-card__drawer-content').innerHTML = renderKesfetContent(handle, tab);
+    card.querySelectorAll('.wa-tab').forEach(t => t.classList.toggle('wa-tab--active', t.dataset.tab === tab));
+  }
+
+  // ============================================
+  // EVENT HANDLERS
+  // ============================================
+  function handleProductClick(card, e) {
+    if (e.target.closest('[data-kesfet-toggle]') || e.target.closest('.wa-tab') || e.target.closest('.wa-product-card__drawer')) {
+      e.stopPropagation();
+      if (e.target.closest('[data-kesfet-toggle]')) handleKesfetToggle(card);
+      else if (e.target.closest('.wa-tab')) handleKesfetTab(card, e.target.closest('.wa-tab').dataset.tab);
+      return;
+    }
+
+    const data = { id: card.dataset.productId, handle: card.dataset.productHandle, title: card.dataset.productTitle, price: parseInt(card.dataset.productPrice), image: card.dataset.productImage, variantId: card.dataset.variantId, url: card.dataset.productUrl, quantity: 1 };
+    addItem(data);
+  }
+
+  function toggleDock() { state.isExpanded = !state.isExpanded; dock.classList.toggle('wa-dock--expanded', state.isExpanded); }
+  function handleCheckout() { if (state.items.length > 0) { vibrate([30, 60, 30]); window.location.href = '/checkout'; } }
+
+  // ============================================
+  // SYNC FROM CART
+  // ============================================
+  async function syncFromShopifyCart() {
+    try {
+      const res = await fetch('/cart.js');
+      if (!res.ok) return;
+      const cart = await res.json();
+      for (const item of cart.items) {
+        const variantId = item.variant_id.toString();
+        const card = [...productCards].find(c => c.dataset.variantId === variantId);
+        if (card && !state.items.find(i => i.variantId === variantId)) {
+          state.items.push({ id: card.dataset.productId, handle: card.dataset.productHandle, title: card.dataset.productTitle, price: parseInt(card.dataset.productPrice), image: card.dataset.productImage, variantId, url: card.dataset.productUrl, quantity: item.quantity });
+        }
+      }
+      updateUI();
+    } catch {}
+  }
+
+  // ============================================
+  // INITIALIZE
+  // ============================================
+  async function init() {
+    window.addEventListener('resize', () => { const was = state.isMobile; state.isMobile = window.innerWidth < 768; if (was !== state.isMobile) updateUI(); });
+
+    productCards.forEach(card => card.addEventListener('click', e => handleProductClick(card, e)));
+
+    dock.querySelector('.wa-dock__handle').addEventListener('click', toggleDock);
+    dock.querySelector('.wa-dock__expand-btn').addEventListener('click', toggleDock);
+    dock.querySelector('.wa-dock__close-btn').addEventListener('click', toggleDock);
+    dock.querySelector('.wa-dock__checkout-btn').addEventListener('click', handleCheckout);
+    sidebar.querySelector('.wa-sidebar__checkout-btn').addEventListener('click', handleCheckout);
+
+    // Event delegation for items
+    [dock.querySelector('.wa-dock__items'), sidebar.querySelector('.wa-sidebar__items')].forEach(container => {
+      if (!container) return;
+      container.addEventListener('click', e => {
+        const t = e.target.closest('[data-remove], [data-qty-minus], [data-qty-plus]');
+        if (!t) return;
+        if (t.dataset.remove) removeItem(t.dataset.remove);
+        else if (t.dataset.qtyMinus) updateQuantity(t.dataset.qtyMinus, -1);
+        else if (t.dataset.qtyPlus) updateQuantity(t.dataset.qtyPlus, 1);
+      });
+    });
+
+    // Recommendation buttons
+    dock.querySelector('.wa-dock__recommendation-add')?.addEventListener('click', e => { const h = e.target.dataset.recHandle; if (h) { const p = getProductDataByHandle(h); if (p) addItem(p); } });
+    sidebar.querySelector('.wa-recommendation__add-btn')?.addEventListener('click', e => { const h = e.target.dataset.recHandle; if (h) { const p = getProductDataByHandle(h); if (p) addItem(p); } });
+
+    await syncFromShopifyCart();
+    updateUI();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>

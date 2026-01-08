@@ -1,0 +1,852 @@
+{% comment %}
+  ============================================
+  CYRASOUL - Cart Page Bundle Upsell
+  Sepet sayfası için ritüel tamamlama modülü
+  ============================================
+{% endcomment %}
+
+{% assign cyrasoul_handles = 'dailyglow,dreamglow,mindfuel,thechill,reset-button' | split: ',' %}
+{% assign cyrasoul_items_in_cart = '' %}
+{% assign cyrasoul_count = 0 %}
+
+{% for item in cart.items %}
+  {% assign item_handle = item.product.handle | downcase %}
+  {% if cyrasoul_handles contains item_handle %}
+    {% assign cyrasoul_count = cyrasoul_count | plus: 1 %}
+    {% if cyrasoul_items_in_cart != '' %}
+      {% assign cyrasoul_items_in_cart = cyrasoul_items_in_cart | append: ',' %}
+    {% endif %}
+    {% assign cyrasoul_items_in_cart = cyrasoul_items_in_cart | append: item_handle %}
+  {% endif %}
+{% endfor %}
+
+{% comment %} Sadece Cyrasoul ürünü varsa veya hiç yoksa göster {% endcomment %}
+{% if cyrasoul_count > 0 or section.settings.show_when_empty %}
+
+<section class="cart-bundle-upsell" data-cyrasoul-items="{{ cyrasoul_items_in_cart }}">
+  <div class="cbu-container">
+
+    <!-- Başlık -->
+    <div class="cbu-header">
+      <div class="cbu-header__icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+        </svg>
+      </div>
+      <div class="cbu-header__text">
+        <h3 class="cbu-header__title">{{ section.settings.title | default: 'Ritüelinizi Tamamlayın' }}</h3>
+        <p class="cbu-header__subtitle">{{ section.settings.subtitle | default: 'Daha fazla ürün ekleyin, daha fazla indirim kazanın' }}</p>
+      </div>
+    </div>
+
+    <!-- Mevcut Ritüel Durumu -->
+    <div class="cbu-status">
+      <div class="cbu-status__ritual">
+        <span class="cbu-status__label">Sepetinizdeki Ritüel:</span>
+        <div class="cbu-status__items" id="cbu-ritual-items">
+          {% if cyrasoul_count > 0 %}
+            {% for item in cart.items %}
+              {% assign item_handle = item.product.handle | downcase %}
+              {% if cyrasoul_handles contains item_handle %}
+                <div class="cbu-status__item">
+                  <img src="{{ item.image | image_url: width: 60 }}" alt="{{ item.product.title }}" class="cbu-status__item-img">
+                  <span class="cbu-status__item-name">{{ item.product.title }}</span>
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            <span class="cbu-status__empty">Henüz ürün eklenmedi</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="cbu-status__discount">
+        <div class="cbu-status__discount-bar">
+          <div class="cbu-status__discount-fill" id="cbu-discount-fill" style="width: {% if cyrasoul_count >= 5 %}100{% elsif cyrasoul_count == 4 %}80{% elsif cyrasoul_count == 3 %}60{% elsif cyrasoul_count == 2 %}40{% elsif cyrasoul_count == 1 %}20{% else %}0{% endif %}%"></div>
+          <div class="cbu-status__discount-markers">
+            <span class="cbu-status__marker {% if cyrasoul_count >= 2 %}cbu-status__marker--active{% endif %}" data-level="2">%15</span>
+            <span class="cbu-status__marker {% if cyrasoul_count >= 3 %}cbu-status__marker--active{% endif %}" data-level="3">%20</span>
+            <span class="cbu-status__marker {% if cyrasoul_count >= 4 %}cbu-status__marker--active{% endif %}" data-level="4">%25</span>
+            <span class="cbu-status__marker {% if cyrasoul_count >= 5 %}cbu-status__marker--active{% endif %}" data-level="5">%30</span>
+          </div>
+        </div>
+        <div class="cbu-status__discount-text" id="cbu-discount-text">
+          {% case cyrasoul_count %}
+            {% when 0 %}
+              <span>İlk ürünü ekleyin</span>
+            {% when 1 %}
+              <span>+1 ürün ekle → <strong>%15 indirim</strong></span>
+            {% when 2 %}
+              <span class="cbu-active">%15 indirim aktif! +1 ürün → %20</span>
+            {% when 3 %}
+              <span class="cbu-active">%20 indirim aktif! +1 ürün → %25</span>
+            {% when 4 %}
+              <span class="cbu-active">%25 indirim aktif! +1 ürün → %30</span>
+            {% else %}
+              <span class="cbu-ultimate">%30 Maksimum İndirim!</span>
+          {% endcase %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Paket Faydası Açıklaması -->
+    <div class="cbu-benefit" id="cbu-benefit" {% if cyrasoul_count < 2 %}style="display: none;"{% endif %}>
+      <div class="cbu-benefit__icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+        </svg>
+      </div>
+      <div class="cbu-benefit__content">
+        <h4 class="cbu-benefit__title" id="cbu-benefit-title">Paket Faydası</h4>
+        <p class="cbu-benefit__text" id="cbu-benefit-text">Bu kombinasyonun faydaları hesaplanıyor...</p>
+      </div>
+    </div>
+
+    <!-- Önerilen Ürünler -->
+    <div class="cbu-recommendations" id="cbu-recommendations">
+      <h4 class="cbu-recommendations__title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        Size Özel Önerilerimiz
+      </h4>
+
+      <div class="cbu-recommendations__grid">
+        {% assign collection = collections[section.settings.collection] %}
+        {% for product in collection.products limit: 5 %}
+          {% assign product_handle = product.handle | downcase %}
+          {% unless cyrasoul_items_in_cart contains product_handle %}
+            <div class="cbu-product-card"
+                 data-product-id="{{ product.id }}"
+                 data-variant-id="{{ product.first_available_variant.id }}"
+                 data-handle="{{ product_handle }}"
+                 data-title="{{ product.title }}"
+                 data-price="{{ product.price }}"
+                 data-image="{{ product.featured_image | image_url: width: 200 }}">
+              <div class="cbu-product-card__image">
+                <img src="{{ product.featured_image | image_url: width: 200 }}" alt="{{ product.title }}" loading="lazy">
+              </div>
+              <div class="cbu-product-card__content">
+                <h5 class="cbu-product-card__title">{{ product.title }}</h5>
+                <p class="cbu-product-card__reason" data-handle="{{ product_handle }}">Bu ürünü ekleyerek ritüelinizi güçlendirin</p>
+                <div class="cbu-product-card__footer">
+                  <span class="cbu-product-card__price">{{ product.price | money }}</span>
+                  <button class="cbu-product-card__add" data-variant-id="{{ product.first_available_variant.id }}">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Ekle
+                  </button>
+                </div>
+              </div>
+              <div class="cbu-product-card__badge" data-handle="{{ product_handle }}">
+                <!-- JS ile doldurulacak -->
+              </div>
+            </div>
+          {% endunless %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Tasarruf Özeti -->
+    {% if cyrasoul_count >= 2 %}
+    <div class="cbu-savings" id="cbu-savings">
+      <div class="cbu-savings__icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+      </div>
+      <div class="cbu-savings__text">
+        <span>Bu siparişte</span>
+        <strong id="cbu-savings-amount">hesaplanıyor...</strong>
+        <span>tasarruf ediyorsunuz!</span>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<style>
+  .cart-bundle-upsell {
+    --cbu-primary: #000000;
+    --cbu-success: #22c55e;
+    --cbu-gray-100: #f5f5f5;
+    --cbu-gray-200: #e5e5e5;
+    --cbu-gray-400: #a3a3a3;
+    --cbu-gray-600: #525252;
+    --cbu-gray-800: #262626;
+    --cbu-radius: 12px;
+    --cbu-radius-sm: 8px;
+
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    border-radius: var(--cbu-radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    font-family: inherit;
+  }
+
+  .cbu-container {
+    max-width: 100%;
+  }
+
+  /* Header */
+  .cbu-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .cbu-header__icon {
+    width: 48px;
+    height: 48px;
+    background: var(--cbu-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .cbu-header__icon svg {
+    stroke: white;
+  }
+
+  .cbu-header__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    color: var(--cbu-primary);
+  }
+
+  .cbu-header__subtitle {
+    font-size: 0.875rem;
+    color: var(--cbu-gray-600);
+    margin: 0;
+  }
+
+  /* Status */
+  .cbu-status {
+    background: white;
+    border-radius: var(--cbu-radius-sm);
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .cbu-status__ritual {
+    margin-bottom: 1rem;
+  }
+
+  .cbu-status__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--cbu-gray-600);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .cbu-status__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .cbu-status__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--cbu-gray-100);
+    padding: 0.375rem 0.75rem 0.375rem 0.375rem;
+    border-radius: 100px;
+  }
+
+  .cbu-status__item-img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .cbu-status__item-name {
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .cbu-status__empty {
+    font-size: 0.875rem;
+    color: var(--cbu-gray-400);
+    font-style: italic;
+  }
+
+  /* Discount Bar */
+  .cbu-status__discount-bar {
+    position: relative;
+    height: 8px;
+    background: var(--cbu-gray-200);
+    border-radius: 4px;
+    overflow: visible;
+    margin-bottom: 0.5rem;
+  }
+
+  .cbu-status__discount-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cbu-success), #16a34a);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+
+  .cbu-status__discount-markers {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5%;
+  }
+
+  .cbu-status__marker {
+    font-size: 0.625rem;
+    font-weight: 600;
+    color: var(--cbu-gray-400);
+    transform: translateY(-100%);
+    padding-bottom: 4px;
+  }
+
+  .cbu-status__marker--active {
+    color: var(--cbu-success);
+  }
+
+  .cbu-status__discount-text {
+    font-size: 0.875rem;
+    text-align: center;
+  }
+
+  .cbu-status__discount-text .cbu-active {
+    color: var(--cbu-success);
+    font-weight: 600;
+  }
+
+  .cbu-status__discount-text .cbu-ultimate {
+    color: var(--cbu-success);
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  /* Benefit */
+  .cbu-benefit {
+    display: flex;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border: 1px solid #a7f3d0;
+    border-radius: var(--cbu-radius-sm);
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .cbu-benefit__icon {
+    width: 32px;
+    height: 32px;
+    background: var(--cbu-success);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .cbu-benefit__icon svg {
+    stroke: white;
+  }
+
+  .cbu-benefit__title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    color: #065f46;
+  }
+
+  .cbu-benefit__text {
+    font-size: 0.8125rem;
+    color: #047857;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Recommendations */
+  .cbu-recommendations {
+    margin-bottom: 1rem;
+  }
+
+  .cbu-recommendations__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    color: var(--cbu-gray-800);
+  }
+
+  .cbu-recommendations__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+
+  /* Product Card */
+  .cbu-product-card {
+    position: relative;
+    background: white;
+    border-radius: var(--cbu-radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--cbu-gray-200);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .cbu-product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .cbu-product-card__image {
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--cbu-gray-100);
+  }
+
+  .cbu-product-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cbu-product-card__content {
+    padding: 0.75rem;
+  }
+
+  .cbu-product-card__title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+    color: var(--cbu-primary);
+  }
+
+  .cbu-product-card__reason {
+    font-size: 0.75rem;
+    color: var(--cbu-gray-600);
+    margin: 0 0 0.75rem 0;
+    line-height: 1.4;
+    min-height: 2.8em;
+  }
+
+  .cbu-product-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .cbu-product-card__price {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--cbu-primary);
+  }
+
+  .cbu-product-card__add {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--cbu-primary);
+    color: white;
+    border: none;
+    border-radius: var(--cbu-radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .cbu-product-card__add:hover {
+    background: var(--cbu-gray-800);
+  }
+
+  .cbu-product-card__add:disabled {
+    background: var(--cbu-gray-400);
+    cursor: not-allowed;
+  }
+
+  .cbu-product-card__badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: var(--cbu-success);
+    color: white;
+    font-size: 0.625rem;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    border-radius: 100px;
+    display: none;
+  }
+
+  .cbu-product-card__badge.cbu-product-card__badge--visible {
+    display: block;
+  }
+
+  /* Savings */
+  .cbu-savings {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    background: var(--cbu-primary);
+    color: white;
+    padding: 1rem;
+    border-radius: var(--cbu-radius-sm);
+    text-align: center;
+  }
+
+  .cbu-savings__text {
+    font-size: 0.9375rem;
+  }
+
+  .cbu-savings__text strong {
+    font-size: 1.125rem;
+    color: #4ade80;
+  }
+
+  /* Loading State */
+  .cbu-product-card--loading .cbu-product-card__add {
+    pointer-events: none;
+  }
+
+  .cbu-product-card--loading .cbu-product-card__add::after {
+    content: '';
+    width: 14px;
+    height: 14px;
+    border: 2px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: cbu-spin 0.8s linear infinite;
+    margin-left: 0.5rem;
+  }
+
+  @keyframes cbu-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .cart-bundle-upsell {
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    .cbu-header {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .cbu-recommendations__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    .cbu-product-card__content {
+      padding: 0.5rem;
+    }
+
+    .cbu-product-card__reason {
+      display: none;
+    }
+
+    .cbu-savings {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  // ============================================
+  // Sinerji Haritası
+  // ============================================
+  const SYNERGY_MAP = {
+    'dreamglow': { name: 'DreamGlow', timing: 'Gece' },
+    'dailyglow': { name: 'DailyGlow', timing: 'Sabah' },
+    'mindfuel': { name: 'MindFuel', timing: 'Sabah' },
+    'thechill': { name: 'TheChill', timing: 'Akşam' },
+    'reset-button': { name: 'Reset Button', timing: 'Öğle' }
+  };
+
+  // Öneri nedenleri
+  const RECOMMENDATIONS = {
+    'dreamglow': {
+      reason: 'Gece cilt onarımını destekler, uyku kalitesine katkı sağlar.',
+      badge: 'Gece Desteği'
+    },
+    'dailyglow': {
+      reason: 'Gündüz enerji ve cilt koruma desteği sağlar.',
+      badge: 'Enerji'
+    },
+    'mindfuel': {
+      reason: 'Odaklanma ve mental performansı destekler.',
+      badge: 'Odak'
+    },
+    'thechill': {
+      reason: 'Akşam sakinlik ve rahatlama desteği sağlar.',
+      badge: 'Sakinlik'
+    },
+    'reset-button': {
+      reason: 'Karaciğer temizliğini ve detoksu destekler.',
+      badge: 'Detoks'
+    }
+  };
+
+  // Sinerji açıklamaları
+  const SYNERGY_EXPLANATIONS = {
+    'dailyglow+dreamglow': {
+      title: '7/24 Cilt Sağlığı Paketi',
+      text: 'DailyGlow gündüz koruma, DreamGlow gece onarım desteği. 24 saat kesintisiz cilt bakımı.'
+    },
+    'dailyglow+mindfuel': {
+      title: 'Güçlü Sabah Ritüeli',
+      text: 'Enerji + odaklanma desteği. Güne fiziksel ve mental olarak güçlü başlayın.'
+    },
+    'dailyglow+reset-button': {
+      title: 'İçten Dışa Parlaklık',
+      text: 'Karaciğer temizliği + cilt desteği. Temiz beden, parlak cilt.'
+    },
+    'dailyglow+thechill': {
+      title: 'Dengeli Gün Paketi',
+      text: 'Sabah enerji, akşam huzur. Burnout olmadan verimli gün.'
+    },
+    'dreamglow+mindfuel': {
+      title: 'Zihin & Güzellik Dengesi',
+      text: 'Gündüz odak, gece onarım. Yoğun çalışırken bile taze görünüm.'
+    },
+    'dreamglow+reset-button': {
+      title: 'Gece Arınma Ritüeli',
+      text: 'Uyurken detoks + onarım. Sabah yenilenmiş uyanış.'
+    },
+    'dreamglow+thechill': {
+      title: 'Kaliteli Uyku Paketi',
+      text: 'Derin uyku + cilt yenilenmesi. Huzurla uyur, güzel uyanırsınız.'
+    },
+    'mindfuel+reset-button': {
+      title: 'Net Zihin Paketi',
+      text: 'Temiz sistem + berrak düşünce. Maksimum mental performans.'
+    },
+    'mindfuel+thechill': {
+      title: 'Zihinsel Denge Paketi',
+      text: 'Gündüz odak, akşam sakinlik. Performans + huzur dengesi.'
+    },
+    'reset-button+thechill': {
+      title: 'Tam Arınma Paketi',
+      text: 'Beden + zihin detoksu. İçten dışa yenilenme.'
+    }
+  };
+
+  // ============================================
+  // DOM Elements
+  // ============================================
+  const section = document.querySelector('.cart-bundle-upsell');
+  if (!section) return;
+
+  const cyrasoulItemsData = section.dataset.cyrasoulItems || '';
+  const currentItems = cyrasoulItemsData ? cyrasoulItemsData.split(',').filter(Boolean) : [];
+
+  const benefitBox = document.getElementById('cbu-benefit');
+  const benefitTitle = document.getElementById('cbu-benefit-title');
+  const benefitText = document.getElementById('cbu-benefit-text');
+  const savingsAmount = document.getElementById('cbu-savings-amount');
+  const productCards = section.querySelectorAll('.cbu-product-card');
+
+  // ============================================
+  // Sinerji Açıklamasını Güncelle
+  // ============================================
+  function updateSynergyExplanation() {
+    if (currentItems.length < 2) {
+      if (benefitBox) benefitBox.style.display = 'none';
+      return;
+    }
+
+    const sortedItems = [...currentItems].sort();
+    const key = sortedItems.join('+');
+
+    // 2'li kombinasyonları kontrol et
+    let explanation = null;
+    for (let i = 0; i < sortedItems.length; i++) {
+      for (let j = i + 1; j < sortedItems.length; j++) {
+        const pairKey = [sortedItems[i], sortedItems[j]].sort().join('+');
+        if (SYNERGY_EXPLANATIONS[pairKey]) {
+          explanation = SYNERGY_EXPLANATIONS[pairKey];
+          break;
+        }
+      }
+      if (explanation) break;
+    }
+
+    if (explanation && benefitBox) {
+      benefitBox.style.display = 'flex';
+      if (benefitTitle) benefitTitle.textContent = explanation.title;
+      if (benefitText) benefitText.textContent = explanation.text;
+    }
+  }
+
+  // ============================================
+  // Tasarruf Hesapla
+  // ============================================
+  function calculateSavings() {
+    const count = currentItems.length;
+    if (count < 2 || !savingsAmount) return;
+
+    let discountRate = 0;
+    if (count >= 5) discountRate = 0.30;
+    else if (count === 4) discountRate = 0.25;
+    else if (count === 3) discountRate = 0.20;
+    else if (count === 2) discountRate = 0.15;
+
+    // Toplam fiyatı hesapla (Liquid'den alınamadığı için tahmini)
+    let totalPrice = 0;
+    document.querySelectorAll('.cbu-status__item').forEach(() => {
+      totalPrice += 50000; // Ortalama ürün fiyatı (500 TL = 50000 kuruş)
+    });
+
+    const savings = Math.round(totalPrice * discountRate);
+    savingsAmount.textContent = (savings / 100).toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' });
+  }
+
+  // ============================================
+  // Öneri Kartlarını Güncelle
+  // ============================================
+  function updateRecommendationCards() {
+    productCards.forEach(card => {
+      const handle = card.dataset.handle;
+      const reasonEl = card.querySelector('.cbu-product-card__reason');
+      const badgeEl = card.querySelector('.cbu-product-card__badge');
+
+      if (RECOMMENDATIONS[handle]) {
+        if (reasonEl) reasonEl.textContent = RECOMMENDATIONS[handle].reason;
+        if (badgeEl) {
+          badgeEl.textContent = RECOMMENDATIONS[handle].badge;
+          badgeEl.classList.add('cbu-product-card__badge--visible');
+        }
+      }
+
+      // Eğer bu ürün ile mevcut ürünler arasında sinerji varsa özel mesaj
+      currentItems.forEach(currentHandle => {
+        const pairKey = [handle, currentHandle].sort().join('+');
+        if (SYNERGY_EXPLANATIONS[pairKey] && reasonEl) {
+          reasonEl.textContent = SYNERGY_EXPLANATIONS[pairKey].text;
+        }
+      });
+    });
+  }
+
+  // ============================================
+  // Sepete Ekleme
+  // ============================================
+  async function addToCart(variantId, button) {
+    const card = button.closest('.cbu-product-card');
+    card.classList.add('cbu-product-card--loading');
+    button.disabled = true;
+
+    try {
+      const response = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: [{ id: parseInt(variantId), quantity: 1 }]
+        })
+      });
+
+      if (response.ok) {
+        // Sayfayı yenile (cart sayfasında en güvenli yöntem)
+        window.location.reload();
+      } else {
+        throw new Error('Ekleme başarısız');
+      }
+    } catch (error) {
+      console.error('Cart add error:', error);
+      card.classList.remove('cbu-product-card--loading');
+      button.disabled = false;
+      alert('Ürün eklenirken bir hata oluştu. Lütfen tekrar deneyin.');
+    }
+  }
+
+  // ============================================
+  // Event Listeners
+  // ============================================
+  productCards.forEach(card => {
+    const addButton = card.querySelector('.cbu-product-card__add');
+    if (addButton) {
+      addButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const variantId = addButton.dataset.variantId;
+        addToCart(variantId, addButton);
+      });
+    }
+  });
+
+  // ============================================
+  // Initialize
+  // ============================================
+  updateSynergyExplanation();
+  updateRecommendationCards();
+  calculateSavings();
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Cart Bundle Upsell",
+  "tag": "section",
+  "class": "cart-bundle-upsell-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Başlık",
+      "default": "Ritüelinizi Tamamlayın"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Alt Başlık",
+      "default": "Daha fazla ürün ekleyin, daha fazla indirim kazanın"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Ürün Koleksiyonu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_when_empty",
+      "label": "Sepette Cyrasoul ürünü yokken de göster",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cart Bundle Upsell",
+      "category": "Cart"
+    }
+  ]
+}
+{% endschema %}
+
+{% endif %}

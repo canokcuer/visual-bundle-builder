@@ -1,0 +1,30 @@
+# Claude Code
+.claude/
+
+# Dependencies
+node_modules/
+
+# Test coverage
+coverage/
+
+# Playwright
+playwright-report/
+test-results/
+
+# npm
+.npm/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Cache
+.cache/
+/tmp/

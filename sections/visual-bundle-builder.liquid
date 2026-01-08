@@ -1,0 +1,3146 @@
+{% comment %}
+  ============================================
+  CYRASOUL - Akıllı Paket Oluşturucu v2
+  5 Ürün + Adet + Sinerji Açıklamaları
+  ============================================
+{% endcomment %}
+
+<section
+  id="wellness-architect"
+  class="wellness-architect"
+  data-section-id="{{ section.id }}"
+>
+  <!-- Başlık -->
+  <div class="wa-header">
+    <span class="wa-header__eyebrow">{{ section.settings.eyebrow_text }}</span>
+    <h2 class="wa-header__title">{{ section.settings.title }}</h2>
+    <p class="wa-header__subtitle">{{ section.settings.subtitle }}</p>
+  </div>
+
+  <div class="wa-container">
+    <!-- Ürün Grid -->
+    <div class="wa-products" role="region" aria-label="Mevcut ürünler">
+      {% assign collection = collections[section.settings.collection] %}
+      {% for product in collection.products limit: section.settings.product_limit %}
+        <article
+          class="wa-product-card"
+          data-product-id="{{ product.id }}"
+          data-product-handle="{{ product.handle }}"
+          data-product-title="{{ product.title }}"
+          data-product-price="{{ product.price }}"
+          data-product-image="{{ product.featured_image | image_url: width: 400 }}"
+          data-variant-id="{{ product.first_available_variant.id }}"
+          data-product-url="{{ product.url }}"
+          tabindex="0"
+          role="button"
+          aria-label="{{ product.title }} ürününü ritüeline ekle"
+        >
+          <div class="wa-product-card__image-wrapper">
+            <img
+              src="{{ product.featured_image | image_url: width: 400 }}"
+              alt="{{ product.title }}"
+              class="wa-product-card__image"
+              loading="lazy"
+            >
+          </div>
+
+          <div class="wa-product-card__content">
+            <h3 class="wa-product-card__title">{{ product.title }}</h3>
+            <p class="wa-product-card__price">{{ product.price | money }}</p>
+          </div>
+
+          <button class="wa-product-card__add-btn" aria-label="{{ product.title }} ekle">
+            <svg class="wa-product-card__icon-add" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <svg class="wa-product-card__icon-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </button>
+        </article>
+      {% endfor %}
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="wa-sidebar">
+      <div class="wa-sidebar__header">
+        <h3 class="wa-sidebar__title">Ritüel Kutunuz</h3>
+        <span class="wa-sidebar__count">0 ürün</span>
+      </div>
+
+      <!-- Seçilen Ürünler -->
+      <div class="wa-sidebar__items-container">
+        <div class="wa-sidebar__empty-state">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          </svg>
+          <p>Ritüelinizi oluşturmak için<br>ürün seçin</p>
+        </div>
+        <div class="wa-sidebar__items"></div>
+      </div>
+
+      <!-- Akıllı Öneri Kutusu -->
+      <div class="wa-recommendation" style="display: none;">
+        <div class="wa-recommendation__header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+          </svg>
+          <span>Akıllı Öneri</span>
+        </div>
+        <div class="wa-recommendation__content">
+          <div class="wa-recommendation__product">
+            <img src="" alt="" class="wa-recommendation__image">
+            <div class="wa-recommendation__info">
+              <span class="wa-recommendation__label">Önerilen Ürün</span>
+              <span class="wa-recommendation__name"></span>
+            </div>
+          </div>
+          <div class="wa-recommendation__bundle-name"></div>
+          <p class="wa-recommendation__reason"></p>
+          <button class="wa-recommendation__add-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Önerilen Ürünü Ekle
+          </button>
+        </div>
+      </div>
+
+      <!-- Paket Faydası Açıklaması -->
+      <div class="wa-synergy-explanation" style="display: none;">
+        <div class="wa-synergy-explanation__header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span>Bu Paketin Faydası</span>
+        </div>
+        <p class="wa-synergy-explanation__text"></p>
+      </div>
+
+      <!-- Ritüel Rehberi -->
+      <div class="wa-ritual-guide" style="display: none;">
+        <div class="wa-ritual-guide__header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>Kullanım Rehberi</span>
+        </div>
+        <div class="wa-ritual-guide__content"></div>
+      </div>
+
+      <!-- İndirim Seviyesi Bar -->
+      <div class="wa-sidebar__synergy">
+        <div class="wa-sidebar__synergy-header">
+          <span>İndirim Seviyesi</span>
+          <span class="wa-sidebar__synergy-text">Başlayın</span>
+        </div>
+        <div class="wa-steps">
+          <div class="wa-step" data-step="1">
+            <span class="wa-step__dot"></span>
+            <span class="wa-step__label"></span>
+          </div>
+          <div class="wa-step" data-step="2">
+            <span class="wa-step__dot"></span>
+            <span class="wa-step__label">%15</span>
+          </div>
+          <div class="wa-step" data-step="3">
+            <span class="wa-step__dot"></span>
+            <span class="wa-step__label">%20</span>
+          </div>
+          <div class="wa-step" data-step="4">
+            <span class="wa-step__dot"></span>
+            <span class="wa-step__label">%25</span>
+          </div>
+          <div class="wa-step" data-step="5">
+            <span class="wa-step__dot"></span>
+            <span class="wa-step__label">%30</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fiyatlandırma -->
+      <div class="wa-sidebar__pricing">
+        <div class="wa-sidebar__price-row">
+          <span>Ara Toplam</span>
+          <span class="wa-sidebar__subtotal">₺0</span>
+        </div>
+        <div class="wa-sidebar__price-row wa-sidebar__price-row--discount" style="display: none;">
+          <span>Paket İndirimi</span>
+          <span class="wa-sidebar__discount">-₺0</span>
+        </div>
+        <div class="wa-sidebar__price-row wa-sidebar__price-row--total">
+          <span>Toplam</span>
+          <span class="wa-sidebar__total">₺0</span>
+        </div>
+      </div>
+
+      <button class="wa-sidebar__checkout-btn" disabled>
+        <span class="wa-sidebar__checkout-text">Ödemeye Git</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 6px;">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </aside>
+  </div>
+
+  <!-- Mobil Dock -->
+  <div class="wa-dock wa-dock--empty">
+    <div class="wa-dock__handle"><span></span></div>
+
+    <div class="wa-dock__collapsed">
+      <div class="wa-dock__collapsed-left">
+        <div class="wa-dock__preview">
+          <span class="wa-dock__empty-text">Ürün Seçin</span>
+          <div class="wa-dock__thumbnails"></div>
+        </div>
+        <div class="wa-dock__collapsed-info">
+          <span class="wa-dock__item-count">0 ürün</span>
+          <span class="wa-dock__synergy-badge">Başlayın</span>
+        </div>
+      </div>
+      <div class="wa-dock__collapsed-right">
+        <div class="wa-dock__mini-total">₺0</div>
+        <button class="wa-dock__expand-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobil Paket Özeti (Swipe etmeden görünür) -->
+    <div class="wa-dock__synergy-summary" style="display: none;">
+      <div class="wa-steps wa-steps--mini">
+        <span class="wa-step" data-step="1" title="%15"></span>
+        <span class="wa-step" data-step="2" title="%20"></span>
+        <span class="wa-step" data-step="3" title="%25"></span>
+        <span class="wa-step" data-step="4" title="%30"></span>
+        <span class="wa-step" data-step="5" title="MAX"></span>
+      </div>
+      <p class="wa-dock__synergy-summary-text"></p>
+    </div>
+
+    <div class="wa-dock__expanded">
+      <div class="wa-dock__expanded-header">
+        <h3>Ritüeliniz</h3>
+        <button class="wa-dock__close-btn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="wa-dock__items"></div>
+
+      <!-- Mobil Öneri -->
+      <div class="wa-dock__recommendation" style="display: none;">
+        <div class="wa-dock__recommendation-header">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+          </svg>
+          <span>Önerilen</span>
+        </div>
+        <div class="wa-dock__recommendation-content">
+          <img src="" alt="" class="wa-dock__recommendation-img">
+          <div class="wa-dock__recommendation-info">
+            <span class="wa-dock__recommendation-name"></span>
+            <span class="wa-dock__recommendation-bundle"></span>
+          </div>
+          <button class="wa-dock__recommendation-add">Ekle</button>
+        </div>
+      </div>
+
+      <!-- Mobil Paket Faydası Açıklaması -->
+      <div class="wa-dock__synergy-explanation" style="display: none;">
+        <div class="wa-dock__synergy-explanation-header">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span>Bu Paketin Faydası</span>
+        </div>
+        <p class="wa-dock__synergy-explanation-text"></p>
+      </div>
+
+      <!-- Mobil Ritüel Rehberi -->
+      <div class="wa-dock__ritual" style="display: none;"></div>
+
+      <div class="wa-dock__synergy">
+        <div class="wa-dock__synergy-header">
+          <span>İndirim Seviyesi</span>
+          <span class="wa-dock__synergy-text">Başlayın</span>
+        </div>
+        <div class="wa-steps">
+          <div class="wa-step" data-step="1">
+            <span class="wa-step__dot"></span>
+            <span class="wa-step__label"></span>
+          </div>
+          <div class="wa-step" data-step="2">
+            <span class="wa-step__dot"></span>
+            <span class="wa-step__label">%15</span>
+          </div>
+          <div class="wa-step" data-step="3">
+            <span class="wa-step__dot"></span>
+            <span class="wa-step__label">%20</span>
+          </div>
+          <div class="wa-step" data-step="4">
+            <span class="wa-step__dot"></span>
+            <span class="wa-step__label">%25</span>
+          </div>
+          <div class="wa-step" data-step="5">
+            <span class="wa-step__dot"></span>
+            <span class="wa-step__label">%30</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wa-dock__pricing">
+        <div class="wa-dock__price-row">
+          <span>Ara Toplam</span>
+          <span class="wa-dock__subtotal">₺0</span>
+        </div>
+        <div class="wa-dock__price-row wa-dock__price-row--discount" style="display: none;">
+          <span>İndirim</span>
+          <span class="wa-dock__discount">-₺0</span>
+        </div>
+        <div class="wa-dock__price-row wa-dock__price-row--total">
+          <span>Toplam</span>
+          <span class="wa-dock__total">₺0</span>
+        </div>
+      </div>
+
+      <button class="wa-dock__checkout-btn" disabled>
+        Ödemeye Git
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 6px;">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="wa-particles"></div>
+</section>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --wa-black: #000000;
+    --wa-dark: #111111;
+    --wa-gray-900: #1a1a1a;
+    --wa-gray-800: #2d2d2d;
+    --wa-gray-700: #404040;
+    --wa-gray-600: #525252;
+    --wa-gray-500: #737373;
+    --wa-gray-400: #a3a3a3;
+    --wa-gray-300: #d4d4d4;
+    --wa-gray-200: #e5e5e5;
+    --wa-gray-100: #f5f5f5;
+    --wa-white: #ffffff;
+    --wa-accent: #000000;
+    --wa-success: #22c55e;
+    --wa-radius: 12px;
+    --wa-radius-sm: 8px;
+    --wa-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    --wa-shadow-lg: 0 4px 20px rgba(0,0,0,0.15);
+    --wa-transition: 0.2s ease;
+    --wa-dock-height: 85px;
+    /* Font sizes - inherit from site */
+    --wa-font-size-xs: 0.75rem;
+    --wa-font-size-sm: 0.875rem;
+    --wa-font-size-base: 1rem;
+    --wa-font-size-lg: 1.125rem;
+  }
+
+  .wellness-architect {
+    position: relative;
+    padding: 2rem 1rem;
+    padding-bottom: calc(var(--wa-dock-height) + 2rem);
+    background: var(--wa-white);
+    min-height: 100vh;
+    font-family: inherit;
+    font-size: var(--wa-font-size-base);
+    color: var(--wa-black);
+  }
+
+  .wellness-architect * {
+    box-sizing: border-box;
+  }
+
+  /* Header */
+  .wa-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    max-width: 500px;
+    margin-inline: auto;
+  }
+
+  .wa-header__eyebrow {
+    display: inline-block;
+    background: var(--wa-black);
+    color: var(--wa-white);
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 1rem;
+  }
+
+  .wa-header__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--wa-black);
+    margin: 0 0 0.75rem 0;
+    letter-spacing: -0.02em;
+  }
+
+  .wa-header__subtitle {
+    font-size: 0.9rem;
+    color: var(--wa-gray-500);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Container */
+  .wa-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Product Grid */
+  .wa-products {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  /* Product Card */
+  .wa-product-card {
+    position: relative;
+    background: var(--wa-white);
+    border: 2px solid var(--wa-gray-200);
+    border-radius: var(--wa-radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all var(--wa-transition);
+  }
+
+  .wa-product-card:hover {
+    border-color: var(--wa-gray-300);
+  }
+
+  .wa-product-card:active {
+    transform: scale(0.98);
+  }
+
+  .wa-product-card--added {
+    border-color: var(--wa-black);
+    background: var(--wa-gray-100);
+  }
+
+  .wa-product-card--added .wa-product-card__add-btn {
+    background: var(--wa-success);
+  }
+
+  .wa-product-card--added .wa-product-card__icon-add {
+    display: none;
+  }
+
+  .wa-product-card--added .wa-product-card__icon-check {
+    display: block;
+  }
+
+  .wa-product-card__icon-check {
+    display: none;
+  }
+
+  .wa-product-card--recommended {
+    border-color: var(--wa-black);
+    box-shadow: 0 0 0 1px var(--wa-black);
+  }
+
+  .wa-product-card--recommended::before {
+    content: 'Önerilen';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--wa-black);
+    color: var(--wa-white);
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    z-index: 5;
+  }
+
+  .wa-product-card--loading {
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  .wa-product-card--loading .wa-product-card__add-btn {
+    background: var(--wa-gray-400);
+  }
+
+  .wa-product-card--loading .wa-product-card__add-btn::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--wa-white);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .wa-product-card--loading .wa-product-card__icon-add,
+  .wa-product-card--loading .wa-product-card__icon-check {
+    display: none;
+  }
+
+  .wa-product-card__image-wrapper {
+    aspect-ratio: 1;
+    background: var(--wa-gray-100);
+    overflow: hidden;
+  }
+
+  .wa-product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--wa-transition);
+  }
+
+  .wa-product-card:hover .wa-product-card__image {
+    transform: scale(1.03);
+  }
+
+  .wa-product-card__content {
+    padding: 0.75rem;
+  }
+
+  .wa-product-card__title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--wa-black);
+    margin: 0 0 0.25rem 0;
+    line-height: 1.3;
+  }
+
+  .wa-product-card__price {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--wa-gray-500);
+    margin: 0;
+  }
+
+  .wa-product-card__add-btn {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--wa-black);
+    color: var(--wa-white);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--wa-transition);
+    z-index: 2;
+  }
+
+  .wa-product-card__add-btn:hover {
+    transform: scale(1.1);
+  }
+
+  /* Sidebar - Hidden on mobile */
+  .wa-sidebar {
+    display: none;
+  }
+
+  /* Mobile Dock */
+  .wa-dock {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--wa-white);
+    border-top: 1px solid var(--wa-gray-200);
+    z-index: 999;
+    transition: height 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+    height: var(--wa-dock-height);
+    overflow: hidden;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+  }
+
+  /* Sepet boşken dock gizle */
+  .wa-dock--empty {
+    transform: translateY(100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .wa-dock--expanded {
+    height: 85vh;
+    border-radius: var(--wa-radius) var(--wa-radius) 0 0;
+    border-top: none;
+    box-shadow: var(--wa-shadow-lg);
+    overflow-y: auto;
+  }
+
+  .wa-dock__handle {
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .wa-dock__handle span {
+    width: 36px;
+    height: 4px;
+    background: var(--wa-gray-300);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .wa-dock__collapsed {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    min-height: 50px;
+  }
+
+  .wa-dock--expanded .wa-dock__collapsed {
+    display: none;
+  }
+
+  .wa-dock__collapsed-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .wa-dock__preview {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .wa-dock__empty-text {
+    font-size: 0.85rem;
+    color: var(--wa-gray-500);
+  }
+
+  .wa-dock__thumbnails {
+    display: flex;
+  }
+
+  .wa-dock__thumbnail {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--wa-white);
+    object-fit: cover;
+    margin-left: -6px;
+    box-shadow: var(--wa-shadow);
+  }
+
+  .wa-dock__thumbnail:first-child {
+    margin-left: 0;
+  }
+
+  .wa-dock__collapsed-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .wa-dock__item-count {
+    font-size: 0.7rem;
+    color: var(--wa-gray-500);
+  }
+
+  .wa-dock__synergy-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    background: var(--wa-gray-100);
+    color: var(--wa-gray-600);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .wa-dock__synergy-badge--active {
+    background: var(--wa-black);
+    color: var(--wa-white);
+  }
+
+  .wa-dock__collapsed-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .wa-dock__mini-total {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--wa-black);
+  }
+
+  .wa-dock__expand-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--wa-black);
+    color: var(--wa-white);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Mobil Sinerji Özeti */
+  .wa-dock__synergy-summary {
+    padding: 0.25rem 1rem 0.5rem;
+    border-top: 1px solid var(--wa-gray-100);
+  }
+
+  .wa-dock--expanded .wa-dock__synergy-summary {
+    display: none !important;
+  }
+
+  .wa-dock__synergy-summary-bar {
+    height: 6px;
+    background: var(--wa-gray-200);
+    border-radius: 3px;
+    overflow: hidden;
+    display: block;
+    margin: 6px 0;
+  }
+
+  .wa-dock__synergy-summary-fill {
+    height: 100%;
+    width: 0%;
+    background: #000000;
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  .wa-dock__synergy-summary-text {
+    font-size: 0.65rem;
+    color: var(--wa-gray-600);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  /* Dock Expanded */
+  .wa-dock__expanded {
+    display: none;
+    padding: 0 1rem 1.5rem;
+  }
+
+  .wa-dock--expanded .wa-dock__expanded {
+    display: block;
+  }
+
+  .wa-dock__expanded-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .wa-dock__expanded-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .wa-dock__close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--wa-gray-100);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--wa-gray-600);
+  }
+
+  .wa-dock__items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .wa-dock__item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--wa-gray-100);
+    border-radius: var(--wa-radius-sm);
+  }
+
+  .wa-dock__item-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .wa-dock__item-link:hover .wa-dock__item-title {
+    color: var(--wa-gray-600);
+  }
+
+  .wa-dock__item-image {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--wa-radius-sm);
+    object-fit: cover;
+  }
+
+  .wa-dock__item-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .wa-dock__item-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 0 0 0.125rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .wa-dock__item-timing {
+    font-size: 0.7rem;
+    color: var(--wa-gray-500);
+    margin: 0;
+  }
+
+  .wa-dock__item-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .wa-dock__item-qty {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: var(--wa-white);
+    border-radius: 6px;
+    padding: 0.25rem;
+  }
+
+  .wa-dock__item-qty-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: none;
+    background: transparent;
+    color: var(--wa-gray-600);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .wa-dock__item-qty-btn:hover {
+    background: var(--wa-gray-100);
+  }
+
+  .wa-dock__item-qty-value {
+    min-width: 20px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .wa-dock__item-remove {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--wa-gray-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wa-dock__item-remove:hover {
+    background: #fee2e2;
+    color: #ef4444;
+  }
+
+  /* Dock Recommendation */
+  .wa-dock__recommendation {
+    background: var(--wa-gray-100);
+    border: 1px dashed var(--wa-gray-300);
+    border-radius: var(--wa-radius-sm);
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .wa-dock__recommendation-header {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--wa-gray-600);
+    margin-bottom: 0.5rem;
+  }
+
+  .wa-dock__recommendation-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .wa-dock__recommendation-img {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--wa-radius-sm);
+    object-fit: cover;
+  }
+
+  .wa-dock__recommendation-info {
+    flex: 1;
+  }
+
+  .wa-dock__recommendation-name {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .wa-dock__recommendation-bundle {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--wa-gray-500);
+  }
+
+  .wa-dock__recommendation-add {
+    padding: 0.5rem 0.75rem;
+    background: var(--wa-black);
+    color: var(--wa-white);
+    border: none;
+    border-radius: var(--wa-radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* Dock Synergy Explanation */
+  .wa-dock__synergy-explanation {
+    background: linear-gradient(135deg, var(--wa-gray-100) 0%, var(--wa-gray-50, #fafafa) 100%);
+    border: 1px solid var(--wa-gray-200);
+    border-radius: var(--wa-radius-sm);
+    padding: 0.875rem;
+    margin-bottom: 1rem;
+  }
+
+  .wa-dock__synergy-explanation-header {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--wa-black);
+    margin-bottom: 0.375rem;
+  }
+
+  .wa-dock__synergy-explanation-benefit {
+    display: inline-block;
+    background: var(--wa-black);
+    color: var(--wa-white);
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+
+  .wa-dock__synergy-explanation-text {
+    font-size: 0.75rem;
+    color: var(--wa-gray-700);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Dock Ritual */
+  .wa-dock__ritual {
+    background: var(--wa-gray-100);
+    border-radius: var(--wa-radius-sm);
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+  }
+
+  .wa-dock__ritual-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .wa-dock__ritual-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .wa-dock__ritual-time {
+    font-weight: 600;
+    color: var(--wa-black);
+    min-width: 50px;
+  }
+
+  .wa-dock__ritual-text {
+    color: var(--wa-gray-600);
+  }
+
+  /* Dock Synergy */
+  .wa-dock__synergy {
+    margin-bottom: 1rem;
+  }
+
+  .wa-dock__synergy-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .wa-dock__synergy-header span:first-child {
+    color: var(--wa-gray-500);
+  }
+
+  .wa-dock__synergy-text {
+    font-weight: 600;
+    color: var(--wa-black);
+  }
+
+  .wa-dock__synergy-bar {
+    height: 8px;
+    background: var(--wa-gray-200);
+    border-radius: 4px;
+    overflow: hidden;
+    display: block;
+    margin-top: 8px;
+  }
+
+  .wa-dock__synergy-fill {
+    height: 100%;
+    width: 0%;
+    background: #000000;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  /* Step Indicators (Adım Göstergesi) */
+  .wa-steps {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  .wa-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    max-width: 60px;
+  }
+
+  /* Mini versiyon (özet için) - tüm base stilleri override et */
+  .wa-steps--mini {
+    gap: 8px;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 4px 0 2px 0;
+  }
+
+  .wa-steps--mini .wa-step {
+    display: block;
+    flex: none;
+    width: 12px;
+    height: 12px;
+    max-width: none;
+    border-radius: 50%;
+    background: var(--wa-gray-300);
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+  }
+
+  .wa-steps--mini .wa-step.active {
+    background: #000;
+    transform: scale(1.15);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .wa-step__dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--wa-gray-200);
+    border: 3px solid var(--wa-gray-300);
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .wa-step__dot::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+  }
+
+  .wa-step.active .wa-step__dot {
+    background: #000;
+    border-color: #000;
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+
+  .wa-step.active .wa-step__dot::after {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .wa-step__label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--wa-gray-400);
+    margin-top: 4px;
+    transition: color 0.3s ease;
+  }
+
+  .wa-step.active .wa-step__label {
+    color: #000;
+  }
+
+  /* Dock Pricing */
+  .wa-dock__pricing {
+    margin-bottom: 1rem;
+  }
+
+  .wa-dock__price-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    padding: 0.375rem 0;
+    color: var(--wa-gray-500);
+  }
+
+  .wa-dock__price-row--discount {
+    color: var(--wa-success);
+  }
+
+  .wa-dock__price-row--total {
+    font-weight: 700;
+    color: var(--wa-black);
+    border-top: 1px solid var(--wa-gray-200);
+    padding-top: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .wa-dock__checkout-btn {
+    width: 100%;
+    height: 48px;
+    background: var(--wa-black);
+    color: var(--wa-white);
+    border: none;
+    border-radius: var(--wa-radius-sm);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wa-dock__checkout-btn:disabled {
+    background: var(--wa-gray-300);
+    cursor: not-allowed;
+  }
+
+  .wa-dock__checkout-btn:not(:disabled):hover {
+    background: var(--wa-gray-800);
+  }
+
+  /* Flying Ghost */
+  .wa-flying-ghost {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: var(--wa-radius-sm);
+    box-shadow: var(--wa-shadow-lg);
+  }
+
+  /* Particles */
+  .wa-particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  .wa-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--wa-black);
+    border-radius: 50%;
+    animation: particleFly 0.8s ease-out forwards;
+  }
+
+  @keyframes particleFly {
+    to {
+      opacity: 0;
+      transform: translate(var(--tx), var(--ty)) scale(0);
+    }
+  }
+
+  /* Spinner */
+  .wa-spinner {
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ========== DESKTOP ========== */
+  @media (min-width: 768px) {
+    .wellness-architect {
+      padding: 3rem 2rem;
+    }
+
+    .wa-header__title {
+      font-size: 2.25rem;
+    }
+
+    .wa-container {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .wa-products {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .wa-product-card__title {
+      font-size: 0.85rem;
+    }
+
+    .wa-dock {
+      display: none;
+    }
+
+    .wa-sidebar {
+      display: block;
+      position: sticky;
+      top: 20px;
+      background: var(--wa-white);
+      border: 1px solid var(--wa-gray-200);
+      border-radius: var(--wa-radius);
+      padding: 1.25rem;
+    }
+
+    .wa-sidebar__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .wa-sidebar__title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .wa-sidebar__count {
+      font-size: 0.75rem;
+      color: var(--wa-gray-500);
+    }
+
+    .wa-sidebar__items-container {
+      min-height: 100px;
+      margin-bottom: 1rem;
+    }
+
+    .wa-sidebar__empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100px;
+      color: var(--wa-gray-400);
+      text-align: center;
+    }
+
+    .wa-sidebar__empty-state p {
+      margin: 0.75rem 0 0;
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+
+    .wa-sidebar--has-items .wa-sidebar__empty-state {
+      display: none;
+    }
+
+    .wa-sidebar__items {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .wa-sidebar__item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: var(--wa-gray-100);
+      border-radius: var(--wa-radius-sm);
+    }
+
+    .wa-sidebar__item-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .wa-sidebar__item-link:hover .wa-sidebar__item-title {
+      color: var(--wa-gray-600);
+    }
+
+    .wa-sidebar__item-image {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--wa-radius-sm);
+      object-fit: cover;
+    }
+
+    .wa-sidebar__item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .wa-sidebar__item-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 0 0 0.125rem;
+    }
+
+    .wa-sidebar__item-timing {
+      font-size: 0.7rem;
+      color: var(--wa-gray-500);
+      margin: 0;
+    }
+
+    .wa-sidebar__item-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .wa-sidebar__item-qty {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      background: var(--wa-white);
+      border-radius: 6px;
+      padding: 0.25rem;
+    }
+
+    .wa-sidebar__item-qty-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      border: none;
+      background: transparent;
+      color: var(--wa-gray-600);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .wa-sidebar__item-qty-btn:hover {
+      background: var(--wa-gray-200);
+    }
+
+    .wa-sidebar__item-qty-value {
+      min-width: 20px;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .wa-sidebar__item-remove {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--wa-gray-400);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wa-sidebar__item-remove:hover {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    /* Recommendation Box */
+    .wa-recommendation {
+      background: var(--wa-gray-100);
+      border: 1px dashed var(--wa-gray-300);
+      border-radius: var(--wa-radius-sm);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .wa-recommendation__header {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--wa-gray-600);
+      margin-bottom: 0.75rem;
+    }
+
+    .wa-recommendation__product {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .wa-recommendation__image {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--wa-radius-sm);
+      object-fit: cover;
+    }
+
+    .wa-recommendation__info {
+      flex: 1;
+    }
+
+    .wa-recommendation__label {
+      display: block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--wa-gray-500);
+      margin-bottom: 0.125rem;
+    }
+
+    .wa-recommendation__name {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--wa-black);
+    }
+
+    .wa-recommendation__bundle-name {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--wa-black);
+      padding: 0.375rem 0.625rem;
+      background: var(--wa-white);
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+
+    .wa-recommendation__reason {
+      font-size: 0.75rem;
+      color: var(--wa-gray-600);
+      line-height: 1.4;
+      margin: 0 0 0.75rem;
+    }
+
+    .wa-recommendation__add-btn {
+      width: 100%;
+      padding: 0.625rem;
+      background: var(--wa-black);
+      color: var(--wa-white);
+      border: none;
+      border-radius: var(--wa-radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.375rem;
+      font-family: inherit;
+    }
+
+    .wa-recommendation__add-btn:hover {
+      background: var(--wa-gray-800);
+    }
+
+    /* Synergy Explanation */
+    .wa-synergy-explanation {
+      background: linear-gradient(135deg, var(--wa-gray-100) 0%, var(--wa-gray-50, #fafafa) 100%);
+      border: 1px solid var(--wa-gray-200);
+      border-radius: var(--wa-radius-sm);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .wa-synergy-explanation__header {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--wa-black);
+      margin-bottom: 0.375rem;
+    }
+
+    .wa-synergy-explanation__benefit {
+      display: inline-block;
+      background: var(--wa-black);
+      color: var(--wa-white);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      margin-bottom: 0.625rem;
+    }
+
+    .wa-synergy-explanation__text {
+      font-size: 0.8rem;
+      color: var(--wa-gray-700);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Ritual Guide */
+    .wa-ritual-guide {
+      background: var(--wa-gray-100);
+      border-radius: var(--wa-radius-sm);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .wa-ritual-guide__header {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--wa-gray-600);
+      margin-bottom: 0.75rem;
+    }
+
+    .wa-ritual-guide__content {
+      font-size: 0.8rem;
+    }
+
+    .wa-ritual-guide__item {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--wa-gray-200);
+    }
+
+    .wa-ritual-guide__item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .wa-ritual-guide__time {
+      font-weight: 600;
+      color: var(--wa-black);
+      min-width: 55px;
+    }
+
+    .wa-ritual-guide__text {
+      color: var(--wa-gray-600);
+      line-height: 1.4;
+    }
+
+    .wa-ritual-guide__product {
+      font-weight: 600;
+      color: var(--wa-black);
+    }
+
+    /* Synergy */
+    .wa-sidebar__synergy {
+      margin-bottom: 1rem;
+    }
+
+    .wa-sidebar__synergy-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .wa-sidebar__synergy-header span:first-child {
+      color: var(--wa-gray-500);
+    }
+
+    .wa-sidebar__synergy-text {
+      font-weight: 600;
+      color: var(--wa-black);
+    }
+
+    .wa-sidebar__synergy-bar {
+      height: 8px;
+      background: var(--wa-gray-200);
+      border-radius: 4px;
+      overflow: hidden;
+      display: block;
+      margin-top: 8px;
+    }
+
+    .wa-sidebar__synergy-fill {
+      height: 100%;
+      width: 0%;
+      background: #000000;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    /* Pricing */
+    .wa-sidebar__pricing {
+      margin-bottom: 1rem;
+    }
+
+    .wa-sidebar__price-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      padding: 0.5rem 0;
+      color: var(--wa-gray-500);
+    }
+
+    .wa-sidebar__price-row--discount {
+      color: var(--wa-success);
+    }
+
+    .wa-sidebar__price-row--total {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--wa-black);
+      border-top: 1px solid var(--wa-gray-200);
+      padding-top: 0.75rem;
+      margin-top: 0.25rem;
+    }
+
+    .wa-sidebar__checkout-btn {
+      width: 100%;
+      height: 48px;
+      background: var(--wa-black);
+      color: var(--wa-white);
+      border: none;
+      border-radius: var(--wa-radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--wa-transition);
+      font-family: inherit;
+    }
+
+    .wa-sidebar__checkout-btn:hover:not(:disabled) {
+      background: var(--wa-gray-800);
+    }
+
+    .wa-sidebar__checkout-btn:disabled {
+      background: var(--wa-gray-300);
+      cursor: not-allowed;
+    }
+
+    .wa-sidebar__checkout-btn--loading .wa-sidebar__checkout-text {
+      display: none;
+    }
+
+    .wa-sidebar__checkout-loader {
+      display: none;
+    }
+
+    .wa-sidebar__checkout-btn--loading .wa-sidebar__checkout-loader {
+      display: block;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .wa-container {
+      grid-template-columns: 1fr 400px;
+      gap: 2.5rem;
+    }
+  }
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  // ============================================
+  // SİNERJİ HARİTASI - Ürün Kombinasyonları
+  // ============================================
+  const SYNERGY_MAP = {
+    'dreamglow': {
+      name: 'DreamGlow',
+      timing: 'Uykudan 45 dk önce',
+      tip: '1 ölçek tozu ılık suyla karıştırın. Gece rutininizin son adımı olsun.',
+      category: 'night'
+    },
+    'dailyglow': {
+      name: 'DailyGlow',
+      timing: 'Kahvaltı sonrası',
+      tip: 'Güne başlarken tok karnına 1 kapsül. Işıltınız içeriden başlasın.',
+      category: 'morning'
+    },
+    'mindfuel': {
+      name: 'MindFuel',
+      timing: 'Kahvaltı sonrası',
+      tip: 'Tok karnına alın. Sabah kahvenizden daha etkili bir odaklanma için.',
+      category: 'morning'
+    },
+    'thechill': {
+      name: 'TheChill',
+      timing: 'Akşam yemeği sonrası',
+      tip: 'Gergin bir günün ardından, uykudan 1-2 saat önce gevşemek için.',
+      category: 'night'
+    },
+    'reset-button': {
+      name: 'Reset Button',
+      timing: 'Öğle yemeği sonrası',
+      tip: 'Bol su ile tok karnına. Gün ortasında bedensel arınmayı başlatın.',
+      category: 'noon'
+    }
+  };
+
+  // Ürün önerileri - her ürün için en iyi eşleşmeler
+  const RECOMMENDATIONS = {
+    'dreamglow': [
+      { handle: 'dailyglow', bundle: '7/24 Güzellik Çemberi', reason: 'Gece onarımına gündüz korumasını ekleyin.' },
+      { handle: 'reset-button', bundle: 'Tam Arınma', reason: 'Cildiniz gece yenilenirken, bedeniniz toksinlerden arınsın.' },
+      { handle: 'thechill', bundle: 'Derin Uyku Ritüeli', reason: 'Zihni sakinleştirin ki güzellik uykunuz bölünmesin.' }
+    ],
+    'dailyglow': [
+      { handle: 'dreamglow', bundle: 'Gece & Gündüz Bakım', reason: '24 saat süren kesintisiz cilt desteği.' },
+      { handle: 'reset-button', bundle: 'İçten Dışa Işıltı', reason: 'Temiz bir beden, ışıldayan bir cilt demektir.' },
+      { handle: 'mindfuel', bundle: 'Start-Up Enerjisi', reason: 'Hem cildiniz hem zihniniz güne hazır olsun.' }
+    ],
+    'mindfuel': [
+      { handle: 'thechill', bundle: 'Flow State', reason: 'Gündüz keskin bir zihin, akşam huzurlu bir dinginlik.' },
+      { handle: 'reset-button', bundle: 'Berrak Zihin', reason: 'Toksinlerden arınmış bir beden, daha net düşünür.' },
+      { handle: 'dailyglow', bundle: 'Performans ve Işıltı', reason: 'Güçlü bir zihin ve canlı bir görünüm.' }
+    ],
+    'thechill': [
+      { handle: 'mindfuel', bundle: 'Denge Ustası', reason: 'Stres yok, sadece odaklanma ve sakinlik var.' },
+      { handle: 'dreamglow', bundle: 'Huzurlu Gece', reason: 'Sakin bir zihinle yatağa girip, yenilenmiş uyanın.' },
+      { handle: 'reset-button', bundle: 'Resetleme Zamanı', reason: 'Hem zihinsel yüklerden hem toksinlerden kurtulun.' }
+    ],
+    'reset-button': [
+      { handle: 'dailyglow', bundle: 'Temiz Başlangıç', reason: 'Arınmış bedenin üzerine cilt ışıltısını ekleyin.' },
+      { handle: 'thechill', bundle: 'Bütünsel Hafiflik', reason: 'Bedensel detoks ve zihinsel rahatlama bir arada.' },
+      { handle: 'mindfuel', bundle: 'Sisli Zihne Son', reason: 'Bedeni temizleyin, zihni keskinleştirin.' }
+    ]
+  };
+
+  // Kombinasyon sinerji açıklamaları - Premium & Holistic marka tonu
+  const SYNERGY_EXPLANATIONS = {
+    // ==================== 2'Lİ KOMBİNASYONLAR ====================
+
+    'dailyglow+dreamglow': {
+      title: '7/24 Güzellik Kiti',
+      benefit: 'Kesintisiz cilt onarımı',
+      detail: 'Gündüz cildinizi koruyun, gece uykuda onarın. 24 saat süren tam kapsamlı güzellik döngüsü.'
+    },
+
+    'dailyglow+mindfuel': {
+      title: 'Power Morning',
+      benefit: 'Enerji + Odaklanma',
+      detail: 'Güne sadece uyanarak değil, canlanarak başlayın. Hem fiziksel ışıltı hem zihinsel netlik.'
+    },
+
+    'dailyglow+reset-button': {
+      title: 'Detox & Glow',
+      benefit: 'Arınma + Canlılık',
+      detail: 'Reset Button ile içeriden temizlenin, DailyGlow ile dışarıya ışık saçın. Gerçek parlaklık içeriden gelir.'
+    },
+
+    'dailyglow+thechill': {
+      title: 'Denge Paketi',
+      benefit: 'Sabah Enerjisi, Akşam Huzuru',
+      detail: 'Gündüz pili bitmeden çalışın, akşam stresi eve taşımadan dinlenin. Modern hayatın panzehiri.'
+    },
+
+    'dreamglow+mindfuel': {
+      title: 'Smart & Beautiful',
+      benefit: 'Gündüz Odak, Gece Bakım',
+      detail: 'Yoğun tempoda bile ne görünümünüzden ne de başarınızdan ödün vermeyin.'
+    },
+
+    'dreamglow+reset-button': {
+      title: 'Gece Terapisi',
+      benefit: 'Arınma + Yenilenme',
+      detail: 'Siz uyurken bedeniniz toksinleri atsın, cildiniz yeniden yapılanmaya başlasın.'
+    },
+
+    'dreamglow+thechill': {
+      title: 'Uyku Ritüeli',
+      benefit: 'Derin Uyku + Onarım',
+      detail: 'TheChill zihni susturur, DreamGlow bedeni onarır. Sabaha tamamen yenilenmiş uyanın.'
+    },
+
+    'mindfuel+reset-button': {
+      title: 'Berrak Zihin',
+      benefit: 'Toksin Atımı + Konsantrasyon',
+      detail: '"Beyin sisi"ne son. Arınmış bir metabolizma ile maksimum bilişsel performans.'
+    },
+
+    'mindfuel+thechill': {
+      title: 'Zen Performans',
+      benefit: 'Kontrollü Güç',
+      detail: 'Stres yapmadan odaklanın. Yüksek performansın sürdürülebilir hali.'
+    },
+
+    'reset-button+thechill': {
+      title: 'Tam Reset',
+      benefit: 'Zihinsel & Bedensel Arınma',
+      detail: 'Hem kafanızdaki hem bedeninizdeki ağırlıklardan kurtulun. Tam anlamıyla "Fabrika Ayarlarına Dönüş."'
+    },
+
+    // ==================== 3'LÜ KOMBİNASYONLAR ====================
+
+    'dailyglow+dreamglow+mindfuel': {
+      title: 'CEO Paketi',
+      benefit: 'Görünüm + Zeka + Enerji',
+      detail: 'Profesyoneller için tasarlandı. Yoğun iş temposunda odağınızı ve ışıltınızı koruyan nihai set.'
+    },
+
+    'dailyglow+dreamglow+reset-button': {
+      title: 'Derin Cilt Bakımı',
+      benefit: 'Arınma + 24 Saat Koruma',
+      detail: 'Cilt problemlerinin kök nedenini hedefleyin. İçeriden temizlik, dışarıda ışıltı.'
+    },
+
+    'dailyglow+dreamglow+thechill': {
+      title: 'Stress-Free Beauty',
+      benefit: 'Stres Karşıtı Güzellik',
+      detail: 'Stres cildin düşmanıdır. Bu set ile stresi yönetin, cildinizi koruyun ve onarın. En popüler üçlümüz.'
+    },
+
+    'dailyglow+mindfuel+reset-button': {
+      title: 'Güne Hazırlık Kiti',
+      benefit: 'Arınma + Enerji + Odak',
+      detail: 'Güne 1-0 önde başlamak isteyenler için. Temiz bir beden ve keskin bir zihin.'
+    },
+
+    'dailyglow+mindfuel+thechill': {
+      title: 'Verimli Gün Paketi',
+      benefit: 'Burnout Olmadan Performans',
+      detail: 'Sabahtan akşama verimli çalışın, akşam rahatça dinlenin. Sürdürülebilir başarı formülü.'
+    },
+
+    'dailyglow+reset-button+thechill': {
+      title: 'Beden Dengesi',
+      benefit: 'Arınma + Enerji + Huzur',
+      detail: 'Bedeninizin hem temiz hem enerjik hem dengeli olmasını sağlayın.'
+    },
+
+    'dreamglow+mindfuel+reset-button': {
+      title: 'Yenilenme Paketi',
+      benefit: 'Temizle, Onar, Odaklan',
+      detail: 'Yorgunluk hissediyorsanız bu üçlü size göre. Bedeninizi sıfırlayın, zihninizi keskinleştirin.'
+    },
+
+    'dreamglow+mindfuel+thechill': {
+      title: 'Zihin-Beden Uyumu',
+      benefit: 'Odaklanma + Kaliteli Uyku',
+      detail: 'Gündüz keskin bir zihin, gece derin bir uyku. Mental sağlığınız için bütünsel destek.'
+    },
+
+    'dreamglow+reset-button+thechill': {
+      title: 'Gece Yenilenme Kiti',
+      benefit: 'Derin Detoks + Uyku',
+      detail: 'Akşam rutininizi bir spa deneyimine çevirin. Sabaha "yeniden doğmuş" gibi uyanın.'
+    },
+
+    'mindfuel+reset-button+thechill': {
+      title: 'Zihinsel Berraklık',
+      benefit: 'Arınma + Odak + Denge',
+      detail: 'Beyin sisi ve odaklanma sorunlarına bütünsel çözüm. Temiz beden, berrak zihin.'
+    },
+
+    // ==================== 4'LÜ KOMBİNASYONLAR ====================
+
+    'dailyglow+dreamglow+mindfuel+reset-button': {
+      title: 'Yoğun Tempo Paketi',
+      benefit: '%25 İndirim • Performans Odaklı',
+      detail: 'Yoğun tempoda çalışanlar için ideal. Arınma, enerji, odak ve onarım bir arada.'
+    },
+
+    'dailyglow+dreamglow+mindfuel+thechill': {
+      title: 'Premium Wellness',
+      benefit: '%25 İndirim • Kapsamlı Destek',
+      detail: 'Gün boyunca dengeli enerji, akşam huzurlu dinlenme. Lüks bir yaşam tarzının temeli.'
+    },
+
+    'dailyglow+dreamglow+reset-button+thechill': {
+      title: 'Huzurlu Güzellik Pro',
+      benefit: '%25 İndirim • Stressiz Cilt Bakımı',
+      detail: 'Stressiz bir hayatta parlayan cilt için kapsamlı destek. İçeriden ve dışarıdan bakım.'
+    },
+
+    'dailyglow+mindfuel+reset-button+thechill': {
+      title: 'Gündüz Performans Pro',
+      benefit: '%25 İndirim • Gün Boyu Destek',
+      detail: 'Sabahtan akşama verimli bir gün için gereken her şey. Maksimum performans paketi.'
+    },
+
+    'dreamglow+mindfuel+reset-button+thechill': {
+      title: 'Derin Denge Paketi',
+      benefit: '%25 İndirim • Bütünsel İyilik',
+      detail: 'Yorgunluk ve dengesizlik hissediyorsanız bu dörtlü tam size göre. Kapsamlı yenilenme.'
+    },
+
+    // ==================== 5'Lİ KOMBİNASYON ====================
+
+    'dailyglow+dreamglow+mindfuel+reset-button+thechill': {
+      title: 'The Cyrasoul Ritual',
+      benefit: '%30 İndirim • TAM DONANIM',
+      detail: 'Bütüncül iyilik hali için eksiksiz set. Odaklanma, uyku, cilt, stres yönetimi ve detoks. Hiçbir şeyi şansa bırakmayın.'
+    }
+  };
+
+  // İndirim seviyesi yapılandırması - 5 ürüne kadar
+  const SYNERGY_CONFIG = {
+    1: { percent: 20, text: 'Başlangıç', discount: 0 },
+    2: { percent: 40, text: '%15 İkili Güç', discount: 0.15 },
+    3: { percent: 60, text: '%20 Popüler', discount: 0.20 },
+    4: { percent: 80, text: '%25 Pro', discount: 0.25 },
+    5: { percent: 100, text: '%30 Efsane', discount: 0.30 }
+  };
+
+  // ============================================
+  // State
+  // ============================================
+  const state = {
+    items: [], // { id, handle, title, price, image, variantId, quantity }
+    isExpanded: false,
+    isMobile: window.innerWidth < 768
+  };
+
+  // ============================================
+  // DOM Elements
+  // ============================================
+  const section = document.getElementById('wellness-architect');
+  if (!section) return;
+
+  const productCards = section.querySelectorAll('.wa-product-card');
+  const dock = section.querySelector('.wa-dock');
+  const sidebar = section.querySelector('.wa-sidebar');
+  const particles = section.querySelector('.wa-particles');
+
+  // ============================================
+  // DOM Cache (Performance Optimization)
+  // ============================================
+  const dockElements = {
+    thumbnails: dock.querySelector('.wa-dock__thumbnails'),
+    emptyText: dock.querySelector('.wa-dock__empty-text'),
+    itemsList: dock.querySelector('.wa-dock__items'),
+    recBox: dock.querySelector('.wa-dock__recommendation'),
+    ritualBox: dock.querySelector('.wa-dock__ritual'),
+    synergyExpBox: dock.querySelector('.wa-dock__synergy-explanation'),
+    synergySummary: dock.querySelector('.wa-dock__synergy-summary'),
+    synergySummaryFill: dock.querySelector('.wa-dock__synergy-summary-fill'),
+    synergySummaryText: dock.querySelector('.wa-dock__synergy-summary-text'),
+    synergyBadge: dock.querySelector('.wa-dock__synergy-badge'),
+    itemCount: dock.querySelector('.wa-dock__item-count'),
+    miniTotal: dock.querySelector('.wa-dock__mini-total'),
+    synergyFill: dock.querySelector('.wa-dock__synergy-fill'),
+    synergyText: dock.querySelector('.wa-dock__synergy-text'),
+    subtotal: dock.querySelector('.wa-dock__subtotal'),
+    discount: dock.querySelector('.wa-dock__discount'),
+    total: dock.querySelector('.wa-dock__total'),
+    discountRow: dock.querySelector('.wa-dock__price-row--discount'),
+    checkoutBtn: dock.querySelector('.wa-dock__checkout-btn'),
+    recImg: dock.querySelector('.wa-dock__recommendation-img'),
+    recName: dock.querySelector('.wa-dock__recommendation-name'),
+    recBundle: dock.querySelector('.wa-dock__recommendation-bundle'),
+    recAddBtn: dock.querySelector('.wa-dock__recommendation-add')
+  };
+
+  const sidebarElements = {
+    itemsContainer: sidebar.querySelector('.wa-sidebar__items'),
+    recBox: sidebar.querySelector('.wa-recommendation'),
+    ritualBox: sidebar.querySelector('.wa-ritual-guide'),
+    synergyExpBox: sidebar.querySelector('.wa-synergy-explanation'),
+    countEl: sidebar.querySelector('.wa-sidebar__count'),
+    synergyFill: sidebar.querySelector('.wa-sidebar__synergy-fill'),
+    synergyText: sidebar.querySelector('.wa-sidebar__synergy-text'),
+    subtotal: sidebar.querySelector('.wa-sidebar__subtotal'),
+    discount: sidebar.querySelector('.wa-sidebar__discount'),
+    total: sidebar.querySelector('.wa-sidebar__total'),
+    discountRow: sidebar.querySelector('.wa-sidebar__price-row--discount'),
+    checkoutBtn: sidebar.querySelector('.wa-sidebar__checkout-btn'),
+    recImg: sidebar.querySelector('.wa-recommendation__image'),
+    recName: sidebar.querySelector('.wa-recommendation__name'),
+    recBundleName: sidebar.querySelector('.wa-recommendation__bundle-name'),
+    recReason: sidebar.querySelector('.wa-recommendation__reason'),
+    recAddBtn: sidebar.querySelector('.wa-recommendation__add-btn'),
+    ritualContent: sidebar.querySelector('.wa-ritual-guide__content')
+  };
+
+  // ============================================
+  // Product Data Cache (Performance Optimization)
+  // ============================================
+  const productDataCache = new Map();
+  const handleToProductMap = new Map();
+
+  // Pre-compute handle mappings for faster lookups
+  const HANDLE_PATTERNS = [
+    { pattern: 'dreamglow', handle: 'dreamglow' },
+    { pattern: 'dailyglow', handle: 'dailyglow' },
+    { pattern: 'mindfuel', handle: 'mindfuel' },
+    { pattern: 'thechill', handle: 'thechill' },
+    { pattern: 'resetbutton', handle: 'reset-button' },
+    { pattern: 'reset-button', handle: 'reset-button' }
+  ];
+
+  // Build product cache at init
+  productCards.forEach(card => {
+    const productData = {
+      id: card.dataset.productId,
+      handle: card.dataset.productHandle,
+      title: card.dataset.productTitle,
+      price: parseInt(card.dataset.productPrice),
+      image: card.dataset.productImage,
+      variantId: card.dataset.variantId,
+      url: card.dataset.productUrl
+    };
+
+    // Cache by product ID
+    productDataCache.set(productData.id, { ...productData, card });
+
+    // Cache by handle for quick lookup
+    const normalizedTitle = productData.title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '');
+    for (const { pattern, handle } of HANDLE_PATTERNS) {
+      if (normalizedTitle.includes(pattern.replace('-', ''))) {
+        handleToProductMap.set(handle, { ...productData, card });
+        productDataCache.set(productData.id, { ...productData, card, matchedHandle: handle });
+        break;
+      }
+    }
+  });
+
+  // ============================================
+  // Helpers
+  // ============================================
+  const MONEY_FORMATTER = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 0 });
+
+  function formatMoney(cents) {
+    return MONEY_FORMATTER.format(cents / 100);
+  }
+
+  function vibrate(pattern = 10) {
+    if ('vibrate' in navigator) navigator.vibrate(pattern);
+  }
+
+  function normalizeHandle(title) {
+    return title.toLowerCase()
+      .replace(/[^a-z0-9\s]/g, '')
+      .replace(/\s+/g, '')
+      .trim();
+  }
+
+  function matchHandle(title) {
+    const normalized = normalizeHandle(title);
+    const handles = ['dreamglow', 'dailyglow', 'mindfuel', 'thechill', 'reset-button', 'resetbutton'];
+    for (const h of handles) {
+      if (normalized.includes(h.replace('-', ''))) {
+        return h === 'resetbutton' ? 'reset-button' : h;
+      }
+    }
+    return normalized;
+  }
+
+  // ============================================
+  // Tek Ürün Faydaları
+  // ============================================
+  const SINGLE_PRODUCT_BENEFITS = {
+    'dreamglow': {
+      title: 'DreamGlow',
+      benefit: 'Gece cilt onarım desteği',
+      detail: 'DreamGlow uyku sırasında kolajen üretimini ve cilt yenilenmesini destekler. Uyumadan 30-45 dk önce alın, sabah daha dinlenmiş ve parlak bir cilde uyanın.'
+    },
+    'dailyglow': {
+      title: 'DailyGlow',
+      benefit: 'Gündüz enerji ve cilt desteği',
+      detail: 'DailyGlow hücresel enerji üretimini destekler ve cildinizi gün boyu dış faktörlere karşı korumaya yardımcı olur. Kahvaltı sonrası tok karnına alın.'
+    },
+    'mindfuel': {
+      title: 'MindFuel',
+      benefit: 'Odaklanma ve konsantrasyon desteği',
+      detail: 'MindFuel zihinsel berraklığı ve odaklanmayı destekler. Kahvaltı sonrası tok karnına alın, gün boyu keskin kalmanıza yardımcı olur.'
+    },
+    'thechill': {
+      title: 'TheChill',
+      benefit: 'Sakinlik ve rahatlama desteği',
+      detail: 'TheChill stresi azaltmaya ve zihinsel sakinliği desteklemeye yardımcı olur. Akşam yemekten sonra, uyumadan 1-2 saat önce alın.'
+    },
+    'reset-button': {
+      title: 'Reset Button',
+      benefit: 'Karaciğer temizliği desteği',
+      detail: 'Reset Button karaciğeri temizlemeye destek olur ve vücuttaki toksinlerin atılmasına yardımcı olur. Öğle yemeği sonrası tok karnına bol su ile alın.'
+    }
+  };
+
+  // ============================================
+  // Synergy Explanation Logic
+  // ============================================
+  function getSynergyExplanation() {
+    if (state.items.length === 0) return null;
+
+    // Tek ürün için fayda göster
+    if (state.items.length === 1) {
+      const handle = matchHandle(state.items[0].title);
+      return SINGLE_PRODUCT_BENEFITS[handle] || null;
+    }
+
+    const handles = state.items.map(item => matchHandle(item.title)).sort();
+    const key = handles.join('+');
+
+    const explanation = SYNERGY_EXPLANATIONS[key];
+    if (explanation) {
+      return explanation; // Returns { title, benefit, detail }
+    }
+
+    return generateDefaultExplanation(handles);
+  }
+
+  function generateDefaultExplanation(handles) {
+    const count = handles.length;
+    const names = handles.map(h => SYNERGY_MAP[h]?.name || h).join(' + ');
+
+    return {
+      title: `${count}'li Kombinasyon`,
+      benefit: `%${SYNERGY_CONFIG[count]?.discount * 100 || 0} indirim`,
+      detail: `${names} birlikte kullanıldığında birbirini tamamlayarak daha etkili sonuçlar sağlar.`
+    };
+  }
+
+  function getShortSynergyText() {
+    if (state.items.length === 0) return 'Ürün seçin';
+    if (state.items.length === 1) {
+      const handle = matchHandle(state.items[0].title);
+      const benefit = SINGLE_PRODUCT_BENEFITS[handle]?.benefit || '';
+      return benefit ? `✨ ${benefit}` : 'İndirim için +1 ürün ekle';
+    }
+
+    const handles = state.items.map(item => matchHandle(item.title)).sort();
+    const key = handles.join('+');
+
+    // Eğer tanımlı bir sinerji varsa benefit'i göster
+    const explanation = SYNERGY_EXPLANATIONS[key];
+    if (explanation) {
+      return `⚡ ${explanation.benefit}`;
+    }
+
+    // Fallback - toplam miktara göre indirim
+    const totalQty = getTotalQuantity();
+    const tier = Math.min(totalQty, 5);
+    const discount = SYNERGY_CONFIG[tier]?.discount || 0;
+    return `⚡ %${Math.round(discount * 100)} indirim aktif!`;
+  }
+
+  // ============================================
+  // Recommendation Logic
+  // ============================================
+  function getRecommendation() {
+    if (state.items.length === 0 || state.items.length >= 5) return null;
+
+    const addedHandles = state.items.map(item => matchHandle(item.title));
+    const firstHandle = addedHandles[0];
+    const recommendations = RECOMMENDATIONS[firstHandle] || [];
+
+    // İlk eklenmeyen öneriyi bul
+    for (const rec of recommendations) {
+      if (!addedHandles.includes(rec.handle)) {
+        return rec;
+      }
+    }
+
+    // Tüm öneriler eklenmişse, eklenmemiş herhangi bir ürünü öner
+    const allHandles = Object.keys(SYNERGY_MAP);
+    for (const handle of allHandles) {
+      if (!addedHandles.includes(handle)) {
+        return {
+          handle,
+          bundle: 'Ritüelinizi Tamamlayın',
+          reason: `${SYNERGY_MAP[handle]?.name || handle} ekleyerek indirim seviyenizi artırın.`
+        };
+      }
+    }
+
+    return null;
+  }
+
+  function getProductDataByHandle(targetHandle) {
+    // Use cached product data for O(1) lookup instead of O(n) loop
+    const cached = handleToProductMap.get(targetHandle);
+    if (cached) {
+      return { ...cached, quantity: 1 };
+    }
+    return null;
+  }
+
+  // ============================================
+  // Ritual Guide
+  // ============================================
+  function getRitualGuide() {
+    if (state.items.length === 0) return null;
+
+    const items = state.items.map(item => ({
+      ...item,
+      handle: matchHandle(item.title),
+      synergy: SYNERGY_MAP[matchHandle(item.title)]
+    }));
+
+    const guide = [];
+
+    // Sabah ürünleri
+    const morningProducts = items.filter(item => item.synergy?.category === 'morning');
+    // Öğle ürünleri
+    const noonProducts = items.filter(item => item.synergy?.category === 'noon');
+    // Akşam ürünleri
+    const eveningProducts = items.filter(item => item.synergy?.category === 'night');
+
+    morningProducts.forEach(product => {
+      guide.push({
+        time: 'Sabah',
+        product: product.synergy?.name || product.title,
+        text: product.synergy?.tip || 'Tok karnına, kahvaltı sonrası alın.'
+      });
+    });
+
+    noonProducts.forEach(product => {
+      guide.push({
+        time: 'Öğle',
+        product: product.synergy?.name || product.title,
+        text: product.synergy?.tip || 'Tok karnına, öğle yemeği sonrası alın.'
+      });
+    });
+
+    eveningProducts.forEach(product => {
+      guide.push({
+        time: 'Akşam',
+        product: product.synergy?.name || product.title,
+        text: product.synergy?.tip || 'Uyumadan önce alın.'
+      });
+    });
+
+    return guide.length > 0 ? guide : null;
+  }
+
+  // ============================================
+  // Flying Animation
+  // ============================================
+  function createFlyingGhost(sourceEl, targetEl, imageSrc) {
+    const sourceRect = sourceEl.getBoundingClientRect();
+    const targetRect = targetEl.getBoundingClientRect();
+
+    const ghost = document.createElement('img');
+    ghost.src = imageSrc;
+    ghost.className = 'wa-flying-ghost';
+    ghost.style.width = sourceRect.width + 'px';
+    ghost.style.height = sourceRect.height + 'px';
+    ghost.style.left = sourceRect.left + 'px';
+    ghost.style.top = sourceRect.top + 'px';
+    ghost.style.objectFit = 'cover';
+    document.body.appendChild(ghost);
+
+    const targetX = targetRect.left + targetRect.width / 2 - sourceRect.width / 2;
+    const targetY = targetRect.top + targetRect.height / 2 - sourceRect.height / 2;
+
+    requestAnimationFrame(() => {
+      ghost.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+      ghost.style.transform = `translate(${targetX - sourceRect.left}px, ${targetY - sourceRect.top}px) scale(0.2)`;
+      ghost.style.opacity = '0.5';
+    });
+
+    setTimeout(() => ghost.remove(), 400);
+  }
+
+  function createParticles(x, y) {
+    for (let i = 0; i < 12; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'wa-particle';
+      const angle = (Math.PI * 2 * i) / 12;
+      const velocity = 40 + Math.random() * 60;
+      particle.style.left = x + 'px';
+      particle.style.top = y + 'px';
+      particle.style.setProperty('--tx', Math.cos(angle) * velocity + 'px');
+      particle.style.setProperty('--ty', Math.sin(angle) * velocity + 'px');
+      particles.appendChild(particle);
+      setTimeout(() => particle.remove(), 800);
+    }
+  }
+
+  // ============================================
+  // State Management
+  // ============================================
+
+  // Sepete direkt ekleme fonksiyonu
+  async function addToShopifyCart(variantId, quantity = 1) {
+    try {
+      const response = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: [{ id: parseInt(variantId), quantity }]
+        })
+      });
+      if (!response.ok) throw new Error('Failed');
+      return true;
+    } catch (error) {
+      console.error('Cart add error:', error);
+      return false;
+    }
+  }
+
+  // Sepetten çıkarma fonksiyonu
+  async function removeFromShopifyCart(variantId) {
+    try {
+      const response = await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: variantId.toString(),
+          quantity: 0
+        })
+      });
+      if (!response.ok) throw new Error('Failed');
+      return true;
+    } catch (error) {
+      console.error('Cart remove error:', error);
+      return false;
+    }
+  }
+
+  // Sepette adet güncelleme
+  async function updateShopifyCartQuantity(variantId, quantity) {
+    try {
+      const response = await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: variantId.toString(),
+          quantity: quantity
+        })
+      });
+      if (!response.ok) throw new Error('Failed');
+      return true;
+    } catch (error) {
+      console.error('Cart update error:', error);
+      return false;
+    }
+  }
+
+  async function addItem(productData) {
+    const existing = state.items.find(item => item.id === productData.id);
+    if (existing) {
+      // Zaten ekliyse, çıkar (toggle)
+      await removeItem(productData.id);
+      return false;
+    }
+    if (state.items.length >= 5) {
+      vibrate([30, 20, 30]);
+      return false;
+    }
+
+    // Loading state göster
+    const card = [...productCards].find(c => c.dataset.productId === productData.id);
+    if (card) card.classList.add('wa-product-card--loading');
+
+    // Shopify sepetine ekle
+    const success = await addToShopifyCart(productData.variantId);
+
+    if (card) card.classList.remove('wa-product-card--loading');
+
+    if (success) {
+      state.items.push({ ...productData, quantity: 1 });
+      vibrate(10);
+      updateUI();
+
+      // Mobilde drawer'ı otomatik aç (kullanıcı faydayı görsün)
+      if (state.isMobile && !state.isExpanded) {
+        setTimeout(() => {
+          state.isExpanded = true;
+          dock.classList.add('wa-dock--expanded');
+        }, 400);
+      }
+
+      if (state.items.length === 5) {
+        setTimeout(() => {
+          const rect = (state.isMobile ? dock : sidebar).getBoundingClientRect();
+          createParticles(rect.left + rect.width / 2, rect.top + 50);
+          vibrate([30, 60, 30]);
+        }, 300);
+      }
+
+      return true;
+    }
+
+    return false;
+  }
+
+  async function removeItem(productId) {
+    const item = state.items.find(item => item.id === productId);
+    if (item) {
+      await removeFromShopifyCart(item.variantId);
+    }
+    state.items = state.items.filter(item => item.id !== productId);
+    vibrate(10);
+    updateUI();
+  }
+
+  async function updateQuantity(productId, delta) {
+    const item = state.items.find(item => item.id === productId);
+    if (item) {
+      const newQty = Math.max(1, Math.min(10, item.quantity + delta));
+
+      const success = await updateShopifyCartQuantity(item.variantId, newQty);
+
+      if (success) {
+        item.quantity = newQty;
+        vibrate(5);
+        updateUI();
+      }
+    }
+  }
+
+  // Karma indirim hesaplaması
+  // - Aynı üründen 3 adet: %30
+  // - Aynı üründen 6 adet: %35
+  // - Bundle (toplam ürün sayısına göre): 2=%15, 3=%20, 4=%25, 5+=%30
+  function calculatePricing() {
+    const totalQuantity = getTotalQuantity();
+    // Bundle indirimi toplam ürün sayısına göre (max 5 tier)
+    const bundleTier = Math.min(totalQuantity, 5);
+    const bundleDiscountRate = bundleTier > 0 ? (SYNERGY_CONFIG[bundleTier]?.discount || 0) : 0;
+
+    let subtotal = 0;
+    let totalDiscount = 0;
+    const discountDetails = [];
+
+    state.items.forEach(item => {
+      const qty = item.quantity || 1;
+      const itemSubtotal = item.price * qty;
+      subtotal += itemSubtotal;
+
+      let itemDiscountRate = 0;
+      let discountType = '';
+
+      // Önce miktar indirimi kontrol et
+      if (qty >= 6) {
+        itemDiscountRate = 0.35; // %35
+        discountType = 'quantity6';
+      } else if (qty >= 3) {
+        itemDiscountRate = 0.30; // %30
+        discountType = 'quantity3';
+      } else {
+        // Miktar indirimi yoksa bundle indirimi uygula
+        itemDiscountRate = bundleDiscountRate;
+        discountType = 'bundle';
+      }
+
+      const itemDiscount = Math.round(itemSubtotal * itemDiscountRate);
+      totalDiscount += itemDiscount;
+
+      discountDetails.push({
+        title: item.title,
+        quantity: qty,
+        subtotal: itemSubtotal,
+        discountRate: itemDiscountRate,
+        discount: itemDiscount,
+        type: discountType
+      });
+    });
+
+    return {
+      subtotal,
+      discount: totalDiscount,
+      total: subtotal - totalDiscount,
+      details: discountDetails
+    };
+  }
+
+  function getTotalQuantity() {
+    return state.items.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  }
+
+  // Step indicator güncelleme - CSS class tabanlı (güvenilir)
+  function updateStepIndicators(container, level) {
+    if (!container) return;
+    const steps = container.querySelectorAll('.wa-step');
+    steps.forEach((step, index) => {
+      const stepNum = index + 1;
+      // Level 0 = hiçbiri aktif, Level 1 = sadece 1. adım, Level 2 = 1 ve 2. adımlar, vb.
+      if (stepNum <= level) {
+        step.classList.add('active');
+      } else {
+        step.classList.remove('active');
+      }
+    });
+  }
+
+  // ============================================
+  // UI Updates
+  // ============================================
+  function updateUI() {
+    const pricing = calculatePricing();
+    const totalQuantity = getTotalQuantity();
+    const uniqueProductCount = state.items.length;
+    // Progress bar toplam adete göre (3 aynı ürün + 1 farklı = 4 adet indirimi)
+    const synergyTier = Math.min(totalQuantity, 5);
+    const synergy = totalQuantity > 0 ? SYNERGY_CONFIG[synergyTier] : { percent: 0, text: 'Başlayın' };
+    const recommendation = getRecommendation();
+    const ritualGuide = getRitualGuide();
+    const synergyExplanation = getSynergyExplanation();
+    const shortSynergy = getShortSynergyText();
+
+    // Update product cards
+    productCards.forEach(card => {
+      const isAdded = state.items.find(item => item.id === card.dataset.productId);
+      card.classList.toggle('wa-product-card--added', !!isAdded);
+
+      // Highlight recommended product
+      const cardHandle = matchHandle(card.dataset.productTitle);
+      const isRecommended = recommendation && cardHandle === recommendation.handle;
+      card.classList.toggle('wa-product-card--recommended', isRecommended && !isAdded);
+    });
+
+    if (state.isMobile) {
+      updateMobileDock(pricing, synergy, synergyTier, recommendation, ritualGuide, synergyExplanation, shortSynergy);
+    } else {
+      updateDesktopSidebar(pricing, synergy, synergyTier, recommendation, ritualGuide, synergyExplanation);
+    }
+  }
+
+  function updateMobileDock(pricing, synergy, level, recommendation, ritualGuide, synergyExplanation, shortSynergy) {
+    // Sepet boşken dock'u gizle
+    dock.classList.toggle('wa-dock--empty', state.items.length === 0);
+
+    // Sepet boşken expanded moddan çık
+    if (state.items.length === 0 && state.isExpanded) {
+      state.isExpanded = false;
+      dock.classList.remove('wa-dock--expanded');
+    }
+
+    // Use cached DOM elements for better performance
+    const { thumbnails, emptyText, itemsList, recBox, ritualBox, synergyExpBox,
+            synergySummary, synergySummaryFill, synergySummaryText, synergyBadge,
+            itemCount, miniTotal, synergyFill, synergyText, subtotal, discount,
+            total, discountRow, checkoutBtn, recImg, recName, recBundle, recAddBtn } = dockElements;
+
+    // Thumbnails
+    thumbnails.innerHTML = state.items.map(item =>
+      `<img src="${item.image}" alt="${item.title}" class="wa-dock__thumbnail">`
+    ).join('');
+    emptyText.style.display = state.items.length ? 'none' : 'block';
+
+    // Item count & synergy badge
+    const totalQty = getTotalQuantity();
+    itemCount.textContent = `${state.items.length} ürün${totalQty > state.items.length ? ` (${totalQty} adet)` : ''}`;
+    synergyBadge.textContent = synergy.text;
+    synergyBadge.classList.toggle('wa-dock__synergy-badge--active', level >= 2);
+
+    // Mini total
+    miniTotal.textContent = formatMoney(pricing.total);
+
+    // Synergy summary (visible without expand) - Step indicators
+    const summaryEl = dock.querySelector('.wa-dock__synergy-summary');
+    const summarySteps = dock.querySelector('.wa-dock__synergy-summary .wa-steps');
+    const summaryTextEl = dock.querySelector('.wa-dock__synergy-summary-text');
+
+    if (state.items.length > 0) {
+      if (summaryEl) summaryEl.style.display = 'block';
+      // Update step indicators (level = unique product count, 1-5)
+      updateStepIndicators(summarySteps, level);
+      if (summaryTextEl) summaryTextEl.textContent = shortSynergy;
+    } else {
+      if (summaryEl) summaryEl.style.display = 'none';
+    }
+
+    // Items list with quantity controls
+    itemsList.innerHTML = state.items.map(item => {
+      const handle = matchHandle(item.title);
+      const timing = SYNERGY_MAP[handle]?.timing || '';
+      const productUrl = item.url || `/products/${item.handle}`;
+      return `
+        <div class="wa-dock__item">
+          <a href="${productUrl}" class="wa-dock__item-link">
+            <img src="${item.image}" alt="${item.title}" class="wa-dock__item-image">
+            <div class="wa-dock__item-info">
+              <h4 class="wa-dock__item-title">${SYNERGY_MAP[handle]?.name || item.title}</h4>
+              ${timing ? `<p class="wa-dock__item-timing">${timing}</p>` : ''}
+            </div>
+          </a>
+          <div class="wa-dock__item-controls">
+            <div class="wa-dock__item-qty">
+              <button class="wa-dock__item-qty-btn" data-qty-minus="${item.id}">−</button>
+              <span class="wa-dock__item-qty-value">${item.quantity}</span>
+              <button class="wa-dock__item-qty-btn" data-qty-plus="${item.id}">+</button>
+            </div>
+            <button class="wa-dock__item-remove" data-remove="${item.id}">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Synergy explanation (detailed)
+    if (synergyExplanation) {
+      synergyExpBox.style.display = 'block';
+      synergyExpBox.innerHTML = `
+        <div class="wa-dock__synergy-explanation-header">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+          </svg>
+          <span>${synergyExplanation.title}</span>
+        </div>
+        <div class="wa-dock__synergy-explanation-benefit">${synergyExplanation.benefit}</div>
+        <p class="wa-dock__synergy-explanation-text">${synergyExplanation.detail}</p>
+      `;
+    } else {
+      synergyExpBox.style.display = 'none';
+    }
+
+    // Recommendation
+    if (recommendation) {
+      const recProduct = getProductDataByHandle(recommendation.handle);
+      if (recProduct) {
+        recBox.style.display = 'block';
+        recImg.src = recProduct.image;
+        recName.textContent = SYNERGY_MAP[recommendation.handle]?.name || recProduct.title;
+        recBundle.textContent = recommendation.bundle;
+        // Store recommendation data for event delegation
+        recAddBtn.dataset.recHandle = recommendation.handle;
+      }
+    } else {
+      recBox.style.display = 'none';
+    }
+
+    // Ritual guide
+    if (ritualGuide && ritualGuide.length > 0) {
+      ritualBox.style.display = 'block';
+      ritualBox.innerHTML = `
+        <div class="wa-dock__ritual-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          Kullanım Rehberi
+        </div>
+        ${ritualGuide.map(item => `
+          <div class="wa-dock__ritual-item">
+            <span class="wa-dock__ritual-time">${item.time}</span>
+            <span class="wa-dock__ritual-text"><strong>${item.product}:</strong> ${item.text}</span>
+          </div>
+        `).join('')}
+      `;
+    } else {
+      ritualBox.style.display = 'none';
+    }
+
+    // Synergy bar - Step indicators (CSS class tabanlı)
+    const dockSynergySteps = dock.querySelector('.wa-dock__synergy .wa-steps');
+    const dockSynergyText = dock.querySelector('.wa-dock__synergy-text');
+    updateStepIndicators(dockSynergySteps, level);
+    if (dockSynergyText) {
+      dockSynergyText.textContent = synergy.text;
+    }
+
+    // Pricing (using cached elements)
+    subtotal.textContent = formatMoney(pricing.subtotal);
+    discount.textContent = '-' + formatMoney(pricing.discount);
+    total.textContent = formatMoney(pricing.total);
+    discountRow.style.display = pricing.discount > 0 ? 'flex' : 'none';
+
+    // Checkout
+    checkoutBtn.disabled = state.items.length === 0;
+
+    // Event listeners are handled by event delegation in init()
+  }
+
+  function updateDesktopSidebar(pricing, synergy, level, recommendation, ritualGuide, synergyExplanation) {
+    const hasItems = state.items.length > 0;
+    sidebar.classList.toggle('wa-sidebar--has-items', hasItems);
+
+    // Use cached DOM elements for better performance
+    const { itemsContainer, recBox, ritualBox, synergyExpBox, countEl,
+            synergyFill, synergyText, subtotal, discount, total,
+            discountRow, checkoutBtn, recImg, recName, recBundleName,
+            recReason, recAddBtn, ritualContent } = sidebarElements;
+
+    // Count
+    const totalQty = getTotalQuantity();
+    countEl.textContent = `${state.items.length} ürün${totalQty > state.items.length ? ` (${totalQty} adet)` : ''}`;
+
+    // Items with quantity controls
+    itemsContainer.innerHTML = state.items.map(item => {
+      const handle = matchHandle(item.title);
+      const timing = SYNERGY_MAP[handle]?.timing || '';
+      const productUrl = item.url || `/products/${item.handle}`;
+      return `
+        <div class="wa-sidebar__item">
+          <a href="${productUrl}" class="wa-sidebar__item-link">
+            <img src="${item.image}" alt="${item.title}" class="wa-sidebar__item-image">
+            <div class="wa-sidebar__item-info">
+              <h4 class="wa-sidebar__item-title">${SYNERGY_MAP[handle]?.name || item.title}</h4>
+              ${timing ? `<p class="wa-sidebar__item-timing">${timing}</p>` : ''}
+            </div>
+          </a>
+          <div class="wa-sidebar__item-controls">
+            <div class="wa-sidebar__item-qty">
+              <button class="wa-sidebar__item-qty-btn" data-qty-minus="${item.id}">−</button>
+              <span class="wa-sidebar__item-qty-value">${item.quantity}</span>
+              <button class="wa-sidebar__item-qty-btn" data-qty-plus="${item.id}">+</button>
+            </div>
+            <button class="wa-sidebar__item-remove" data-remove="${item.id}">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Synergy explanation (detailed)
+    if (synergyExplanation) {
+      synergyExpBox.style.display = 'block';
+      synergyExpBox.innerHTML = `
+        <div class="wa-synergy-explanation__header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+          </svg>
+          <span>${synergyExplanation.title}</span>
+        </div>
+        <div class="wa-synergy-explanation__benefit">${synergyExplanation.benefit}</div>
+        <p class="wa-synergy-explanation__text">${synergyExplanation.detail}</p>
+      `;
+    } else {
+      synergyExpBox.style.display = 'none';
+    }
+
+    // Recommendation
+    if (recommendation) {
+      const recProduct = getProductDataByHandle(recommendation.handle);
+      if (recProduct) {
+        recBox.style.display = 'block';
+        recImg.src = recProduct.image;
+        recName.textContent = SYNERGY_MAP[recommendation.handle]?.name || recProduct.title;
+        recBundleName.textContent = recommendation.bundle;
+        recReason.textContent = recommendation.reason;
+        // Store recommendation data for event delegation
+        recAddBtn.dataset.recHandle = recommendation.handle;
+      }
+    } else {
+      recBox.style.display = 'none';
+    }
+
+    // Ritual guide
+    if (ritualGuide && ritualGuide.length > 0) {
+      ritualBox.style.display = 'block';
+      ritualContent.innerHTML = ritualGuide.map(item => `
+        <div class="wa-ritual-guide__item">
+          <span class="wa-ritual-guide__time">${item.time}</span>
+          <div>
+            <span class="wa-ritual-guide__product">${item.product}</span>
+            <span class="wa-ritual-guide__text">${item.text}</span>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      ritualBox.style.display = 'none';
+    }
+
+    // Synergy bar - Step indicators (CSS class tabanlı)
+    const sidebarSynergySteps = sidebar.querySelector('.wa-sidebar__synergy .wa-steps');
+    const sidebarSynergyText = sidebar.querySelector('.wa-sidebar__synergy-text');
+    updateStepIndicators(sidebarSynergySteps, level);
+    if (sidebarSynergyText) {
+      sidebarSynergyText.textContent = synergy.text;
+    }
+
+    // Pricing (using cached elements)
+    subtotal.textContent = formatMoney(pricing.subtotal);
+    discount.textContent = '-' + formatMoney(pricing.discount);
+    total.textContent = formatMoney(pricing.total);
+    discountRow.style.display = pricing.discount > 0 ? 'flex' : 'none';
+
+    // Checkout
+    checkoutBtn.disabled = state.items.length === 0;
+
+    // Event listeners are handled by event delegation in init()
+  }
+
+  // ============================================
+  // Event Handlers
+  // ============================================
+  function handleProductClick(card) {
+    const productData = {
+      id: card.dataset.productId,
+      handle: card.dataset.productHandle,
+      title: card.dataset.productTitle,
+      price: parseInt(card.dataset.productPrice),
+      image: card.dataset.productImage,
+      variantId: card.dataset.variantId,
+      url: card.dataset.productUrl,
+      quantity: 1
+    };
+
+    const isAdded = state.items.find(item => item.id === productData.id);
+
+    if (isAdded) {
+      // Ekliyse çıkar
+      removeItem(productData.id);
+    } else {
+      // Ekli değilse ekle
+      const target = state.isMobile
+        ? dock.querySelector('.wa-dock__preview')
+        : sidebar.querySelector('.wa-sidebar__items-container');
+
+      if (addItem(productData)) {
+        createFlyingGhost(card.querySelector('.wa-product-card__image'), target, productData.image);
+      }
+    }
+  }
+
+  function toggleDock() {
+    state.isExpanded = !state.isExpanded;
+    dock.classList.toggle('wa-dock--expanded', state.isExpanded);
+  }
+
+  function handleCheckout() {
+    if (state.items.length === 0) return;
+
+    vibrate([30, 60, 30]);
+    // Ürünler zaten sepette, direkt checkout'a git
+    window.location.href = '/checkout';
+  }
+
+  // ============================================
+  // Shopify Sepetinden Okuma
+  // ============================================
+  async function syncFromShopifyCart() {
+    try {
+      const response = await fetch('/cart.js');
+      if (!response.ok) return;
+
+      const cart = await response.json();
+
+      // Sepetteki ürünleri kontrol et
+      for (const item of cart.items) {
+        const variantId = item.variant_id.toString();
+
+        // Bu variant bizim ürünlerimizden biri mi?
+        const matchingCard = [...productCards].find(card =>
+          card.dataset.variantId === variantId
+        );
+
+        if (matchingCard && !state.items.find(i => i.variantId === variantId)) {
+          // State'e ekle (sepete tekrar ekleme, zaten var)
+          state.items.push({
+            id: matchingCard.dataset.productId,
+            handle: matchingCard.dataset.productHandle,
+            title: matchingCard.dataset.productTitle,
+            price: parseInt(matchingCard.dataset.productPrice),
+            image: matchingCard.dataset.productImage,
+            variantId: variantId,
+            url: matchingCard.dataset.productUrl,
+            quantity: item.quantity
+          });
+
+          // Kartı seçili olarak işaretle
+          matchingCard.classList.add('wa-product-card--added');
+        }
+      }
+
+      updateUI();
+    } catch (error) {
+      console.error('Cart sync error:', error);
+    }
+  }
+
+  // ============================================
+  // Ürün Sayfası Entegrasyonu
+  // ============================================
+  // Cart interceptor kaldırıldı - çakışma sorunları nedeniyle
+  // Bundle builder kendi içinde Shopify sepetine ekleme yapıyor
+  function setupCartInterceptor() {
+    // Şimdilik devre dışı
+  }
+
+  // ============================================
+  // Initialize
+  // ============================================
+  async function init() {
+    // Dock görünürlüğünü kontrol et - sadece bundle builder görünürken göster
+    const productGrid = section.querySelector('.wa-products');
+    let isBundlePageVisible = true;
+
+    function updateDockVisibility() {
+      if (!state.isMobile) return;
+
+      // Section DOM'da var mı ve görünür mü kontrol et
+      const sectionExists = document.getElementById('wellness-architect');
+      if (!sectionExists) {
+        dock.style.display = 'none';
+        isBundlePageVisible = false;
+        return;
+      }
+
+      if (isBundlePageVisible || state.items.length > 0) {
+        dock.style.display = 'block';
+      }
+    }
+
+    if (productGrid && state.isMobile) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          isBundlePageVisible = entry.isIntersecting;
+          updateDockVisibility();
+        });
+      }, { threshold: 0 });
+      observer.observe(productGrid);
+    }
+
+    // AJAX navigasyon için URL değişikliklerini dinle
+    const originalPushState = history.pushState;
+    history.pushState = function(...args) {
+      originalPushState.apply(this, args);
+      setTimeout(updateDockVisibility, 100);
+    };
+    window.addEventListener('popstate', () => setTimeout(updateDockVisibility, 100));
+
+    window.addEventListener('resize', () => {
+      const wasMobile = state.isMobile;
+      state.isMobile = window.innerWidth < 768;
+      if (wasMobile !== state.isMobile) updateUI();
+    });
+
+    productCards.forEach(card => {
+      card.addEventListener('click', () => handleProductClick(card));
+    });
+
+    dock.querySelector('.wa-dock__handle').addEventListener('click', toggleDock);
+    dock.querySelector('.wa-dock__expand-btn').addEventListener('click', toggleDock);
+    dock.querySelector('.wa-dock__close-btn').addEventListener('click', toggleDock);
+
+    // Use cached checkout buttons
+    dockElements.checkoutBtn.addEventListener('click', handleCheckout);
+    sidebarElements.checkoutBtn.addEventListener('click', handleCheckout);
+
+    // ============================================
+    // Event Delegation (Performance Optimization)
+    // Single event listener instead of many listeners per item
+    // ============================================
+
+    // Mobile dock event delegation
+    dockElements.itemsList.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const target = e.target.closest('[data-remove], [data-qty-minus], [data-qty-plus]');
+      if (!target) return;
+
+      if (target.dataset.remove) {
+        removeItem(target.dataset.remove);
+      } else if (target.dataset.qtyMinus) {
+        updateQuantity(target.dataset.qtyMinus, -1);
+      } else if (target.dataset.qtyPlus) {
+        updateQuantity(target.dataset.qtyPlus, 1);
+      }
+    });
+
+    // Desktop sidebar event delegation
+    sidebarElements.itemsContainer.addEventListener('click', (e) => {
+      const target = e.target.closest('[data-remove], [data-qty-minus], [data-qty-plus]');
+      if (!target) return;
+
+      if (target.dataset.remove) {
+        removeItem(target.dataset.remove);
+      } else if (target.dataset.qtyMinus) {
+        updateQuantity(target.dataset.qtyMinus, -1);
+      } else if (target.dataset.qtyPlus) {
+        updateQuantity(target.dataset.qtyPlus, 1);
+      }
+    });
+
+    // Recommendation buttons event delegation
+    dockElements.recAddBtn.addEventListener('click', () => {
+      const handle = dockElements.recAddBtn.dataset.recHandle;
+      if (handle) {
+        const recProduct = getProductDataByHandle(handle);
+        if (recProduct) addItem(recProduct);
+      }
+    });
+
+    sidebarElements.recAddBtn.addEventListener('click', () => {
+      const handle = sidebarElements.recAddBtn.dataset.recHandle;
+      if (handle) {
+        const recProduct = getProductDataByHandle(handle);
+        if (recProduct) {
+          // Flying ghost animation for desktop
+          const cached = handleToProductMap.get(handle);
+          if (cached?.card) {
+            createFlyingGhost(
+              cached.card.querySelector('.wa-product-card__image'),
+              sidebarElements.itemsContainer,
+              recProduct.image
+            );
+          }
+          addItem(recProduct);
+        }
+      }
+    });
+
+    // Ürün sayfası entegrasyonu
+    setupCartInterceptor();
+
+    // Sayfa yüklendiğinde Shopify sepetinden oku
+    await syncFromShopifyCart();
+
+    updateUI();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Akıllı Paket Oluşturucu",
+  "tag": "section",
+  "class": "section-bundle-builder",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Üst Başlık",
+      "default": "Kişisel Ritüeliniz"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Ana Başlık",
+      "default": "Wellness Architect"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Alt Başlık",
+      "default": "Size özel önerilerimizle ritüelinizi oluşturun. Ürünler birlikte daha güçlü çalışır!"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Ürün Koleksiyonu"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Ürün Limiti",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Akıllı Paket Oluşturucu",
+      "category": "Ürünler"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,52 @@
+{% comment %}
+  Bundle Product Badge Snippet
+  Usage: {% render 'bundle-product-badge', product: product %}
+
+  Product tags should follow format: category:Sleep & Beauty
+{% endcomment %}
+
+{% assign category_badge = '' %}
+{% assign badge_color = 'default' %}
+
+{% for tag in product.tags %}
+  {% if tag contains 'category:' %}
+    {% assign category_badge = tag | remove: 'category:' %}
+
+    {% comment %} Assign colors based on category {% endcomment %}
+    {% case category_badge %}
+      {% when 'Sleep & Beauty' or 'Uyku & Güzellik' %}
+        {% assign badge_color = 'purple' %}
+      {% when 'Beauty & Energy' or 'Güzellik & Enerji' %}
+        {% assign badge_color = 'pink' %}
+      {% when 'Focus & Energy' or 'Odaklanma & Enerji' %}
+        {% assign badge_color = 'blue' %}
+      {% when 'Calm & Balance' or 'Sakinlik & Denge' %}
+        {% assign badge_color = 'green' %}
+      {% when 'Detox' or 'Detoks' %}
+        {% assign badge_color = 'orange' %}
+    {% endcase %}
+  {% endif %}
+{% endfor %}
+
+{% if category_badge != '' %}
+  <span class="wa-badge wa-badge--{{ badge_color }}">{{ category_badge }}</span>
+{% endif %}
+
+<style>
+  .wa-badge {
+    display: inline-block;
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    color: white;
+  }
+  .wa-badge--default { background: rgba(31, 41, 55, 0.8); }
+  .wa-badge--purple { background: rgba(139, 92, 246, 0.9); }
+  .wa-badge--pink { background: rgba(236, 72, 153, 0.9); }
+  .wa-badge--blue { background: rgba(59, 130, 246, 0.9); }
+  .wa-badge--green { background: rgba(16, 185, 129, 0.9); }
+  .wa-badge--orange { background: rgba(217, 119, 6, 0.9); }
+</style>
