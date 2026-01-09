@@ -2607,3 +2607,51 @@
   else init();
 })();
 </script>
+
+{% schema %}
+{
+  "name": "Akıllı Paket Oluşturucu v2",
+  "tag": "section",
+  "class": "section-bundle-builder",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Üst Başlık",
+      "default": "Kişisel Ritüeliniz"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Ana Başlık",
+      "default": "Wellness Architect"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Alt Başlık",
+      "default": "Size özel önerilerimizle ritüelinizi oluşturun. Ürünler birlikte daha güçlü çalışır!"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Ürün Koleksiyonu"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Ürün Limiti",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Akıllı Paket Oluşturucu v2",
+      "category": "Ürünler"
+    }
+  ]
+}
+{% endschema %}
