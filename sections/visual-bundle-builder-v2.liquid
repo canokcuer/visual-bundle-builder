@@ -105,7 +105,7 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
           </svg>
-          <span>Sinerji & Basarimlar</span>
+          <span>Birlikte Kullanim</span>
         </div>
         <!-- Hexagon Synergy Map -->
         <div class="wa-synergy-map__scroll">
@@ -268,13 +268,24 @@
 
       <div class="wa-dock__items"></div>
 
+      <!-- Discount Progress Hint -->
+      <div class="wa-dock__discount-hint" style="display: none;">
+        <div class="wa-dock__discount-hint-progress">
+          <div class="wa-dock__discount-hint-bar">
+            <div class="wa-dock__discount-hint-fill"></div>
+          </div>
+          <span class="wa-dock__discount-hint-current">%0</span>
+        </div>
+        <p class="wa-dock__discount-hint-text"></p>
+      </div>
+
       <!-- Combined Synergy Map + Achievements (v2 merged) -->
       <div class="wa-dock__synergy-achievements" style="display: none;">
         <div class="wa-synergy-achievements__header">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
           </svg>
-          <span>Sinerji & Basarimlar</span>
+          <span>Birlikte Kullanim</span>
         </div>
         <!-- Hexagon Synergy Map -->
         <div class="wa-synergy-map__scroll">
@@ -342,7 +353,7 @@
         </div>
       </div>
 
-      <!-- Mobile Pricing -->
+      <!-- Mobile Pricing Summary -->
       <div class="wa-dock__pricing">
         <div class="wa-dock__price-row">
           <span>Ara Toplam</span>
@@ -352,14 +363,17 @@
           <span>Indirim</span>
           <span class="wa-dock__discount">-₺0</span>
         </div>
-        <div class="wa-dock__price-row wa-dock__price-row--total">
-          <span>Toplam</span>
-          <span class="wa-dock__total">₺0</span>
-        </div>
       </div>
+    </div>
 
+    <!-- Sticky Checkout Footer -->
+    <div class="wa-dock__checkout-footer">
+      <div class="wa-dock__checkout-total">
+        <span class="wa-dock__checkout-total-label">Toplam</span>
+        <span class="wa-dock__checkout-total-value wa-dock__total">₺0</span>
+      </div>
       <button class="wa-dock__checkout-btn" disabled>
-        Odemeye Git
+        Sepeti Onayla
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
@@ -392,13 +406,22 @@
       <button class="wa-tab wa-tab--active" data-tab="benefits">Faydalar</button>
       <button class="wa-tab" data-tab="ingredients">Icindekiler</button>
       <button class="wa-tab" data-tab="science">Bilim</button>
+      <button class="wa-tab" data-tab="combinations">Kombinasyonlar</button>
     </div>
     <div class="wa-kesfet-modal__content"></div>
     <div class="wa-kesfet-modal__footer">
       <button class="wa-kesfet-modal__add-btn">
         <span class="wa-kesfet-modal__add-text">Sepete Ekle</span>
-        <span class="wa-kesfet-modal__added-text" style="display:none;">Eklendi</span>
       </button>
+      <div class="wa-kesfet-modal__qty-controls" style="display:none;">
+        <button class="wa-kesfet-modal__qty-btn wa-kesfet-modal__qty-minus" data-action="minus">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <span class="wa-kesfet-modal__qty-value">1</span>
+        <button class="wa-kesfet-modal__qty-btn wa-kesfet-modal__qty-plus" data-action="plus">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </div>
     </div>
   </div>
 </section>
@@ -478,11 +501,14 @@
   /* Container */
   .wa-container { max-width: 1200px; margin: 0 auto; }
 
-  /* Product Grid - Mobile: single column, Desktop: 3 columns */
+  /* Product Grid - Mobile: single column with safe margins, Desktop: 3 columns */
   .wa-products {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 0 1rem;
   }
 
   /* Product Card */
@@ -944,10 +970,11 @@
     text-overflow: ellipsis;
   }
 
-  .wa-dock__item-timing {
-    font-size: 0.7rem;
-    color: var(--wa-gray-500);
+  .wa-dock__item-benefit {
+    font-size: 0.65rem;
+    color: var(--wa-gray-600);
     margin: 0;
+    font-weight: 500;
   }
 
   .wa-dock__item-controls {
@@ -1512,6 +1539,56 @@
     background: var(--wa-success);
   }
 
+  .wa-kesfet-modal__qty-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    padding: 8px;
+    background: var(--wa-gray-100);
+    border-radius: var(--wa-radius);
+  }
+
+  .wa-kesfet-modal__qty-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid var(--wa-gray-300);
+    background: var(--wa-white);
+    color: var(--wa-gray-700);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .wa-kesfet-modal__qty-btn:hover {
+    border-color: var(--wa-black);
+    color: var(--wa-black);
+  }
+
+  .wa-kesfet-modal__qty-minus:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+    background: #fef2f2;
+  }
+
+  .wa-kesfet-modal__qty-plus:hover {
+    border-color: var(--wa-success);
+    color: var(--wa-success);
+    background: #f0fdf4;
+  }
+
+  .wa-kesfet-modal__qty-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    min-width: 40px;
+    text-align: center;
+    color: var(--wa-black);
+  }
+
   /* Modal Content Styles */
   .wa-modal-benefit-item {
     display: flex;
@@ -1602,6 +1679,54 @@
     font-size: 0.9rem;
     color: var(--wa-gray-700);
     line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Combinations Tab */
+  .wa-modal-combo-item {
+    padding: 14px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+  }
+
+  .wa-modal-combo-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .wa-modal-combo-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .wa-modal-combo-product {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--wa-black);
+  }
+
+  .wa-modal-combo-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--wa-white);
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .wa-modal-combo-benefit {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--wa-gray-800);
+    margin-bottom: 6px;
+  }
+
+  .wa-modal-combo-detail {
+    font-size: 0.8rem;
+    color: var(--wa-gray-600);
+    line-height: 1.5;
     margin: 0;
   }
 
@@ -1740,10 +1865,96 @@
     margin-top: 0.25rem;
   }
 
+  /* Discount Hint Progress */
+  .wa-dock__discount-hint {
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-radius: var(--wa-radius-sm);
+    margin-bottom: 12px;
+  }
+
+  .wa-dock__discount-hint-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  .wa-dock__discount-hint-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--wa-gray-200);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .wa-dock__discount-hint-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+    width: 0%;
+  }
+
+  .wa-dock__discount-hint-current {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #16a34a;
+    min-width: 35px;
+    text-align: right;
+  }
+
+  .wa-dock__discount-hint-text {
+    font-size: 0.7rem;
+    color: var(--wa-gray-700);
+    margin: 0;
+    text-align: center;
+  }
+
+  .wa-dock__discount-hint-text strong {
+    color: #16a34a;
+    font-weight: 600;
+  }
+
+  /* Sticky Checkout Footer */
+  .wa-dock__checkout-footer {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--wa-white);
+    border-top: 1px solid var(--wa-gray-200);
+    margin: 0 -16px -16px -16px;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+  }
+
+  .wa-dock__checkout-total {
+    display: flex;
+    flex-direction: column;
+    min-width: 80px;
+  }
+
+  .wa-dock__checkout-total-label {
+    font-size: 0.65rem;
+    color: var(--wa-gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .wa-dock__checkout-total-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--wa-black);
+  }
+
   .wa-dock__checkout-btn {
-    width: 100%;
+    flex: 1;
     height: 48px;
-    background: var(--wa-black);
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
     color: var(--wa-white);
     border: none;
     border-radius: var(--wa-radius-sm);
@@ -1754,14 +1965,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.35);
+    transition: all 0.2s ease;
   }
 
   .wa-dock__checkout-btn:disabled {
     background: var(--wa-gray-300);
     cursor: not-allowed;
+    box-shadow: none;
   }
 
-  .wa-dock__checkout-btn:not(:disabled):hover { background: var(--wa-gray-800); }
+  .wa-dock__checkout-btn:not(:disabled):hover {
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.45);
+    transform: translateY(-1px);
+  }
+
+  .wa-dock__checkout-btn:not(:disabled):active {
+    transform: translateY(0);
+  }
 
   /* Flying Ghost & Particles */
   .wa-flying-ghost {
@@ -1885,7 +2108,7 @@
 
     .wa-sidebar__item-info { flex: 1; min-width: 0; }
     .wa-sidebar__item-title { font-size: 0.85rem; font-weight: 600; margin: 0 0 0.125rem; }
-    .wa-sidebar__item-timing { font-size: 0.7rem; color: var(--wa-gray-500); margin: 0; }
+    .wa-sidebar__item-benefit { font-size: 0.65rem; color: var(--wa-gray-600); margin: 0; font-weight: 500; }
 
     .wa-sidebar__item-controls { display: flex; align-items: center; gap: 0.5rem; }
 
@@ -2223,11 +2446,11 @@
   // SYNERGY DATA
   // ============================================
   const SYNERGY_MAP = {
-    'dreamglow': { name: 'DreamGlow', timing: 'Uykudan 45 dk once', tip: '1 olcek tozu ilik suyla karistirin.', category: 'night' },
-    'dailyglow': { name: 'DailyGlow', timing: 'Kahvalti sonrasi', tip: 'Tok karnina 1 kapsul. Isilti iceriden baslar.', category: 'morning' },
-    'mindfuel': { name: 'MindFuel', timing: 'Kahvalti sonrasi', tip: 'Tok karnina alin. Kahveden etkili odaklanma.', category: 'morning' },
-    'thechill': { name: 'TheChill', timing: 'Aksam yemegi sonrasi', tip: 'Uykudan 1-2 saat once gevsemek icin.', category: 'night' },
-    'reset-button': { name: 'Reset Button', timing: 'Ogle yemegi sonrasi', tip: 'Bol su ile tok karnina.', category: 'noon' }
+    'dreamglow': { name: 'DreamGlow', timing: 'Uykudan 45 dk once', benefit: 'Guzellik & Cilt Onarimi', shortDesc: 'Gece Cilt Ritueli', tip: '1 olcek tozu ilik suyla karistirin.', category: 'night' },
+    'dailyglow': { name: 'DailyGlow', timing: 'Kahvalti sonrasi', benefit: 'Cilt Parlakligi & Enerji', shortDesc: 'Gunduz Isilti Destegi', tip: 'Tok karnina 1 kapsul. Isilti iceriden baslar.', category: 'morning' },
+    'mindfuel': { name: 'MindFuel', timing: 'Kahvalti sonrasi', benefit: 'Odak & Zihinsel Performans', shortDesc: 'Bilissel Guc Destegi', tip: 'Tok karnina alin. Kahveden etkili odaklanma.', category: 'morning' },
+    'thechill': { name: 'TheChill', timing: 'Aksam yemegi sonrasi', benefit: 'Stres Yonetimi & Rahatlama', shortDesc: 'Derin Uyku Ritueli', tip: 'Uykudan 1-2 saat once gevsemek icin.', category: 'night' },
+    'reset-button': { name: 'Reset Button', timing: 'Ogle yemegi sonrasi', benefit: 'Detox & Karaciger Destegi', shortDesc: 'Bedensel Arinma', tip: 'Bol su ile tok karnina.', category: 'noon' }
   };
 
   const SYNERGY_CONNECTIONS = {
@@ -2844,14 +3067,14 @@
   // ============================================
   function renderItemHTML(item, variant) {
     const handle = matchHandle(item.title);
-    const timing = SYNERGY_MAP[handle]?.timing || '';
+    const benefit = SYNERGY_MAP[handle]?.benefit || '';
     const prefix = variant === 'dock' ? 'wa-dock' : 'wa-sidebar';
     return `<div class="${prefix}__item" data-product-id="${item.id}">
       <a href="${item.url || '/products/' + item.handle}" class="${prefix}__item-link">
         <img src="${item.image}" alt="${item.title}" class="${prefix}__item-image">
         <div class="${prefix}__item-info">
           <h4 class="${prefix}__item-title">${SYNERGY_MAP[handle]?.name || item.title}</h4>
-          ${timing ? `<p class="${prefix}__item-timing">${timing}</p>` : ''}
+          ${benefit ? `<p class="${prefix}__item-benefit">${benefit}</p>` : ''}
         </div>
       </a>
       <div class="${prefix}__item-controls">
@@ -2943,7 +3166,7 @@
         dockRecElements.container.style.display = 'block';
         dockRecElements.img.src = rp.image;
         dockRecElements.name.textContent = SYNERGY_MAP[rec.handle]?.name || rp.title;
-        dockRecElements.bundle.textContent = rec.bundle;
+        dockRecElements.bundle.textContent = SYNERGY_MAP[rec.handle]?.shortDesc || rec.bundle;
         dockRecElements.addBtn.dataset.recHandle = rec.handle;
       }
     } else if (dockRecElements.container) {
@@ -2965,6 +3188,33 @@
     dock.querySelector('.wa-dock__total').textContent = formatMoney(pricing.total);
     dock.querySelector('.wa-dock__price-row--discount').style.display = pricing.discount > 0 ? 'flex' : 'none';
     dock.querySelector('.wa-dock__checkout-btn').disabled = state.items.length === 0;
+
+    // Discount hint progress
+    const discountHint = dock.querySelector('.wa-dock__discount-hint');
+    if (discountHint && state.items.length > 0) {
+      const totalQtyHint = getTotalQuantity();
+      const currentDiscount = SYNERGY_CONFIG[Math.min(totalQtyHint, 5)]?.discount || 0;
+      const currentPercent = Math.round(currentDiscount * 100);
+
+      // Progress fill (0-5 items maps to 0-100%)
+      const progressFill = Math.min(totalQtyHint / 5, 1) * 100;
+      discountHint.querySelector('.wa-dock__discount-hint-fill').style.width = progressFill + '%';
+      discountHint.querySelector('.wa-dock__discount-hint-current').textContent = '%' + currentPercent;
+
+      // Hint text based on tier
+      const hintText = discountHint.querySelector('.wa-dock__discount-hint-text');
+      if (totalQtyHint >= 5) {
+        hintText.innerHTML = '🎉 <strong>Maksimum indirime ulastiniz!</strong>';
+      } else {
+        const nextTier = totalQtyHint + 1;
+        const nextDiscount = Math.round((SYNERGY_CONFIG[nextTier]?.discount || 0) * 100);
+        const needed = 1;
+        hintText.innerHTML = `<strong>${needed} urun</strong> daha ekle, <strong>%${nextDiscount}</strong> indirime ulas!`;
+      }
+      discountHint.style.display = 'block';
+    } else if (discountHint) {
+      discountHint.style.display = 'none';
+    }
   }
 
   function updateDesktopUI(pricing, synergy, tier, rec, ritual, synExp) {
@@ -2987,7 +3237,7 @@
         sidebarRecElements.container.style.display = 'block';
         sidebarRecElements.img.src = rp.image;
         sidebarRecElements.name.textContent = SYNERGY_MAP[rec.handle]?.name || rp.title;
-        sidebarRecElements.bundleName.textContent = rec.bundle;
+        sidebarRecElements.bundleName.textContent = SYNERGY_MAP[rec.handle]?.shortDesc || rec.bundle;
         sidebarRecElements.reason.textContent = rec.reason;
         sidebarRecElements.addBtn.dataset.recHandle = rec.handle;
       }
@@ -3050,6 +3300,35 @@
           <p class="wa-modal-science-text">${data.science.description}</p>
         </div>
       `;
+    } else if (tab === 'combinations') {
+      // Find all synergy connections involving this product
+      const combos = [];
+      const allHandles = ['dailyglow', 'dreamglow', 'mindfuel', 'thechill', 'reset-button'];
+      for (const other of allHandles) {
+        if (other === handle) continue;
+        const key = [handle, other].sort().join('+');
+        const conn = SYNERGY_CONNECTIONS[key];
+        const expl = SYNERGY_EXPLANATIONS[key];
+        if (conn && expl) {
+          const otherData = SYNERGY_MAP[other];
+          combos.push({ handle: other, name: otherData?.name || other, label: conn.label, benefit: expl.benefit, detail: expl.detail, color: conn.color });
+        }
+      }
+
+      if (combos.length === 0) {
+        return '<p style="text-align:center;color:var(--wa-gray-500);">Bu urun icin kombinasyon onerisi bulunamadi.</p>';
+      }
+
+      return combos.map(c => `
+        <div class="wa-modal-combo-item" style="background:${c.color}10;border-left:3px solid ${c.color};">
+          <div class="wa-modal-combo-header">
+            <span class="wa-modal-combo-product">${c.name}</span>
+            <span class="wa-modal-combo-label" style="background:${c.color};">${c.label}</span>
+          </div>
+          <div class="wa-modal-combo-benefit">${c.benefit}</div>
+          <p class="wa-modal-combo-detail">${c.detail}</p>
+        </div>
+      `).join('');
     }
     return '';
   }
@@ -3080,12 +3359,19 @@
     // Reset tabs
     kesfetModal.querySelectorAll('.wa-tab').forEach((t, i) => t.classList.toggle('wa-tab--active', i === 0));
 
-    // Update add button state
-    const isAdded = state.items.find(i => i.id === currentKesfetProductData.id);
+    // Update add button / qty controls state
+    const existingItem = state.items.find(i => i.id === currentKesfetProductData.id);
     const addBtn = kesfetModal.querySelector('.wa-kesfet-modal__add-btn');
-    addBtn.classList.toggle('wa-kesfet-modal__add-btn--added', !!isAdded);
-    addBtn.querySelector('.wa-kesfet-modal__add-text').style.display = isAdded ? 'none' : 'inline';
-    addBtn.querySelector('.wa-kesfet-modal__added-text').style.display = isAdded ? 'inline' : 'none';
+    const qtyControls = kesfetModal.querySelector('.wa-kesfet-modal__qty-controls');
+
+    if (existingItem) {
+      addBtn.style.display = 'none';
+      qtyControls.style.display = 'flex';
+      kesfetModal.querySelector('.wa-kesfet-modal__qty-value').textContent = existingItem.quantity;
+    } else {
+      addBtn.style.display = 'block';
+      qtyControls.style.display = 'none';
+    }
 
     // Open modal
     kesfetModal.classList.add('wa-kesfet-modal--open');
@@ -3107,20 +3393,39 @@
 
   function handleModalAddToCart() {
     if (!currentKesfetProductData) return;
-    const isAdded = state.items.find(i => i.id === currentKesfetProductData.id);
 
-    if (isAdded) {
-      removeItem(currentKesfetProductData.id);
-    } else {
-      addItem(currentKesfetProductData);
-    }
+    // Add item to cart
+    addItem(currentKesfetProductData);
 
-    // Update button state
-    const nowAdded = state.items.find(i => i.id === currentKesfetProductData.id);
+    // Switch to qty controls
     const addBtn = kesfetModal.querySelector('.wa-kesfet-modal__add-btn');
-    addBtn.classList.toggle('wa-kesfet-modal__add-btn--added', !!nowAdded);
-    addBtn.querySelector('.wa-kesfet-modal__add-text').style.display = nowAdded ? 'none' : 'inline';
-    addBtn.querySelector('.wa-kesfet-modal__added-text').style.display = nowAdded ? 'inline' : 'none';
+    const qtyControls = kesfetModal.querySelector('.wa-kesfet-modal__qty-controls');
+    addBtn.style.display = 'none';
+    qtyControls.style.display = 'flex';
+    kesfetModal.querySelector('.wa-kesfet-modal__qty-value').textContent = '1';
+  }
+
+  function handleModalQtyChange(delta) {
+    if (!currentKesfetProductData) return;
+    const item = state.items.find(i => i.id === currentKesfetProductData.id);
+    if (!item) return;
+
+    const newQty = item.quantity + delta;
+    const addBtn = kesfetModal.querySelector('.wa-kesfet-modal__add-btn');
+    const qtyControls = kesfetModal.querySelector('.wa-kesfet-modal__qty-controls');
+
+    if (newQty <= 0) {
+      // Remove item and switch back to add button
+      removeItem(currentKesfetProductData.id);
+      addBtn.style.display = 'block';
+      qtyControls.style.display = 'none';
+    } else {
+      // Update quantity
+      item.quantity = newQty;
+      syncQuantityToCart(item.variantId, newQty);
+      kesfetModal.querySelector('.wa-kesfet-modal__qty-value').textContent = newQty;
+      updateUI();
+    }
   }
 
   // ============================================
@@ -3218,6 +3523,8 @@
       kesfetModal.querySelector('.wa-kesfet-modal__close')?.addEventListener('click', closeKesfetModal);
       kesfetModal.querySelector('.wa-kesfet-modal__back')?.addEventListener('click', closeKesfetModal);
       kesfetModal.querySelector('.wa-kesfet-modal__add-btn')?.addEventListener('click', handleModalAddToCart);
+      kesfetModal.querySelector('.wa-kesfet-modal__qty-minus')?.addEventListener('click', () => handleModalQtyChange(-1));
+      kesfetModal.querySelector('.wa-kesfet-modal__qty-plus')?.addEventListener('click', () => handleModalQtyChange(1));
       kesfetModal.querySelectorAll('.wa-kesfet-modal__tabs .wa-tab').forEach(tab => {
         tab.addEventListener('click', () => handleModalTab(tab.dataset.tab));
       });
@@ -3227,10 +3534,13 @@
       });
     }
 
-    // Swipe-down to close dock
+    // Swipe gestures for dock
     let touchStartY = 0;
     let touchCurrentY = 0;
     const expandedContent = dock.querySelector('.wa-dock__expanded');
+    const dockPreview = dock.querySelector('.wa-dock__preview');
+
+    // Swipe-down to close (when expanded)
     if (expandedContent) {
       expandedContent.addEventListener('touchstart', e => {
         if (expandedContent.scrollTop === 0) {
@@ -3253,6 +3563,31 @@
         }
         touchStartY = 0;
         touchCurrentY = 0;
+      });
+    }
+
+    // Swipe-up to open (when collapsed)
+    if (dockPreview) {
+      let previewTouchStartY = 0;
+      let previewTouchCurrentY = 0;
+
+      dockPreview.addEventListener('touchstart', e => {
+        previewTouchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      dockPreview.addEventListener('touchmove', e => {
+        previewTouchCurrentY = e.touches[0].clientY;
+      }, { passive: true });
+
+      dockPreview.addEventListener('touchend', () => {
+        if (previewTouchStartY > 0 && previewTouchCurrentY > 0) {
+          const diff = previewTouchStartY - previewTouchCurrentY; // Swipe UP = positive diff
+          if (diff > 50 && !state.isExpanded && state.items.length > 0) {
+            toggleDock();
+          }
+        }
+        previewTouchStartY = 0;
+        previewTouchCurrentY = 0;
       });
     }
 
