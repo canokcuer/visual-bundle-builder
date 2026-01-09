@@ -99,30 +99,39 @@
         <div class="wa-sidebar__items"></div>
       </div>
 
-      <!-- Synergy Map (v2) -->
-      <div class="wa-synergy-map" style="display: none;">
-        <div class="wa-synergy-map__header">
+      <!-- Combined Synergy Map + Achievements (v2 merged) -->
+      <div class="wa-synergy-achievements" style="display: none;">
+        <div class="wa-synergy-achievements__header">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
           </svg>
-          <span>Sinerji Haritasi</span>
+          <span>Sinerji & Basarimlar</span>
         </div>
+        <!-- Hexagon Synergy Map -->
         <div class="wa-synergy-map__scroll">
-          <svg class="wa-synergy-map__svg" viewBox="0 0 350 180"></svg>
+          <svg class="wa-synergy-map__svg" viewBox="0 0 350 200"></svg>
           <div class="wa-synergy-map__labels"></div>
         </div>
-      </div>
-
-      <!-- Achievement Progress (v2) -->
-      <div class="wa-achievement-progress" style="display: none;">
-        <div class="wa-achievement-progress__header">
-          <span class="wa-achievement-progress__title">Basarimlar</span>
-          <span class="wa-achievement-progress__count">0/5</span>
+        <!-- Achievement Icons Row -->
+        <div class="wa-achievement-icons">
+          <div class="wa-achievement-icon" data-achievement="first-step" title="Ilk Adim">
+            <span class="wa-achievement-icon__emoji">🌱</span>
+          </div>
+          <div class="wa-achievement-icon" data-achievement="power-duo" title="Guclu Ikili">
+            <span class="wa-achievement-icon__emoji">⚡</span>
+          </div>
+          <div class="wa-achievement-icon" data-achievement="triple-threat" title="Uclu Kuvvet">
+            <span class="wa-achievement-icon__emoji">🔥</span>
+          </div>
+          <div class="wa-achievement-icon" data-achievement="ritual-master" title="Ritual Ustasi">
+            <span class="wa-achievement-icon__emoji">✨</span>
+          </div>
+          <div class="wa-achievement-icon" data-achievement="wellness-architect" title="Wellness Architect">
+            <span class="wa-achievement-icon__emoji">🏆</span>
+          </div>
         </div>
-        <div class="wa-achievement-progress__bar">
-          <div class="wa-achievement-progress__fill" style="width: 0%"></div>
-        </div>
-        <div class="wa-achievement-progress__badges"></div>
+        <!-- Unlock Explanation Box -->
+        <div class="wa-achievement-unlock-box" style="display: none;"></div>
       </div>
 
       <!-- Recommendation Box -->
@@ -259,30 +268,39 @@
 
       <div class="wa-dock__items"></div>
 
-      <!-- Mobile Synergy Map (v2) -->
-      <div class="wa-dock__synergy-map" style="display: none;">
-        <div class="wa-synergy-map__header">
+      <!-- Combined Synergy Map + Achievements (v2 merged) -->
+      <div class="wa-dock__synergy-achievements" style="display: none;">
+        <div class="wa-synergy-achievements__header">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
           </svg>
-          <span>Sinerji Haritasi</span>
+          <span>Sinerji & Basarimlar</span>
         </div>
+        <!-- Hexagon Synergy Map -->
         <div class="wa-synergy-map__scroll">
-          <svg class="wa-synergy-map__svg" viewBox="0 0 350 180"></svg>
+          <svg class="wa-synergy-map__svg" viewBox="0 0 350 200"></svg>
           <div class="wa-synergy-map__labels"></div>
         </div>
-      </div>
-
-      <!-- Mobile Achievement Progress (v2) -->
-      <div class="wa-dock__achievement-progress" style="display: none;">
-        <div class="wa-achievement-progress__header">
-          <span class="wa-achievement-progress__title">Basarimlar</span>
-          <span class="wa-achievement-progress__count">0/5</span>
+        <!-- Achievement Icons Row -->
+        <div class="wa-achievement-icons">
+          <div class="wa-achievement-icon" data-achievement="first-step" title="Ilk Adim">
+            <span class="wa-achievement-icon__emoji">🌱</span>
+          </div>
+          <div class="wa-achievement-icon" data-achievement="power-duo" title="Guclu Ikili">
+            <span class="wa-achievement-icon__emoji">⚡</span>
+          </div>
+          <div class="wa-achievement-icon" data-achievement="triple-threat" title="Uclu Kuvvet">
+            <span class="wa-achievement-icon__emoji">🔥</span>
+          </div>
+          <div class="wa-achievement-icon" data-achievement="ritual-master" title="Ritual Ustasi">
+            <span class="wa-achievement-icon__emoji">✨</span>
+          </div>
+          <div class="wa-achievement-icon" data-achievement="wellness-architect" title="Wellness Architect">
+            <span class="wa-achievement-icon__emoji">🏆</span>
+          </div>
         </div>
-        <div class="wa-achievement-progress__bar">
-          <div class="wa-achievement-progress__fill" style="width: 0%"></div>
-        </div>
-        <div class="wa-achievement-progress__badges"></div>
+        <!-- Unlock Explanation Box -->
+        <div class="wa-achievement-unlock-box" style="display: none;"></div>
       </div>
 
       <!-- Mobile Recommendation -->
@@ -350,6 +368,39 @@
   </div>
 
   <div class="wa-particles"></div>
+
+  <!-- Kesfet Full Screen Modal -->
+  <div class="wa-kesfet-modal" id="kesfet-modal">
+    <div class="wa-kesfet-modal__header">
+      <button class="wa-kesfet-modal__back" aria-label="Geri">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <h3 class="wa-kesfet-modal__title"></h3>
+      <button class="wa-kesfet-modal__close" aria-label="Kapat">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div class="wa-kesfet-modal__product">
+      <img class="wa-kesfet-modal__image" src="" alt="">
+      <div class="wa-kesfet-modal__timing"></div>
+    </div>
+    <div class="wa-kesfet-modal__tabs">
+      <button class="wa-tab wa-tab--active" data-tab="benefits">Faydalar</button>
+      <button class="wa-tab" data-tab="ingredients">Icindekiler</button>
+      <button class="wa-tab" data-tab="science">Bilim</button>
+    </div>
+    <div class="wa-kesfet-modal__content"></div>
+    <div class="wa-kesfet-modal__footer">
+      <button class="wa-kesfet-modal__add-btn">
+        <span class="wa-kesfet-modal__add-text">Sepete Ekle</span>
+        <span class="wa-kesfet-modal__added-text" style="display:none;">Eklendi</span>
+      </button>
+    </div>
+  </div>
 </section>
 
 <style>
@@ -427,11 +478,11 @@
   /* Container */
   .wa-container { max-width: 1200px; margin: 0 auto; }
 
-  /* Product Grid */
+  /* Product Grid - Mobile: single column, Desktop: 3 columns */
   .wa-products {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   /* Product Card */
@@ -682,7 +733,7 @@
   }
 
   .wa-dock--expanded {
-    height: 85vh;
+    height: 95vh;
     border-radius: var(--wa-radius) var(--wa-radius) 0 0;
     border-top: none;
     box-shadow: var(--wa-shadow-lg);
@@ -818,10 +869,16 @@
   .wa-dock--expanded .wa-dock__expanded { display: block; }
 
   .wa-dock__expanded-header {
+    position: sticky;
+    top: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    padding: 12px 16px;
+    margin: 0 -16px 1rem -16px;
+    background: var(--wa-white);
+    border-bottom: 1px solid var(--wa-gray-200);
+    z-index: 10;
   }
 
   .wa-dock__expanded-header h3 {
@@ -1066,6 +1123,112 @@
   .wa-synergy-line--strong { stroke-width: 3; opacity: 0.8; }
   .wa-synergy-line--medium { stroke-width: 2; opacity: 0.7; }
 
+  /* Combined Synergy + Achievements (v2 merged) */
+  .wa-synergy-achievements,
+  .wa-dock__synergy-achievements {
+    margin: 1rem 0;
+    padding: 12px;
+    background: var(--wa-gray-100);
+    border-radius: var(--wa-radius);
+  }
+
+  .wa-synergy-achievements__header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--wa-black);
+    margin-bottom: 12px;
+  }
+
+  .wa-synergy-achievements__header svg {
+    color: var(--wa-gray-500);
+  }
+
+  /* Achievement Icons Row */
+  .wa-achievement-icons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 16px 0 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--wa-gray-200);
+  }
+
+  .wa-achievement-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--wa-gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.4;
+    filter: grayscale(1);
+  }
+
+  .wa-achievement-icon--unlocked {
+    opacity: 1;
+    filter: grayscale(0);
+    background: var(--wa-gold);
+    box-shadow: 0 0 12px rgba(255, 193, 7, 0.5);
+  }
+
+  .wa-achievement-icon--unlocking {
+    animation: achievement-unlock 0.6s ease;
+  }
+
+  @keyframes achievement-unlock {
+    0% { transform: scale(1) rotate(0deg); }
+    30% { transform: scale(1.3) rotate(-15deg); }
+    60% { transform: scale(1.2) rotate(10deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+
+  .wa-achievement-icon__emoji {
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  /* Achievement Unlock Box */
+  .wa-achievement-unlock-box {
+    margin-top: 12px;
+    padding: 12px;
+    background: var(--wa-white);
+    border-radius: var(--wa-radius-sm);
+    border: 1px solid var(--wa-gray-200);
+    animation: slide-up 0.3s ease;
+  }
+
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .wa-achievement-unlock-box__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+    color: var(--wa-black);
+  }
+
+  .wa-achievement-unlock-box__emoji {
+    font-size: 1.2rem;
+  }
+
+  .wa-achievement-unlock-box__text {
+    font-size: 0.75rem;
+    color: var(--wa-gray-600);
+    line-height: 1.4;
+    margin: 0;
+  }
+
   /* Achievement System */
   .wa-achievement-progress {
     margin: 1rem 0;
@@ -1202,6 +1365,244 @@
     display: block;
     font-size: 0.85rem;
     font-weight: 700;
+  }
+
+  /* Kesfet Full Screen Modal */
+  .wa-kesfet-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--wa-white);
+    z-index: 10000;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .wa-kesfet-modal--open {
+    transform: translateY(0);
+  }
+
+  .wa-kesfet-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--wa-gray-200);
+    background: var(--wa-white);
+    flex-shrink: 0;
+  }
+
+  .wa-kesfet-modal__back,
+  .wa-kesfet-modal__close {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: var(--wa-gray-100);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .wa-kesfet-modal__back:hover,
+  .wa-kesfet-modal__close:hover {
+    background: var(--wa-gray-200);
+  }
+
+  .wa-kesfet-modal__title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+  }
+
+  .wa-kesfet-modal__product {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px;
+    background: var(--wa-gray-100);
+    flex-shrink: 0;
+  }
+
+  .wa-kesfet-modal__image {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    border-radius: 12px;
+    background: var(--wa-white);
+    padding: 8px;
+  }
+
+  .wa-kesfet-modal__timing {
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: var(--wa-gray-600);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .wa-kesfet-modal__tabs {
+    display: flex;
+    border-bottom: 1px solid var(--wa-gray-200);
+    padding: 0 16px;
+    flex-shrink: 0;
+    background: var(--wa-white);
+  }
+
+  .wa-kesfet-modal__tabs .wa-tab {
+    flex: 1;
+    padding: 14px 8px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--wa-gray-500);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .wa-kesfet-modal__tabs .wa-tab--active {
+    color: var(--wa-black);
+    border-bottom-color: var(--wa-black);
+  }
+
+  .wa-kesfet-modal__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 16px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .wa-kesfet-modal__footer {
+    padding: 16px;
+    border-top: 1px solid var(--wa-gray-200);
+    background: var(--wa-white);
+    flex-shrink: 0;
+  }
+
+  .wa-kesfet-modal__add-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--wa-black);
+    color: var(--wa-white);
+    border: none;
+    border-radius: var(--wa-radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .wa-kesfet-modal__add-btn:hover {
+    background: var(--wa-gray-800);
+  }
+
+  .wa-kesfet-modal__add-btn--added {
+    background: var(--wa-success);
+  }
+
+  /* Modal Content Styles */
+  .wa-modal-benefit-item {
+    display: flex;
+    gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--wa-gray-200);
+  }
+
+  .wa-modal-benefit-item:last-child {
+    border-bottom: none;
+  }
+
+  .wa-modal-benefit-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--wa-gray-100);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .wa-modal-benefit-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--wa-black);
+  }
+
+  .wa-modal-benefit-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .wa-modal-benefit-desc {
+    font-size: 0.85rem;
+    color: var(--wa-gray-600);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .wa-modal-ingredient-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--wa-gray-200);
+  }
+
+  .wa-modal-ingredient-item:last-child {
+    border-bottom: none;
+  }
+
+  .wa-modal-ingredient-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .wa-modal-ingredient-benefit {
+    font-size: 0.8rem;
+    color: var(--wa-gray-600);
+  }
+
+  .wa-modal-ingredient-amount {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--wa-black);
+    background: var(--wa-gray-100);
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+
+  .wa-modal-science {
+    padding: 16px;
+    background: var(--wa-gray-100);
+    border-radius: 12px;
+  }
+
+  .wa-modal-science-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .wa-modal-science-text {
+    font-size: 0.9rem;
+    color: var(--wa-gray-700);
+    line-height: 1.6;
+    margin: 0;
   }
 
   /* Confetti */
@@ -1407,6 +1808,7 @@
     }
 
     .wa-products {
+      display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
     }
@@ -1705,27 +2107,29 @@
   };
 
   // ============================================
-  // EXTENDED PRODUCT DATA (v2)
+  // EXTENDED PRODUCT DATA (v2 - cyrasoul.com data)
   // ============================================
   const EXTENDED_PRODUCT_DATA = {
     'dreamglow': {
       name: 'DreamGlow',
-      timing: 'Uykudan 45 dk once',
+      timing: 'Uykudan once',
       category: 'night',
       benefits: [
-        { icon: 'moon', title: 'Derin Uyku', description: 'Uyku kalitesini destekler' },
-        { icon: 'sparkle', title: 'Cilt Onarimi', description: 'Gece kolajen sentezini destekler' },
-        { icon: 'clock', title: 'Gece Yenilenmesi', description: 'Hucre yenilenmesine katki saglar' }
+        { icon: 'sparkle', title: 'Cilt Elastikiyeti', description: 'Gece boyunca kolajen uretimini destekler' },
+        { icon: 'moon', title: 'Derin Uyku', description: 'Uyku kalitesini ve gecisini destekler' },
+        { icon: 'droplet', title: 'Yogun Nemlendirme', description: 'Gece boyunca antioksidan destegi' }
       ],
       ingredients: [
-        { name: 'Tip 1&3 Kolajen', amount: '5g', benefit: 'Cilt elastikiyeti' },
-        { name: 'Magnezyum', amount: '300mg', benefit: 'Kas gevsetici' },
-        { name: 'L-Theanine', amount: '200mg', benefit: 'Zihinsel sakinlik' },
-        { name: 'Vitamin C', amount: '80mg', benefit: 'Kolajen sentezi' }
+        { name: 'Kolajen Peptitleri (Tip 1 & 3)', amount: '', benefit: 'Cilt yenilenmesi' },
+        { name: 'Melisa (Lemon Balm) Ozutu', amount: '', benefit: 'Sakinlestirici' },
+        { name: 'Papatya Ozutu', amount: '', benefit: 'Gevsetici' },
+        { name: 'L-Theanine', amount: '', benefit: 'Zihinsel sakinlik' },
+        { name: 'Hyaluronik Asit', amount: '', benefit: 'Nemlendirme' },
+        { name: 'C Vitamini', amount: '', benefit: 'Antioksidan' }
       ],
       science: {
         title: 'Nasil Calisir?',
-        description: 'Sirkadiyen ritminize uygun formul. Magnezyum GABA reseptorlerini aktive eder, L-Theanine alfa beyin dalgalarini artirir. Kolajen peptitleri uyku sirasinda cildin dogal onarim surecini destekler.'
+        description: 'Vucut, uyku saatlerinde kolajeni en verimli sekilde isler. Gece boyunca cilt bariyeri onarimi ve kolajen uretimi zirve yapar.'
       }
     },
     'dailyglow': {
@@ -1733,19 +2137,21 @@
       timing: 'Kahvalti sonrasi',
       category: 'morning',
       benefits: [
-        { icon: 'sun', title: 'Gun Boyu Enerji', description: 'Hucresel enerji uretimini destekler' },
-        { icon: 'sparkle', title: 'Cilt Parlaklik', description: 'Iceriden gelen isilti' },
-        { icon: 'lightning', title: 'Antioksidan Koruma', description: 'Serbest radikallere karsi savunma' }
+        { icon: 'sun', title: 'Cilt Parlakligi', description: 'Kolajen uretimi, elastikiyet ve puruzsuzluk destegi' },
+        { icon: 'lightning', title: 'Enerji Destegi', description: 'Kirmizi Kore ginsengi ile kan akisi ve oksijen tasinmasi' },
+        { icon: 'shield', title: 'Cilt Bariyeri', description: 'Nemi kilitler ve korur' }
       ],
       ingredients: [
-        { name: 'Hyaluronik Asit', amount: '120mg', benefit: 'Cilt nemlendirme' },
-        { name: 'Vitamin C', amount: '500mg', benefit: 'Kolajen destegi' },
-        { name: 'Biotin', amount: '2500mcg', benefit: 'Sac ve tirnak sagligi' },
-        { name: 'CoQ10', amount: '100mg', benefit: 'Hucresel enerji' }
+        { name: 'MSM (Metilsulfonilmetan)', amount: '', benefit: 'Doganin guzellik minerali' },
+        { name: 'Kirmizi Kore Ginsengi Ozutu', amount: '', benefit: 'Enerji ve kan akisi' },
+        { name: 'B3 Vitamini (Niasinamid)', amount: '', benefit: 'Cilt tonu' },
+        { name: 'Cinko', amount: '', benefit: 'Cilt sagligi' },
+        { name: 'Selenyum', amount: '', benefit: 'Antioksidan' },
+        { name: 'Manganez', amount: '', benefit: 'Mineral destegi' }
       ],
       science: {
         title: 'Nasil Calisir?',
-        description: 'Gunduz formulu cildi dis faktorlere karsi korur. Hyaluronik asit nem tutmaya yardimci olur, Vitamin C kolajen sentezini ve antioksidan savunmayi destekler.'
+        description: 'Adaptojenleri ve mineralleri birlestirerek hem cilt hem enerji faydasi saglar. Aktif bilesenler dolasim sistemi uzerinden sistemik etki eder.'
       }
     },
     'mindfuel': {
@@ -1753,19 +2159,20 @@
       timing: 'Kahvalti sonrasi',
       category: 'morning',
       benefits: [
-        { icon: 'lightning', title: 'Zihinsel Netlik', description: 'Konsantrasyonu destekler' },
-        { icon: 'clock', title: 'Uzun Sureli Odak', description: 'Gun boyu dikkat destegi' },
-        { icon: 'sparkle', title: 'Hafiza Destegi', description: 'Bilissel fonksiyonlara katki' }
+        { icon: 'brain', title: 'Odaklanma', description: 'Dopamin mekanizmalari ile odak ve mental performans' },
+        { icon: 'lightning', title: 'Zihinsel Dayaniklilik', description: 'Uzun calisma veya ogrenme seanslarinda' },
+        { icon: 'clock', title: 'Ogleden Sonra Dususu Onler', description: 'Mental yorgunlukla savasir' }
       ],
       ingredients: [
-        { name: 'L-Tyrosine', amount: '500mg', benefit: 'Norotransmitter oncusu' },
-        { name: 'Ginkgo Biloba', amount: '120mg', benefit: 'Beyin kan akisi' },
-        { name: 'Panax Ginseng', amount: '200mg', benefit: 'Mental dayaniklilik' },
-        { name: 'B12 Vitamini', amount: '1000mcg', benefit: 'Sinir sistemi destegi' }
+        { name: 'L-Tirozin', amount: '', benefit: 'Motivasyon ve odak; stres altinda koruma' },
+        { name: 'Ginkgo Biloba', amount: '', benefit: 'Beyne kan akisi' },
+        { name: 'Panax Ginseng', amount: '', benefit: 'Hafiza ve mental hiz' },
+        { name: 'Maca Koku (Lepidium)', amount: '', benefit: 'Mental dayaniklilik' },
+        { name: 'B12 Vitamini', amount: '', benefit: 'Sinir sistemi enerjisi' }
       ],
       science: {
         title: 'Nasil Calisir?',
-        description: 'L-Tyrosine dopamin oncusudur ve motivasyonu destekler. Ginkgo Biloba beyin kan akisini artirarak oksijen ve besin tasimaciligi saglar. Ginseng adaptojenik etkileriyle stres altinda performans saglar.'
+        description: 'Geleneksel olarak desteklenen bilesenleri modern takviye bilimiyle bilestirir. Doganin gucu bilimle bulusur.'
       }
     },
     'thechill': {
@@ -1773,19 +2180,20 @@
       timing: 'Aksam yemegi sonrasi',
       category: 'night',
       benefits: [
-        { icon: 'moon', title: 'Stres Azaltma', description: 'Gerginligi hafifletmeye yardimci olur' },
-        { icon: 'sparkle', title: 'Zihinsel Sakinlik', description: 'Huzurlu bir ruh hali' },
-        { icon: 'clock', title: 'Rahat Gecis', description: 'Uykuya gecisi kolaylastirir' }
+        { icon: 'peace', title: 'Stres Yonetimi', description: 'Baski altinda daha sakin, merkezi bir bakis acisi' },
+        { icon: 'brain', title: 'Mental Berraklik', description: 'Surekli tetikte olmaktan kaynaklanan yorgunlugu azaltir' },
+        { icon: 'muscle', title: 'Fiziksel Rahatlama', description: 'Kas gevsemesi ve gerginlik giderme' }
       ],
       ingredients: [
-        { name: 'Ashwagandha', amount: '600mg', benefit: 'Kortizol dengeleme' },
-        { name: 'L-Theanine', amount: '200mg', benefit: 'Sakinlik' },
-        { name: 'Magnezyum', amount: '200mg', benefit: 'Kas gevsetme' },
-        { name: 'GABA', amount: '250mg', benefit: 'Sinirsel rahatlama' }
+        { name: 'Rhodiola (Altin Kok)', amount: '', benefit: 'Stres yaniti icin adaptogen' },
+        { name: 'Carkifelek & Melisa', amount: '', benefit: 'Dogal rahatlama ikilisi' },
+        { name: 'Papatya', amount: '', benefit: 'Sinir sistemi yatistirici' },
+        { name: 'B6 Vitamini', amount: '', benefit: 'Serotonin uretimi' },
+        { name: 'B12 Vitamini', amount: '', benefit: 'Sinir onarimi' }
       ],
       science: {
         title: 'Nasil Calisir?',
-        description: 'Ashwagandha adaptojenik etkileriyle kortizol seviyelerini dengelemeye yardimci olur. L-Theanine kafein olmadan sakinlik saglar. GABA inhibitor norotransmitter olarak asiri uyarilmayi azaltir.'
+        description: 'Doganin sakinlestirici ajanlarini kanitlanmis vitaminlerle bilestirir. Aksam bos mideye 2 kapsul onerilir.'
       }
     },
     'reset-button': {
@@ -1793,19 +2201,20 @@
       timing: 'Ogle yemegi sonrasi',
       category: 'noon',
       benefits: [
-        { icon: 'sparkle', title: 'Detoks Destegi', description: 'Karaciger fonksiyonlarini destekler' },
-        { icon: 'lightning', title: 'Metabolizma', description: 'Metabolik sureclere katki' },
-        { icon: 'sun', title: 'Hafiflik Hissi', description: 'Siskinlik ve agirligi azaltir' }
+        { icon: 'refresh', title: 'Detoks Destegi', description: 'Modern yasam, islenmis gidalar ve stresten kaynakli toksinleri atar' },
+        { icon: 'liver', title: 'Karaciger Destegi', description: 'Dogal temizleme sureclerini ve metabolik fonksiyonu destekler' },
+        { icon: 'energy', title: 'Fiziksel Rahatlama', description: 'Yorgunluk, siskinlik ve agirlik hissinden kurtulma' }
       ],
       ingredients: [
-        { name: 'Deve Dikeni', amount: '250mg', benefit: 'Karaciger koruma' },
-        { name: 'Enginar', amount: '400mg', benefit: 'Safra akisi' },
-        { name: 'Karahindiba', amount: '300mg', benefit: 'Su dengeleme' },
-        { name: 'Zerdecal', amount: '500mg', benefit: 'Anti-inflamatuar' }
+        { name: 'Deve Dikeni (Silimarin)', amount: '', benefit: 'Guvenli toksin eliminasyonu' },
+        { name: 'Enginar', amount: '', benefit: 'Filtrasyon destegi' },
+        { name: 'Karahindiba', amount: '', benefit: 'Su tutulumunu azaltir' },
+        { name: 'Zerdecal (Kurkumin)', amount: '', benefit: 'Anti-inflamatuar' },
+        { name: 'Moringa', amount: '', benefit: 'Mineral destegi, enerji' }
       ],
       science: {
         title: 'Nasil Calisir?',
-        description: 'Deve Dikeni (Silymarin) karaciger hucrelerini korur ve yenilenmelerine katki saglar. Enginar safra uretimini destekler, sindirim ve yag metabolizmasina yardimci olur. Zerdecal guclu antioksidan ve anti-inflamatuar etki saglar.'
+        description: 'Doganin gucunu bilimle bilestirir. Bos mideye 2 kapsul onerilir, optimal sonuclar icin en az 3 ay duzenli kullanim.'
       }
     }
   };
@@ -1895,11 +2304,11 @@
   // ACHIEVEMENTS (v2)
   // ============================================
   const ACHIEVEMENTS = {
-    'first-step': { id: 'first-step', title: 'Ilk Adim', icon: 'star', condition: s => s.items.length >= 1 },
-    'power-duo': { id: 'power-duo', title: 'Guclu Ikili', icon: 'lightning', condition: s => s.items.length >= 2 },
-    'power-morning': { id: 'power-morning', title: 'Power Morning', icon: 'sun', condition: s => hasProducts(s, ['dailyglow', 'mindfuel']) },
-    'sleep-beauty': { id: 'sleep-beauty', title: 'Guzellik Uykusu', icon: 'moon', condition: s => hasProducts(s, ['dreamglow', 'thechill']) },
-    'full-ritual': { id: 'full-ritual', title: 'Tam Ritual', icon: 'trophy', condition: s => s.items.length >= 5 }
+    'first-step': { id: 'first-step', title: 'Ilk Adim', emoji: '🌱', description: 'Ilk urununu ekleyerek wellness yolculuguna basladiniz!', icon: 'star', condition: s => s.items.length >= 1 },
+    'power-duo': { id: 'power-duo', title: 'Guclu Ikili', emoji: '⚡', description: 'Iki urun birlikte %15 sinerji indirimi kazandiniz!', icon: 'lightning', condition: s => s.items.length >= 2 },
+    'triple-threat': { id: 'triple-threat', title: 'Uclu Kuvvet', emoji: '🔥', description: 'Uc urunle rituelinizi guclendirdiniz. %20 indirim!', icon: 'fire', condition: s => s.items.length >= 3 },
+    'ritual-master': { id: 'ritual-master', title: 'Ritual Ustasi', emoji: '✨', description: 'Dort urunle tam bir gunluk ritual olusturuyorsunuz. %25 indirim!', icon: 'sparkle', condition: s => s.items.length >= 4 },
+    'wellness-architect': { id: 'wellness-architect', title: 'Wellness Architect', emoji: '🏆', description: 'Tum 5 urunu eklediniz! Maksimum %30 sinerji indirimi!', icon: 'trophy', condition: s => s.items.length >= 5 }
   };
 
   const achievementState = { unlocked: new Set(), pending: [] };
@@ -1929,6 +2338,23 @@
   const sidebar = section.querySelector('.wa-sidebar');
   const particles = section.querySelector('.wa-particles');
 
+  // Cached recommendation elements (v1 approach for performance)
+  const dockRecElements = {
+    container: dock?.querySelector('.wa-dock__recommendation'),
+    img: dock?.querySelector('.wa-dock__recommendation-img'),
+    name: dock?.querySelector('.wa-dock__recommendation-name'),
+    bundle: dock?.querySelector('.wa-dock__recommendation-bundle'),
+    addBtn: dock?.querySelector('.wa-dock__recommendation-add')
+  };
+  const sidebarRecElements = {
+    container: sidebar?.querySelector('.wa-recommendation'),
+    img: sidebar?.querySelector('.wa-recommendation__image'),
+    name: sidebar?.querySelector('.wa-recommendation__name'),
+    bundleName: sidebar?.querySelector('.wa-recommendation__bundle-name'),
+    reason: sidebar?.querySelector('.wa-recommendation__reason'),
+    addBtn: sidebar?.querySelector('.wa-recommendation__add-btn')
+  };
+
   // ============================================
   // HELPERS
   // ============================================
@@ -1947,6 +2373,43 @@
 
   function getTotalQuantity() {
     return state.items.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  }
+
+  // Flying ghost animation (v1 approach)
+  function createFlyingGhost(sourceEl, targetEl, imageSrc) {
+    if (!sourceEl || !targetEl) return Promise.resolve();
+
+    const sourceRect = sourceEl.getBoundingClientRect();
+    const targetRect = targetEl.getBoundingClientRect();
+
+    const ghost = document.createElement('div');
+    ghost.style.cssText = `
+      position: fixed;
+      z-index: 10000;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: url(${imageSrc}) center/cover no-repeat;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      pointer-events: none;
+      left: ${sourceRect.left + sourceRect.width / 2 - 25}px;
+      top: ${sourceRect.top + sourceRect.height / 2 - 25}px;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    `;
+    document.body.appendChild(ghost);
+
+    // Trigger animation
+    requestAnimationFrame(() => {
+      ghost.style.transform = `translate(${targetRect.left - sourceRect.left}px, ${targetRect.top - sourceRect.top}px) scale(0.5)`;
+      ghost.style.opacity = '0';
+    });
+
+    return new Promise(resolve => {
+      setTimeout(() => {
+        ghost.remove();
+        resolve();
+      }, 500);
+    });
   }
 
   // ============================================
@@ -1979,13 +2442,13 @@
   // SYNERGY MAP RENDERER (v2)
   // ============================================
   const SynergyMapRenderer = {
-    // Product positions in horizontal layout (x, y coordinates in SVG viewBox 350x180)
+    // Product positions in hexagon layout (x, y coordinates in SVG viewBox 350x200)
     POSITIONS: {
-      'dailyglow': { x: 55, y: 90 },
-      'mindfuel': { x: 125, y: 50 },
-      'reset-button': { x: 175, y: 130 },
-      'thechill': { x: 225, y: 50 },
-      'dreamglow': { x: 295, y: 90 }
+      'dailyglow': { x: 175, y: 35 },    // Top center
+      'mindfuel': { x: 295, y: 75 },     // Right top
+      'dreamglow': { x: 260, y: 155 },   // Right bottom
+      'thechill': { x: 90, y: 155 },     // Left bottom
+      'reset-button': { x: 55, y: 75 }   // Left top
     },
     NODE_RADIUS: 28,
 
@@ -2125,9 +2588,9 @@
     },
 
     update(selectedHandles) {
-      // Update both mobile and desktop synergy maps
-      const dockMap = dock?.querySelector('.wa-dock__synergy-map');
-      const sidebarMap = sidebar?.querySelector('.wa-synergy-map');
+      // Update both mobile and desktop synergy maps (in merged containers)
+      const dockMap = dock?.querySelector('.wa-dock__synergy-achievements');
+      const sidebarMap = sidebar?.querySelector('.wa-synergy-achievements');
       if (dockMap) this.render(dockMap, selectedHandles);
       if (sidebarMap) this.render(sidebarMap, selectedHandles);
     }
@@ -2240,9 +2703,19 @@
 
   async function updateQuantity(productId, delta) {
     const item = state.items.find(i => i.id === productId);
-    if (item) {
-      const newQty = Math.max(1, Math.min(10, item.quantity + delta));
-      if (await updateShopifyCartQty(item.variantId, newQty)) { item.quantity = newQty; vibrate(5); updateUI(); }
+    if (!item) return;
+
+    const newQty = item.quantity + delta;
+    if (newQty <= 0) {
+      // Remove item when quantity reaches 0
+      removeItem(productId);
+    } else {
+      const clampedQty = Math.min(10, newQty);
+      if (await updateShopifyCartQty(item.variantId, clampedQty)) {
+        item.quantity = clampedQty;
+        vibrate(5);
+        updateUI();
+      }
     }
   }
 
@@ -2267,6 +2740,11 @@
   }
 
   function showAchievementUnlock(ach) {
+    // Update achievement icons in merged container
+    updateAchievementDisplay();
+    showAchievementUnlockInBox(ach);
+
+    // Also show floating notification
     const notif = document.createElement('div');
     notif.className = 'wa-achievement-notification';
     notif.innerHTML = `<div class="wa-achievement-notification__icon wa-achievement-notification__icon--locked">${ICONS.lock}</div><div><span class="wa-achievement-notification__label">Kilidi Acildi!</span><span class="wa-achievement-notification__title">${ach.title}</span></div>`;
@@ -2309,21 +2787,54 @@
 
   function updateAchievementDisplay() {
     const unlocked = achievementState.unlocked.size;
-    const total = Object.keys(ACHIEVEMENTS).length;
-    const pct = (unlocked / total) * 100;
 
     [sidebar, dock].forEach(container => {
       if (!container) return;
-      const prog = container.querySelector('.wa-achievement-progress, .wa-dock__achievement-progress');
-      if (!prog) return;
-      prog.style.display = unlocked > 0 ? 'block' : 'none';
-      const countEl = prog.querySelector('.wa-achievement-progress__count');
-      const fillEl = prog.querySelector('.wa-achievement-progress__fill');
-      const badgesEl = prog.querySelector('.wa-achievement-progress__badges');
-      if (countEl) countEl.textContent = `${unlocked}/${total}`;
-      if (fillEl) fillEl.style.width = pct + '%';
-      if (badgesEl) {
-        badgesEl.innerHTML = Object.values(ACHIEVEMENTS).map(a => `<div class="wa-achievement-badge ${achievementState.unlocked.has(a.id) ? 'wa-achievement-badge--unlocked' : ''}" title="${a.title}">${ICONS[a.icon] || ICONS.star}</div>`).join('');
+      // Update achievement icons in merged synergy-achievements container
+      const merged = container.querySelector('.wa-synergy-achievements, .wa-dock__synergy-achievements');
+      if (!merged) return;
+
+      // Show merged container when there are items
+      merged.style.display = state.items.length > 0 ? 'block' : 'none';
+
+      // Update achievement icons
+      const icons = merged.querySelectorAll('.wa-achievement-icon');
+      icons.forEach(icon => {
+        const achId = icon.dataset.achievement;
+        const isUnlocked = achievementState.unlocked.has(achId);
+        icon.classList.toggle('wa-achievement-icon--unlocked', isUnlocked);
+      });
+    });
+  }
+
+  function showAchievementUnlockInBox(achievement) {
+    [sidebar, dock].forEach(container => {
+      if (!container) return;
+      const merged = container.querySelector('.wa-synergy-achievements, .wa-dock__synergy-achievements');
+      if (!merged) return;
+
+      // Find the icon and animate it
+      const icon = merged.querySelector(`.wa-achievement-icon[data-achievement="${achievement.id}"]`);
+      if (icon) {
+        icon.classList.add('wa-achievement-icon--unlocking');
+        setTimeout(() => icon.classList.remove('wa-achievement-icon--unlocking'), 600);
+      }
+
+      // Show unlock box
+      const unlockBox = merged.querySelector('.wa-achievement-unlock-box');
+      if (unlockBox) {
+        unlockBox.style.display = 'block';
+        unlockBox.innerHTML = `
+          <div class="wa-achievement-unlock-box__header">
+            <span class="wa-achievement-unlock-box__emoji">${achievement.emoji || '⭐'}</span>
+            <span>${achievement.title} Acildi!</span>
+          </div>
+          <p class="wa-achievement-unlock-box__text">${achievement.description}</p>
+        `;
+        // Auto-hide after 4 seconds
+        setTimeout(() => {
+          unlockBox.style.display = 'none';
+        }, 4000);
       }
     });
   }
@@ -2425,18 +2936,19 @@
       synBox.innerHTML = `<div style="display:flex;align-items:center;gap:6px;font-weight:600;margin-bottom:6px;">${ICONS.lightning}<span>${synExp.title}</span></div><div style="display:inline-block;background:#000;color:#fff;font-size:0.65rem;padding:2px 6px;border-radius:4px;margin-bottom:6px;">${synExp.benefit}</div><p style="margin:0;color:#525252;line-height:1.4;">${synExp.detail}</p>`;
     } else { synBox.style.display = 'none'; }
 
-    // Recommendation
-    const recBox = dock.querySelector('.wa-dock__recommendation');
-    if (rec) {
+    // Recommendation (using cached elements for performance)
+    if (rec && dockRecElements.container) {
       const rp = getProductDataByHandle(rec.handle);
       if (rp) {
-        recBox.style.display = 'block';
-        recBox.querySelector('.wa-dock__recommendation-img').src = rp.image;
-        recBox.querySelector('.wa-dock__recommendation-name').textContent = SYNERGY_MAP[rec.handle]?.name || rp.title;
-        recBox.querySelector('.wa-dock__recommendation-bundle').textContent = rec.bundle;
-        recBox.querySelector('.wa-dock__recommendation-add').dataset.recHandle = rec.handle;
+        dockRecElements.container.style.display = 'block';
+        dockRecElements.img.src = rp.image;
+        dockRecElements.name.textContent = SYNERGY_MAP[rec.handle]?.name || rp.title;
+        dockRecElements.bundle.textContent = rec.bundle;
+        dockRecElements.addBtn.dataset.recHandle = rec.handle;
       }
-    } else { recBox.style.display = 'none'; }
+    } else if (dockRecElements.container) {
+      dockRecElements.container.style.display = 'none';
+    }
 
     // Ritual
     const ritBox = dock.querySelector('.wa-dock__ritual');
@@ -2468,19 +2980,20 @@
       synBox.innerHTML = `<div class="wa-synergy-explanation__header">${ICONS.lightning}<span>${synExp.title}</span></div><div class="wa-synergy-explanation__benefit">${synExp.benefit}</div><p class="wa-synergy-explanation__text">${synExp.detail}</p>`;
     } else { synBox.style.display = 'none'; }
 
-    // Recommendation
-    const recBox = sidebar.querySelector('.wa-recommendation');
-    if (rec) {
+    // Recommendation (using cached elements for performance)
+    if (rec && sidebarRecElements.container) {
       const rp = getProductDataByHandle(rec.handle);
       if (rp) {
-        recBox.style.display = 'block';
-        recBox.querySelector('.wa-recommendation__image').src = rp.image;
-        recBox.querySelector('.wa-recommendation__name').textContent = SYNERGY_MAP[rec.handle]?.name || rp.title;
-        recBox.querySelector('.wa-recommendation__bundle-name').textContent = rec.bundle;
-        recBox.querySelector('.wa-recommendation__reason').textContent = rec.reason;
-        recBox.querySelector('.wa-recommendation__add-btn').dataset.recHandle = rec.handle;
+        sidebarRecElements.container.style.display = 'block';
+        sidebarRecElements.img.src = rp.image;
+        sidebarRecElements.name.textContent = SYNERGY_MAP[rec.handle]?.name || rp.title;
+        sidebarRecElements.bundleName.textContent = rec.bundle;
+        sidebarRecElements.reason.textContent = rec.reason;
+        sidebarRecElements.addBtn.dataset.recHandle = rec.handle;
       }
-    } else { recBox.style.display = 'none'; }
+    } else if (sidebarRecElements.container) {
+      sidebarRecElements.container.style.display = 'none';
+    }
 
     // Ritual
     const ritBox = sidebar.querySelector('.wa-ritual-guide');
@@ -2500,49 +3013,128 @@
   }
 
   // ============================================
-  // KESFET DRAWER (v2)
+  // KESFET MODAL (v2)
   // ============================================
-  function renderKesfetContent(handle, tab) {
+  const kesfetModal = document.getElementById('kesfet-modal');
+  let currentKesfetHandle = null;
+  let currentKesfetProductData = null;
+
+  function renderModalContent(handle, tab) {
     const data = EXTENDED_PRODUCT_DATA[handle];
     if (!data) return '<p>Bilgi bulunamadi.</p>';
 
     if (tab === 'benefits') {
-      return data.benefits.map(b => `<div class="wa-benefit-item"><div class="wa-benefit-icon">${ICONS[b.icon] || ICONS.star}</div><div><div class="wa-benefit-title">${b.title}</div><p class="wa-benefit-desc">${b.description}</p></div></div>`).join('');
+      return data.benefits.map(b => `
+        <div class="wa-modal-benefit-item">
+          <div class="wa-modal-benefit-icon">${ICONS[b.icon] || ICONS.star}</div>
+          <div>
+            <div class="wa-modal-benefit-title">${b.title}</div>
+            <p class="wa-modal-benefit-desc">${b.description}</p>
+          </div>
+        </div>
+      `).join('');
     } else if (tab === 'ingredients') {
-      return data.ingredients.map(i => `<div class="wa-ingredient-item"><div><div class="wa-ingredient-name">${i.name}</div><div class="wa-ingredient-benefit">${i.benefit}</div></div><div class="wa-ingredient-amount">${i.amount}</div></div>`).join('');
+      return data.ingredients.map(i => `
+        <div class="wa-modal-ingredient-item">
+          <div>
+            <div class="wa-modal-ingredient-name">${i.name}</div>
+            <div class="wa-modal-ingredient-benefit">${i.benefit}</div>
+          </div>
+          ${i.amount ? `<div class="wa-modal-ingredient-amount">${i.amount}</div>` : ''}
+        </div>
+      `).join('');
     } else if (tab === 'science') {
-      return `<div class="wa-science-content"><div class="wa-science-title">${data.science.title}</div><p>${data.science.description}</p></div>`;
+      return `
+        <div class="wa-modal-science">
+          <div class="wa-modal-science-title">${data.science.title}</div>
+          <p class="wa-modal-science-text">${data.science.description}</p>
+        </div>
+      `;
     }
     return '';
   }
 
-  function handleKesfetToggle(card) {
-    const isOpen = card.classList.toggle('wa-product-card--drawer-open');
-    if (isOpen) {
-      const handle = matchHandle(card.dataset.productTitle);
-      const content = card.querySelector('.wa-product-card__drawer-content');
-      content.innerHTML = renderKesfetContent(handle, 'benefits');
-      card.querySelectorAll('.wa-tab').forEach((t, i) => t.classList.toggle('wa-tab--active', i === 0));
-    }
+  function openKesfetModal(card) {
+    const handle = matchHandle(card.dataset.productTitle);
+    const data = EXTENDED_PRODUCT_DATA[handle];
+    if (!data) return;
+
+    currentKesfetHandle = handle;
+    currentKesfetProductData = {
+      id: card.dataset.productId,
+      handle: card.dataset.productHandle,
+      title: card.dataset.productTitle,
+      price: parseInt(card.dataset.productPrice),
+      image: card.dataset.productImage,
+      variantId: card.dataset.variantId,
+      url: card.dataset.productUrl,
+      quantity: 1
+    };
+
+    // Update modal content
+    kesfetModal.querySelector('.wa-kesfet-modal__title').textContent = data.name;
+    kesfetModal.querySelector('.wa-kesfet-modal__image').src = card.dataset.productImage;
+    kesfetModal.querySelector('.wa-kesfet-modal__timing').innerHTML = `${ICONS.clock} ${data.timing}`;
+    kesfetModal.querySelector('.wa-kesfet-modal__content').innerHTML = renderModalContent(handle, 'benefits');
+
+    // Reset tabs
+    kesfetModal.querySelectorAll('.wa-tab').forEach((t, i) => t.classList.toggle('wa-tab--active', i === 0));
+
+    // Update add button state
+    const isAdded = state.items.find(i => i.id === currentKesfetProductData.id);
+    const addBtn = kesfetModal.querySelector('.wa-kesfet-modal__add-btn');
+    addBtn.classList.toggle('wa-kesfet-modal__add-btn--added', !!isAdded);
+    addBtn.querySelector('.wa-kesfet-modal__add-text').style.display = isAdded ? 'none' : 'inline';
+    addBtn.querySelector('.wa-kesfet-modal__added-text').style.display = isAdded ? 'inline' : 'none';
+
+    // Open modal
+    kesfetModal.classList.add('wa-kesfet-modal--open');
+    document.body.style.overflow = 'hidden';
   }
 
-  function handleKesfetTab(card, tab) {
-    const handle = matchHandle(card.dataset.productTitle);
-    card.querySelector('.wa-product-card__drawer-content').innerHTML = renderKesfetContent(handle, tab);
-    card.querySelectorAll('.wa-tab').forEach(t => t.classList.toggle('wa-tab--active', t.dataset.tab === tab));
+  function closeKesfetModal() {
+    kesfetModal.classList.remove('wa-kesfet-modal--open');
+    document.body.style.overflow = '';
+    currentKesfetHandle = null;
+    currentKesfetProductData = null;
+  }
+
+  function handleModalTab(tab) {
+    if (!currentKesfetHandle) return;
+    kesfetModal.querySelector('.wa-kesfet-modal__content').innerHTML = renderModalContent(currentKesfetHandle, tab);
+    kesfetModal.querySelectorAll('.wa-tab').forEach(t => t.classList.toggle('wa-tab--active', t.dataset.tab === tab));
+  }
+
+  function handleModalAddToCart() {
+    if (!currentKesfetProductData) return;
+    const isAdded = state.items.find(i => i.id === currentKesfetProductData.id);
+
+    if (isAdded) {
+      removeItem(currentKesfetProductData.id);
+    } else {
+      addItem(currentKesfetProductData);
+    }
+
+    // Update button state
+    const nowAdded = state.items.find(i => i.id === currentKesfetProductData.id);
+    const addBtn = kesfetModal.querySelector('.wa-kesfet-modal__add-btn');
+    addBtn.classList.toggle('wa-kesfet-modal__add-btn--added', !!nowAdded);
+    addBtn.querySelector('.wa-kesfet-modal__add-text').style.display = nowAdded ? 'none' : 'inline';
+    addBtn.querySelector('.wa-kesfet-modal__added-text').style.display = nowAdded ? 'inline' : 'none';
   }
 
   // ============================================
   // EVENT HANDLERS
   // ============================================
   function handleProductClick(card, e) {
-    if (e.target.closest('[data-kesfet-toggle]') || e.target.closest('.wa-tab') || e.target.closest('.wa-product-card__drawer')) {
+    // If clicking Kesfet button, open modal
+    if (e.target.closest('[data-kesfet-toggle]')) {
       e.stopPropagation();
-      if (e.target.closest('[data-kesfet-toggle]')) handleKesfetToggle(card);
-      else if (e.target.closest('.wa-tab')) handleKesfetTab(card, e.target.closest('.wa-tab').dataset.tab);
+      openKesfetModal(card);
       return;
     }
 
+    // Otherwise add to cart
     const data = { id: card.dataset.productId, handle: card.dataset.productHandle, title: card.dataset.productTitle, price: parseInt(card.dataset.productPrice), image: card.dataset.productImage, variantId: card.dataset.variantId, url: card.dataset.productUrl, quantity: 1 };
     addItem(data);
   }
@@ -2595,9 +3187,74 @@
       });
     });
 
-    // Recommendation buttons
-    dock.querySelector('.wa-dock__recommendation-add')?.addEventListener('click', e => { const h = e.target.dataset.recHandle; if (h) { const p = getProductDataByHandle(h); if (p) addItem(p); } });
-    sidebar.querySelector('.wa-recommendation__add-btn')?.addEventListener('click', e => { const h = e.target.dataset.recHandle; if (h) { const p = getProductDataByHandle(h); if (p) addItem(p); } });
+    // Recommendation buttons with flying ghost animation
+    dockRecElements.addBtn?.addEventListener('click', async e => {
+      const h = e.target.dataset.recHandle;
+      if (h) {
+        const p = getProductDataByHandle(h);
+        if (p) {
+          // Flying ghost from recommendation image to dock items
+          const targetEl = dock.querySelector('.wa-dock__items') || dock.querySelector('.wa-dock__thumbnails');
+          await createFlyingGhost(dockRecElements.img, targetEl, p.image);
+          addItem(p);
+        }
+      }
+    });
+    sidebarRecElements.addBtn?.addEventListener('click', async e => {
+      const h = e.target.dataset.recHandle;
+      if (h) {
+        const p = getProductDataByHandle(h);
+        if (p) {
+          // Flying ghost from recommendation image to sidebar items
+          const targetEl = sidebar.querySelector('.wa-sidebar__items');
+          await createFlyingGhost(sidebarRecElements.img, targetEl, p.image);
+          addItem(p);
+        }
+      }
+    });
+
+    // Kesfet Modal event listeners
+    if (kesfetModal) {
+      kesfetModal.querySelector('.wa-kesfet-modal__close')?.addEventListener('click', closeKesfetModal);
+      kesfetModal.querySelector('.wa-kesfet-modal__back')?.addEventListener('click', closeKesfetModal);
+      kesfetModal.querySelector('.wa-kesfet-modal__add-btn')?.addEventListener('click', handleModalAddToCart);
+      kesfetModal.querySelectorAll('.wa-kesfet-modal__tabs .wa-tab').forEach(tab => {
+        tab.addEventListener('click', () => handleModalTab(tab.dataset.tab));
+      });
+      // Close on backdrop click (clicking outside modal content)
+      kesfetModal.addEventListener('click', e => {
+        if (e.target === kesfetModal) closeKesfetModal();
+      });
+    }
+
+    // Swipe-down to close dock
+    let touchStartY = 0;
+    let touchCurrentY = 0;
+    const expandedContent = dock.querySelector('.wa-dock__expanded');
+    if (expandedContent) {
+      expandedContent.addEventListener('touchstart', e => {
+        if (expandedContent.scrollTop === 0) {
+          touchStartY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+
+      expandedContent.addEventListener('touchmove', e => {
+        if (touchStartY > 0 && expandedContent.scrollTop === 0) {
+          touchCurrentY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+
+      expandedContent.addEventListener('touchend', () => {
+        if (touchStartY > 0 && touchCurrentY > 0) {
+          const diff = touchCurrentY - touchStartY;
+          if (diff > 100 && state.isExpanded) {
+            toggleDock();
+          }
+        }
+        touchStartY = 0;
+        touchCurrentY = 0;
+      });
+    }
 
     await syncFromShopifyCart();
     updateUI();
