@@ -1,7 +1,7 @@
 {% comment %}
   ============================================
   CYRASOUL - Visual Bundle Builder v2
-  Features: Kesfet Cards, Synergy Map, Achievements
+  Features: Keşfet Cards, Synergy Map, Achievements
   Mobile-first design
   ============================================
 {% endcomment %}
@@ -20,7 +20,7 @@
 
   <div class="wa-container">
     <!-- Product Grid -->
-    <div class="wa-products" role="region" aria-label="Mevcut urunler">
+    <div class="wa-products" role="region" aria-label="Mevcut ürünler">
       {% assign collection = collections[section.settings.collection] %}
       {% for product in collection.products limit: section.settings.product_limit %}
         <article
@@ -34,7 +34,7 @@
           data-product-url="{{ product.url }}"
           tabindex="0"
           role="button"
-          aria-label="{{ product.title }} urununu ritueline ekle"
+          aria-label="{{ product.title }} ürününü ritüeline ekle"
         >
           <div class="wa-product-card__image-wrapper">
             <img
@@ -50,19 +50,19 @@
             <p class="wa-product-card__price">{{ product.price | money }}</p>
           </div>
 
-          <!-- Kesfet Button -->
-          <button class="wa-product-card__kesfet-btn" data-kesfet-toggle aria-label="Urun detaylarini kesfet">
-            <span>Kesfet</span>
+          <!-- Keşfet Button -->
+          <button class="wa-product-card__kesfet-btn" data-kesfet-toggle aria-label="Ürün detaylarını keşfet">
+            <span>Keşfet</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
           </button>
 
-          <!-- Kesfet Drawer -->
+          <!-- Keşfet Drawer -->
           <div class="wa-product-card__drawer" aria-hidden="true">
             <div class="wa-product-card__drawer-tabs">
               <button class="wa-tab wa-tab--active" data-tab="benefits">Faydalar</button>
-              <button class="wa-tab" data-tab="ingredients">Icindekiler</button>
+              <button class="wa-tab" data-tab="ingredients">İçindekiler</button>
               <button class="wa-tab" data-tab="science">Bilim</button>
             </div>
             <div class="wa-product-card__drawer-content"></div>
@@ -84,8 +84,8 @@
     <!-- Desktop Sidebar -->
     <aside class="wa-sidebar">
       <div class="wa-sidebar__header">
-        <h3 class="wa-sidebar__title">Rituel Kutunuz</h3>
-        <span class="wa-sidebar__count">0 urun</span>
+        <h3 class="wa-sidebar__title">Ritüel Kutunuz</h3>
+        <span class="wa-sidebar__count">0 ürün</span>
       </div>
 
       <!-- Selected Items -->
@@ -94,7 +94,7 @@
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
           </svg>
-          <p>Rituelinizi olusturmak icin<br>urun secin</p>
+          <p>Ritüelinizi oluşturmak için<br>ürün seçin</p>
         </div>
         <div class="wa-sidebar__items"></div>
       </div>
@@ -105,31 +105,33 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
           </svg>
-          <span>Birlikte Kullanim</span>
+          <span>Birlikte Kullanım</span>
         </div>
         <!-- Hexagon Synergy Map -->
         <div class="wa-synergy-map__scroll">
-          <svg class="wa-synergy-map__svg" viewBox="0 0 350 200"></svg>
+          <svg class="wa-synergy-map__svg" viewBox="0 0 350 240"></svg>
           <div class="wa-synergy-map__labels"></div>
         </div>
         <!-- Achievement Icons Row -->
         <div class="wa-achievement-icons">
-          <div class="wa-achievement-icon" data-achievement="first-step" title="Ilk Adim">
+          <div class="wa-achievement-icon" data-achievement="first-step" title="İlk Adım">
             <span class="wa-achievement-icon__emoji">🌱</span>
           </div>
-          <div class="wa-achievement-icon" data-achievement="power-duo" title="Guclu Ikili">
+          <div class="wa-achievement-icon" data-achievement="power-duo" title="Güçlü İkili">
             <span class="wa-achievement-icon__emoji">⚡</span>
           </div>
-          <div class="wa-achievement-icon" data-achievement="triple-threat" title="Uclu Kuvvet">
+          <div class="wa-achievement-icon" data-achievement="triple-threat" title="Üçlü Kuvvet">
             <span class="wa-achievement-icon__emoji">🔥</span>
           </div>
-          <div class="wa-achievement-icon" data-achievement="ritual-master" title="Ritual Ustasi">
+          <div class="wa-achievement-icon" data-achievement="ritual-master" title="Ritüel Ustası">
             <span class="wa-achievement-icon__emoji">✨</span>
           </div>
           <div class="wa-achievement-icon" data-achievement="wellness-architect" title="Wellness Architect">
             <span class="wa-achievement-icon__emoji">🏆</span>
           </div>
         </div>
+        <!-- Synergy Explanations List (icons + descriptions) -->
+        <div class="wa-synergy-list"></div>
         <!-- Unlock Explanation Box -->
         <div class="wa-achievement-unlock-box" style="display: none;"></div>
       </div>
@@ -140,13 +142,13 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
           </svg>
-          <span>Akilli Oneri</span>
+          <span>Akıllı Öneri</span>
         </div>
         <div class="wa-recommendation__content">
           <div class="wa-recommendation__product">
             <img src="" alt="" class="wa-recommendation__image">
             <div class="wa-recommendation__info">
-              <span class="wa-recommendation__label">Onerilen Urun</span>
+              <span class="wa-recommendation__label">Önerilen Ürün</span>
               <span class="wa-recommendation__name"></span>
             </div>
           </div>
@@ -157,7 +159,7 @@
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-            Onerilen Urunu Ekle
+            Önerilen Ürünu Ekle
           </button>
         </div>
       </div>
@@ -172,7 +174,7 @@
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
-          <span>Kullanim Rehberi</span>
+          <span>Kullanım Rehberi</span>
         </div>
         <div class="wa-ritual-guide__content"></div>
       </div>
@@ -180,8 +182,8 @@
       <!-- Discount Steps -->
       <div class="wa-sidebar__synergy">
         <div class="wa-sidebar__synergy-header">
-          <span>Indirim Seviyesi</span>
-          <span class="wa-sidebar__synergy-text">Baslayin</span>
+          <span>İndirim Seviyesi</span>
+          <span class="wa-sidebar__synergy-text">Başlayın</span>
         </div>
         <div class="wa-steps">
           <div class="wa-step" data-step="1"><span class="wa-step__dot"></span><span class="wa-step__label"></span></div>
@@ -199,7 +201,7 @@
           <span class="wa-sidebar__subtotal">₺0</span>
         </div>
         <div class="wa-sidebar__price-row wa-sidebar__price-row--discount" style="display: none;">
-          <span>Paket Indirimi</span>
+          <span>Paket İndirimi</span>
           <span class="wa-sidebar__discount">-₺0</span>
         </div>
         <div class="wa-sidebar__price-row wa-sidebar__price-row--total">
@@ -209,7 +211,7 @@
       </div>
 
       <button class="wa-sidebar__checkout-btn" disabled>
-        <span class="wa-sidebar__checkout-text">Odemeye Git</span>
+        <span class="wa-sidebar__checkout-text">Ödemeye Git</span>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
@@ -224,12 +226,12 @@
     <div class="wa-dock__collapsed">
       <div class="wa-dock__collapsed-left">
         <div class="wa-dock__preview">
-          <span class="wa-dock__empty-text">Urun Secin</span>
+          <span class="wa-dock__empty-text">Ürün Seçin</span>
           <div class="wa-dock__thumbnails"></div>
         </div>
         <div class="wa-dock__collapsed-info">
-          <span class="wa-dock__item-count">0 urun</span>
-          <span class="wa-dock__synergy-badge">Baslayin</span>
+          <span class="wa-dock__item-count">0 ürün</span>
+          <span class="wa-dock__synergy-badge">Başlayın</span>
         </div>
       </div>
       <div class="wa-dock__collapsed-right">
@@ -257,7 +259,7 @@
     <!-- Mobile Expanded View -->
     <div class="wa-dock__expanded">
       <div class="wa-dock__expanded-header">
-        <h3>Ritueliniz</h3>
+        <h3>Ritüeliniz</h3>
         <button class="wa-dock__close-btn">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -271,8 +273,8 @@
       <!-- Discount Steps (moved to top) -->
       <div class="wa-dock__discount-steps" style="display: none;">
         <div class="wa-dock__discount-steps-header">
-          <span class="wa-dock__discount-steps-title">Indirim Seviyesi</span>
-          <span class="wa-dock__discount-steps-current">Baslayin</span>
+          <span class="wa-dock__discount-steps-title">İndirim Seviyesi</span>
+          <span class="wa-dock__discount-steps-current">Başlayın</span>
         </div>
         <div class="wa-steps wa-steps--top">
           <div class="wa-step" data-step="1"><span class="wa-step__dot"></span><span class="wa-step__label"></span></div>
@@ -290,11 +292,11 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
           </svg>
-          <span>Birlikte Kullanim</span>
+          <span>Birlikte Kullanım</span>
         </div>
         <!-- Hexagon Synergy Map -->
         <div class="wa-synergy-map__scroll">
-          <svg class="wa-synergy-map__svg" viewBox="0 0 350 200"></svg>
+          <svg class="wa-synergy-map__svg" viewBox="0 0 350 240"></svg>
           <div class="wa-synergy-map__labels"></div>
         </div>
         <!-- Synergy Explanations List (icons + descriptions) -->
@@ -307,7 +309,7 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
           </svg>
-          <span>Onerilen</span>
+          <span>Önerilen</span>
         </div>
         <div class="wa-dock__recommendation-content">
           <img src="" alt="" class="wa-dock__recommendation-img">
@@ -332,7 +334,7 @@
           <span class="wa-dock__subtotal">₺0</span>
         </div>
         <div class="wa-dock__price-row wa-dock__price-row--discount" style="display: none;">
-          <span>Indirim</span>
+          <span>İndirim</span>
           <span class="wa-dock__discount">-₺0</span>
         </div>
         <div class="wa-dock__price-row wa-dock__price-row--total">
@@ -359,7 +361,7 @@
 
   <div class="wa-particles"></div>
 
-  <!-- Kesfet Full Screen Modal -->
+  <!-- Keşfet Full Screen Modal -->
   <div class="wa-kesfet-modal" id="kesfet-modal">
     <div class="wa-kesfet-modal__header">
       <button class="wa-kesfet-modal__back" aria-label="Geri">
@@ -380,7 +382,7 @@
     </div>
     <div class="wa-kesfet-modal__tabs">
       <button class="wa-tab wa-tab--active" data-tab="benefits">Faydalar</button>
-      <button class="wa-tab" data-tab="ingredients">Icindekiler</button>
+      <button class="wa-tab" data-tab="ingredients">İçindekiler</button>
       <button class="wa-tab" data-tab="science">Bilim</button>
       <button class="wa-tab" data-tab="combinations">Kombinasyonlar</button>
     </div>
@@ -423,7 +425,7 @@
     --wa-shadow: 0 1px 3px rgba(0,0,0,0.1);
     --wa-shadow-lg: 0 4px 20px rgba(0,0,0,0.15);
     --wa-transition: 0.2s ease;
-    --wa-dock-height: 85px;
+    --wa-dock-height: 95px;
   }
 
   .wellness-architect {
@@ -517,7 +519,7 @@
   }
 
   .wa-product-card--recommended::before {
-    content: 'Onerilen';
+    content: 'Önerilen';
     position: absolute;
     top: 8px;
     left: 8px;
@@ -585,7 +587,7 @@
 
   .wa-product-card__add-btn:hover { transform: scale(1.1); }
 
-  /* Kesfet Button & Drawer */
+  /* Keşfet Button & Drawer */
   .wa-product-card__kesfet-btn {
     position: absolute;
     bottom: 55px;
@@ -912,8 +914,8 @@
   .wa-dock__item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem;
+    gap: 0.5rem;
+    padding: 0.5rem;
     background: var(--wa-gray-100);
     border-radius: var(--wa-radius-sm);
   }
@@ -921,7 +923,7 @@
   .wa-dock__item-link {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     text-decoration: none;
     color: inherit;
     flex: 1;
@@ -929,8 +931,8 @@
   }
 
   .wa-dock__item-image {
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     border-radius: var(--wa-radius-sm);
     object-fit: cover;
   }
@@ -938,16 +940,16 @@
   .wa-dock__item-info { flex: 1; min-width: 0; }
 
   .wa-dock__item-title {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    margin: 0 0 0.125rem;
+    margin: 0 0 0.1rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
   .wa-dock__item-benefit {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: var(--wa-gray-600);
     margin: 0;
     font-weight: 500;
@@ -1039,7 +1041,7 @@
 
   .wa-synergy-map__svg {
     min-width: 320px;
-    height: 160px;
+    height: 200px;
     display: block;
   }
 
@@ -1098,6 +1100,15 @@
 
   .wa-synergy-node--inactive {
     opacity: 0.4;
+  }
+
+  .wa-synergy-node:hover {
+    opacity: 1;
+  }
+
+  .wa-synergy-node:hover .wa-synergy-node__bg {
+    stroke: var(--wa-black);
+    stroke-width: 2;
   }
 
   .wa-synergy-node__glow {
@@ -1386,7 +1397,7 @@
     font-weight: 700;
   }
 
-  /* Kesfet Full Screen Modal */
+  /* Keşfet Full Screen Modal */
   .wa-kesfet-modal {
     position: fixed;
     top: 0;
@@ -1508,6 +1519,8 @@
     border-top: 1px solid var(--wa-gray-200);
     background: var(--wa-white);
     flex-shrink: 0;
+    position: relative;
+    z-index: 10;
   }
 
   .wa-kesfet-modal__add-btn {
@@ -1554,11 +1567,17 @@
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .wa-kesfet-modal__qty-btn:hover {
     border-color: var(--wa-black);
     color: var(--wa-black);
+  }
+
+  .wa-kesfet-modal__qty-btn svg {
+    pointer-events: none;
   }
 
   .wa-kesfet-modal__qty-minus:hover {
@@ -1977,7 +1996,7 @@
     padding: 12px 16px;
     background: var(--wa-white);
     border-top: 1px solid var(--wa-gray-200);
-    margin: 0 -16px -16px -16px;
+    margin: 0 -16px -24px -16px;
     box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
   }
 
@@ -2086,11 +2105,23 @@
 
     .wa-products {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
     }
 
+    /* 2+2+1 layout: last item centered */
+    .wa-products .wa-product-card:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+      max-width: 50%;
+      justify-self: center;
+    }
+
     .wa-product-card__title { font-size: 0.85rem; }
+
+    /* Bigger hexagon on desktop */
+    .wa-synergy-map__svg {
+      height: 260px;
+    }
     .wa-dock { display: none; }
 
     .wa-sidebar {
@@ -2389,109 +2420,103 @@
   const EXTENDED_PRODUCT_DATA = {
     'dreamglow': {
       name: 'DreamGlow',
-      timing: 'Uykudan once',
+      timing: 'Yatmadan önce 1 ölçek',
       category: 'night',
       benefits: [
-        { icon: 'sparkle', title: 'Cilt Elastikiyeti', description: 'Gece boyunca kolajen uretimini destekler' },
-        { icon: 'moon', title: 'Derin Uyku', description: 'Uyku kalitesini ve gecisini destekler' },
-        { icon: 'droplet', title: 'Yogun Nemlendirme', description: 'Gece boyunca antioksidan destegi' }
+        { icon: 'sparkle', title: 'Cilt Onarımı & Kolajen', description: 'Gece uykusunda kolajen üretimi zirveye çıkar, cildin elastikiyetini destekler' },
+        { icon: 'moon', title: 'Derin Uyku Desteği', description: 'Melisa ve papatya ile zihni sakinleştirerek kaliteli uykuya geçişi kolaylaştırır' },
+        { icon: 'droplet', title: 'Nem & Antioksidan', description: 'Hyaluronik asit ve C vitamini ile yoğun nem ve antioksidan desteği' }
       ],
       ingredients: [
-        { name: 'Kolajen Peptitleri (Tip 1 & 3)', amount: '', benefit: 'Cilt yenilenmesi' },
-        { name: 'Melisa (Lemon Balm) Ozutu', amount: '', benefit: 'Sakinlestirici' },
-        { name: 'Papatya Ozutu', amount: '', benefit: 'Gevsetici' },
-        { name: 'L-Theanine', amount: '', benefit: 'Zihinsel sakinlik' },
-        { name: 'Hyaluronik Asit', amount: '', benefit: 'Nemlendirme' },
-        { name: 'C Vitamini', amount: '', benefit: 'Antioksidan' }
+        { name: 'Tip 1 & 3 Sığır Kolajeni', amount: '', benefit: 'Cilt elastikiyeti ve sıkılık desteği' },
+        { name: 'Melisa ve Mayıs Papatyası', amount: '', benefit: 'Zihni sakinleştirerek uyku hazırlığı' },
+        { name: 'L-Teanin', amount: '', benefit: 'Derin uykuya geçişi kolaylaştırır' },
+        { name: 'Hyaluronik Asit', amount: '', benefit: 'Yoğun nem desteği' },
+        { name: 'C Vitamini', amount: '', benefit: 'Antioksidan koruma' }
       ],
       science: {
-        title: 'Nasil Calisir?',
-        description: 'Vucut, uyku saatlerinde kolajeni en verimli sekilde isler. Gece boyunca cilt bariyeri onarimi ve kolajen uretimi zirve yapar.'
+        title: 'Nasıl Çalışır?',
+        description: 'Araştırmalar gösteriyor ki vücut, aldığı kolajeni en verimli gece saatlerinde işler. En iyi sonuçlar için minimum 3 ay düzenli kullanım önerilir.'
       }
     },
     'dailyglow': {
       name: 'DailyGlow',
-      timing: 'Kahvalti sonrasi',
+      timing: 'Sabah tok karnına 1 kapsül',
       category: 'morning',
       benefits: [
-        { icon: 'sun', title: 'Cilt Parlakligi', description: 'Kolajen uretimi, elastikiyet ve puruzsuzluk destegi' },
-        { icon: 'lightning', title: 'Enerji Destegi', description: 'Kirmizi Kore ginsengi ile kan akisi ve oksijen tasinmasi' },
-        { icon: 'shield', title: 'Cilt Bariyeri', description: 'Nemi kilitler ve korur' }
+        { icon: 'sun', title: 'Cilt Parlaklığı', description: 'Aynada yorgun bir yüz değil, ışıldayan bir enerji görün' },
+        { icon: 'lightning', title: 'Gün Boyu Enerji', description: 'Kırmızı Kore ginsengi ile kan dolaşımını ve oksijen akışını destekler' },
+        { icon: 'shield', title: 'Cilt Koruma', description: 'Oksidatif strese karşı antioksidan koruma, cilt bariyerini güçlendirir' }
       ],
       ingredients: [
-        { name: 'MSM (Metilsulfonilmetan)', amount: '', benefit: 'Doganin guzellik minerali' },
-        { name: 'Kirmizi Kore Ginsengi Ozutu', amount: '', benefit: 'Enerji ve kan akisi' },
-        { name: 'B3 Vitamini (Niasinamid)', amount: '', benefit: 'Cilt tonu' },
-        { name: 'Cinko', amount: '', benefit: 'Cilt sagligi' },
-        { name: 'Selenyum', amount: '', benefit: 'Antioksidan' },
-        { name: 'Manganez', amount: '', benefit: 'Mineral destegi' }
+        { name: 'MSM', amount: '', benefit: 'Kolajen üretiminin temel hammaddesi, esneklik ve pürüzsüzlük desteği' },
+        { name: 'Kırmızı Kore Ginsengi', amount: '', benefit: 'Kan dolaşımını ve oksijen akışını destekler' },
+        { name: 'Vitamin B3 (Niasin)', amount: '', benefit: 'Cilt bariyerini güçlendirir, nemi hapseder' },
+        { name: 'Çinko, Selenyum, Manganez', amount: '', benefit: 'Antioksidan koruma, serbest radikal nötralizasyonu' }
       ],
       science: {
-        title: 'Nasil Calisir?',
-        description: 'Adaptojenleri ve mineralleri birlestirerek hem cilt hem enerji faydasi saglar. Aktif bilesenler dolasim sistemi uzerinden sistemik etki eder.'
+        title: 'Nasıl Çalışır?',
+        description: 'Yorgun ve solgun görünümü canlı bir pembeliğe dönüştürür. En iyi sonuçlar için minimum 3 ay düzenli kullanım tavsiye edilir.'
       }
     },
     'mindfuel': {
       name: 'MindFuel',
-      timing: 'Kahvalti sonrasi',
+      timing: 'Gün içinde tok karnına 2 kapsül',
       category: 'morning',
       benefits: [
-        { icon: 'brain', title: 'Odaklanma', description: 'Dopamin mekanizmalari ile odak ve mental performans' },
-        { icon: 'lightning', title: 'Zihinsel Dayaniklilik', description: 'Uzun calisma veya ogrenme seanslarinda' },
-        { icon: 'clock', title: 'Ogleden Sonra Dususu Onler', description: 'Mental yorgunlukla savasir' }
+        { icon: 'brain', title: 'Odaklanma Desteği', description: 'Dopamin mekanizmalarını destekleyerek zihinsel performansı artırır' },
+        { icon: 'lightning', title: 'Zihinsel Dayanıklılık', description: 'Uzun çalışma seanslarında zihin yorgunluğunu engeller' },
+        { icon: 'clock', title: 'Öğleden Sonra Çöküşe Karşı', description: 'Doğal enerji ile dikkat dağınıklığını azaltır' }
       ],
       ingredients: [
-        { name: 'L-Tirozin', amount: '', benefit: 'Motivasyon ve odak; stres altinda koruma' },
-        { name: 'Ginkgo Biloba', amount: '', benefit: 'Beyne kan akisi' },
-        { name: 'Panax Ginseng', amount: '', benefit: 'Hafiza ve mental hiz' },
-        { name: 'Maca Koku (Lepidium)', amount: '', benefit: 'Mental dayaniklilik' },
-        { name: 'B12 Vitamini', amount: '', benefit: 'Sinir sistemi enerjisi' }
+        { name: 'L-Tirozin', amount: '', benefit: 'Nörotransmitter yapı taşı, motivasyon ve stres yönetimi' },
+        { name: 'Ginkgo Biloba & Panax Ginseng', amount: '', benefit: 'Beyne kan akışı ve oksijenlenme desteği' },
+        { name: 'Lepidyum (Maca Kökü)', amount: '', benefit: 'Zihinsel dayanıklılık artırımı' },
+        { name: 'Vitamin B12', amount: '', benefit: 'Sinir sistemi enerji desteği, hafıza yardımcısı' }
       ],
       science: {
-        title: 'Nasil Calisir?',
-        description: 'Geleneksel olarak desteklenen bilesenleri modern takviye bilimiyle bilestirir. Doganin gucu bilimle bulusur.'
+        title: 'Nasıl Çalışır?',
+        description: 'Zihninizi aktifleştirir ve dikkat dağınıklığını azaltır. En iyi sonuçlar için en az 3 ay düzenli kullanım tavsiye edilir.'
       }
     },
     'thechill': {
       name: 'TheChill',
-      timing: 'Aksam yemegi sonrasi',
+      timing: 'Akşam tok karnına 2 kapsül',
       category: 'night',
       benefits: [
-        { icon: 'peace', title: 'Stres Yonetimi', description: 'Baski altinda daha sakin, merkezi bir bakis acisi' },
-        { icon: 'brain', title: 'Mental Berraklik', description: 'Surekli tetikte olmaktan kaynaklanan yorgunlugu azaltir' },
-        { icon: 'muscle', title: 'Fiziksel Rahatlama', description: 'Kas gevsemesi ve gerginlik giderme' }
+        { icon: 'peace', title: 'Stres Yönetimi', description: 'Zihinsel sisinizi dağıtarak olaylara daha serinkanlı bakmanıza yardımcı olur' },
+        { icon: 'brain', title: 'Mental Berraklık', description: 'Günün stresini geride bırakarak huzurlu hissetmenizi sağlar' },
+        { icon: 'muscle', title: 'Fiziksel Rahatlama', description: 'Bedensel gerginliğin çözülmesine yardımcı olur' }
       ],
       ingredients: [
-        { name: 'Rhodiola (Altin Kok)', amount: '', benefit: 'Stres yaniti icin adaptogen' },
-        { name: 'Carkifelek & Melisa', amount: '', benefit: 'Dogal rahatlama ikilisi' },
-        { name: 'Papatya', amount: '', benefit: 'Sinir sistemi yatistirici' },
-        { name: 'B6 Vitamini', amount: '', benefit: 'Serotonin uretimi' },
-        { name: 'B12 Vitamini', amount: '', benefit: 'Sinir onarimi' }
+        { name: 'Rhodiola (Altın Kök)', amount: '', benefit: 'Stres tepkilerini dengeler, zihinsel yorgunlukla savaşır' },
+        { name: 'Passiflora (Çarkıfelek) & Melisa', amount: '', benefit: 'Doğal gevşeme ikilisi, anda kalmanıza destek olur' },
+        { name: 'Mayıs Papatyası', amount: '', benefit: 'Sinir sistemini yatıştırır' },
+        { name: 'Vitamin B6 & B12', amount: '', benefit: 'Serotonin gibi nörotransmitter üretimine katkı' }
       ],
       science: {
-        title: 'Nasil Calisir?',
-        description: 'Doganin sakinlestirici ajanlarini kanitlanmis vitaminlerle bilestirir. Aksam bos mideye 2 kapsul onerilir.'
+        title: 'Nasıl Çalışır?',
+        description: 'Doğanın en güçlü sakinleştirici ajanlarının birleşimi. Tükenmişliğe karşı direnci artırır. En az 3 ay düzenli kullanım önerilir.'
       }
     },
     'reset-button': {
       name: 'Reset Button',
-      timing: 'Ogle yemegi sonrasi',
+      timing: 'Tok karnına 2 kapsül',
       category: 'noon',
       benefits: [
-        { icon: 'refresh', title: 'Detoks Destegi', description: 'Modern yasam, islenmis gidalar ve stresten kaynakli toksinleri atar' },
-        { icon: 'liver', title: 'Karaciger Destegi', description: 'Dogal temizleme sureclerini ve metabolik fonksiyonu destekler' },
-        { icon: 'energy', title: 'Fiziksel Rahatlama', description: 'Yorgunluk, siskinlik ve agirlik hissinden kurtulma' }
+        { icon: 'refresh', title: 'Arınma & Detoks', description: 'Vücudu toksinlerden temizler, şişkinlik ve ağırlık hissini azaltır' },
+        { icon: 'liver', title: 'Karaciğer Desteği', description: 'Karaciğerin doğal arınma süreçlerini hızlandırır' },
+        { icon: 'energy', title: 'Enerji Artışı', description: 'Yorgunluğa karşı direnci güçlendirir, hafiflik hissi sağlar' }
       ],
       ingredients: [
-        { name: 'Deve Dikeni (Silimarin)', amount: '', benefit: 'Guvenli toksin eliminasyonu' },
-        { name: 'Enginar', amount: '', benefit: 'Filtrasyon destegi' },
-        { name: 'Karahindiba', amount: '', benefit: 'Su tutulumunu azaltir' },
-        { name: 'Zerdecal (Kurkumin)', amount: '', benefit: 'Anti-inflamatuar' },
-        { name: 'Moringa', amount: '', benefit: 'Mineral destegi, enerji' }
+        { name: 'Devedikeni (Silimarin) & Enginar', amount: '', benefit: 'Toksin atılımını ve filtreleme kapasitesini destekler' },
+        { name: 'Karahindiba', amount: '', benefit: 'Fazla su tutulumunu azaltmaya yardımcı' },
+        { name: 'Zerdeçal (Kurkumin)', amount: '', benefit: 'Antienflamatuar özellikleriyle hücreleri korur' },
+        { name: 'Moringa', amount: '', benefit: 'Mucize bitki olarak bilinir, mineral desteği sağlar' }
       ],
       science: {
-        title: 'Nasil Calisir?',
-        description: 'Doganin gucunu bilimle bilestirir. Bos mideye 2 kapsul onerilir, optimal sonuclar icin en az 3 ay duzenli kullanim.'
+        title: 'Nasıl Çalışır?',
+        description: 'Modern yaşamın neden olduğu biyolojik yükü hafifletir. En az 3 ay düzenli kullanım tavsiye edilir.'
       }
     }
   };
@@ -2500,11 +2525,11 @@
   // SYNERGY DATA
   // ============================================
   const SYNERGY_MAP = {
-    'dreamglow': { name: 'DreamGlow', timing: 'Uykudan 45 dk once', benefit: 'Guzellik & Cilt Onarimi', shortDesc: 'Gece Cilt Ritueli', tip: '1 olcek tozu ilik suyla karistirin.', category: 'night' },
-    'dailyglow': { name: 'DailyGlow', timing: 'Kahvalti sonrasi', benefit: 'Cilt Parlakligi & Enerji', shortDesc: 'Gunduz Isilti Destegi', tip: 'Tok karnina 1 kapsul. Isilti iceriden baslar.', category: 'morning' },
-    'mindfuel': { name: 'MindFuel', timing: 'Kahvalti sonrasi', benefit: 'Odak & Zihinsel Performans', shortDesc: 'Bilissel Guc Destegi', tip: 'Tok karnina alin. Kahveden etkili odaklanma.', category: 'morning' },
-    'thechill': { name: 'TheChill', timing: 'Aksam yemegi sonrasi', benefit: 'Stres Yonetimi & Rahatlama', shortDesc: 'Derin Uyku Ritueli', tip: 'Uykudan 1-2 saat once gevsemek icin.', category: 'night' },
-    'reset-button': { name: 'Reset Button', timing: 'Ogle yemegi sonrasi', benefit: 'Detox & Karaciger Destegi', shortDesc: 'Bedensel Arinma', tip: 'Bol su ile tok karnina.', category: 'noon' }
+    'dreamglow': { name: 'DreamGlow', timing: 'Yatmadan önce', benefit: 'Cilt Onarımı & Kolajen', shortDesc: 'Gece Cilt Ritüeli', tip: '1 ölçek tozu ılık suyla karıştırın.', category: 'night' },
+    'dailyglow': { name: 'DailyGlow', timing: 'Sabah tok karnına', benefit: 'Cilt Parlaklığı & Enerji', shortDesc: 'Gündüz Işıltı Desteği', tip: 'Tok karnına 1 kapsül. Işıltı içeriden başlar.', category: 'morning' },
+    'mindfuel': { name: 'MindFuel', timing: 'Gün içinde tok karnına', benefit: 'Odak & Zihinsel Performans', shortDesc: 'Bilişsel Güç Desteği', tip: 'Tok karnına 2 kapsül. Kahveden etkili odaklanma.', category: 'morning' },
+    'thechill': { name: 'TheChill', timing: 'Akşam tok karnına', benefit: 'Stres Yönetimi & Rahatlama', shortDesc: 'Huzurlu Akşam Desteği', tip: 'Akşam tok karnına 2 kapsül.', category: 'night' },
+    'reset-button': { name: 'Reset Button', timing: 'Tok karnına', benefit: 'Arınma & Karaciğer Desteği', shortDesc: 'Bedensel Arınma', tip: 'Bol su ile tok karnına 2 kapsül.', category: 'noon' }
   };
 
   const SYNERGY_CONNECTIONS = {
@@ -2514,65 +2539,65 @@
     'dailyglow+thechill': { label: 'Denge Paketi', strength: 'medium', color: '#6366F1', icon: '⚖️' },
     'dreamglow+mindfuel': { label: 'Smart Beauty', strength: 'medium', color: '#EC4899', icon: '💎' },
     'dreamglow+reset-button': { label: 'Gece Terapisi', strength: 'medium', color: '#8B5CF6', icon: '🌙' },
-    'dreamglow+thechill': { label: 'Uyku Ritueli', strength: 'strong', color: '#6366F1', icon: '😴' },
+    'dreamglow+thechill': { label: 'Uyku Ritüeli', strength: 'strong', color: '#6366F1', icon: '😴' },
     'mindfuel+reset-button': { label: 'Berrak Zihin', strength: 'medium', color: '#14B8A6', icon: '🧠' },
     'mindfuel+thechill': { label: 'Zen Performans', strength: 'strong', color: '#10B981', icon: '🧘' },
     'reset-button+thechill': { label: 'Tam Reset', strength: 'medium', color: '#F59E0B', icon: '🔄' }
   };
 
   const SYNERGY_EXPLANATIONS = {
-    'dailyglow+dreamglow': { title: '7/24 Guzellik Kiti', benefit: 'Kesintisiz cilt onarimi', detail: 'Gunduz cildinizi koruyun, gece uykuda onarin.' },
-    'dailyglow+mindfuel': { title: 'Power Morning', benefit: 'Enerji + Odaklanma', detail: 'Hem fiziksel isilti hem zihinsel netlik.' },
-    'dailyglow+reset-button': { title: 'Detox & Glow', benefit: 'Arinma + Canlilik', detail: 'Iceriden temizlenin, disariya isik sacin.' },
-    'dailyglow+thechill': { title: 'Denge Paketi', benefit: 'Sabah Enerjisi, Aksam Huzuru', detail: 'Modern hayatin panzehiri.' },
-    'dreamglow+mindfuel': { title: 'Smart & Beautiful', benefit: 'Gunduz Odak, Gece Bakim', detail: 'Ne gorunumunuzden ne basarinizdan odun vermeyin.' },
-    'dreamglow+reset-button': { title: 'Gece Terapisi', benefit: 'Arinma + Yenilenme', detail: 'Siz uyurken bedeniniz toksinleri atsin.' },
-    'dreamglow+thechill': { title: 'Uyku Ritueli', benefit: 'Derin Uyku + Onarim', detail: 'TheChill zihni susturur, DreamGlow bedeni onarir.' },
-    'mindfuel+reset-button': { title: 'Berrak Zihin', benefit: 'Toksin Atimi + Konsantrasyon', detail: 'Beyin sisine son. Arinmis metabolizma ile performans.' },
-    'mindfuel+thechill': { title: 'Zen Performans', benefit: 'Kontrollu Guc', detail: 'Stres yapmadan odaklanin.' },
-    'reset-button+thechill': { title: 'Tam Reset', benefit: 'Zihinsel & Bedensel Arinma', detail: 'Fabrika Ayarlarina Donus.' },
-    'dailyglow+dreamglow+mindfuel': { title: 'CEO Paketi', benefit: 'Gorunum + Zeka + Enerji', detail: 'Profesyoneller icin tasarlandi.' },
-    'dailyglow+dreamglow+thechill': { title: 'Stress-Free Beauty', benefit: 'Stres Karsiti Guzellik', detail: 'En populer uclumuz.' },
-    'mindfuel+reset-button+thechill': { title: 'Zihinsel Berraklik', benefit: 'Arinma + Odak + Denge', detail: 'Temiz beden, berrak zihin.' },
-    'dailyglow+dreamglow+mindfuel+thechill': { title: 'Premium Wellness', benefit: '%25 Indirim', detail: 'Luks bir yasam tarzinin temeli.' },
-    'dailyglow+dreamglow+mindfuel+reset-button+thechill': { title: 'The Cyrasoul Ritual', benefit: '%30 Indirim - TAM DONANIM', detail: 'Butuncul iyilik hali icin eksiksiz set.' }
+    'dailyglow+dreamglow': { title: '7/24 Güzellik Kiti', benefit: 'Kesintisiz cilt onarımı', detail: 'Gündüz cildinizi koruyun, gece uykuda onarın.' },
+    'dailyglow+mindfuel': { title: 'Power Morning', benefit: 'Enerji + Odaklanma', detail: 'Hem fiziksel ışıltı hem zihinsel netlik.' },
+    'dailyglow+reset-button': { title: 'Detox & Glow', benefit: 'Arınma + Canlılık', detail: 'İçeriden temizlenin, dışarıya ışık saçın.' },
+    'dailyglow+thechill': { title: 'Denge Paketi', benefit: 'Sabah Enerjisi, Akşam Huzuru', detail: 'Modern hayatın panzehiri.' },
+    'dreamglow+mindfuel': { title: 'Smart & Beautiful', benefit: 'Gündüz Odak, Gece Bakım', detail: 'Ne görünümünüzden ne başarınızdan ödün vermeyin.' },
+    'dreamglow+reset-button': { title: 'Gece Terapisi', benefit: 'Arınma + Yenilenme', detail: 'Siz uyurken bedeniniz toksinleri atsın.' },
+    'dreamglow+thechill': { title: 'Uyku Ritüeli', benefit: 'Derin Uyku + Onarım', detail: 'TheChill zihni susturur, DreamGlow bedeni onarır.' },
+    'mindfuel+reset-button': { title: 'Berrak Zihin', benefit: 'Toksin Atımı + Konsantrasyon', detail: 'Beyin sisine son. Arınmış metabolizma ile performans.' },
+    'mindfuel+thechill': { title: 'Zen Performans', benefit: 'Kontrollü Güç', detail: 'Stres yapmadan odaklanın.' },
+    'reset-button+thechill': { title: 'Tam Reset', benefit: 'Zihinsel & Bedensel Arınma', detail: 'Fabrika Ayarlarına Dönüş.' },
+    'dailyglow+dreamglow+mindfuel': { title: 'CEO Paketi', benefit: 'Görünüm + Zeka + Enerji', detail: 'Profesyoneller için tasarlandı.' },
+    'dailyglow+dreamglow+thechill': { title: 'Stress-Free Beauty', benefit: 'Stres Karşıtı Güzellik', detail: 'En popüler üçlümüz.' },
+    'mindfuel+reset-button+thechill': { title: 'Zihinsel Berraklık', benefit: 'Arınma + Odak + Denge', detail: 'Temiz beden, berrak zihin.' },
+    'dailyglow+dreamglow+mindfuel+thechill': { title: 'Premium Wellness', benefit: '%25 İndirim', detail: 'Lüks bir yaşam tarzının temeli.' },
+    'dailyglow+dreamglow+mindfuel+reset-button+thechill': { title: 'The Cyrasoul Ritual', benefit: '%30 İndirim - TAM DONANIM', detail: 'Bütüncül iyilik hali için eksiksiz set.' }
   };
 
   const SINGLE_PRODUCT_BENEFITS = {
-    'dreamglow': { title: 'DreamGlow', benefit: 'Gece cilt onarim destegi', detail: 'Uyku sirasinda kolajen uretimini ve cilt yenilenmesini destekler.' },
-    'dailyglow': { title: 'DailyGlow', benefit: 'Gunduz enerji ve cilt destegi', detail: 'Hucresel enerji uretimini destekler, cildi dis faktorlere karsi korur.' },
-    'mindfuel': { title: 'MindFuel', benefit: 'Odaklanma ve konsantrasyon destegi', detail: 'Zihinsel berrakligi ve odaklanmayi destekler.' },
-    'thechill': { title: 'TheChill', benefit: 'Sakinlik ve rahatlama destegi', detail: 'Stresi azaltmaya ve zihinsel sakinligi desteklemeye yardimci olur.' },
-    'reset-button': { title: 'Reset Button', benefit: 'Detoks ve arinma destegi', detail: 'Karaciger fonksiyonlarini destekler, toksin atimina yardimci olur.' }
+    'dreamglow': { title: 'DreamGlow', benefit: 'Gece cilt onarım desteği', detail: 'Uyku sırasında kolajen üretimini ve cilt yenilenmesini destekler.' },
+    'dailyglow': { title: 'DailyGlow', benefit: 'Gündüz enerji ve cilt desteği', detail: 'Hücresel enerji üretimini destekler, cildi dış faktörlere karşı korur.' },
+    'mindfuel': { title: 'MindFuel', benefit: 'Odaklanma ve konsantrasyon desteği', detail: 'Zihinsel berraklığı ve odaklanmayı destekler.' },
+    'thechill': { title: 'TheChill', benefit: 'Sakinlik ve rahatlama desteği', detail: 'Stresi azaltmaya ve zihinsel sakinliği desteklemeye yardımcı olur.' },
+    'reset-button': { title: 'Reset Button', benefit: 'Detoks ve arınma desteği', detail: 'Karaciğer fonksiyonlarını destekler, toksin atımına yardımcı olur.' }
   };
 
   const RECOMMENDATIONS = {
     'dreamglow': [
-      { handle: 'dailyglow', bundle: '7/24 Guzellik', reason: 'Gece onarimina gunduz korumasini ekleyin.' },
-      { handle: 'thechill', bundle: 'Derin Uyku Ritueli', reason: 'Zihni sakinlestirin ki guzellik uykunuz bolunmesin.' }
+      { handle: 'dailyglow', bundle: '7/24 Güzellik', reason: 'Gece onarımına gündüz korumasını ekleyin.' },
+      { handle: 'thechill', bundle: 'Derin Uyku Ritüeli', reason: 'Zihni sakinleştirin ki güzellik uykunuz bölünmesin.' }
     ],
     'dailyglow': [
-      { handle: 'dreamglow', bundle: 'Gece & Gunduz', reason: '24 saat suren kesintisiz cilt destegi.' },
-      { handle: 'mindfuel', bundle: 'Start-Up Enerjisi', reason: 'Hem cildiniz hem zihniniz gune hazir olsun.' }
+      { handle: 'dreamglow', bundle: 'Gece & Gündüz', reason: '24 saat süren kesintisiz cilt desteği.' },
+      { handle: 'mindfuel', bundle: 'Start-Up Enerjisi', reason: 'Hem cildiniz hem zihniniz güne hazır olsun.' }
     ],
     'mindfuel': [
-      { handle: 'thechill', bundle: 'Flow State', reason: 'Gunduz keskin zihin, aksam huzurlu dinginlik.' },
-      { handle: 'reset-button', bundle: 'Berrak Zihin', reason: 'Toksinlerden arinmis beden, daha net dusunur.' }
+      { handle: 'thechill', bundle: 'Flow State', reason: 'Gündüz keskin zihin, akşam huzurlu dinginlik.' },
+      { handle: 'reset-button', bundle: 'Berrak Zihin', reason: 'Toksinlerden arınmış beden, daha net düşünür.' }
     ],
     'thechill': [
-      { handle: 'mindfuel', bundle: 'Denge Ustasi', reason: 'Stres yok, sadece odaklanma ve sakinlik.' },
-      { handle: 'dreamglow', bundle: 'Huzurlu Gece', reason: 'Sakin zihinle yatagin girin, yenilenmis uyanin.' }
+      { handle: 'mindfuel', bundle: 'Denge Ustası', reason: 'Stres yok, sadece odaklanma ve sakinlik.' },
+      { handle: 'dreamglow', bundle: 'Huzurlu Gece', reason: 'Sakin zihinle yatağın girin, yenilenmiş uyanın.' }
     ],
     'reset-button': [
-      { handle: 'dailyglow', bundle: 'Temiz Baslangic', reason: 'Arinmis bedenin uzerine cilt isiltisini ekleyin.' },
-      { handle: 'thechill', bundle: 'Butunsel Hafiflik', reason: 'Bedensel detoks ve zihinsel rahatlama bir arada.' }
+      { handle: 'dailyglow', bundle: 'Temiz Başlangıç', reason: 'Arınmış bedenin üzerine cilt ışıltısını ekleyin.' },
+      { handle: 'thechill', bundle: 'Bütünsel Hafiflik', reason: 'Bedensel detoks ve zihinsel rahatlama bir arada.' }
     ]
   };
 
   const SYNERGY_CONFIG = {
-    1: { percent: 20, text: 'Baslangic', discount: 0 },
-    2: { percent: 40, text: '%15 Ikili Guc', discount: 0.15 },
-    3: { percent: 60, text: '%20 Populer', discount: 0.20 },
+    1: { percent: 20, text: 'Başlangıç', discount: 0 },
+    2: { percent: 40, text: '%15 İkili Güç', discount: 0.15 },
+    3: { percent: 60, text: '%20 Popüler', discount: 0.20 },
     4: { percent: 80, text: '%25 Pro', discount: 0.25 },
     5: { percent: 100, text: '%30 Efsane', discount: 0.30 }
   };
@@ -2581,11 +2606,11 @@
   // ACHIEVEMENTS (v2)
   // ============================================
   const ACHIEVEMENTS = {
-    'first-step': { id: 'first-step', title: 'Ilk Adim', emoji: '🌱', description: 'Ilk urununu ekleyerek wellness yolculuguna basladiniz!', icon: 'star', condition: s => s.items.length >= 1 },
-    'power-duo': { id: 'power-duo', title: 'Guclu Ikili', emoji: '⚡', description: 'Iki urun birlikte %15 sinerji indirimi kazandiniz!', icon: 'lightning', condition: s => s.items.length >= 2 },
-    'triple-threat': { id: 'triple-threat', title: 'Uclu Kuvvet', emoji: '🔥', description: 'Uc urunle rituelinizi guclendirdiniz. %20 indirim!', icon: 'fire', condition: s => s.items.length >= 3 },
-    'ritual-master': { id: 'ritual-master', title: 'Ritual Ustasi', emoji: '✨', description: 'Dort urunle tam bir gunluk ritual olusturuyorsunuz. %25 indirim!', icon: 'sparkle', condition: s => s.items.length >= 4 },
-    'wellness-architect': { id: 'wellness-architect', title: 'Wellness Architect', emoji: '🏆', description: 'Tum 5 urunu eklediniz! Maksimum %30 sinerji indirimi!', icon: 'trophy', condition: s => s.items.length >= 5 }
+    'first-step': { id: 'first-step', title: 'İlk Adım', emoji: '🌱', description: 'İlk ürününü ekleyerek wellness yolculuğuna başladınız!', icon: 'star', condition: s => s.items.length >= 1 },
+    'power-duo': { id: 'power-duo', title: 'Güçlü İkili', emoji: '⚡', description: 'İki ürün birlikte %15 sinerji indirimi kazandınız!', icon: 'lightning', condition: s => s.items.length >= 2 },
+    'triple-threat': { id: 'triple-threat', title: 'Üçlü Kuvvet', emoji: '🔥', description: 'Üç ürünle ritüelinizi güçlendirdiniz. %20 indirim!', icon: 'fire', condition: s => s.items.length >= 3 },
+    'ritual-master': { id: 'ritual-master', title: 'Ritüel Ustası', emoji: '✨', description: 'Dört ürünle tam bir günlük ritüel oluşturuyorsunuz. %25 indirim!', icon: 'sparkle', condition: s => s.items.length >= 4 },
+    'wellness-architect': { id: 'wellness-architect', title: 'Wellness Architect', emoji: '🏆', description: 'Tüm 5 ürünü eklediniz! Maksimum %30 sinerji indirimi!', icon: 'trophy', condition: s => s.items.length >= 5 }
   };
 
   const achievementState = { unlocked: new Set(), pending: [] };
@@ -2719,15 +2744,15 @@
   // SYNERGY MAP RENDERER (v2)
   // ============================================
   const SynergyMapRenderer = {
-    // Product positions in hexagon layout (x, y coordinates in SVG viewBox 350x200)
+    // Product positions in pentagon layout (x, y coordinates in SVG viewBox 350x240)
     POSITIONS: {
-      'dailyglow': { x: 175, y: 35 },    // Top center
-      'mindfuel': { x: 295, y: 75 },     // Right top
-      'dreamglow': { x: 260, y: 155 },   // Right bottom
-      'thechill': { x: 90, y: 155 },     // Left bottom
-      'reset-button': { x: 55, y: 75 }   // Left top
+      'dailyglow': { x: 175, y: 45 },    // Top center
+      'mindfuel': { x: 290, y: 100 },    // Right top
+      'dreamglow': { x: 250, y: 195 },   // Right bottom
+      'thechill': { x: 100, y: 195 },    // Left bottom
+      'reset-button': { x: 60, y: 100 }  // Left top
     },
-    NODE_RADIUS: 28,
+    NODE_RADIUS: 30,
 
     render(container, selectedHandles) {
       const svg = container.querySelector('.wa-synergy-map__svg');
@@ -2753,6 +2778,44 @@
       Object.entries(this.POSITIONS).forEach(([handle, pos]) => {
         const isSelected = selectedHandles.includes(handle);
         this.renderNode(svg, handle, pos, isSelected);
+      });
+
+      // Add click handlers to nodes
+      this.bindNodeClickHandlers(svg);
+    },
+
+    bindNodeClickHandlers(svg) {
+      svg.querySelectorAll('.wa-synergy-node').forEach(node => {
+        node.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const handle = node.getAttribute('data-handle');
+          if (!handle) return;
+
+          const isSelected = node.classList.contains('wa-synergy-node--selected');
+          const product = handleToProductMap.get(handle);
+
+          if (isSelected) {
+            // Remove from cart
+            const item = state.items.find(i => matchHandle(i.title) === handle);
+            if (item) removeItem(item.id);
+          } else if (product) {
+            // Add to cart
+            const card = document.querySelector(`.wa-product-card[data-product-handle="${handle}"]`);
+            if (card) {
+              const data = {
+                id: card.dataset.productId,
+                handle: card.dataset.productHandle,
+                title: card.dataset.productTitle,
+                price: parseInt(card.dataset.productPrice),
+                image: card.dataset.productImage,
+                variantId: card.dataset.variantId,
+                url: card.dataset.productUrl,
+                quantity: 1
+              };
+              addItem(data);
+            }
+          }
+        });
       });
     },
 
@@ -2780,6 +2843,8 @@
       const product = handleToProductMap.get(handle);
       const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       g.setAttribute('class', `wa-synergy-node ${isSelected ? 'wa-synergy-node--selected' : 'wa-synergy-node--inactive'}`);
+      g.setAttribute('data-handle', handle);
+      g.style.cursor = 'pointer';
 
       // Background circle
       const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -2858,7 +2923,7 @@
       const labelEl = document.createElement('div');
       labelEl.className = 'wa-synergy-label wa-synergy-label--icon';
       labelEl.style.left = `${(ctrlX / 350) * 100}%`;
-      labelEl.style.top = `${(ctrlY / 180) * 100}%`;
+      labelEl.style.top = `${(ctrlY / 240) * 100}%`;
       labelEl.style.background = color;
       labelEl.innerHTML = `<span>${icon || '⚡'}</span>`;
       labelsContainer.appendChild(labelEl);
@@ -2949,7 +3014,7 @@
     const addedHandles = state.items.map(i => matchHandle(i.title));
     const recs = RECOMMENDATIONS[addedHandles[0]] || [];
     for (const r of recs) if (!addedHandles.includes(r.handle)) return r;
-    for (const h of Object.keys(SYNERGY_MAP)) if (!addedHandles.includes(h)) return { handle: h, bundle: 'Ritueli Tamamla', reason: 'Indirim seviyenizi artirin.' };
+    for (const h of Object.keys(SYNERGY_MAP)) if (!addedHandles.includes(h)) return { handle: h, bundle: 'Ritüeli Tamamla', reason: 'İndirim seviyenizi artırın.' };
     return null;
   }
 
@@ -3195,7 +3260,7 @@
     const pricing = calculatePricing();
     const totalQty = getTotalQuantity();
     const tier = Math.min(totalQty, 5);
-    const synergy = totalQty > 0 ? SYNERGY_CONFIG[tier] : { percent: 0, text: 'Baslayin' };
+    const synergy = totalQty > 0 ? SYNERGY_CONFIG[tier] : { percent: 0, text: 'Başlayın' };
     const rec = getRecommendation();
     const ritual = getRitualGuide();
     const synExp = getSynergyExplanation();
@@ -3272,7 +3337,7 @@
     const ritBox = dock.querySelector('.wa-dock__ritual');
     if (ritual) {
       ritBox.style.display = 'block';
-      ritBox.innerHTML = `<div style="font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px;">${ICONS.clock} Kullanim Rehberi</div>${ritual.map(r => `<div style="display:flex;gap:8px;margin-bottom:4px;"><span style="font-weight:600;min-width:50px;">${r.time}</span><span style="color:#525252;"><strong>${r.product}:</strong> ${r.text}</span></div>`).join('')}`;
+      ritBox.innerHTML = `<div style="font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px;">${ICONS.clock} Kullanım Rehberi</div>${ritual.map(r => `<div style="display:flex;gap:8px;margin-bottom:4px;"><span style="font-weight:600;min-width:50px;">${r.time}</span><span style="color:#525252;"><strong>${r.product}:</strong> ${r.text}</span></div>`).join('')}`;
     } else { ritBox.style.display = 'none'; }
 
     // Pricing
@@ -3294,7 +3359,7 @@
       updateStepIndicators(discountSteps.querySelector('.wa-steps--top'), tier);
 
       // Update current discount text
-      discountSteps.querySelector('.wa-dock__discount-steps-current').textContent = currentPercent > 0 ? `%${currentPercent} indirim` : 'Baslayin';
+      discountSteps.querySelector('.wa-dock__discount-steps-current').textContent = currentPercent > 0 ? `%${currentPercent} indirim` : 'Başlayın';
 
       // Hint text based on tier
       const hintText = discountSteps.querySelector('.wa-dock__discount-hint-text');
@@ -3362,8 +3427,8 @@
   // KESFET MODAL (v2)
   // ============================================
   const kesfetModal = document.getElementById('kesfet-modal');
-  let currentKesfetHandle = null;
-  let currentKesfetProductData = null;
+  let currentKeşfetHandle = null;
+  let currentKeşfetProductData = null;
 
   function renderModalContent(handle, tab) {
     const data = EXTENDED_PRODUCT_DATA[handle];
@@ -3412,7 +3477,7 @@
       }
 
       if (combos.length === 0) {
-        return '<p style="text-align:center;color:var(--wa-gray-500);">Bu urun icin kombinasyon onerisi bulunamadi.</p>';
+        return '<p style="text-align:center;color:var(--wa-gray-500);">Bu ürün için kombinasyon önerisi bulunamadı.</p>';
       }
 
       return combos.map(c => `
@@ -3429,13 +3494,13 @@
     return '';
   }
 
-  function openKesfetModal(card) {
+  function openKeşfetModal(card) {
     const handle = matchHandle(card.dataset.productTitle);
     const data = EXTENDED_PRODUCT_DATA[handle];
     if (!data) return;
 
-    currentKesfetHandle = handle;
-    currentKesfetProductData = {
+    currentKeşfetHandle = handle;
+    currentKeşfetProductData = {
       id: card.dataset.productId,
       handle: card.dataset.productHandle,
       title: card.dataset.productTitle,
@@ -3456,7 +3521,7 @@
     kesfetModal.querySelectorAll('.wa-tab').forEach((t, i) => t.classList.toggle('wa-tab--active', i === 0));
 
     // Update add button / qty controls state
-    const existingItem = state.items.find(i => i.id === currentKesfetProductData.id);
+    const existingItem = state.items.find(i => i.id === currentKeşfetProductData.id);
     const addBtn = kesfetModal.querySelector('.wa-kesfet-modal__add-btn');
     const qtyControls = kesfetModal.querySelector('.wa-kesfet-modal__qty-controls');
 
@@ -3474,24 +3539,24 @@
     document.body.style.overflow = 'hidden';
   }
 
-  function closeKesfetModal() {
+  function closeKeşfetModal() {
     kesfetModal.classList.remove('wa-kesfet-modal--open');
     document.body.style.overflow = '';
-    currentKesfetHandle = null;
-    currentKesfetProductData = null;
+    currentKeşfetHandle = null;
+    currentKeşfetProductData = null;
   }
 
   function handleModalTab(tab) {
-    if (!currentKesfetHandle) return;
-    kesfetModal.querySelector('.wa-kesfet-modal__content').innerHTML = renderModalContent(currentKesfetHandle, tab);
+    if (!currentKeşfetHandle) return;
+    kesfetModal.querySelector('.wa-kesfet-modal__content').innerHTML = renderModalContent(currentKeşfetHandle, tab);
     kesfetModal.querySelectorAll('.wa-tab').forEach(t => t.classList.toggle('wa-tab--active', t.dataset.tab === tab));
   }
 
   function handleModalAddToCart() {
-    if (!currentKesfetProductData) return;
+    if (!currentKeşfetProductData) return;
 
     // Add item to cart
-    addItem(currentKesfetProductData);
+    addItem(currentKeşfetProductData);
 
     // Switch to qty controls
     const addBtn = kesfetModal.querySelector('.wa-kesfet-modal__add-btn');
@@ -3502,8 +3567,8 @@
   }
 
   function handleModalQtyChange(delta) {
-    if (!currentKesfetProductData) return;
-    const item = state.items.find(i => i.id === currentKesfetProductData.id);
+    if (!currentKeşfetProductData) return;
+    const item = state.items.find(i => i.id === currentKeşfetProductData.id);
     if (!item) return;
 
     const newQty = item.quantity + delta;
@@ -3512,7 +3577,7 @@
 
     if (newQty <= 0) {
       // Remove item and switch back to add button
-      removeItem(currentKesfetProductData.id);
+      removeItem(currentKeşfetProductData.id);
       addBtn.style.display = 'block';
       qtyControls.style.display = 'none';
     } else {
@@ -3528,10 +3593,10 @@
   // EVENT HANDLERS
   // ============================================
   function handleProductClick(card, e) {
-    // If clicking Kesfet button, open modal
+    // If clicking Keşfet button, open modal
     if (e.target.closest('[data-kesfet-toggle]')) {
       e.stopPropagation();
-      openKesfetModal(card);
+      openKeşfetModal(card);
       return;
     }
 
@@ -3614,10 +3679,10 @@
       }
     });
 
-    // Kesfet Modal event listeners
+    // Keşfet Modal event listeners
     if (kesfetModal) {
-      kesfetModal.querySelector('.wa-kesfet-modal__close')?.addEventListener('click', closeKesfetModal);
-      kesfetModal.querySelector('.wa-kesfet-modal__back')?.addEventListener('click', closeKesfetModal);
+      kesfetModal.querySelector('.wa-kesfet-modal__close')?.addEventListener('click', closeKeşfetModal);
+      kesfetModal.querySelector('.wa-kesfet-modal__back')?.addEventListener('click', closeKeşfetModal);
       kesfetModal.querySelector('.wa-kesfet-modal__add-btn')?.addEventListener('click', handleModalAddToCart);
       kesfetModal.querySelector('.wa-kesfet-modal__qty-minus')?.addEventListener('click', () => handleModalQtyChange(-1));
       kesfetModal.querySelector('.wa-kesfet-modal__qty-plus')?.addEventListener('click', () => handleModalQtyChange(1));
@@ -3626,7 +3691,7 @@
       });
       // Close on backdrop click (clicking outside modal content)
       kesfetModal.addEventListener('click', e => {
-        if (e.target === kesfetModal) closeKesfetModal();
+        if (e.target === kesfetModal) closeKeşfetModal();
       });
     }
 
@@ -3706,7 +3771,7 @@
       "type": "text",
       "id": "eyebrow_text",
       "label": "Ust Baslik",
-      "default": "Kisisel Ritueliniz"
+      "default": "Kisisel Ritüeliniz"
     },
     {
       "type": "text",
@@ -3718,7 +3783,7 @@
       "type": "textarea",
       "id": "subtitle",
       "label": "Alt Baslik",
-      "default": "Size ozel onerilerimizle rituelinizi olusturun."
+      "default": "Size özel önerilerimizle ritüelinizi oluşturun."
     },
     {
       "type": "collection",
