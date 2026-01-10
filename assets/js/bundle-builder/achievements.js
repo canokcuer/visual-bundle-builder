@@ -6,16 +6,16 @@
 const ACHIEVEMENTS = {
   'first-step': {
     id: 'first-step',
-    title: 'Ilk Adim',
+    title: 'İlk Adım',
     icon: 'star',
-    description: 'Ilk urununu ekledin!',
+    description: 'İlk ürününü ekledin!',
     condition: (state) => state.items.length >= 1
   },
   'power-duo': {
     id: 'power-duo',
-    title: 'Guclu Ikili',
+    title: 'Güçlü İkili',
     icon: 'lightning',
-    description: 'Iki urun kombinasyonu!',
+    description: 'İki ürün kombinasyonu!',
     condition: (state) => state.items.length >= 2
   },
   'power-morning': {
@@ -27,16 +27,16 @@ const ACHIEVEMENTS = {
   },
   'sleep-beauty': {
     id: 'sleep-beauty',
-    title: 'Guzellik Uykusu',
+    title: 'Güzellik Uykusu',
     icon: 'moon',
-    description: 'Gece ritueli tamamlandi!',
+    description: 'Gece ritüeli tamamlandı!',
     condition: (state) => hasProducts(state, ['dreamglow', 'thechill'])
   },
   'full-ritual': {
     id: 'full-ritual',
-    title: 'Tam Ritual',
+    title: 'Tam Ritüel',
     icon: 'trophy',
-    description: 'Tum urunler! %30 indirim kazandin!',
+    description: 'Tüm ürünler! %30 indirim kazandın!',
     condition: (state) => state.items.length >= 5
   }
 };

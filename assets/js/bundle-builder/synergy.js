@@ -4,11 +4,11 @@
  */
 
 const SYNERGY_MAP = {
-  'dreamglow': { name: 'DreamGlow', timing: 'Uykudan 45 dk once', tip: '1 olcek tozu ilik suyla karistirin.', category: 'night' },
-  'dailyglow': { name: 'DailyGlow', timing: 'Kahvalti sonrasi', tip: 'Tok karnina 1 kapsul. Isilti iceriden baslar.', category: 'morning' },
-  'mindfuel': { name: 'MindFuel', timing: 'Kahvalti sonrasi', tip: 'Tok karnina alin. Kahveden etkili odaklanma.', category: 'morning' },
-  'thechill': { name: 'TheChill', timing: 'Aksam yemegi sonrasi', tip: 'Uykudan 1-2 saat once gevsemek icin.', category: 'night' },
-  'reset-button': { name: 'Reset Button', timing: 'Ogle yemegi sonrasi', tip: 'Bol su ile tok karnina.', category: 'noon' }
+  'dreamglow': { name: 'DreamGlow', timing: 'Uykudan 45 dk önce', tip: '1 ölçek tozu ılık suyla karıştırın.', category: 'night' },
+  'dailyglow': { name: 'DailyGlow', timing: 'Kahvaltı sonrası', tip: 'Tok karnına 1 kapsül. Işıltı içeriden başlar.', category: 'morning' },
+  'mindfuel': { name: 'MindFuel', timing: 'Kahvaltı sonrası', tip: 'Tok karnına alın. Kahveden etkili odaklanma.', category: 'morning' },
+  'thechill': { name: 'TheChill', timing: 'Akşam yemeği sonrası', tip: 'Uykudan 1-2 saat önce gevşemek için.', category: 'night' },
+  'reset-button': { name: 'Reset Button', timing: 'Öğle yemeği sonrası', tip: 'Bol su ile tok karnına.', category: 'noon' }
 };
 
 const SYNERGY_CONNECTIONS = {
@@ -25,16 +25,16 @@ const SYNERGY_CONNECTIONS = {
 };
 
 const SYNERGY_EXPLANATIONS = {
-  'dailyglow+dreamglow': { title: '7/24 Guzellik Kiti', benefit: 'Kesintisiz cilt onarimi', detail: 'Gunduz cildinizi koruyun, gece uykuda onarin.' },
-  'dailyglow+mindfuel': { title: 'Power Morning', benefit: 'Enerji + Odaklanma', detail: 'Hem fiziksel isilti hem zihinsel netlik.' },
-  'dailyglow+reset-button': { title: 'Detox & Glow', benefit: 'Arinma + Canlilik', detail: 'Iceriden temizlenin, disariya isik sacin.' },
-  'dailyglow+thechill': { title: 'Denge Paketi', benefit: 'Sabah Enerjisi, Aksam Huzuru', detail: 'Modern hayatin panzehiri.' },
-  'dreamglow+mindfuel': { title: 'Smart & Beautiful', benefit: 'Gunduz Odak, Gece Bakim', detail: 'Ne gorunumunuzden ne basarinizdan odun vermeyin.' },
-  'dreamglow+reset-button': { title: 'Gece Terapisi', benefit: 'Arinma + Yenilenme', detail: 'Siz uyurken bedeniniz toksinleri atsin.' },
-  'dreamglow+thechill': { title: 'Uyku Ritueli', benefit: 'Derin Uyku + Onarim', detail: 'TheChill zihni susturur, DreamGlow bedeni onarir.' },
-  'mindfuel+reset-button': { title: 'Berrak Zihin', benefit: 'Toksin Atimi + Konsantrasyon', detail: 'Beyin sisine son. Arinmis metabolizma ile performans.' },
-  'mindfuel+thechill': { title: 'Zen Performans', benefit: 'Kontrollu Guc', detail: 'Stres yapmadan odaklanin.' },
-  'reset-button+thechill': { title: 'Tam Reset', benefit: 'Zihinsel & Bedensel Arinma', detail: 'Fabrika Ayarlarina Donus.' }
+  'dailyglow+dreamglow': { title: '7/24 Güzellik Kiti', benefit: 'Kesintisiz cilt onarımı', detail: 'Gündüz cildinizi koruyun, gece uykuda onarın.' },
+  'dailyglow+mindfuel': { title: 'Power Morning', benefit: 'Enerji + Odaklanma', detail: 'Hem fiziksel ışıltı hem zihinsel netlik.' },
+  'dailyglow+reset-button': { title: 'Detox & Glow', benefit: 'Arınma + Canlılık', detail: 'İçeriden temizlenin, dışarıya ışık saçın.' },
+  'dailyglow+thechill': { title: 'Denge Paketi', benefit: 'Sabah Enerjisi, Akşam Huzuru', detail: 'Modern hayatın panzehiri.' },
+  'dreamglow+mindfuel': { title: 'Smart & Beautiful', benefit: 'Gündüz Odak, Gece Bakım', detail: 'Ne görünümünüzden ne başarınızdan ödün vermeyin.' },
+  'dreamglow+reset-button': { title: 'Gece Terapisi', benefit: 'Arınma + Yenilenme', detail: 'Siz uyurken bedeniniz toksinleri atsın.' },
+  'dreamglow+thechill': { title: 'Uyku Ritüeli', benefit: 'Derin Uyku + Onarım', detail: 'TheChill zihni susturur, DreamGlow bedeni onarır.' },
+  'mindfuel+reset-button': { title: 'Berrak Zihin', benefit: 'Toksin Atımı + Konsantrasyon', detail: 'Beyin sisine son. Arınmış metabolizma ile performans.' },
+  'mindfuel+thechill': { title: 'Zen Performans', benefit: 'Kontrollü Güç', detail: 'Stres yapmadan odaklanın.' },
+  'reset-button+thechill': { title: 'Tam Reset', benefit: 'Zihinsel & Bedensel Arınma', detail: 'Fabrika Ayarlarına Dönüş.' }
 };
 
 /**

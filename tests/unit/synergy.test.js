@@ -95,7 +95,7 @@ describe('Synergy Module', () => {
     it('should return explanation for two products', () => {
       const exp = getSynergyExplanation(['dailyglow', 'dreamglow']);
       expect(exp).not.toBeNull();
-      expect(exp.title).toBe('7/24 Guzellik Kiti');
+      expect(exp.title).toBe('7/24 Güzellik Kiti');
       expect(exp).toHaveProperty('benefit');
       expect(exp).toHaveProperty('detail');
     });

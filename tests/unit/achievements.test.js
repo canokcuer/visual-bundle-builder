@@ -264,7 +264,7 @@ describe('Achievements Module', () => {
     it('should return achievement by ID', () => {
       const achievement = getAchievement('first-step');
       expect(achievement).not.toBeNull();
-      expect(achievement.title).toBe('Ilk Adim');
+      expect(achievement.title).toBe('İlk Adım');
     });
 
     it('should return null for invalid ID', () => {

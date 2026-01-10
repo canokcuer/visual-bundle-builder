@@ -39,7 +39,7 @@ describe('Pricing Module', () => {
     it('should return base tier for 0 quantity', () => {
       const tier = getTier(0);
       expect(tier.percent).toBe(0);
-      expect(tier.text).toBe('Baslayin');
+      expect(tier.text).toBe('Başlayın');
       expect(tier.discount).toBe(0);
     });
 

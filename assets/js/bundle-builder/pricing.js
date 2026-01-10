@@ -4,9 +4,9 @@
  */
 
 const SYNERGY_CONFIG = {
-  1: { percent: 20, text: 'Baslangic', discount: 0 },
-  2: { percent: 40, text: '%15 Ikili Guc', discount: 0.15 },
-  3: { percent: 60, text: '%20 Populer', discount: 0.20 },
+  1: { percent: 20, text: 'Başlangıç', discount: 0 },
+  2: { percent: 40, text: '%15 İkili Güç', discount: 0.15 },
+  3: { percent: 60, text: '%20 Popüler', discount: 0.20 },
   4: { percent: 80, text: '%25 Pro', discount: 0.25 },
   5: { percent: 100, text: '%30 Efsane', discount: 0.30 }
 };
@@ -24,7 +24,7 @@ const QUANTITY_DISCOUNTS = {
  */
 function getTier(quantity) {
   const tier = Math.min(Math.max(quantity, 0), 5);
-  return tier > 0 ? SYNERGY_CONFIG[tier] : { percent: 0, text: 'Baslayin', discount: 0 };
+  return tier > 0 ? SYNERGY_CONFIG[tier] : { percent: 0, text: 'Başlayın', discount: 0 };
 }
 
 /**
@@ -115,7 +115,7 @@ function getNextTier(currentQuantity) {
   if (nextTierNum > 5) return null;
 
   return {
-    currentTier: SYNERGY_CONFIG[currentTierNum] || { percent: 0, text: 'Baslayin', discount: 0 },
+    currentTier: SYNERGY_CONFIG[currentTierNum] || { percent: 0, text: 'Başlayın', discount: 0 },
     nextTier: SYNERGY_CONFIG[nextTierNum],
     productsNeeded: nextTierNum - currentQuantity
   };

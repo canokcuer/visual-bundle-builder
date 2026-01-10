@@ -139,9 +139,9 @@ test.describe('Visual Bundle Builder', () => {
       if (isMobile) {
         // Expand dock to see synergy explanation
         await page.locator('.wa-dock__handle').click();
-        await expect(page.locator('.wa-dock__synergy-explanation')).toContainText('7/24 Guzellik');
+        await expect(page.locator('.wa-dock__synergy-explanation')).toContainText('7/24 Güzellik');
       } else {
-        await expect(page.locator('.wa-synergy-explanation')).toContainText('7/24 Guzellik');
+        await expect(page.locator('.wa-synergy-explanation')).toContainText('7/24 Güzellik');
       }
     });
   });
@@ -204,7 +204,7 @@ test.describe('Visual Bundle Builder', () => {
       // Wait for achievement notification
       const notification = page.locator('.wa-achievement-notification');
       await expect(notification).toBeVisible({ timeout: 5000 });
-      await expect(notification).toContainText('Ilk Adim');
+      await expect(notification).toContainText('İlk Adım');
     });
 
     test('should show power-duo achievement after 2 products', async ({ page }) => {
@@ -218,7 +218,7 @@ test.describe('Visual Bundle Builder', () => {
 
       // Wait for power-duo notification
       const notification = page.locator('.wa-achievement-notification');
-      await expect(notification).toContainText('Guclu Ikili');
+      await expect(notification).toContainText('Güçlü İkili');
     });
 
     test('should update achievement progress bar', async ({ page }) => {
