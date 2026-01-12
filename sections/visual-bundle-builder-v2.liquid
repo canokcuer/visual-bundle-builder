@@ -88,6 +88,21 @@
         <span class="wa-sidebar__count">0 ürün</span>
       </div>
 
+      <!-- Discount Steps (moved up like mobile) -->
+      <div class="wa-sidebar__synergy">
+        <div class="wa-sidebar__synergy-header">
+          <span>İndirim Seviyesi</span>
+          <span class="wa-sidebar__synergy-text">Başlayın</span>
+        </div>
+        <div class="wa-steps">
+          <div class="wa-step" data-step="1"><span class="wa-step__dot"></span><span class="wa-step__label"></span></div>
+          <div class="wa-step" data-step="2"><span class="wa-step__dot"></span><span class="wa-step__label">%15</span></div>
+          <div class="wa-step" data-step="3"><span class="wa-step__dot"></span><span class="wa-step__label">%20</span></div>
+          <div class="wa-step" data-step="4"><span class="wa-step__dot"></span><span class="wa-step__label">%25</span></div>
+          <div class="wa-step" data-step="5"><span class="wa-step__dot"></span><span class="wa-step__label">%30</span></div>
+        </div>
+      </div>
+
       <!-- Selected Items -->
       <div class="wa-sidebar__items-container">
         <div class="wa-sidebar__empty-state">
@@ -98,6 +113,29 @@
         </div>
         <div class="wa-sidebar__items"></div>
       </div>
+
+      <!-- Pricing + Checkout (moved up for visibility) -->
+      <div class="wa-sidebar__pricing">
+        <div class="wa-sidebar__price-row">
+          <span>Ara Toplam</span>
+          <span class="wa-sidebar__subtotal">₺0</span>
+        </div>
+        <div class="wa-sidebar__price-row wa-sidebar__price-row--discount" style="display: none;">
+          <span>Paket İndirimi</span>
+          <span class="wa-sidebar__discount">-₺0</span>
+        </div>
+        <div class="wa-sidebar__price-row wa-sidebar__price-row--total">
+          <span>Toplam</span>
+          <span class="wa-sidebar__total">₺0</span>
+        </div>
+      </div>
+
+      <button class="wa-sidebar__checkout-btn" disabled>
+        <span class="wa-sidebar__checkout-text">Sepeti Onayla</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
 
       <!-- Combined Synergy Map + Achievements (v2 merged) -->
       <div class="wa-synergy-achievements" style="display: none;">
@@ -178,44 +216,6 @@
         </div>
         <div class="wa-ritual-guide__content"></div>
       </div>
-
-      <!-- Discount Steps -->
-      <div class="wa-sidebar__synergy">
-        <div class="wa-sidebar__synergy-header">
-          <span>İndirim Seviyesi</span>
-          <span class="wa-sidebar__synergy-text">Başlayın</span>
-        </div>
-        <div class="wa-steps">
-          <div class="wa-step" data-step="1"><span class="wa-step__dot"></span><span class="wa-step__label"></span></div>
-          <div class="wa-step" data-step="2"><span class="wa-step__dot"></span><span class="wa-step__label">%15</span></div>
-          <div class="wa-step" data-step="3"><span class="wa-step__dot"></span><span class="wa-step__label">%20</span></div>
-          <div class="wa-step" data-step="4"><span class="wa-step__dot"></span><span class="wa-step__label">%25</span></div>
-          <div class="wa-step" data-step="5"><span class="wa-step__dot"></span><span class="wa-step__label">%30</span></div>
-        </div>
-      </div>
-
-      <!-- Pricing -->
-      <div class="wa-sidebar__pricing">
-        <div class="wa-sidebar__price-row">
-          <span>Ara Toplam</span>
-          <span class="wa-sidebar__subtotal">₺0</span>
-        </div>
-        <div class="wa-sidebar__price-row wa-sidebar__price-row--discount" style="display: none;">
-          <span>Paket İndirimi</span>
-          <span class="wa-sidebar__discount">-₺0</span>
-        </div>
-        <div class="wa-sidebar__price-row wa-sidebar__price-row--total">
-          <span>Toplam</span>
-          <span class="wa-sidebar__total">₺0</span>
-        </div>
-      </div>
-
-      <button class="wa-sidebar__checkout-btn" disabled>
-        <span class="wa-sidebar__checkout-text">Ödemeye Git</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </button>
     </aside>
   </div>
 
@@ -1587,20 +1587,24 @@
   }
 
   .wa-kesfet-modal__add-btn {
-    width: 100%;
-    padding: 16px;
+    width: auto;
+    min-width: 140px;
+    padding: 10px 20px;
     background: var(--wa-black);
     color: var(--wa-white);
     border: none;
-    border-radius: var(--wa-radius);
-    font-size: 1rem;
+    border-radius: var(--wa-radius-sm);
+    font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
+    margin: 0 auto;
+    display: block;
   }
 
   .wa-kesfet-modal__add-btn:hover {
     background: var(--wa-gray-800);
+    transform: translateY(-1px);
   }
 
   .wa-kesfet-modal__add-btn--added {
@@ -1611,16 +1615,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
-    width: 100%;
-    padding: 8px;
+    gap: 12px;
+    width: auto;
+    padding: 6px 12px;
     background: var(--wa-gray-100);
-    border-radius: var(--wa-radius);
+    border-radius: var(--wa-radius-sm);
+    margin: 0 auto;
   }
 
   .wa-kesfet-modal__qty-btn {
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     border: 2px solid var(--wa-gray-300);
     background: var(--wa-white);
@@ -1656,9 +1661,9 @@
   }
 
   .wa-kesfet-modal__qty-value {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 700;
-    min-width: 40px;
+    min-width: 32px;
     text-align: center;
     color: var(--wa-black);
   }
