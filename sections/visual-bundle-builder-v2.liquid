@@ -109,7 +109,7 @@
         </div>
         <!-- Hexagon Synergy Map -->
         <div class="wa-synergy-map__scroll">
-          <svg class="wa-synergy-map__svg" viewBox="0 0 350 240"></svg>
+          <svg class="wa-synergy-map__svg" viewBox="0 0 400 280"></svg>
           <div class="wa-synergy-map__labels"></div>
         </div>
         <!-- Achievement Icons Row -->
@@ -296,7 +296,7 @@
         </div>
         <!-- Hexagon Synergy Map -->
         <div class="wa-synergy-map__scroll">
-          <svg class="wa-synergy-map__svg" viewBox="0 0 350 240"></svg>
+          <svg class="wa-synergy-map__svg" viewBox="0 0 400 280"></svg>
           <div class="wa-synergy-map__labels"></div>
         </div>
         <!-- Synergy Explanations List (icons + descriptions) -->
@@ -1040,8 +1040,9 @@
   }
 
   .wa-synergy-map__svg {
-    min-width: 320px;
-    height: 200px;
+    min-width: 100%;
+    width: 100%;
+    height: 260px;
     display: block;
   }
 
@@ -1083,14 +1084,59 @@
   }
 
   .wa-synergy-label--icon {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
+    z-index: 10;
+  }
+
+  /* Achievement Icons Row */
+  .wa-achievement-icons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 8px;
+    margin-top: 8px;
+    border-top: 1px solid var(--wa-gray-200);
+  }
+
+  .wa-achievement-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--wa-gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.4;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .wa-achievement-icon--unlocked {
+    background: var(--wa-gold);
+    opacity: 1;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+  }
+
+  .wa-achievement-icon--unlocking {
+    animation: achievement-unlock 0.5s ease;
+  }
+
+  @keyframes achievement-unlock {
+    0% { transform: scale(0.8) rotate(-10deg); }
+    50% { transform: scale(1.2) rotate(10deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+
+  .wa-achievement-icon__emoji {
+    font-size: 1.1rem;
+    line-height: 1;
   }
 
   .wa-synergy-node--selected .wa-synergy-node__bg {
@@ -2744,15 +2790,15 @@
   // SYNERGY MAP RENDERER (v2)
   // ============================================
   const SynergyMapRenderer = {
-    // Product positions in pentagon layout (x, y coordinates in SVG viewBox 350x240)
+    // Product positions in pentagon layout (x, y coordinates in SVG viewBox 400x280)
     POSITIONS: {
-      'dailyglow': { x: 175, y: 45 },    // Top center
-      'mindfuel': { x: 290, y: 100 },    // Right top
-      'dreamglow': { x: 250, y: 195 },   // Right bottom
-      'thechill': { x: 100, y: 195 },    // Left bottom
-      'reset-button': { x: 60, y: 100 }  // Left top
+      'dailyglow': { x: 200, y: 55 },     // Top center
+      'mindfuel': { x: 340, y: 120 },     // Right top
+      'dreamglow': { x: 300, y: 230 },    // Right bottom
+      'thechill': { x: 100, y: 230 },     // Left bottom
+      'reset-button': { x: 60, y: 120 }   // Left top
     },
-    NODE_RADIUS: 30,
+    NODE_RADIUS: 35,
 
     render(container, selectedHandles) {
       const svg = container.querySelector('.wa-synergy-map__svg');
@@ -2922,8 +2968,8 @@
       // Add icon on connection line (positioned relative to SVG)
       const labelEl = document.createElement('div');
       labelEl.className = 'wa-synergy-label wa-synergy-label--icon';
-      labelEl.style.left = `${(ctrlX / 350) * 100}%`;
-      labelEl.style.top = `${(ctrlY / 240) * 100}%`;
+      labelEl.style.left = `${(ctrlX / 400) * 100}%`;
+      labelEl.style.top = `${(ctrlY / 280) * 100}%`;
       labelEl.style.background = color;
       labelEl.innerHTML = `<span>${icon || '⚡'}</span>`;
       labelsContainer.appendChild(labelEl);
@@ -3566,7 +3612,7 @@
     kesfetModal.querySelector('.wa-kesfet-modal__qty-value').textContent = '1';
   }
 
-  function handleModalQtyChange(delta) {
+  async function handleModalQtyChange(delta) {
     if (!currentKeşfetProductData) return;
     const item = state.items.find(i => i.id === currentKeşfetProductData.id);
     if (!item) return;
@@ -3581,11 +3627,14 @@
       addBtn.style.display = 'block';
       qtyControls.style.display = 'none';
     } else {
-      // Update quantity
-      item.quantity = newQty;
-      syncQuantityToCart(item.variantId, newQty);
-      kesfetModal.querySelector('.wa-kesfet-modal__qty-value').textContent = newQty;
-      updateUI();
+      // Update quantity using existing updateQuantity logic
+      const clampedQty = Math.min(10, newQty);
+      if (await updateShopifyCartQty(item.variantId, clampedQty)) {
+        item.quantity = clampedQty;
+        vibrate(5);
+        kesfetModal.querySelector('.wa-kesfet-modal__qty-value').textContent = clampedQty;
+        updateUI();
+      }
     }
   }
 
