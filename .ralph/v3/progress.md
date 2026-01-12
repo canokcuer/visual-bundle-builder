@@ -1,19 +1,25 @@
-# V3 Progress Tracker
+# V4 Progress Tracker
 
 ## Current Status
-V3 COMPLETE - All 6 bugs fixed!
+V4 COMPLETE - All 4 post-testing bugs fixed!
 
-## Bugs Fixed
+## V4 Bugs Fixed (Post-Testing Issues)
 
-### HIGH Priority
-- [x] P1: Backdrop gray instead of dark overlay - Changed z-index from -1 to 998
-- [x] P2: Hexagon emojis overlap - Distributed along curve (30%, 50%, 70%), reduced size to 18px
-- [x] P6: Product page add-to-cart not working - Fixed with strict equality, normalized handle comparison
+### CRITICAL
+- [x] B1: Slider backdrop blocking all clicks - Changed pointer-events from auto to none
+- [x] B2: Product page add-to-cart not working - Added standalone intercept script (runs on ALL pages)
 
-### MEDIUM Priority
-- [x] P3: Add-to-cart button unnatural position - Moved to bottom-right corner
-- [x] P4: Sepeti Onayla button doesn't fit - Reduced min-width to 90px, added 375px media query
-- [x] P5: Bilim section doesn't fit - Added collapsible with "Devamini Oku" toggle
+### HIGH
+- [x] B3: Nasıl Çalışır section collapsed - Removed collapse, added 3-step structure for each product
+- [x] B4: Premium Wellness header not bold - Changed font-weight from 600 to 700
+
+## V3 Bugs (Previously Fixed)
+- [x] Backdrop z-index (was -1, now 998)
+- [x] Hexagon emoji overlap (distributed along curve)
+- [x] Add-to-cart button position (bottom-right)
+- [x] Sepeti Onayla button fit (smaller min-width)
+- [x] Bilim section overflow (now multi-step)
+- [x] Product page intercept (now standalone script)
 
 ## Test Results
 - All 84 unit tests passing
@@ -21,4 +27,5 @@ V3 COMPLETE - All 6 bugs fixed!
 ## Notes
 - File modified: sections/visual-bundle-builder-v2.liquid
 - Turkish content preserved
-- No breaking changes
+- Standalone product page intercept runs on all pages
+- Science section now has 3 detailed steps per product

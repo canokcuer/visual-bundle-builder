@@ -717,38 +717,34 @@
   .wa-science-content { line-height: 1.5; color: var(--wa-gray-600); }
   .wa-science-title { font-weight: 600; color: var(--wa-black); margin-bottom: 6px; }
 
-  /* Collapsible Science Section */
-  .wa-modal-science-text {
-    max-height: 80px;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-    position: relative;
+  /* Science Section - Multi-Step Layout */
+  .wa-modal-science-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
-  .wa-modal-science-text.expanded {
-    max-height: 500px;
+  .wa-modal-science-step {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--wa-gray-200);
   }
-  .wa-modal-science-text:not(.expanded)::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 30px;
-    background: linear-gradient(transparent, var(--wa-white));
+  .wa-modal-science-step:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
   }
-  .wa-modal-science-toggle {
-    color: var(--wa-accent);
-    cursor: pointer;
+  .wa-modal-science-step:first-child {
+    padding-top: 0;
+  }
+  .wa-modal-science-step-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    color: var(--wa-black);
+  }
+  .wa-modal-science-step-text {
     font-size: 0.85rem;
-    font-weight: 500;
-    margin-top: 8px;
-    display: inline-block;
-    border: none;
-    background: none;
-    padding: 0;
-  }
-  .wa-modal-science-toggle:hover {
-    text-decoration: underline;
+    color: var(--wa-gray-600);
+    line-height: 1.5;
+    margin: 0;
   }
 
   /* Desktop Sidebar - Hidden on mobile */
@@ -784,7 +780,7 @@
     touch-action: pan-y;
   }
 
-  /* Backdrop to block background interaction when slider is expanded */
+  /* Backdrop to darken background when slider is expanded (clicks pass through) */
   .wa-dock--expanded::before {
     content: '';
     position: fixed;
@@ -794,7 +790,7 @@
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
     z-index: 998;
-    pointer-events: auto;
+    pointer-events: none;
   }
 
   .wa-dock__handle {
@@ -1989,7 +1985,7 @@
   .wa-dock__recommendation-name {
     display: block;
     font-size: 0.8rem;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   .wa-dock__recommendation-bundle {
@@ -2443,11 +2439,11 @@
 
     .wa-recommendation__info { flex: 1; }
     .wa-recommendation__label { display: block; font-size: 0.65rem; text-transform: uppercase; color: var(--wa-gray-500); margin-bottom: 0.125rem; }
-    .wa-recommendation__name { display: block; font-size: 0.9rem; font-weight: 600; color: var(--wa-black); }
+    .wa-recommendation__name { display: block; font-size: 0.9rem; font-weight: 700; color: var(--wa-black); }
 
     .wa-recommendation__bundle-name {
       font-size: 0.75rem;
-      font-weight: 600;
+      font-weight: 700;
       padding: 0.375rem 0.625rem;
       background: var(--wa-white);
       border-radius: 4px;
@@ -2553,6 +2549,55 @@
 </style>
 
 <script>
+// ============================================
+// STANDALONE PRODUCT PAGE INTERCEPT
+// Runs on ALL pages, not just bundle builder
+// ============================================
+(function() {
+  'use strict';
+
+  const BUNDLE_HANDLES = ['dailyglow', 'dreamglow', 'mindfuel', 'thechill', 'reset-button'];
+  const BUNDLE_PAGE_URL = '/pages/wellness-rituel-olusturucu';
+
+  const normalizeHandle = (h) => h?.toLowerCase().replace(/-/g, '').trim() || '';
+
+  const findBundleHandle = (testHandle) => {
+    if (!testHandle) return null;
+    const normalized = normalizeHandle(testHandle);
+    return BUNDLE_HANDLES.find(h => normalizeHandle(h) === normalized);
+  };
+
+  document.addEventListener('click', (e) => {
+    // Check if clicked element is an add-to-cart button
+    const btn = e.target.closest([
+      'form[action*="/cart/add"] button[type="submit"]',
+      'form[action*="/cart/add"] input[type="submit"]',
+      '.product-form button[name="add"]',
+      '.product-form__submit',
+      '[data-add-to-cart]',
+      '.add-to-cart',
+      '#AddToCart',
+      '.btn-add-to-cart'
+    ].join(', '));
+
+    if (!btn) return;
+
+    // Get handle from URL pathname (e.g., /products/dreamglow)
+    const pathMatch = window.location.pathname.match(/\/products\/([^\/\?]+)/);
+    if (!pathMatch) return;
+
+    const matchedHandle = findBundleHandle(pathMatch[1]);
+    if (!matchedHandle) return;
+
+    // Intercept the add-to-cart and redirect to bundle builder
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Redirect to bundle builder with product pre-selected
+    window.location.href = BUNDLE_PAGE_URL + '?add=' + matchedHandle;
+  }, true); // Use capture phase to intercept before other handlers
+})();
+
 (function() {
   'use strict';
 
@@ -2595,7 +2640,11 @@
       ],
       science: {
         title: 'Nasıl Çalışır?',
-        description: 'Araştırmalar, yetersiz uykunun cildin kendini onarma döngüsünü %60\'a kadar yavaşlattığını gösteriyor (Journal of Clinical Sleep Medicine, 2020). DreamGlow, uykunuzun her anını cildiniz için yenilenme seansına dönüştürür. Su, smoothie, mocktail veya yemeklerle kolayca tüketebilirsiniz. Doğal vanilya aroması içerir. Sığır kolajeni içermektedir.'
+        steps: [
+          { title: '1. Gece Onarımı', text: 'Yetersiz uyku cildin kendini onarma döngüsünü %60\'a kadar yavaşlatır. DreamGlow uykunuzun her anını yenilenme seansına dönüştürür.' },
+          { title: '2. Kolay Kullanım', text: 'Su, smoothie, mocktail veya yemeklerle kolayca tüketebilirsiniz. Doğal vanilya aroması ile lezzetli.' },
+          { title: '3. Premium İçerik', text: 'Sığır kolajeni ve hyaluronik asit ile yoğun nem desteği. Her gece düzenli kullanım önerilir.' }
+        ]
       }
     },
     'dailyglow': {
@@ -2617,7 +2666,11 @@
       ],
       science: {
         title: 'Nasıl Çalışır?',
-        description: 'Modern hayatın gerçeği: Hava kirliliği, stres ve ekranların mavi ışığı ciltte "serbest radikaller" oluşturur. Bu matlaşma, lekeleme ve erken yaşlanmaya yol açar. DailyGlow, vücudun en güçlü antioksidanlarıyla serbest radikalleri nötralize eder. Sadece bugün değil, gelecekteki cildine yapılmış bir yatırımdır. Gündüz alınması önerilir.'
+        steps: [
+          { title: '1. Serbest Radikal Savunması', text: 'Hava kirliliği, stres ve ekranların mavi ışığı ciltte serbest radikaller oluşturur. DailyGlow bunları içeriden nötralize eder.' },
+          { title: '2. Günlük Koruma', text: 'Sabah tok karnına 1 kapsül ile tüm gün antioksidan koruması. Kahvaltıdan sonra almak en iyisidir.' },
+          { title: '3. Uzun Vadeli Yatırım', text: 'Sadece bugün değil, gelecekteki cildine yapılmış bir yatırım. Düzenli kullanımda 4-6 hafta içinde fark görülür.' }
+        ]
       }
     },
     'mindfuel': {
@@ -2638,7 +2691,11 @@
       ],
       science: {
         title: 'Nasıl Çalışır?',
-        description: 'Tıpkı bedenin gibi, zihninin de en iyi performans için doğru yakıta ihtiyacı var. MindFuel dikkatinin dağıldığı, enerjinin düştüğü anlarda zihnini canlandırır. Sadece "çalışmak" değil, gerçekten "iş bitirmek" ve gün sonunda tatmin olmak istiyorsan, MindFuel potansiyelini kullanmana destek olur.'
+        steps: [
+          { title: '1. Zihinsel Yakıt', text: 'Tıpkı bedenin gibi, zihninin de en iyi performans için doğru yakıta ihtiyacı var. MindFuel dikkatinin dağıldığı anlarda zihnini canlandırır.' },
+          { title: '2. Optimal Zamanlama', text: 'Gün içinde tok karnına 2 kapsül. En verimli sonuç için önemli işlerden 30-45 dakika önce alın.' },
+          { title: '3. Üretkenlik Desteği', text: 'Sadece "çalışmak" değil, gerçekten "iş bitirmek" için. Gün sonunda tatmin olmak istiyorsan, MindFuel potansiyelini kullanmanı sağlar.' }
+        ]
       }
     },
     'thechill': {
@@ -2660,7 +2717,11 @@
       ],
       science: {
         title: 'Nasıl Çalışır?',
-        description: 'Modern hayatın temposu sürekli gerginlik, sabırsızlık ve zihinsel yorgunluğa neden olur. TheChill formülü bu yıpratıcı döngüyü kırmak için tasarlandı. İçeriğindeki güçlü adaptojenler sinir sisteminin sakinleşmesine, kortizol seviyelerinin dengelenmesine ve zihninin huzura kavuşmasına destek olur. Sen güne devam ederken...'
+        steps: [
+          { title: '1. Stres Döngüsünü Kır', text: 'Modern hayatın temposu sürekli gerginlik ve zihinsel yorgunluğa neden olur. TheChill bu yıpratıcı döngüyü kırmak için tasarlandı.' },
+          { title: '2. Adaptojenik Güç', text: 'Rhodiola ve çarkıfelek gibi güçlü adaptojenler sinir sisteminin sakinleşmesine ve kortizol seviyelerinin dengelenmesine destek olur.' },
+          { title: '3. Esnek Kullanım', text: 'Tok karnına 2 kapsül. Stresli dönemlerde veya akşam sakinleşmek için kullanabilirsiniz. Uyku öncesi de uygundur.' }
+        ]
       }
     },
     'reset-button': {
@@ -2681,7 +2742,11 @@
       ],
       science: {
         title: 'Nasıl Çalışır?',
-        description: 'Modern hayatın temposu, işlenmiş gıdalar ve sosyal yaşamın yükleri vücudun doğal dengesini bozar. Reset Button bu dengeyi yeniden kurmak için geliştirildi. Doğal Filtre (Enginar + Devedikeni), Sıvı Dengesi (Karahindiba) ve Canlılık Kaynağı (Moringa + Zerdeçal) ile bedenini yoran toksinleri geride bırak, güne temiz bir sayfa aç.'
+        steps: [
+          { title: '1. Doğal Filtre', text: 'Enginar ve Devedikeni ile karaciğer desteği. İşlenmiş gıdalar ve çevresel toksinleri süzme kapasitesini artırır.' },
+          { title: '2. Sıvı Dengesi', text: 'Karahindiba ekstresi ile fazla sıvı ve şişkinlik atılır. Vücudun doğal arınma mekanizmalarını destekler.' },
+          { title: '3. Canlılık Kaynağı', text: 'Moringa ve Zerdeçal ile antioksidan koruma ve enerji. Tok karnına 2 kapsül ile güne temiz bir sayfa açın.' }
+        ]
       }
     }
   };
@@ -3648,11 +3713,16 @@
         </div>
       `).join('');
     } else if (tab === 'science') {
+      const stepsHtml = data.science.steps.map(s => `
+        <div class="wa-modal-science-step">
+          <div class="wa-modal-science-step-title">${s.title}</div>
+          <div class="wa-modal-science-step-text">${s.text}</div>
+        </div>
+      `).join('');
       return `
         <div class="wa-modal-science">
           <div class="wa-modal-science-title">${data.science.title}</div>
-          <p class="wa-modal-science-text">${data.science.description}</p>
-          <button class="wa-modal-science-toggle" onclick="this.previousElementSibling.classList.toggle('expanded'); this.textContent = this.previousElementSibling.classList.contains('expanded') ? 'Kapat' : 'Devamini Oku...';">Devamini Oku...</button>
+          <div class="wa-modal-science-steps">${stepsHtml}</div>
         </div>
       `;
     } else if (tab === 'combinations') {
