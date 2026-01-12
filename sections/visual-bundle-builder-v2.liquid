@@ -3996,24 +3996,93 @@
 
     await syncFromShopifyCart();
 
-    // Check for auto-add from product page redirect
+    // Check for auto-add from URL parameter
     const urlParams = new URLSearchParams(window.location.search);
-    const addHandle = urlParams.get('add') || localStorage.getItem('cyra_bundle_add');
+    const addHandle = urlParams.get('add');
     if (addHandle) {
-      localStorage.removeItem('cyra_bundle_add'); // Clear after use
       const productData = getProductDataByHandle(addHandle);
       if (productData && !state.items.find(i => i.id === productData.id)) {
         await addItem(productData);
-        // Open the slider on mobile
         if (state.isMobile) {
           state.isExpanded = true;
           dock.classList.add('wa-dock--expanded');
         }
       }
-      // Clean up URL
-      if (urlParams.has('add')) {
-        const cleanUrl = window.location.pathname;
-        window.history.replaceState({}, '', cleanUrl);
+      const cleanUrl = window.location.pathname;
+      window.history.replaceState({}, '', cleanUrl);
+    }
+
+    // ============================================
+    // PRODUCT PAGE ADD-TO-CART INTERCEPT
+    // When on a product page, intercept add-to-cart and add to bundle builder
+    // ============================================
+    const productPageMatch = window.location.pathname.match(/\/products\/([^\/\?]+)/);
+    if (productPageMatch) {
+      const pageHandle = productPageMatch[1].toLowerCase();
+      const productData = getProductDataByHandle(pageHandle);
+
+      if (productData) {
+        // This is a bundle product page - set up intercept
+        document.addEventListener('click', async (e) => {
+          const btn = e.target.closest([
+            'form[action*="/cart/add"] button[type="submit"]',
+            'form[action*="/cart/add"] input[type="submit"]',
+            '.product-form__submit',
+            '[data-add-to-cart]',
+            '.add-to-cart',
+            '#AddToCart',
+            '.btn-add-to-cart'
+          ].join(', '));
+
+          if (!btn) return;
+
+          // Don't intercept clicks inside our bundle builder
+          if (btn.closest('#wellness-architect')) return;
+
+          e.preventDefault();
+          e.stopPropagation();
+
+          // Get quantity from form
+          const form = btn.closest('form');
+          let quantity = 1;
+          if (form) {
+            const qtyInput = form.querySelector('input[name="quantity"]');
+            if (qtyInput) quantity = parseInt(qtyInput.value) || 1;
+          }
+
+          // Add to bundle builder (with quantity)
+          for (let i = 0; i < quantity; i++) {
+            if (!state.items.find(item => item.id === productData.id)) {
+              await addItem(productData);
+            } else {
+              // Product already in bundle, increase quantity
+              const existingItem = state.items.find(item => item.id === productData.id);
+              if (existingItem) {
+                existingItem.quantity = (existingItem.quantity || 1) + 1;
+              }
+            }
+          }
+
+          // Also add to Shopify cart
+          try {
+            await fetch('/cart/add.js', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ items: [{ id: parseInt(productData.variantId), quantity: quantity }] })
+            });
+          } catch (err) {
+            console.error('Cart add error:', err);
+          }
+
+          // Open slider on mobile
+          if (state.isMobile && !state.isExpanded) {
+            state.isExpanded = true;
+            dock.classList.add('wa-dock--expanded');
+          }
+
+          updateUI();
+          vibrate(10);
+        }, true);
       }
     }
 
