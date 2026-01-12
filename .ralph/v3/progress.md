@@ -1,36 +1,40 @@
-# V11 Progress Tracker
+# V12 Progress Tracker
 
 ## Current Status
-V11 - Clean implementation for same-page add-to-cart
+V12 COMPLETE - 4 UX improvements
 
-## V11 Implementation
+## V12 Fixes
 
-### Setup
-- Bundle builder section is on home page + 5 product pages
-- Same page, no redirects needed
+### 1. Web: Scroll to bundle builder after add-to-cart
+- Desktop now scrolls smoothly to bundle builder section
+- Mobile still opens the slider
 
-### How It Works
-1. User is on product page (e.g., /products/dreamglow)
-2. Bundle builder section is already on the page
-3. User selects quantity (via pumperbreaks: 1, 3, or 6)
-4. User clicks add-to-cart
-5. Our intercept captures the click
-6. Reads quantity from form
-7. Adds product to bundle builder state (with quantity)
-8. Also adds to Shopify cart via fetch
-9. Opens slider on mobile
-10. Updates UI with vibration feedback
+### 2. Styling: Premium Wellness & Kullanim Rehberi
+- Title: font-weight 700, font-size 1rem (was 600)
+- Text: font-weight 400, font-size 0.8rem, normal color
+- Clear visual hierarchy between title and description
 
-### Key Features
-- Runs inside init() so has access to all bundle builder functions
-- Uses capture phase to intercept before other handlers
-- Ignores clicks inside the bundle builder itself
-- Respects quantity from pumperbreaks
-- Adds to both bundle builder AND Shopify cart
-- Opens slider automatically on mobile
+### 3. Mobile: Sepeti Onayla button fit
+- Reduced padding: 12px (was 16px)
+- Reduced gap: 8px (was 12px)
+- Button max-width: 140px (was 180px)
+- @media 375px: max-width 120px, font-size 0.75rem
+- Button now fits properly on small screens
 
-### Code Location
-Inside init() function, after syncFromShopifyCart()
+### 4. Mobile: Slider scroll hierarchy
+- Swipe-to-close now ONLY works on handle and header
+- Content area scrolls normally without closing slider
+- Added overflow-y: auto and overscroll-behavior: contain
+- No more accidental closes when scrolling up
+
+## Code Changes
+- Line 4077-4086: Desktop scroll, mobile slider open
+- Line 3517: Synergy explanation styling (Premium Wellness)
+- Line 3538: Ritual styling (Kullanim Rehberi)
+- Line 2095-2109: Checkout footer padding
+- Line 2135-2166: Checkout button sizing
+- Line 906-913: Expanded content overflow
+- Line 3925-3964: Touch handlers on handle/header only
 
 ## Test Results
 - All 84 unit tests passing
