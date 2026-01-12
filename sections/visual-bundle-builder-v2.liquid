@@ -4022,10 +4022,6 @@
       isSwipingUp = false;
     });
 
-    // Product page add-to-cart intercept
-    // When user clicks "Add to Cart" on any product page, open the bundle builder slider instead
-    setupProductPageIntercept();
-
     await syncFromShopifyCart();
 
     // Check for auto-add from product page redirect
@@ -4052,118 +4048,17 @@
     updateUI();
   }
 
-  // Intercept add-to-cart clicks on product pages and redirect to bundle builder
-  function setupProductPageIntercept() {
-    // Common Shopify add-to-cart form selectors
-    const addToCartSelectors = [
-      'form[action*="/cart/add"] button[type="submit"]',
-      'form[action*="/cart/add"] input[type="submit"]',
-      '.product-form button[name="add"]',
-      '.product-form__submit',
-      '[data-add-to-cart]',
-      '.add-to-cart',
-      '#AddToCart',
-      '.btn-add-to-cart'
-    ];
-
-    // Get all bundle product handles for matching
-    const bundleHandles = new Set([...handleToProductMap.keys()]);
-
-    // Normalize handle for comparison (lowercase, remove dashes, trim)
-    const normalizeHandle = (h) => h?.toLowerCase().replace(/-/g, '').trim() || '';
-
-    // Find bundle handle by normalized comparison
-    const findBundleHandle = (testHandle) => {
-      if (!testHandle) return null;
-      const normalized = normalizeHandle(testHandle);
-      for (const handle of bundleHandles) {
-        if (normalizeHandle(handle) === normalized) return handle;
-      }
-      return null;
-    };
-
-    // Listen for clicks on document (event delegation)
-    document.addEventListener('click', async (e) => {
-      // Check if clicked element matches any add-to-cart selector
-      const btn = e.target.closest(addToCartSelectors.join(', '));
-      if (!btn) return;
-
-      // Find the product form
-      const form = btn.closest('form[action*="/cart/add"]') || btn.closest('.product-form');
-      if (!form) return;
-
-      // Try to get the product handle from various sources
-      let productHandle = null;
-
-      // Method 1: From form input with name="id" (variant ID) - we need to match this
-      const variantInput = form.querySelector('input[name="id"], select[name="id"]');
-      if (variantInput && variantInput.value) {
-        const variantId = String(variantInput.value);
-        // Check if this variant belongs to one of our bundle products
-        for (const [handle, data] of handleToProductMap.entries()) {
-          if (data.variantId && String(data.variantId) === variantId) {
-            productHandle = handle;
-            break;
-          }
-        }
-      }
-
-      // Method 2: From URL pathname (e.g., /products/dreamglow)
-      if (!productHandle) {
-        const pathMatch = window.location.pathname.match(/\/products\/([^\/\?]+)/);
-        if (pathMatch) {
-          productHandle = findBundleHandle(pathMatch[1]);
-        }
-      }
-
-      // Method 3: From form data attribute
-      if (!productHandle) {
-        const formHandle = form.dataset.productHandle || form.dataset.handle;
-        productHandle = findBundleHandle(formHandle);
-      }
-
-      // If we found a matching bundle product, intercept the add-to-cart
-      if (productHandle) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const productData = getProductDataByHandle(productHandle);
-        if (productData) {
-          // Add to bundle
-          await addItem(productData);
-
-          // Open the slider if on mobile, or scroll to builder on desktop
-          if (state.isMobile) {
-            if (!state.isExpanded) {
-              state.isExpanded = true;
-              dock.classList.add('wa-dock--expanded');
-            }
-          } else {
-            // On desktop, scroll to the bundle builder section
-            const bundleSection = document.querySelector('.wa-section--bundle-builder');
-            if (bundleSection) {
-              bundleSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          }
-
-          // Show visual feedback
-          vibrate(10);
-        }
-      }
-    }, true); // Use capture phase to intercept before other handlers
-
-    // Also expose a global function for theme customization
-    window.openBundleBuilder = function(handle) {
-      if (handle) {
-        const productData = getProductDataByHandle(handle);
-        if (productData) addItem(productData);
-      }
-      if (state.isMobile) {
-        state.isExpanded = true;
-        dock.classList.add('wa-dock--expanded');
-      }
-    };
-  }
+  // Global function for theme customization - allows manually adding products to bundle
+  window.openBundleBuilder = function(handle) {
+    if (handle) {
+      const productData = getProductDataByHandle(handle);
+      if (productData) addItem(productData);
+    }
+    if (state.isMobile) {
+      state.isExpanded = true;
+      dock.classList.add('wa-dock--expanded');
+    }
+  };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
