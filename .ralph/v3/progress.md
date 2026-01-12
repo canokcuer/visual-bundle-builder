@@ -1,31 +1,34 @@
-# V4 Progress Tracker
+# V5 Progress Tracker
 
 ## Current Status
-V4 COMPLETE - All 4 post-testing bugs fixed!
+V5 COMPLETE - Critical fixes for product page and backdrop!
 
-## V4 Bugs Fixed (Post-Testing Issues)
+## V5 Bugs Fixed
 
 ### CRITICAL
-- [x] B1: Slider backdrop blocking all clicks - Changed pointer-events from auto to none
-- [x] B2: Product page add-to-cart not working - Added standalone intercept script (runs on ALL pages)
+- [x] Product page add-to-cart - Now properly intercepts and redirects with auto-add
+- [x] Slider backdrop - Removed dark gray overlay, clean white look
 
-### HIGH
-- [x] B3: Nasıl Çalışır section collapsed - Removed collapse, added 3-step structure for each product
-- [x] B4: Premium Wellness header not bold - Changed font-weight from 600 to 700
+### Changes Made
+- Backdrop removed entirely (was rgba(0,0,0,0.5) causing gray overlay)
+- Standalone intercept improved with more selectors and localStorage backup
+- Auto-add functionality added to init() - checks URL ?add= and localStorage
+- Slider opens automatically when product is auto-added
 
-## V3 Bugs (Previously Fixed)
-- [x] Backdrop z-index (was -1, now 998)
-- [x] Hexagon emoji overlap (distributed along curve)
-- [x] Add-to-cart button position (bottom-right)
-- [x] Sepeti Onayla button fit (smaller min-width)
-- [x] Bilim section overflow (now multi-step)
-- [x] Product page intercept (now standalone script)
+## Previous Fixes (V3/V4)
+- [x] Backdrop z-index
+- [x] Hexagon emoji overlap
+- [x] Add-to-cart button position
+- [x] Sepeti Onayla button fit
+- [x] Nasıl Çalışır 3-step structure
+- [x] Premium Wellness header bold
 
 ## Test Results
 - All 84 unit tests passing
 
-## Notes
-- File modified: sections/visual-bundle-builder-v2.liquid
-- Turkish content preserved
-- Standalone product page intercept runs on all pages
-- Science section now has 3 detailed steps per product
+## Product Page Flow
+1. User clicks "Sepete Ekle" on /products/dreamglow
+2. Intercept catches click, stores handle in localStorage
+3. Redirect to bundle builder page with ?add=dreamglow
+4. Bundle builder init() detects ?add= parameter
+5. Product auto-added to cart, slider opens on mobile

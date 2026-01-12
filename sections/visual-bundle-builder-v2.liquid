@@ -780,18 +780,7 @@
     touch-action: pan-y;
   }
 
-  /* Backdrop to darken background when slider is expanded (clicks pass through) */
-  .wa-dock--expanded::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 998;
-    pointer-events: none;
-  }
+  /* No backdrop when slider is expanded - clean white look */
 
   .wa-dock__handle {
     display: flex;
@@ -2557,7 +2546,14 @@
   'use strict';
 
   const BUNDLE_HANDLES = ['dailyglow', 'dreamglow', 'mindfuel', 'thechill', 'reset-button'];
-  const BUNDLE_PAGE_URL = '/pages/wellness-rituel-olusturucu';
+
+  // Try multiple possible bundle page URLs
+  const BUNDLE_PAGE_URLS = [
+    '/pages/wellness-rituel-olusturucu',
+    '/pages/bundle-builder',
+    '/pages/rituel-olusturucu',
+    '/collections/bundle'
+  ];
 
   const normalizeHandle = (h) => h?.toLowerCase().replace(/-/g, '').trim() || '';
 
@@ -2577,7 +2573,10 @@
       '[data-add-to-cart]',
       '.add-to-cart',
       '#AddToCart',
-      '.btn-add-to-cart'
+      '#add-to-cart',
+      '.btn-add-to-cart',
+      '.shopify-payment-button button',
+      '[name="add"]'
     ].join(', '));
 
     if (!btn) return;
@@ -2589,12 +2588,16 @@
     const matchedHandle = findBundleHandle(pathMatch[1]);
     if (!matchedHandle) return;
 
-    // Intercept the add-to-cart and redirect to bundle builder
+    // Intercept the add-to-cart
     e.preventDefault();
     e.stopPropagation();
+    e.stopImmediatePropagation();
 
-    // Redirect to bundle builder with product pre-selected
-    window.location.href = BUNDLE_PAGE_URL + '?add=' + matchedHandle;
+    // Store product to add in localStorage for the bundle builder to pick up
+    localStorage.setItem('cyra_bundle_add', matchedHandle);
+
+    // Redirect to bundle builder (try first URL)
+    window.location.href = BUNDLE_PAGE_URLS[0] + '?add=' + matchedHandle;
   }, true); // Use capture phase to intercept before other handlers
 })();
 
@@ -4059,6 +4062,28 @@
     setupProductPageIntercept();
 
     await syncFromShopifyCart();
+
+    // Check for auto-add from product page redirect
+    const urlParams = new URLSearchParams(window.location.search);
+    const addHandle = urlParams.get('add') || localStorage.getItem('cyra_bundle_add');
+    if (addHandle) {
+      localStorage.removeItem('cyra_bundle_add'); // Clear after use
+      const productData = getProductDataByHandle(addHandle);
+      if (productData && !state.items.find(i => i.id === productData.id)) {
+        await addItem(productData);
+        // Open the slider on mobile
+        if (state.isMobile) {
+          state.isExpanded = true;
+          dock.classList.add('wa-dock--expanded');
+        }
+      }
+      // Clean up URL
+      if (urlParams.has('add')) {
+        const cleanUrl = window.location.pathname;
+        window.history.replaceState({}, '', cleanUrl);
+      }
+    }
+
     updateUI();
   }
 
