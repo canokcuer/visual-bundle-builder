@@ -2539,8 +2539,8 @@
 
 <script>
 // ============================================
-// PRODUCT PAGE -> BUNDLE BUILDER REDIRECT
-// Intercepts cart add on product pages and redirects to bundle builder
+// PRODUCT PAGE -> BUNDLE BUILDER DIRECT REDIRECT
+// Intercepts add-to-cart, adds to Shopify cart, redirects to bundle builder
 // ============================================
 (function() {
   'use strict';
@@ -2561,38 +2561,85 @@
   if (bundleBuilderSection) {
     // We're on the bundle builder page - store its URL for product pages to use
     localStorage.setItem(BUNDLE_BUILDER_URL_KEY, window.location.pathname);
+    return; // Don't set up intercept on bundle builder page
   }
 
   // Check if we're on a bundle product page
   const pathMatch = window.location.pathname.match(/\/products\/([^\/\?]+)/);
-  if (pathMatch) {
-    const matchedHandle = findBundleHandle(pathMatch[1]);
-    if (matchedHandle) {
-      // Store handle for bundle builder to pick up
-      localStorage.setItem('cyra_bundle_add', matchedHandle);
+  if (!pathMatch) return;
 
-      // Intercept fetch to /cart/add.js to redirect after cart add
-      const originalFetch = window.fetch;
-      window.fetch = async function(...args) {
-        const response = await originalFetch.apply(this, args);
+  const matchedHandle = findBundleHandle(pathMatch[1]);
+  if (!matchedHandle) return;
 
-        // Check if this was a cart add request
-        const url = typeof args[0] === 'string' ? args[0] : args[0]?.url;
-        if (url && url.includes('/cart/add')) {
-          // Get the bundle builder URL from localStorage
-          const bundleUrl = localStorage.getItem(BUNDLE_BUILDER_URL_KEY);
-          if (bundleUrl) {
-            // Small delay to let pumperbreaks finish any UI updates
-            setTimeout(() => {
-              window.location.href = bundleUrl;
-            }, 300);
-          }
-        }
+  // Get bundle builder URL
+  const bundleUrl = localStorage.getItem(BUNDLE_BUILDER_URL_KEY);
+  if (!bundleUrl) return; // No bundle builder URL stored yet
 
-        return response;
-      };
+  // Intercept add-to-cart clicks
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest([
+      'form[action*="/cart/add"] button[type="submit"]',
+      'form[action*="/cart/add"] input[type="submit"]',
+      '.product-form button[name="add"]',
+      '.product-form__submit',
+      '[data-add-to-cart]',
+      '.add-to-cart',
+      '#AddToCart',
+      '.btn-add-to-cart',
+      '.shopify-payment-button__button'
+    ].join(', '));
+
+    if (!btn) return;
+
+    // Prevent default and stop propagation (before pumperbreaks gets it)
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    // Find the form to get variant ID and quantity
+    const form = btn.closest('form[action*="/cart/add"]') || btn.closest('.product-form') || document.querySelector('form[action*="/cart/add"]');
+
+    // Get variant ID
+    let variantId = null;
+    if (form) {
+      const variantInput = form.querySelector('input[name="id"], select[name="id"]');
+      if (variantInput) variantId = variantInput.value;
     }
-  }
+    if (!variantId) {
+      // Try to get from page meta or other sources
+      const metaVariant = document.querySelector('meta[itemprop="sku"]');
+      if (metaVariant) variantId = metaVariant.content;
+    }
+    if (!variantId) {
+      // Fallback: look for any variant input on page
+      const anyVariantInput = document.querySelector('input[name="id"][value], select[name="id"]');
+      if (anyVariantInput) variantId = anyVariantInput.value;
+    }
+
+    // Get quantity (pumperbreaks sets this)
+    let quantity = 1;
+    if (form) {
+      const qtyInput = form.querySelector('input[name="quantity"], select[name="quantity"]');
+      if (qtyInput) quantity = parseInt(qtyInput.value) || 1;
+    }
+
+    // Add to Shopify cart
+    if (variantId) {
+      try {
+        await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: quantity }] })
+        });
+      } catch (err) {
+        console.error('Failed to add to cart:', err);
+      }
+    }
+
+    // Redirect directly to bundle builder
+    window.location.href = bundleUrl;
+
+  }, true); // Capture phase - runs before other handlers
 })();
 
 (function() {
