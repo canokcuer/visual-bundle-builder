@@ -150,24 +150,7 @@
           <svg class="wa-synergy-map__svg" viewBox="0 0 400 280"></svg>
           <div class="wa-synergy-map__labels"></div>
         </div>
-        <!-- Achievement Icons Row -->
-        <div class="wa-achievement-icons">
-          <div class="wa-achievement-icon" data-achievement="first-step" title="İlk Adım">
-            <span class="wa-achievement-icon__emoji">🌱</span>
-          </div>
-          <div class="wa-achievement-icon" data-achievement="power-duo" title="Güçlü İkili">
-            <span class="wa-achievement-icon__emoji">⚡</span>
-          </div>
-          <div class="wa-achievement-icon" data-achievement="triple-threat" title="Üçlü Kuvvet">
-            <span class="wa-achievement-icon__emoji">🔥</span>
-          </div>
-          <div class="wa-achievement-icon" data-achievement="ritual-master" title="Ritüel Ustası">
-            <span class="wa-achievement-icon__emoji">✨</span>
-          </div>
-          <div class="wa-achievement-icon" data-achievement="wellness-architect" title="Wellness Architect">
-            <span class="wa-achievement-icon__emoji">🏆</span>
-          </div>
-        </div>
+        <!-- Synergy achievements are shown in the synergy list below -->
         <!-- Synergy Explanations List (icons + descriptions) -->
         <div class="wa-synergy-list"></div>
         <!-- Unlock Explanation Box -->
@@ -481,15 +464,22 @@
 
   /* Product Grid - Mobile: single column with safe margins, Desktop: 3 columns */
   .wa-products {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
-    max-width: 320px;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 0.5rem;
   }
 
-  /* Product Card - Mobile optimized (30-35% smaller) */
+  /* Last odd item centered on mobile */
+  .wa-products .wa-product-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    max-width: 50%;
+    justify-self: center;
+  }
+
+  /* Product Card - Mobile optimized with natural proportions */
   .wa-product-card {
     position: relative;
     background: var(--wa-white);
@@ -499,7 +489,7 @@
     cursor: pointer;
     transition: all var(--wa-transition);
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: stretch;
   }
 
@@ -539,9 +529,8 @@
   .wa-product-card--loading { pointer-events: none; opacity: 0.7; }
 
   .wa-product-card__image-wrapper {
-    width: 80px;
-    min-width: 80px;
-    height: 80px;
+    width: 100%;
+    aspect-ratio: 1;
     background: var(--wa-gray-100);
     overflow: hidden;
     flex-shrink: 0;
@@ -759,6 +748,20 @@
     border-top: none;
     box-shadow: var(--wa-shadow-lg);
     overflow-y: auto;
+    touch-action: pan-y;
+  }
+
+  /* Backdrop to block background interaction when slider is expanded */
+  .wa-dock--expanded::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+    pointer-events: auto;
   }
 
   .wa-dock__handle {
@@ -1101,15 +1104,16 @@
   }
 
   .wa-synergy-label--icon {
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     z-index: 10;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   }
 
   /* Achievement Icons Row */
@@ -1274,15 +1278,29 @@
   }
 
   .wa-synergy-list-title {
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.85rem;
+    font-weight: 700;
     color: var(--wa-black);
-    margin-bottom: 2px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .wa-synergy-list-emoji {
+    font-size: 1rem;
   }
 
   .wa-synergy-list-benefit {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--wa-gray-700);
+    margin-bottom: 2px;
+  }
+
+  .wa-synergy-list-detail {
     font-size: 0.7rem;
-    color: var(--wa-gray-600);
+    color: var(--wa-gray-500);
     line-height: 1.4;
   }
 
@@ -1671,8 +1689,8 @@
   /* Modal Content Styles */
   .wa-modal-benefit-item {
     display: flex;
-    gap: 14px;
-    padding: 16px 0;
+    gap: 12px;
+    padding: 12px 0;
     border-bottom: 1px solid var(--wa-gray-200);
   }
 
@@ -1681,10 +1699,10 @@
   }
 
   .wa-modal-benefit-icon {
-    width: 48px;
-    height: 48px;
+    width: 36px;
+    height: 36px;
     background: var(--wa-gray-100);
-    border-radius: 12px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1692,22 +1710,26 @@
   }
 
   .wa-modal-benefit-icon svg {
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
     stroke: var(--wa-black);
   }
 
   .wa-modal-benefit-title {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
 
   .wa-modal-benefit-desc {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--wa-gray-600);
-    line-height: 1.5;
+    line-height: 1.4;
     margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .wa-modal-ingredient-item {
@@ -2061,7 +2083,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 12px 12px 12px 20px;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)) 16px;
     background: var(--wa-white);
     border-top: 1px solid var(--wa-gray-200);
     margin: 0 -16px -24px -16px;
@@ -2093,13 +2115,13 @@
   }
 
   .wa-dock__checkout-btn {
-    height: 48px;
-    padding: 0 24px;
+    height: 44px;
+    padding: 0 20px;
     background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
     color: var(--wa-white);
     border: none;
     border-radius: var(--wa-radius-sm);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     font-family: inherit;
@@ -2109,9 +2131,11 @@
     gap: 6px;
     box-shadow: 0 2px 8px rgba(34, 197, 94, 0.35);
     transition: all 0.2s ease;
-    flex-shrink: 0;
+    flex-shrink: 1;
     flex-grow: 1;
-    max-width: 200px;
+    max-width: 180px;
+    min-width: 120px;
+    white-space: nowrap;
   }
 
   .wa-dock__checkout-btn:disabled {
@@ -2177,17 +2201,38 @@
     .wa-products {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
+      gap: 1.25rem;
+      padding: 0;
     }
 
-    /* 2+2+1 layout: last item centered */
+    /* 2+2+1 layout: last item centered on desktop */
     .wa-products .wa-product-card:last-child:nth-child(odd) {
       grid-column: 1 / -1;
       max-width: 50%;
       justify-self: center;
     }
 
-    .wa-product-card__title { font-size: 0.85rem; }
+    .wa-product-card {
+      flex-direction: column;
+    }
+
+    .wa-product-card__image-wrapper {
+      width: 100%;
+      aspect-ratio: 1;
+      min-height: 140px;
+    }
+
+    .wa-product-card__content {
+      padding: 1rem;
+    }
+
+    .wa-product-card__title {
+      font-size: 0.95rem;
+    }
+
+    .wa-product-card__price {
+      font-size: 0.9rem;
+    }
 
     /* Bigger hexagon on desktop */
     .wa-synergy-map__svg {
@@ -2849,6 +2894,7 @@
       container.style.display = 'block';
 
       // Render connections first (so they appear behind nodes)
+      this.connectionIndex = 0; // Reset for each render
       const connections = this.getActiveConnections(selectedHandles);
       connections.forEach(conn => this.renderConnection(svg, labelsContainer, conn));
 
@@ -2978,6 +3024,8 @@
       svg.appendChild(g);
     },
 
+    connectionIndex: 0, // Track connection index for spreading emojis
+
     renderConnection(svg, labelsContainer, conn) {
       const { from, to, color, label, strength, icon } = conn;
 
@@ -2986,9 +3034,14 @@
       const midY = (from.y + to.y) / 2;
       const dx = to.x - from.x, dy = to.y - from.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      // Curve away from center (perpendicular offset)
-      const perpX = -dy / dist * 20, perpY = dx / dist * 20;
+
+      // Increase perpendicular offset and vary based on connection to spread emojis
+      const baseOffset = 35; // Increased from 20
+      const variation = (this.connectionIndex % 3 - 1) * 15; // -15, 0, or +15
+      const perpX = -dy / dist * (baseOffset + variation);
+      const perpY = dx / dist * (baseOffset + variation);
       const ctrlX = midX + perpX, ctrlY = midY + perpY;
+      this.connectionIndex++;
 
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       path.setAttribute('d', `M ${from.x} ${from.y} Q ${ctrlX} ${ctrlY} ${to.x} ${to.y}`);
@@ -3031,8 +3084,9 @@
                 ${conn.icon || '⚡'}
               </div>
               <div class="wa-synergy-list-content">
-                <div class="wa-synergy-list-title">${expl.title}</div>
-                <div class="wa-synergy-list-benefit">${expl.benefit} - ${expl.detail}</div>
+                <div class="wa-synergy-list-title"><span class="wa-synergy-list-emoji">${conn.icon || '✨'}</span> ${expl.title}</div>
+                <div class="wa-synergy-list-benefit">${expl.benefit}</div>
+                <div class="wa-synergy-list-detail">${expl.detail}</div>
               </div>
             </div>
           `;
@@ -3162,7 +3216,7 @@
     updateUI();
   }
 
-  async function updateQuantity(productId, delta) {
+  function updateQuantity(productId, delta) {
     const item = state.items.find(i => i.id === productId);
     if (!item) return;
 
@@ -3171,12 +3225,21 @@
       // Remove item when quantity reaches 0
       removeItem(productId);
     } else {
+      // Optimistic UI update - instant feedback
       const clampedQty = Math.min(10, newQty);
-      if (await updateShopifyCartQty(item.variantId, clampedQty)) {
-        item.quantity = clampedQty;
-        vibrate(5);
-        updateUI();
-      }
+      const oldQty = item.quantity;
+      item.quantity = clampedQty;
+      vibrate(5);
+      updateUI();
+
+      // Background cart sync
+      updateShopifyCartQty(item.variantId, clampedQty).then(success => {
+        if (!success) {
+          // Revert on failure
+          item.quantity = oldQty;
+          updateUI();
+        }
+      });
     }
   }
 
@@ -3184,13 +3247,15 @@
   // ACHIEVEMENTS
   // ============================================
   function checkAchievements() {
+    // Generic achievements are disabled - synergy connections shown in synergy list instead
+    // Keep tracking state for potential future use
     Object.values(ACHIEVEMENTS).forEach(ach => {
       if (!achievementState.unlocked.has(ach.id) && ach.condition(state)) {
         achievementState.unlocked.add(ach.id);
-        achievementState.pending.push(ach);
+        // Don't push to pending queue - no notifications for generic achievements
       }
     });
-    if (achievementState.pending.length > 0) processAchievementQueue();
+    // Synergy achievements are displayed via the synergy list in renderSynergyList
     updateAchievementDisplay();
   }
 
@@ -3652,6 +3717,7 @@
     const newQty = item.quantity + delta;
     const addBtn = kesfetModal.querySelector('.wa-kesfet-modal__add-btn');
     const qtyControls = kesfetModal.querySelector('.wa-kesfet-modal__qty-controls');
+    const qtyValue = kesfetModal.querySelector('.wa-kesfet-modal__qty-value');
 
     if (newQty <= 0) {
       // Remove item and switch back to add button
@@ -3659,14 +3725,23 @@
       addBtn.style.display = 'block';
       qtyControls.style.display = 'none';
     } else {
-      // Update quantity using existing updateQuantity logic
+      // Optimistic UI update - instant feedback
       const clampedQty = Math.min(10, newQty);
-      if (await updateShopifyCartQty(item.variantId, clampedQty)) {
-        item.quantity = clampedQty;
-        vibrate(5);
-        kesfetModal.querySelector('.wa-kesfet-modal__qty-value').textContent = clampedQty;
-        updateUI();
-      }
+      const oldQty = item.quantity;
+      item.quantity = clampedQty;
+      qtyValue.textContent = clampedQty;
+      vibrate(5);
+      updateUI();
+
+      // Background cart sync - don't wait for it
+      updateShopifyCartQty(item.variantId, clampedQty).then(success => {
+        if (!success) {
+          // Revert on failure
+          item.quantity = oldQty;
+          qtyValue.textContent = oldQty;
+          updateUI();
+        }
+      });
     }
   }
 
@@ -3686,7 +3761,13 @@
     addItem(data);
   }
 
-  function toggleDock() { state.isExpanded = !state.isExpanded; dock.classList.toggle('wa-dock--expanded', state.isExpanded); }
+  function toggleDock() {
+    state.isExpanded = !state.isExpanded;
+    dock.classList.toggle('wa-dock--expanded', state.isExpanded);
+    // Block/unblock body scroll when slider is expanded
+    document.body.style.overflow = state.isExpanded ? 'hidden' : '';
+    document.documentElement.style.overflow = state.isExpanded ? 'hidden' : '';
+  }
   function handleCheckout() { if (state.items.length > 0) { vibrate([30, 60, 30]); window.location.href = '/checkout'; } }
 
   // ============================================
@@ -3782,56 +3863,74 @@
     const expandedContent = dock.querySelector('.wa-dock__expanded');
 
     // Swipe-down to close (when expanded)
+    let isSwipingDown = false;
     if (expandedContent) {
       expandedContent.addEventListener('touchstart', e => {
         if (expandedContent.scrollTop === 0) {
           touchStartY = e.touches[0].clientY;
+          isSwipingDown = false;
         }
       }, { passive: true });
 
       expandedContent.addEventListener('touchmove', e => {
         if (touchStartY > 0 && expandedContent.scrollTop === 0) {
           touchCurrentY = e.touches[0].clientY;
+          const diff = touchCurrentY - touchStartY;
+          // If swiping down from top, prevent default scroll and mark as swiping
+          if (diff > 10) {
+            isSwipingDown = true;
+            e.preventDefault();
+          }
         }
-      }, { passive: true });
+      }, { passive: false });
 
       expandedContent.addEventListener('touchend', () => {
         if (touchStartY > 0 && touchCurrentY > 0) {
           const diff = touchCurrentY - touchStartY;
-          if (diff > 100 && state.isExpanded) {
+          if (diff > 80 && state.isExpanded && isSwipingDown) {
             toggleDock();
           }
         }
         touchStartY = 0;
         touchCurrentY = 0;
+        isSwipingDown = false;
       });
     }
 
     // Swipe-up to open (when collapsed) - attach to entire dock for easier swiping
     let collapsedTouchStartY = 0;
     let collapsedTouchCurrentY = 0;
+    let isSwipingUp = false;
 
     dock.addEventListener('touchstart', e => {
       if (!state.isExpanded) {
         collapsedTouchStartY = e.touches[0].clientY;
+        isSwipingUp = false;
       }
     }, { passive: true });
 
     dock.addEventListener('touchmove', e => {
       if (!state.isExpanded && collapsedTouchStartY > 0) {
         collapsedTouchCurrentY = e.touches[0].clientY;
+        const diff = collapsedTouchStartY - collapsedTouchCurrentY; // Swipe UP = positive diff
+        // If swiping up on dock, prevent page scroll
+        if (diff > 10) {
+          isSwipingUp = true;
+          e.preventDefault();
+        }
       }
-    }, { passive: true });
+    }, { passive: false });
 
     dock.addEventListener('touchend', () => {
       if (!state.isExpanded && collapsedTouchStartY > 0 && collapsedTouchCurrentY > 0) {
         const diff = collapsedTouchStartY - collapsedTouchCurrentY; // Swipe UP = positive diff
-        if (diff > 30 && state.items.length > 0) {
+        if (diff > 30 && state.items.length > 0 && isSwipingUp) {
           toggleDock();
         }
       }
       collapsedTouchStartY = 0;
       collapsedTouchCurrentY = 0;
+      isSwipingUp = false;
     });
 
     // Product page add-to-cart intercept
