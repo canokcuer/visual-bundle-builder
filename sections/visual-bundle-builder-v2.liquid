@@ -574,9 +574,8 @@
 
   .wa-product-card__add-btn {
     position: absolute;
-    top: 50%;
-    right: 0.5rem;
-    transform: translateY(-50%);
+    bottom: 0.75rem;
+    right: 0.75rem;
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -591,7 +590,7 @@
     z-index: 2;
   }
 
-  .wa-product-card__add-btn:hover { transform: translateY(-50%) scale(1.1); }
+  .wa-product-card__add-btn:hover { transform: scale(1.1); }
 
   /* Keşfet Button & Drawer */
   .wa-product-card__kesfet-btn {
@@ -718,6 +717,40 @@
   .wa-science-content { line-height: 1.5; color: var(--wa-gray-600); }
   .wa-science-title { font-weight: 600; color: var(--wa-black); margin-bottom: 6px; }
 
+  /* Collapsible Science Section */
+  .wa-modal-science-text {
+    max-height: 80px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    position: relative;
+  }
+  .wa-modal-science-text.expanded {
+    max-height: 500px;
+  }
+  .wa-modal-science-text:not(.expanded)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: linear-gradient(transparent, var(--wa-white));
+  }
+  .wa-modal-science-toggle {
+    color: var(--wa-accent);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 8px;
+    display: inline-block;
+    border: none;
+    background: none;
+    padding: 0;
+  }
+  .wa-modal-science-toggle:hover {
+    text-decoration: underline;
+  }
+
   /* Desktop Sidebar - Hidden on mobile */
   .wa-sidebar { display: none; }
 
@@ -759,8 +792,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.3);
-    z-index: -1;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
     pointer-events: auto;
   }
 
@@ -1104,14 +1137,14 @@
   }
 
   .wa-synergy-label--icon {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     z-index: 10;
     box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   }
@@ -2116,7 +2149,7 @@
 
   .wa-dock__checkout-btn {
     height: 44px;
-    padding: 0 20px;
+    padding: 0 16px;
     background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
     color: var(--wa-white);
     border: none;
@@ -2134,8 +2167,17 @@
     flex-shrink: 1;
     flex-grow: 1;
     max-width: 180px;
-    min-width: 120px;
+    min-width: 90px;
     white-space: nowrap;
+  }
+
+  @media (max-width: 375px) {
+    .wa-dock__checkout-btn {
+      min-width: 80px;
+      padding: 0 12px;
+      font-size: 0.8rem;
+      gap: 4px;
+    }
   }
 
   .wa-dock__checkout-btn:disabled {
@@ -3035,13 +3077,12 @@
       const dx = to.x - from.x, dy = to.y - from.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      // Increase perpendicular offset and vary based on connection to spread emojis
-      const baseOffset = 35; // Increased from 20
-      const variation = (this.connectionIndex % 3 - 1) * 15; // -15, 0, or +15
-      const perpX = -dy / dist * (baseOffset + variation);
-      const perpY = dx / dist * (baseOffset + variation);
+      // Vary curve offset based on connection index to spread curves apart
+      const baseOffset = 35;
+      const curveVariation = (this.connectionIndex % 3 - 1) * 12; // -12, 0, or +12
+      const perpX = -dy / dist * (baseOffset + curveVariation);
+      const perpY = dx / dist * (baseOffset + curveVariation);
       const ctrlX = midX + perpX, ctrlY = midY + perpY;
-      this.connectionIndex++;
 
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       path.setAttribute('d', `M ${from.x} ${from.y} Q ${ctrlX} ${ctrlY} ${to.x} ${to.y}`);
@@ -3050,11 +3091,20 @@
       path.setAttribute('fill', 'none');
       svg.insertBefore(path, svg.firstChild);
 
+      // Distribute emojis along curve at different positions (25%, 50%, 75%) to prevent overlap
+      const curvePositions = [0.3, 0.5, 0.7];
+      const t = curvePositions[this.connectionIndex % 3];
+      this.connectionIndex++;
+
+      // Quadratic Bezier formula: B(t) = (1-t)²P0 + 2(1-t)tP1 + t²P2
+      const emojiX = (1-t)*(1-t)*from.x + 2*(1-t)*t*ctrlX + t*t*to.x;
+      const emojiY = (1-t)*(1-t)*from.y + 2*(1-t)*t*ctrlY + t*t*to.y;
+
       // Add icon on connection line (positioned relative to SVG)
       const labelEl = document.createElement('div');
       labelEl.className = 'wa-synergy-label wa-synergy-label--icon';
-      labelEl.style.left = `${(ctrlX / 400) * 100}%`;
-      labelEl.style.top = `${(ctrlY / 280) * 100}%`;
+      labelEl.style.left = `${(emojiX / 400) * 100}%`;
+      labelEl.style.top = `${(emojiY / 280) * 100}%`;
       labelEl.style.background = color;
       labelEl.innerHTML = `<span>${icon || '⚡'}</span>`;
       labelsContainer.appendChild(labelEl);
@@ -3602,6 +3652,7 @@
         <div class="wa-modal-science">
           <div class="wa-modal-science-title">${data.science.title}</div>
           <p class="wa-modal-science-text">${data.science.description}</p>
+          <button class="wa-modal-science-toggle" onclick="this.previousElementSibling.classList.toggle('expanded'); this.textContent = this.previousElementSibling.classList.contains('expanded') ? 'Kapat' : 'Devamini Oku...';">Devamini Oku...</button>
         </div>
       `;
     } else if (tab === 'combinations') {
@@ -3958,6 +4009,19 @@
     // Get all bundle product handles for matching
     const bundleHandles = new Set([...handleToProductMap.keys()]);
 
+    // Normalize handle for comparison (lowercase, remove dashes, trim)
+    const normalizeHandle = (h) => h?.toLowerCase().replace(/-/g, '').trim() || '';
+
+    // Find bundle handle by normalized comparison
+    const findBundleHandle = (testHandle) => {
+      if (!testHandle) return null;
+      const normalized = normalizeHandle(testHandle);
+      for (const handle of bundleHandles) {
+        if (normalizeHandle(handle) === normalized) return handle;
+      }
+      return null;
+    };
+
     // Listen for clicks on document (event delegation)
     document.addEventListener('click', async (e) => {
       // Check if clicked element matches any add-to-cart selector
@@ -3973,11 +4037,11 @@
 
       // Method 1: From form input with name="id" (variant ID) - we need to match this
       const variantInput = form.querySelector('input[name="id"], select[name="id"]');
-      if (variantInput) {
-        const variantId = variantInput.value;
+      if (variantInput && variantInput.value) {
+        const variantId = String(variantInput.value);
         // Check if this variant belongs to one of our bundle products
         for (const [handle, data] of handleToProductMap.entries()) {
-          if (data.variantId == variantId) {
+          if (data.variantId && String(data.variantId) === variantId) {
             productHandle = handle;
             break;
           }
@@ -3987,17 +4051,15 @@
       // Method 2: From URL pathname (e.g., /products/dreamglow)
       if (!productHandle) {
         const pathMatch = window.location.pathname.match(/\/products\/([^\/\?]+)/);
-        if (pathMatch && bundleHandles.has(pathMatch[1])) {
-          productHandle = pathMatch[1];
+        if (pathMatch) {
+          productHandle = findBundleHandle(pathMatch[1]);
         }
       }
 
       // Method 3: From form data attribute
       if (!productHandle) {
         const formHandle = form.dataset.productHandle || form.dataset.handle;
-        if (formHandle && bundleHandles.has(formHandle)) {
-          productHandle = formHandle;
-        }
+        productHandle = findBundleHandle(formHandle);
       }
 
       // If we found a matching bundle product, intercept the add-to-cart
