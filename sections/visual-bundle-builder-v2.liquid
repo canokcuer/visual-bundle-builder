@@ -2539,21 +2539,13 @@
 
 <script>
 // ============================================
-// STANDALONE PRODUCT PAGE INTERCEPT
-// Runs on ALL pages, not just bundle builder
+// PRODUCT PAGE BUNDLE NOTIFICATION
+// Shows notification for bundle products, doesn't block add-to-cart
 // ============================================
 (function() {
   'use strict';
 
   const BUNDLE_HANDLES = ['dailyglow', 'dreamglow', 'mindfuel', 'thechill', 'reset-button'];
-
-  // Try multiple possible bundle page URLs
-  const BUNDLE_PAGE_URLS = [
-    '/pages/wellness-rituel-olusturucu',
-    '/pages/bundle-builder',
-    '/pages/rituel-olusturucu',
-    '/collections/bundle'
-  ];
 
   const normalizeHandle = (h) => h?.toLowerCase().replace(/-/g, '').trim() || '';
 
@@ -2563,42 +2555,15 @@
     return BUNDLE_HANDLES.find(h => normalizeHandle(h) === normalized);
   };
 
-  document.addEventListener('click', (e) => {
-    // Check if clicked element is an add-to-cart button
-    const btn = e.target.closest([
-      'form[action*="/cart/add"] button[type="submit"]',
-      'form[action*="/cart/add"] input[type="submit"]',
-      '.product-form button[name="add"]',
-      '.product-form__submit',
-      '[data-add-to-cart]',
-      '.add-to-cart',
-      '#AddToCart',
-      '#add-to-cart',
-      '.btn-add-to-cart',
-      '.shopify-payment-button button',
-      '[name="add"]'
-    ].join(', '));
-
-    if (!btn) return;
-
-    // Get handle from URL pathname (e.g., /products/dreamglow)
-    const pathMatch = window.location.pathname.match(/\/products\/([^\/\?]+)/);
-    if (!pathMatch) return;
-
+  // Check if we're on a bundle product page
+  const pathMatch = window.location.pathname.match(/\/products\/([^\/\?]+)/);
+  if (pathMatch) {
     const matchedHandle = findBundleHandle(pathMatch[1]);
-    if (!matchedHandle) return;
-
-    // Intercept the add-to-cart
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-
-    // Store product to add in localStorage for the bundle builder to pick up
-    localStorage.setItem('cyra_bundle_add', matchedHandle);
-
-    // Redirect to bundle builder (try first URL)
-    window.location.href = BUNDLE_PAGE_URLS[0] + '?add=' + matchedHandle;
-  }, true); // Use capture phase to intercept before other handlers
+    if (matchedHandle) {
+      // Store for bundle builder to pick up later
+      localStorage.setItem('cyra_bundle_add', matchedHandle);
+    }
+  }
 })();
 
 (function() {
