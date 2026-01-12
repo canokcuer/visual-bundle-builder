@@ -35,13 +35,34 @@ These are rules learned from past mistakes. Follow them to avoid repeating error
 - Make hexagon larger, ensure no emoji overlap
 - Test thoroughly on multiple screen sizes
 
-## Learned Signs (Add new ones below as mistakes happen)
+## Learned Signs (Round 2)
 
-<!--
-When Ralph makes a mistake, add a sign here:
+### Sign: Don't over-shrink elements
+- Iteration: Round 1 -> Round 2
+- Problem: Product cards were made too small on both web and mobile
+- Rule: When reducing size, check that elements remain usable and readable
 
-### Sign: [Short description]
-- Iteration: [When this was learned]
-- Problem: [What went wrong]
-- Rule: [What to do instead]
--->
+### Sign: Slider must block page scroll
+- Iteration: Round 2
+- Problem: When slider is open, background page still scrolls on touch
+- Rule: Add `overflow: hidden` to body when slider is expanded, use `e.preventDefault()` on touch events
+
+### Sign: Height matters as much as width
+- Iteration: Round 2
+- Problem: Mobile cards made wide but squished in height
+- Rule: Maintain natural aspect ratios when resizing elements
+
+### Sign: Test swipe on real devices
+- Iteration: Round 2
+- Problem: Swipe gestures interfere with page scroll
+- Rule: Swipe-to-open should capture touch events completely, not compete with page scroll
+
+### Sign: Check safe areas on mobile
+- Iteration: Round 2
+- Problem: "Sepeti Onayla" button cut off by screen edge curves
+- Rule: Use safe-area-inset padding for elements near screen edges
+
+### Sign: Optimize before shipping
+- Iteration: Round 2
+- Problem: +/- buttons feel slow even though they work
+- Rule: Show immediate UI feedback, debounce API calls separately

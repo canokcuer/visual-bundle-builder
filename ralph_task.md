@@ -1,4 +1,4 @@
-# Task: Fix UI/UX Issues in Visual Bundle Builder v2
+# Task: Fix UI/UX Issues in Visual Bundle Builder v2 - Round 2
 
 ## Context
 This is a Shopify Visual Bundle Builder for wellness supplements. Focus ONLY on:
@@ -9,89 +9,110 @@ This is a Shopify Visual Bundle Builder for wellness supplements. Focus ONLY on:
 
 ---
 
-### MOBILE FIXES (Priority: High)
+### WEB FIXES (Priority: High)
 
-#### 1. [x] Slider Swipe-to-Open
-- Currently: Slider only opens when clicking
-- Required: Slider should ALSO open when user swipes UP on the slider handle/area
-- Implementation: Add touch event listeners for swipe-up gesture
-
-#### 2. [x] Product Page Add-to-Cart Integration
-- Currently: Add-to-cart on product pages goes to cart
-- Required: When "Add to Cart" is clicked on ANY product page (outside this module), open the bundle builder slider instead of cart page
-- Note: This affects product pages, not the bundle builder itself
-
-#### 3. [x] Slider Bottom Bar Spacing Fix
-- Currently: Price element on left doesn't fit, "Sepeti Onayla" button too far right
+#### 1. [ ] "Nasil Calisir" (How It Works) Section Overflow - WEB
+- Currently: Benefits don't fit in the small box, content overflows
 - Required:
-  - Move price element slightly RIGHT so it fits properly
-  - Make "Sepeti Onayla" button BIGGER
-  - Move "Sepeti Onayla" button slightly LEFT
-- Test: All elements should be visible without overflow on 375px width screen
+  - Split benefits into multiple smaller pieces for each product
+  - Each benefit should fit properly in its container
+  - Clean, simple UI/UX - more minimalist design
+  - Consider tabs or accordion for multiple benefits per product
+- Test: All benefit text should be fully visible without overflow on 1280px+ screens
 
-#### 4. [x] Product Info +/- Buttons NOT WORKING (BUG FIX)
-- Currently: In "Keşfet" (Explore) section, + and - icons show but don't add/remove products
-- Required: Make these buttons functional - clicking + should add product, clicking - should remove
-- This is a JavaScript bug - buttons exist but click handlers don't work
-
-#### 5. [x] Product Detail Content Enhancement
-- For EACH product (DreamGlow, DailyGlow, MindFuel, TheChill, Reset Button):
-  - [ ] Add detailed "Fayda" (Benefits) content from product pages
-  - [ ] Add "İçindekiler" (Ingredients) with AMOUNTS (e.g., "500mg", "30ml")
-  - [ ] Add "Bilim" (Science) explanations
-  - [ ] Add "Kombinasyon" (Combination) suggestions
-  - [ ] Expand "Nasıl Çalışır" (How it works) - currently too empty, add multiple content items
-
-#### 6. [x] HEXAGON EMOJI OVERLAP - CRITICAL
-- Currently: Emojis overlap each other, hexagon too small
+#### 2. [ ] Web Product Card Size Too Small
+- Currently: The 2+2+1 product cards on the left (before slider) are too small
 - Required:
-  - Make hexagon container LARGER
-  - Ensure emojis NEVER overlap (proper spacing/hierarchy)
-  - Emojis should fit within their designated areas
-  - Test on 375px, 390px, 414px width screens
-- This is the MOST CRITICAL mobile fix
-
-#### 7. [x] Product Card Size Reduction (Pre-Slider View)
-- Currently: Product cards too large in the main view (before slider opens)
-- Required: Reduce product card size by 30-35%
-- Affects: The product listing area visible BEFORE the slider is opened
-- Keep proportions, just scale down
+  - Enlarge product card size on web/desktop
+  - Cards were over-shrunk in previous iteration
+  - Keep readable, balanced proportions
+- Test: Product cards should be clearly visible and readable on 1280px+ screens
 
 ---
 
-### WEB/DESKTOP FIXES (Priority: High)
+### GENERAL FIXES (Both Web & Mobile)
 
-#### 8. [x] Hexagon Container Size (Web)
-- Currently: Hexagon with "Birlikte Kullanım" icons doesn't fit screen
-- Required: Expand the hexagon container area to fit properly
-- Test: Should display correctly on 1280px+ screens
-
-#### 9. [x] Empty Emoji Slots Issue
-- Currently: 5 empty emoji slots at top, detailed descriptions below
-- Required: Either fill the emoji slots OR remove them if not needed
-- Investigate why emojis are empty and fix the root cause
-
-#### 10. [x] Explore Section "Add to Cart" Button Redesign
-- Currently: Button is too big and doesn't look right
+#### 3. [ ] Achievement/Unlock System Rework
+- Currently: 5 generic unlock animations that aren't meaningful
 - Required:
-  - Make it a standard, smaller button
-  - Position it higher (more towards top)
-  - Ensure ADD functionality works (currently might be broken)
-  - Ensure REMOVE functionality works
-  - Test both add and remove thoroughly
+  - REMOVE the 5 generic unlock achievements (first-step, power-duo, etc.)
+  - KEEP ONLY the meaningful emoji-based synergy unlocks:
+    - "Zen Performans" (DreamGlow + TheChill)
+    - "Berrak Zihin" (MindFuel + TheChill)
+    - "Sabah Enerjisi" (DailyGlow + MindFuel)
+    - etc.
+  - These are the ones shown at the bottom with emoji descriptions
+- Test: Only meaningful synergy combinations should trigger unlock animations
 
-#### 11. [x] Match Web Layout to Mobile Hierarchy
-- Currently: Web has different flow than mobile
-- Required: Update web to match mobile's updated hierarchy:
-  - Discount boxes should be moved UP (like mobile)
-  - Flow indicators should match mobile style
-  - Discount info and box info layout should match mobile
+#### 4. [ ] Product Description Header Styling
+- Currently: Title and description text use same font/style
+- Required:
+  - Make headers BOLD
+  - Add relevant EMOJI next to each header
+  - Clear visual distinction between title and description
+  - Applies to both single product descriptions AND combination descriptions
+- Example: "DailyGlow - Gunduz enerji ve cilt destegi" should have bold "DailyGlow" with emoji
+- Test: Headers should be visually distinct from description text
 
-#### 12. [x] "Ödemeye Git" / "Sepeti Onayla" Button Position (Web)
-- Currently: Button is too low on the page
-- Required: Move checkout button to more visible/logical position
-- Suggestion: Consider moving "Birlikte Kullanım" and "Kullanım Rehberi" sections BELOW products
-- "Sepeti Onayla" should be near the top/visible area
+---
+
+### MOBILE FIXES (Priority: High)
+
+#### 5. [ ] "Nasil Calisir" (How It Works) Section Overflow - MOBILE
+- Currently: Benefits don't fit in the small box, content overflows
+- Required:
+  - Same as web fix - split benefits into smaller pieces
+  - Ensure proper fit on mobile screens (375px, 390px, 414px)
+  - Clean, simple, readable UI
+
+#### 6. [ ] Mobile Product Card Proportions
+- Currently: Cards are too wide but height is too short (squished)
+- Required:
+  - Increase HEIGHT of product cards (not just width)
+  - More natural, balanced proportions
+  - Not huge, but properly proportioned
+  - Cards should feel natural in vertical scroll flow
+- Test: Product cards should have balanced width:height ratio on 375px screens
+
+#### 7. [ ] Kesfet +/- Button Response Speed
+- Currently: Adding/removing products via +/- is very slow
+- Required:
+  - Optimize the quantity change response time
+  - Instant visual feedback on button press
+  - Debounce cart updates but show immediate UI change
+- Test: +/- buttons should feel instant (< 100ms visual response)
+
+#### 8. [ ] "Sepeti Onayla" Button Fit in Slider
+- Currently: Button doesn't fit properly, screen edge is slightly curved/flat
+- Required:
+  - Shift button slightly LEFT to fit within safe area
+  - Account for device screen edge curves (notch area)
+  - Ensure full button visibility on all mobile devices
+- Test: Button fully visible and tappable on iPhone (with notch) and Android devices
+
+#### 9. [ ] Hexagon Emoji Overlap - CRITICAL
+- Currently: Emojis still overlap each other despite previous fixes
+- Required:
+  - Implement proper spacing/sizing to prevent ANY emoji overlap
+  - Consider: smaller emoji size, larger hexagon, different positioning
+  - Ensure clear visibility of each emoji
+- Test: Zero emoji overlap on 375px, 390px, 414px screens
+
+#### 10. [ ] Slider Swipe Behavior - CRITICAL
+- Currently: Multiple swipe issues:
+  - When slider is OPEN and swiping DOWN, the BACKGROUND PAGE scrolls (wrong)
+  - When slider is CLOSED and swiping UP, the PAGE scrolls instead of opening slider
+  - Overall swipe gesture feels unnatural and hard to use
+- Required:
+  - When slider is OPEN: Block background page scroll completely
+  - When slider is CLOSED: Swipe UP should ONLY open slider, not scroll page
+  - Smooth, natural animation for open/close
+  - Clear gesture boundaries
+- Implementation hints:
+  - Add `overflow: hidden` to body when slider is expanded
+  - Use `e.preventDefault()` on touch events when appropriate
+  - Consider touch-action CSS property
+- Test: Slider should open/close smoothly without any background page scroll interference
 
 ---
 
@@ -106,7 +127,7 @@ node --check assets/js/bundle-builder/*.js
 
 ## Files to Focus On
 - `sections/visual-bundle-builder-v2.liquid` (main file - HTML/CSS/JS)
-- `assets/js/bundle-builder/*.js` (if button handlers need fixing)
+- `assets/js/bundle-builder/*.js` (if needed for performance/logic)
 
 ## Files to IGNORE
 - `sections/visual-bundle-builder.liquid` (v1 - deprecated)
@@ -121,17 +142,16 @@ node --check assets/js/bundle-builder/*.js
 - Test on mobile widths: 375px, 390px, 414px
 - Test on desktop widths: 1280px, 1440px
 
-## How to Verify (Manual Testing Checklist)
-After making changes, verify:
-- [ ] Mobile: Swipe up opens slider
-- [ ] Mobile: +/- buttons in Keşfet section add/remove products
-- [ ] Mobile: Hexagon emojis don't overlap
-- [ ] Mobile: Product cards are smaller (30-35% reduction)
-- [ ] Mobile: Bottom bar elements fit properly
-- [ ] Web: Hexagon container fits screen
-- [ ] Web: Add/remove buttons work in explore section
-- [ ] Web: Checkout button is visible without scrolling far
-- [ ] All: `npm test` passes
+## Priority Order
+1. Slider swipe behavior (#10) - Most impactful UX issue
+2. Hexagon emoji overlap (#9) - Visual clarity
+3. Mobile product card proportions (#6) - Core layout
+4. "Sepeti Onayla" button fit (#8) - Usability
+5. Kesfet +/- speed (#7) - Performance feel
+6. "Nasil Calisir" overflow (#1, #5) - Content fit
+7. Web product card size (#2) - Desktop layout
+8. Product header styling (#4) - Visual polish
+9. Achievement rework (#3) - Feature refinement
 
 ## Definition of Done
-All numbered checkboxes (1-12) above are addressed AND `npm test` passes.
+All numbered checkboxes (1-10) above are addressed AND `npm test` passes.

@@ -1,62 +1,54 @@
 # Progress Tracker
 
 ## Current Status
-All 12 UI/UX issues have been addressed + additional enhancements completed!
+Round 2 of UI/UX fixes - 10 new issues to address
 
-## Completed Issues
+## Round 1 - COMPLETED
+All 12 original issues were addressed in previous iteration.
 
-### Mobile (7 issues) - ALL DONE
-1. [x] Slider swipe-to-open - Attached to entire dock, reduced threshold to 30px
-2. [x] Product page add-to-cart integration - **FULLY IMPLEMENTED** - Intercepts add-to-cart, opens slider
-3. [x] Bottom bar spacing - Price moved right, button bigger/left
-4. [x] +/- buttons not working - Fixed syncQuantityToCart bug
-5. [x] Product detail content - **FULLY IMPLEMENTED** - All 5 products have detailed content
-6. [x] **HEXAGON EMOJI OVERLAP** - Enlarged viewBox to 400x280, bigger nodes
-7. [x] Product card size reduction - Changed to horizontal layout, 80px images
+## Round 2 - IN PROGRESS
 
-### Web (5 issues) - ALL DONE
-8. [x] Hexagon container size - Increased with viewBox changes
-9. [x] Empty emoji slots - Added proper CSS for achievement icons
-10. [x] Explore "Add to Cart" button - Made compact, centered
-11. [x] Match mobile hierarchy - Discount steps moved up, checkout moved up
-12. [x] Checkout button position - Now directly below items, above synergy map
+### Web Fixes (2 issues)
+1. [ ] "Nasil Calisir" section overflow - benefits don't fit, need splitting
+2. [ ] Web product cards too small - over-shrunk, need enlarging
 
-### Additional Enhancements
-13. [x] **PRODUCT CONTENT** - Added detailed content for all 5 products:
-    - DreamGlow: Benefits (Guzellik Uykusu, Uyku Kalitesi, Cilt Yenilenmesi), 6 ingredients with amounts, science explanation
-    - DailyGlow: Benefits (Gun Boyu Enerji, Bagisiklik, Cilt Sagligi), 7 ingredients with amounts, science explanation
-    - MindFuel: Benefits (Zihinsel Performans, Odaklanma, Stres Direnci), 6 ingredients with amounts, science explanation
-    - TheChill: Benefits (Stres & Gevsenme, Uyku Hazirligi, Zihinsel Denge), 6 ingredients with amounts, science explanation
-    - Reset Button: Benefits (Detoks & Arinma, Sindirim Sagligi, Iceriden Yenilenme), 7 ingredients with amounts, science explanation
+### General Fixes (2 issues)
+3. [ ] Achievement system rework - remove generic unlocks, keep synergy-based ones
+4. [ ] Product description headers - need bold + emoji styling
 
-14. [x] **ADD-TO-CART INTERCEPT** - Product page add-to-cart buttons now open bundle builder:
-    - Intercepts clicks on common Shopify add-to-cart selectors
-    - Matches product by variant ID, URL pathname, or form data attribute
-    - Adds product to bundle and opens slider (mobile) or scrolls to builder (desktop)
-    - Exposes `window.openBundleBuilder(handle)` for theme customization
+### Mobile Fixes (6 issues)
+5. [ ] "Nasil Calisir" section overflow - same as web
+6. [ ] Product card proportions - too wide, height too short
+7. [ ] Kesfet +/- buttons too slow - need optimization
+8. [ ] "Sepeti Onayla" button overflow - shift left for safe area
+9. [ ] Hexagon emoji overlap - STILL happening, need better solution
+10. [ ] Slider swipe behavior - CRITICAL - page scrolls instead of slider
 
-## Git Commits Made
+## Priority Order
+1. #10 Slider swipe (most impactful UX)
+2. #9 Hexagon emoji overlap
+3. #6 Mobile card proportions
+4. #8 Sepeti Onayla fit
+5. #7 +/- speed
+6. #1, #5 Nasil Calisir overflow
+7. #2 Web card size
+8. #4 Header styling
+9. #3 Achievement rework
+
+## Git Commits (Round 1)
 1. `c6a1992` - chore: Add Ralph setup for UI/UX fixes
 2. `4300be0` - fix: Hexagon emoji overlap and Kesfet +/- buttons
 3. `ba77f2c` - fix: Mobile UI improvements - bottom bar, swipe, compact cards
 4. `da7032d` - fix: Web/desktop layout improvements
 5. `209d56d` - docs: Update Ralph progress - all issues addressed
 6. `6d68800` - feat: Add detailed product content and add-to-cart intercept
+7. `a15c934` - docs: Mark all 12 UI/UX issues as completed in Ralph files
 
 ## Notes
-- All 84 unit tests passing
-- Git push requires authentication (commits saved locally)
-- To push: configure git credentials or use SSH key
+- All 84 unit tests must pass after each change
+- Focus on v2 ONLY (visual-bundle-builder-v2.liquid)
+- Keep Turkish content intact
 
-## Files Modified
-- `sections/visual-bundle-builder-v2.liquid` (main file with all changes)
-- `.ralph/progress.md` (this file)
-- `.ralph/guardrails.md` (rules for Ralph)
-- `ralph_task.md` (task definition)
-
-## For Future Ralph Sessions
-If continuing this project, the next potential tasks could be:
-- Manual testing on actual Shopify store
-- Theme-specific adjustments for add-to-cart intercept selectors
-- Performance optimization if needed
-- Additional product combinations or synergies
+## Key Files
+- `sections/visual-bundle-builder-v2.liquid` - Main file
+- `assets/js/bundle-builder/*.js` - JS modules if needed
