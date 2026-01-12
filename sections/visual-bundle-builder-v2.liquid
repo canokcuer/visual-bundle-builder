@@ -2538,112 +2538,6 @@
 </style>
 
 <script>
-// ============================================
-// PRODUCT PAGE -> BUNDLE BUILDER DIRECT REDIRECT
-// Intercepts add-to-cart, adds to Shopify cart, redirects to bundle builder
-// ============================================
-(function() {
-  'use strict';
-
-  const BUNDLE_HANDLES = ['dailyglow', 'dreamglow', 'mindfuel', 'thechill', 'reset-button'];
-  const BUNDLE_BUILDER_URL_KEY = 'cyra_bundle_builder_url';
-
-  // Default bundle builder URL (set via Liquid from schema, fallback to common paths)
-  const DEFAULT_BUNDLE_URL = '{{ section.settings.bundle_builder_url | default: "/pages/wellness-rituel-olusturucu" }}';
-
-  const normalizeHandle = (h) => h?.toLowerCase().replace(/-/g, '').trim() || '';
-
-  const findBundleHandle = (testHandle) => {
-    if (!testHandle) return null;
-    const normalized = normalizeHandle(testHandle);
-    return BUNDLE_HANDLES.find(h => normalizeHandle(h) === normalized);
-  };
-
-  // Check if bundle builder section exists on this page
-  const bundleBuilderSection = document.getElementById('wellness-architect');
-  if (bundleBuilderSection) {
-    // We're on the bundle builder page - store its URL for product pages to use
-    localStorage.setItem(BUNDLE_BUILDER_URL_KEY, window.location.pathname);
-    return; // Don't set up intercept on bundle builder page
-  }
-
-  // Check if we're on a bundle product page
-  const pathMatch = window.location.pathname.match(/\/products\/([^\/\?]+)/);
-  if (!pathMatch) return;
-
-  const matchedHandle = findBundleHandle(pathMatch[1]);
-  if (!matchedHandle) return;
-
-  // Get bundle builder URL - use localStorage if available, otherwise use default
-  const bundleUrl = localStorage.getItem(BUNDLE_BUILDER_URL_KEY) || DEFAULT_BUNDLE_URL;
-
-  // Intercept add-to-cart clicks
-  document.addEventListener('click', async (e) => {
-    const btn = e.target.closest([
-      'form[action*="/cart/add"] button[type="submit"]',
-      'form[action*="/cart/add"] input[type="submit"]',
-      '.product-form button[name="add"]',
-      '.product-form__submit',
-      '[data-add-to-cart]',
-      '.add-to-cart',
-      '#AddToCart',
-      '.btn-add-to-cart',
-      '.shopify-payment-button__button'
-    ].join(', '));
-
-    if (!btn) return;
-
-    // Prevent default and stop propagation (before pumperbreaks gets it)
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-
-    // Find the form to get variant ID and quantity
-    const form = btn.closest('form[action*="/cart/add"]') || btn.closest('.product-form') || document.querySelector('form[action*="/cart/add"]');
-
-    // Get variant ID
-    let variantId = null;
-    if (form) {
-      const variantInput = form.querySelector('input[name="id"], select[name="id"]');
-      if (variantInput) variantId = variantInput.value;
-    }
-    if (!variantId) {
-      // Try to get from page meta or other sources
-      const metaVariant = document.querySelector('meta[itemprop="sku"]');
-      if (metaVariant) variantId = metaVariant.content;
-    }
-    if (!variantId) {
-      // Fallback: look for any variant input on page
-      const anyVariantInput = document.querySelector('input[name="id"][value], select[name="id"]');
-      if (anyVariantInput) variantId = anyVariantInput.value;
-    }
-
-    // Get quantity (pumperbreaks sets this)
-    let quantity = 1;
-    if (form) {
-      const qtyInput = form.querySelector('input[name="quantity"], select[name="quantity"]');
-      if (qtyInput) quantity = parseInt(qtyInput.value) || 1;
-    }
-
-    // Add to Shopify cart
-    if (variantId) {
-      try {
-        await fetch('/cart/add.js', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: quantity }] })
-        });
-      } catch (err) {
-        console.error('Failed to add to cart:', err);
-      }
-    }
-
-    // Redirect directly to bundle builder
-    window.location.href = bundleUrl;
-
-  }, true); // Capture phase - runs before other handlers
-})();
-
 (function() {
   'use strict';
 
@@ -4149,13 +4043,6 @@
   "tag": "section",
   "class": "section-bundle-builder",
   "settings": [
-    {
-      "type": "text",
-      "id": "bundle_builder_url",
-      "label": "Bundle Builder Sayfa URL",
-      "default": "/pages/wellness-rituel-olusturucu",
-      "info": "Urun sayfalarindan yonlendirilecek bundle builder sayfa URL'i"
-    },
     {
       "type": "text",
       "id": "eyebrow_text",
