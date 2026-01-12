@@ -2539,13 +2539,14 @@
 
 <script>
 // ============================================
-// PRODUCT PAGE BUNDLE NOTIFICATION
-// Shows notification for bundle products, doesn't block add-to-cart
+// PRODUCT PAGE -> BUNDLE BUILDER REDIRECT
+// Intercepts cart add on product pages and redirects to bundle builder
 // ============================================
 (function() {
   'use strict';
 
   const BUNDLE_HANDLES = ['dailyglow', 'dreamglow', 'mindfuel', 'thechill', 'reset-button'];
+  const BUNDLE_BUILDER_URL_KEY = 'cyra_bundle_builder_url';
 
   const normalizeHandle = (h) => h?.toLowerCase().replace(/-/g, '').trim() || '';
 
@@ -2555,13 +2556,41 @@
     return BUNDLE_HANDLES.find(h => normalizeHandle(h) === normalized);
   };
 
+  // Check if bundle builder section exists on this page
+  const bundleBuilderSection = document.getElementById('wellness-architect');
+  if (bundleBuilderSection) {
+    // We're on the bundle builder page - store its URL for product pages to use
+    localStorage.setItem(BUNDLE_BUILDER_URL_KEY, window.location.pathname);
+  }
+
   // Check if we're on a bundle product page
   const pathMatch = window.location.pathname.match(/\/products\/([^\/\?]+)/);
   if (pathMatch) {
     const matchedHandle = findBundleHandle(pathMatch[1]);
     if (matchedHandle) {
-      // Store for bundle builder to pick up later
+      // Store handle for bundle builder to pick up
       localStorage.setItem('cyra_bundle_add', matchedHandle);
+
+      // Intercept fetch to /cart/add.js to redirect after cart add
+      const originalFetch = window.fetch;
+      window.fetch = async function(...args) {
+        const response = await originalFetch.apply(this, args);
+
+        // Check if this was a cart add request
+        const url = typeof args[0] === 'string' ? args[0] : args[0]?.url;
+        if (url && url.includes('/cart/add')) {
+          // Get the bundle builder URL from localStorage
+          const bundleUrl = localStorage.getItem(BUNDLE_BUILDER_URL_KEY);
+          if (bundleUrl) {
+            // Small delay to let pumperbreaks finish any UI updates
+            setTimeout(() => {
+              window.location.href = bundleUrl;
+            }, 300);
+          }
+        }
+
+        return response;
+      };
     }
   }
 })();
