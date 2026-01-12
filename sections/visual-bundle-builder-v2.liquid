@@ -2548,6 +2548,9 @@
   const BUNDLE_HANDLES = ['dailyglow', 'dreamglow', 'mindfuel', 'thechill', 'reset-button'];
   const BUNDLE_BUILDER_URL_KEY = 'cyra_bundle_builder_url';
 
+  // Default bundle builder URL (set via Liquid from schema, fallback to common paths)
+  const DEFAULT_BUNDLE_URL = '{{ section.settings.bundle_builder_url | default: "/pages/wellness-rituel-olusturucu" }}';
+
   const normalizeHandle = (h) => h?.toLowerCase().replace(/-/g, '').trim() || '';
 
   const findBundleHandle = (testHandle) => {
@@ -2571,9 +2574,8 @@
   const matchedHandle = findBundleHandle(pathMatch[1]);
   if (!matchedHandle) return;
 
-  // Get bundle builder URL
-  const bundleUrl = localStorage.getItem(BUNDLE_BUILDER_URL_KEY);
-  if (!bundleUrl) return; // No bundle builder URL stored yet
+  // Get bundle builder URL - use localStorage if available, otherwise use default
+  const bundleUrl = localStorage.getItem(BUNDLE_BUILDER_URL_KEY) || DEFAULT_BUNDLE_URL;
 
   // Intercept add-to-cart clicks
   document.addEventListener('click', async (e) => {
@@ -4147,6 +4149,13 @@
   "tag": "section",
   "class": "section-bundle-builder",
   "settings": [
+    {
+      "type": "text",
+      "id": "bundle_builder_url",
+      "label": "Bundle Builder Sayfa URL",
+      "default": "/pages/wellness-rituel-olusturucu",
+      "info": "Urun sayfalarindan yonlendirilecek bundle builder sayfa URL'i"
+    },
     {
       "type": "text",
       "id": "eyebrow_text",

@@ -1,50 +1,47 @@
-# V9 Progress Tracker
+# V10 Progress Tracker
 
 ## Current Status
-V9 COMPLETE - Direct redirect without reload or intermediate steps!
+V10 COMPLETE - No more "visit bundle builder first" requirement!
 
-## V9 Fix
+## V10 Fix
 
 ### Problem
-V8 flow had bad UX:
-1. Click add-to-cart
-2. Pumperbreaks opens cart drawer/popup
-3. Page reloads
-4. Then redirects to bundle builder
+V9 required user to visit bundle builder page first to store URL in localStorage.
 
 ### Solution
-Now intercepts click BEFORE pumperbreaks in capture phase:
-1. Click add-to-cart
-2. Intercept captures click immediately
-3. preventDefault + stopPropagation (pumperbreaks never runs)
-4. Read quantity from form (pumperbreaks sets this value)
-5. Add to Shopify cart via fetch
-6. Redirect directly to bundle builder
+Added default URL that works immediately:
+1. Schema setting `bundle_builder_url` with default `/pages/wellness-rituel-olusturucu`
+2. Liquid outputs this default into JavaScript
+3. Falls back to localStorage if available (for dynamic URL discovery)
 
-### Key Changes
-- Uses capture phase (`true` parameter) to run before pumperbreaks
-- Prevents default and stops all propagation
-- Reads quantity from form input (pumperbreaks quantity selection works)
-- Makes own /cart/add.js fetch call
-- Immediate redirect - no intermediate UI
+### How It Works Now
+1. User visits ANY product page (e.g., /products/dreamglow) - FIRST TIME EVER
+2. Script uses default URL from schema (no localStorage needed)
+3. User clicks add-to-cart
+4. Intercept captures click, adds to Shopify cart
+5. Redirects to bundle builder immediately
 
-### Flow Now
-1. User on product page selects quantity (1, 3, or 6)
-2. User clicks add-to-cart
-3. Our script intercepts (pumperbreaks blocked)
-4. Reads quantity from form
-5. Adds to Shopify cart
-6. Redirects to bundle builder
-7. Bundle builder syncs from cart (correct quantity)
+### Schema Setting
+```json
+{
+  "type": "text",
+  "id": "bundle_builder_url",
+  "label": "Bundle Builder Sayfa URL",
+  "default": "/pages/wellness-rituel-olusturucu"
+}
+```
+
+### Configurable
+Store owner can change the URL in Shopify theme customizer if their bundle builder page has a different URL.
 
 ## Previous Fixes
-- V3: Backdrop, emoji, button fixes
-- V4: Pointer-events, header bold
+- V3-V4: Initial bug fixes
 - V5: White background
 - V6: 404 fix
 - V7: Removed old intercept
-- V8: Fetch intercept (had reload issue)
+- V8: Fetch intercept
 - V9: Direct intercept (no reload)
+- V10: Default URL (no prerequisite visit)
 
 ## Test Results
 - All 84 unit tests passing
