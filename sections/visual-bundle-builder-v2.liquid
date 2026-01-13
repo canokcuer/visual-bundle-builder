@@ -3258,7 +3258,7 @@
       vibrate(10);
       updateUI();
       checkAchievements();
-      if (state.isMobile && !state.isExpanded) setTimeout(() => { state.isExpanded = true; dock.classList.add('wa-dock--expanded'); document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden'; }, 400);
+      if (state.isMobile && !state.isExpanded) setTimeout(() => { state.isExpanded = true; dock.classList.add('wa-dock--expanded'); setBodyScroll(true); }, 400);
       return true;
     }
     return false;
@@ -3485,7 +3485,11 @@
 
   function updateMobileUI(pricing, synergy, tier, rec, ritual, synExp) {
     dock.classList.toggle('wa-dock--empty', state.items.length === 0);
-    if (state.items.length === 0 && state.isExpanded) { state.isExpanded = false; dock.classList.remove('wa-dock--expanded'); }
+    if (state.items.length === 0 && state.isExpanded) {
+      state.isExpanded = false;
+      dock.classList.remove('wa-dock--expanded');
+      setBodyScroll(false); // Reset overflow when auto-closing empty slider
+    }
 
     // Thumbnails
     const thumbs = dock.querySelector('.wa-dock__thumbnails');
@@ -3741,12 +3745,15 @@
 
     // Open modal
     kesfetModal.classList.add('wa-kesfet-modal--open');
-    document.body.style.overflow = 'hidden';
+    setBodyScroll(true);
   }
 
   function closeKeşfetModal() {
     kesfetModal.classList.remove('wa-kesfet-modal--open');
-    document.body.style.overflow = '';
+    // Only unblock if slider is not expanded
+    if (!state.isExpanded) {
+      setBodyScroll(false);
+    }
     currentKeşfetHandle = null;
     currentKeşfetProductData = null;
   }
@@ -3823,12 +3830,25 @@
     addItem(data);
   }
 
+  function setBodyScroll(blocked) {
+    document.body.style.overflow = blocked ? 'hidden' : '';
+    document.documentElement.style.overflow = blocked ? 'hidden' : '';
+  }
+
   function toggleDock() {
     state.isExpanded = !state.isExpanded;
     dock.classList.toggle('wa-dock--expanded', state.isExpanded);
     // Block/unblock body scroll when slider is expanded
-    document.body.style.overflow = state.isExpanded ? 'hidden' : '';
-    document.documentElement.style.overflow = state.isExpanded ? 'hidden' : '';
+    setBodyScroll(state.isExpanded);
+  }
+
+  // Safety: Ensure overflow matches slider state (fixes edge cases)
+  function ensureOverflowState() {
+    const shouldBeBlocked = state.isMobile && state.isExpanded;
+    const isBlocked = document.body.style.overflow === 'hidden';
+    if (shouldBeBlocked !== isBlocked) {
+      setBodyScroll(shouldBeBlocked);
+    }
   }
   function handleCheckout() { if (state.items.length > 0) { vibrate([30, 60, 30]); window.location.href = '/checkout'; } }
 
@@ -3855,7 +3875,21 @@
   // INITIALIZE
   // ============================================
   async function init() {
-    window.addEventListener('resize', () => { const was = state.isMobile; state.isMobile = window.innerWidth < 768; if (was !== state.isMobile) updateUI(); });
+    window.addEventListener('resize', () => {
+      const was = state.isMobile;
+      state.isMobile = window.innerWidth < 768;
+      if (was !== state.isMobile) {
+        // Reset slider state when switching between mobile/desktop
+        if (state.isExpanded) {
+          state.isExpanded = false;
+          dock.classList.remove('wa-dock--expanded');
+        }
+        // Always ensure overflow is reset on mode change
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+        updateUI();
+      }
+    });
 
     productCards.forEach(card => card.addEventListener('click', e => handleProductClick(card, e)));
 
@@ -3996,6 +4030,16 @@
       isSwipingUp = false;
     });
 
+    // Safety: Clean up any stuck overflow state on page load
+    setBodyScroll(false);
+
+    // Visibility change handler - reset overflow when tab becomes visible (catches edge cases)
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        ensureOverflowState();
+      }
+    });
+
     await syncFromShopifyCart();
 
     // Check for auto-add from URL parameter
@@ -4008,8 +4052,7 @@
         if (state.isMobile) {
           state.isExpanded = true;
           dock.classList.add('wa-dock--expanded');
-          document.body.style.overflow = 'hidden';
-          document.documentElement.style.overflow = 'hidden';
+          setBodyScroll(true);
         }
       }
       const cleanUrl = window.location.pathname;
@@ -4083,9 +4126,7 @@
             if (!state.isExpanded) {
               state.isExpanded = true;
               dock.classList.add('wa-dock--expanded');
-              // Block body scroll when slider is open
-              document.body.style.overflow = 'hidden';
-              document.documentElement.style.overflow = 'hidden';
+              setBodyScroll(true);
             }
           } else {
             // Desktop: Scroll down to the bundle builder section
@@ -4110,8 +4151,7 @@
     if (state.isMobile) {
       state.isExpanded = true;
       dock.classList.add('wa-dock--expanded');
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
+      setBodyScroll(true);
     }
   };
 
