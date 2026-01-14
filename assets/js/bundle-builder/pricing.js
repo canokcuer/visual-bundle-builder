@@ -6,9 +6,9 @@
 const SYNERGY_CONFIG = {
   1: { percent: 20, text: 'Başlangıç', discount: 0 },
   2: { percent: 40, text: '%15 İkili Güç', discount: 0.15 },
-  3: { percent: 60, text: '%20 Popüler', discount: 0.20 },
-  4: { percent: 80, text: '%25 Pro', discount: 0.25 },
-  5: { percent: 100, text: '%30 Efsane', discount: 0.30 }
+  3: { percent: 60, text: '%30 Popüler', discount: 0.30 },
+  4: { percent: 80, text: '%33 Pro', discount: 0.33 },
+  5: { percent: 100, text: '%35 Efsane', discount: 0.35 }
 };
 
 // Quantity-based discount rates

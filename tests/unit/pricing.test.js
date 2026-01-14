@@ -21,9 +21,9 @@ describe('Pricing Module', () => {
     it('should have increasing discount rates', () => {
       expect(SYNERGY_CONFIG[1].discount).toBe(0);
       expect(SYNERGY_CONFIG[2].discount).toBe(0.15);
-      expect(SYNERGY_CONFIG[3].discount).toBe(0.20);
-      expect(SYNERGY_CONFIG[4].discount).toBe(0.25);
-      expect(SYNERGY_CONFIG[5].discount).toBe(0.30);
+      expect(SYNERGY_CONFIG[3].discount).toBe(0.30);
+      expect(SYNERGY_CONFIG[4].discount).toBe(0.33);
+      expect(SYNERGY_CONFIG[5].discount).toBe(0.35);
     });
 
     it('should have increasing progress percentages', () => {
@@ -46,9 +46,9 @@ describe('Pricing Module', () => {
     it('should return correct tier for each quantity', () => {
       expect(getTier(1).discount).toBe(0);
       expect(getTier(2).discount).toBe(0.15);
-      expect(getTier(3).discount).toBe(0.20);
-      expect(getTier(4).discount).toBe(0.25);
-      expect(getTier(5).discount).toBe(0.30);
+      expect(getTier(3).discount).toBe(0.30);
+      expect(getTier(4).discount).toBe(0.33);
+      expect(getTier(5).discount).toBe(0.35);
     });
 
     it('should cap at tier 5 for quantities over 5', () => {
@@ -131,7 +131,7 @@ describe('Pricing Module', () => {
       expect(result.total).toBe(17000);
     });
 
-    it('should apply 30% discount for 5 items', () => {
+    it('should apply 35% discount for 5 items', () => {
       const items = [
         { price: 10000, quantity: 1 },
         { price: 10000, quantity: 1 },
@@ -141,8 +141,8 @@ describe('Pricing Module', () => {
       ];
       const result = calculatePricing(items);
       expect(result.subtotal).toBe(50000);
-      expect(result.discount).toBe(15000); // 30% of 50000
-      expect(result.total).toBe(35000);
+      expect(result.discount).toBe(17500); // 35% of 50000
+      expect(result.total).toBe(32500);
     });
 
     it('should apply quantity discount for 3+ of same item', () => {

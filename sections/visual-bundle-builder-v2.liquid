@@ -99,9 +99,9 @@
         <div class="wa-steps">
           <div class="wa-step" data-step="1"><span class="wa-step__dot"></span><span class="wa-step__label"></span></div>
           <div class="wa-step" data-step="2"><span class="wa-step__dot"></span><span class="wa-step__label">%15</span></div>
-          <div class="wa-step" data-step="3"><span class="wa-step__dot"></span><span class="wa-step__label">%20</span></div>
-          <div class="wa-step" data-step="4"><span class="wa-step__dot"></span><span class="wa-step__label">%25</span></div>
-          <div class="wa-step" data-step="5"><span class="wa-step__dot"></span><span class="wa-step__label">%30</span></div>
+          <div class="wa-step" data-step="3"><span class="wa-step__dot"></span><span class="wa-step__label">%30</span></div>
+          <div class="wa-step" data-step="4"><span class="wa-step__dot"></span><span class="wa-step__label">%33</span></div>
+          <div class="wa-step" data-step="5"><span class="wa-step__dot"></span><span class="wa-step__label">%35</span></div>
         </div>
       </div>
 
@@ -233,9 +233,9 @@
     <div class="wa-dock__synergy-summary" style="display: none;">
       <div class="wa-steps wa-steps--mini">
         <span class="wa-step" data-step="1" title="%15"></span>
-        <span class="wa-step" data-step="2" title="%20"></span>
-        <span class="wa-step" data-step="3" title="%25"></span>
-        <span class="wa-step" data-step="4" title="%30"></span>
+        <span class="wa-step" data-step="2" title="%30"></span>
+        <span class="wa-step" data-step="3" title="%33"></span>
+        <span class="wa-step" data-step="4" title="%35"></span>
         <span class="wa-step" data-step="5" title="MAX"></span>
       </div>
       <p class="wa-dock__synergy-summary-text"></p>
@@ -264,9 +264,9 @@
         <div class="wa-steps wa-steps--top">
           <div class="wa-step" data-step="1"><span class="wa-step__dot"></span><span class="wa-step__label"></span></div>
           <div class="wa-step" data-step="2"><span class="wa-step__dot"></span><span class="wa-step__label">%15</span></div>
-          <div class="wa-step" data-step="3"><span class="wa-step__dot"></span><span class="wa-step__label">%20</span></div>
-          <div class="wa-step" data-step="4"><span class="wa-step__dot"></span><span class="wa-step__label">%25</span></div>
-          <div class="wa-step" data-step="5"><span class="wa-step__dot"></span><span class="wa-step__label">%30</span></div>
+          <div class="wa-step" data-step="3"><span class="wa-step__dot"></span><span class="wa-step__label">%30</span></div>
+          <div class="wa-step" data-step="4"><span class="wa-step__dot"></span><span class="wa-step__label">%33</span></div>
+          <div class="wa-step" data-step="5"><span class="wa-step__dot"></span><span class="wa-step__label">%35</span></div>
         </div>
         <p class="wa-dock__discount-hint-text"></p>
       </div>
@@ -2743,8 +2743,8 @@
     'dailyglow+dreamglow+mindfuel': { title: 'CEO Paketi', benefit: 'Görünüm + Zeka + Enerji', detail: 'Profesyoneller için tasarlandı.' },
     'dailyglow+dreamglow+thechill': { title: 'Stress-Free Beauty', benefit: 'Stres Karşıtı Güzellik', detail: 'En popüler üçlümüz.' },
     'mindfuel+reset-button+thechill': { title: 'Zihinsel Berraklık', benefit: 'Arınma + Odak + Denge', detail: 'Temiz beden, berrak zihin.' },
-    'dailyglow+dreamglow+mindfuel+thechill': { title: 'Premium Wellness', benefit: '%25 İndirim', detail: 'Lüks bir yaşam tarzının temeli.' },
-    'dailyglow+dreamglow+mindfuel+reset-button+thechill': { title: 'The Cyrasoul Ritual', benefit: '%30 İndirim - TAM DONANIM', detail: 'Bütüncül iyilik hali için eksiksiz set.' }
+    'dailyglow+dreamglow+mindfuel+thechill': { title: 'Premium Wellness', benefit: '%33 İndirim', detail: 'Lüks bir yaşam tarzının temeli.' },
+    'dailyglow+dreamglow+mindfuel+reset-button+thechill': { title: 'The Cyrasoul Ritual', benefit: '%35 İndirim - TAM DONANIM', detail: 'Bütüncül iyilik hali için eksiksiz set.' }
   };
 
   const SINGLE_PRODUCT_BENEFITS = {
@@ -2781,9 +2781,9 @@
   const SYNERGY_CONFIG = {
     1: { percent: 20, text: 'Başlangıç', discount: 0 },
     2: { percent: 40, text: '%15 İkili Güç', discount: 0.15 },
-    3: { percent: 60, text: '%20 Popüler', discount: 0.20 },
-    4: { percent: 80, text: '%25 Pro', discount: 0.25 },
-    5: { percent: 100, text: '%30 Efsane', discount: 0.30 }
+    3: { percent: 60, text: '%30 Popüler', discount: 0.30 },
+    4: { percent: 80, text: '%33 Pro', discount: 0.33 },
+    5: { percent: 100, text: '%35 Efsane', discount: 0.35 }
   };
 
   // ============================================
@@ -2792,9 +2792,9 @@
   const ACHIEVEMENTS = {
     'first-step': { id: 'first-step', title: 'İlk Adım', emoji: '🌱', description: 'İlk ürününü ekleyerek wellness yolculuğuna başladınız!', icon: 'star', condition: s => s.items.length >= 1 },
     'power-duo': { id: 'power-duo', title: 'Güçlü İkili', emoji: '⚡', description: 'İki ürün birlikte %15 sinerji indirimi kazandınız!', icon: 'lightning', condition: s => s.items.length >= 2 },
-    'triple-threat': { id: 'triple-threat', title: 'Üçlü Kuvvet', emoji: '🔥', description: 'Üç ürünle ritüelinizi güçlendirdiniz. %20 indirim!', icon: 'fire', condition: s => s.items.length >= 3 },
-    'ritual-master': { id: 'ritual-master', title: 'Ritüel Ustası', emoji: '✨', description: 'Dört ürünle tam bir günlük ritüel oluşturuyorsunuz. %25 indirim!', icon: 'sparkle', condition: s => s.items.length >= 4 },
-    'wellness-architect': { id: 'wellness-architect', title: 'Wellness Architect', emoji: '🏆', description: 'Tüm 5 ürünü eklediniz! Maksimum %30 sinerji indirimi!', icon: 'trophy', condition: s => s.items.length >= 5 }
+    'triple-threat': { id: 'triple-threat', title: 'Üçlü Kuvvet', emoji: '🔥', description: 'Üç ürünle ritüelinizi güçlendirdiniz. %30 indirim!', icon: 'fire', condition: s => s.items.length >= 3 },
+    'ritual-master': { id: 'ritual-master', title: 'Ritüel Ustası', emoji: '✨', description: 'Dört ürünle tam bir günlük ritüel oluşturuyorsunuz. %33 indirim!', icon: 'sparkle', condition: s => s.items.length >= 4 },
+    'wellness-architect': { id: 'wellness-architect', title: 'Wellness Architect', emoji: '🏆', description: 'Tüm 5 ürünü eklediniz! Maksimum %35 sinerji indirimi!', icon: 'trophy', condition: s => s.items.length >= 5 }
   };
 
   const achievementState = { unlocked: new Set(), pending: [] };
