@@ -182,7 +182,7 @@
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-            Önerilen Ürünu Ekle
+            Önerilen Ürünü Ekle
           </button>
         </div>
       </div>
@@ -774,7 +774,7 @@
   }
 
   .wa-dock--expanded {
-    height: 95vh;
+    height: 85vh;
     border-radius: var(--wa-radius) var(--wa-radius) 0 0;
     border-top: none;
     box-shadow: var(--wa-shadow-lg);
@@ -1751,7 +1751,7 @@
     line-height: 1.4;
     margin: 0;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -2105,8 +2105,8 @@
     right: 0;
     display: none;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    justify-content: flex-start;
+    gap: 8px;
     padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)) 16px;
     background: var(--wa-white);
     border-top: 1px solid var(--wa-gray-200);
@@ -2155,14 +2155,15 @@
     gap: 6px;
     box-shadow: 0 2px 8px rgba(34, 197, 94, 0.35);
     transition: all 0.2s ease;
-    flex-shrink: 0;
+    flex-shrink: 1;
+    min-width: 0;
     white-space: nowrap;
   }
 
   @media (max-width: 375px) {
     .wa-dock__checkout-btn {
-      padding: 0 12px;
-      font-size: 0.8rem;
+      padding: 0 10px;
+      font-size: 0.75rem;
     }
   }
 
@@ -2567,7 +2568,7 @@
       timing: 'Yatmadan önce tok karnına 1 ölçek (10gr)',
       category: 'night',
       benefits: [
-        { icon: 'sparkle', title: 'Güzellik Uykusu', description: 'Uykunuzun her anını cildiniz için bir yenilenme seansına dönüştürür. Siz dinlenirken hedefe yönelik içerikler cildin doğal onarım sürecini destekler.' },
+        { icon: 'sparkle', title: 'Güzellik Uykusu', description: 'Uykunun her anını cildin için bir yenilenme seansına dönüştürür. Sen dinlenirken hedefe yönelik içerikler cildin doğal onarım sürecini destekler.' },
         { icon: 'moon', title: 'Uyku Kalitesi', description: 'Yatağa yattığında uyumakta zorlanıyorsan veya 8 saat uyusan bile yorgun uyanıyorsan, DreamGlow zihni sakinleştirerek kaliteli uykuya geçişi kolaylaştırır.' },
         { icon: 'droplet', title: 'Cilt Yenilenmesi', description: 'Yetersiz uyku cildin kendini onarma döngüsünü %60\'a kadar yavaşlatır. DreamGlow kolajen üretimini destekleyerek mat, donuk görünüme son verir.' }
       ],
@@ -2697,8 +2698,8 @@
   // ============================================
   const SYNERGY_MAP = {
     'dreamglow': { name: 'DreamGlow', timing: 'Yatmadan önce', benefit: 'Cilt Onarımı & Kolajen', shortDesc: 'Gece Cilt Ritüeli', tip: '1 ölçek tozu ılık suyla karıştırın.', category: 'night' },
-    'dailyglow': { name: 'DailyGlow', timing: 'Sabah tok karnına', benefit: 'Cilt Parlaklığı & Enerji', shortDesc: 'Gündüz Işıltı Desteği', tip: 'Tok karnına 1 kapsül. Işıltı içeriden başlar.', category: 'morning' },
-    'mindfuel': { name: 'MindFuel', timing: 'Gün içinde tok karnına', benefit: 'Odak & Zihinsel Performans', shortDesc: 'Bilişsel Güç Desteği', tip: 'Tok karnına 2 kapsül. Kahveden etkili odaklanma.', category: 'morning' },
+    'dailyglow': { name: 'DailyGlow', timing: 'Sabah tok karnına', benefit: 'Cilt Parlaklığı & Enerji', shortDesc: 'Gündüz Işıltı Desteği', tip: 'Tok karnına 1 kapsül.', category: 'morning' },
+    'mindfuel': { name: 'MindFuel', timing: 'Gün içinde tok karnına', benefit: 'Odak & Zihinsel Performans', shortDesc: 'Bilişsel Güç Desteği', tip: 'Tok karnına 2 kapsül.', category: 'morning' },
     'thechill': { name: 'TheChill', timing: 'Akşam tok karnına', benefit: 'Stres Yönetimi & Rahatlama', shortDesc: 'Huzurlu Akşam Desteği', tip: 'Akşam tok karnına 2 kapsül.', category: 'night' },
     'reset-button': { name: 'Reset Button', timing: 'Tok karnına', benefit: 'Arınma & Karaciğer Desteği', shortDesc: 'Bedensel Arınma', tip: 'Bol su ile tok karnına 2 kapsül.', category: 'noon' }
   };
@@ -2717,15 +2718,15 @@
   };
 
   const SYNERGY_EXPLANATIONS = {
-    'dailyglow+dreamglow': { title: '7/24 Güzellik Kiti', benefit: 'Kesintisiz cilt onarımı', detail: 'Gündüz cildinizi koruyun, gece uykuda onarın.' },
+    'dailyglow+dreamglow': { title: '7/24 Güzellik Kiti', benefit: 'Kesintisiz cilt onarımı', detail: 'Gündüz cildini koru, gece uykuda onar.' },
     'dailyglow+mindfuel': { title: 'Power Morning', benefit: 'Enerji + Odaklanma', detail: 'Hem fiziksel ışıltı hem zihinsel netlik.' },
-    'dailyglow+reset-button': { title: 'Detox & Glow', benefit: 'Arınma + Canlılık', detail: 'İçeriden temizlenin, dışarıya ışık saçın.' },
+    'dailyglow+reset-button': { title: 'Detox & Glow', benefit: 'Arınma + Canlılık', detail: 'İçeriden temizlen, dışarıya ışık saç.' },
     'dailyglow+thechill': { title: 'Denge Paketi', benefit: 'Sabah Enerjisi, Akşam Huzuru', detail: 'Modern hayatın panzehiri.' },
-    'dreamglow+mindfuel': { title: 'Smart & Beautiful', benefit: 'Gündüz Odak, Gece Bakım', detail: 'Ne görünümünüzden ne başarınızdan ödün vermeyin.' },
-    'dreamglow+reset-button': { title: 'Gece Terapisi', benefit: 'Arınma + Yenilenme', detail: 'Siz uyurken bedeniniz toksinleri atsın.' },
+    'dreamglow+mindfuel': { title: 'Smart & Beautiful', benefit: 'Gündüz Odak, Gece Bakım', detail: 'Ne görünümünden ne başarından ödün verme.' },
+    'dreamglow+reset-button': { title: 'Gece Terapisi', benefit: 'Arınma + Yenilenme', detail: 'Sen uyurken bedenin toksinleri atsın.' },
     'dreamglow+thechill': { title: 'Uyku Ritüeli', benefit: 'Derin Uyku + Onarım', detail: 'TheChill zihni susturur, DreamGlow bedeni onarır.' },
     'mindfuel+reset-button': { title: 'Berrak Zihin', benefit: 'Toksin Atımı + Konsantrasyon', detail: 'Beyin sisine son. Arınmış metabolizma ile performans.' },
-    'mindfuel+thechill': { title: 'Zen Performans', benefit: 'Kontrollü Güç', detail: 'Stres yapmadan odaklanın.' },
+    'mindfuel+thechill': { title: 'Zen Performans', benefit: 'Kontrollü Güç', detail: 'Stres yapmadan odaklan.' },
     'reset-button+thechill': { title: 'Tam Reset', benefit: 'Zihinsel & Bedensel Arınma', detail: 'Fabrika Ayarlarına Dönüş.' },
     'dailyglow+dreamglow+mindfuel': { title: 'CEO Paketi', benefit: 'Görünüm + Zeka + Enerji', detail: 'Profesyoneller için tasarlandı.' },
     'dailyglow+dreamglow+thechill': { title: 'Stress-Free Beauty', benefit: 'Stres Karşıtı Güzellik', detail: 'En popüler üçlümüz.' },
@@ -3211,8 +3212,8 @@
     const guide = [];
     const items = state.items.map(i => ({ ...i, handle: matchHandle(i.title), syn: SYNERGY_MAP[matchHandle(i.title)] }));
     items.filter(i => i.syn?.category === 'morning').forEach(p => guide.push({ time: 'Sabah', product: p.syn?.name || p.title, text: p.syn?.tip || '' }));
-    items.filter(i => i.syn?.category === 'noon').forEach(p => guide.push({ time: 'Ogle', product: p.syn?.name || p.title, text: p.syn?.tip || '' }));
-    items.filter(i => i.syn?.category === 'night').forEach(p => guide.push({ time: 'Aksam', product: p.syn?.name || p.title, text: p.syn?.tip || '' }));
+    items.filter(i => i.syn?.category === 'noon').forEach(p => guide.push({ time: 'Öğle', product: p.syn?.name || p.title, text: p.syn?.tip || '' }));
+    items.filter(i => i.syn?.category === 'night').forEach(p => guide.push({ time: 'Akşam', product: p.syn?.name || p.title, text: p.syn?.tip || '' }));
     return guide.length > 0 ? guide : null;
   }
 
@@ -3499,7 +3500,7 @@
 
     // Info
     const totalQty = getTotalQuantity();
-    dock.querySelector('.wa-dock__item-count').textContent = `${state.items.length} urun${totalQty > state.items.length ? ` (${totalQty} adet)` : ''}`;
+    dock.querySelector('.wa-dock__item-count').textContent = `${state.items.length} ürün${totalQty > state.items.length ? ` (${totalQty} adet)` : ''}`;
     const badge = dock.querySelector('.wa-dock__synergy-badge');
     badge.textContent = synergy.text;
     badge.classList.toggle('wa-dock__synergy-badge--active', tier >= 2);
@@ -3568,11 +3569,11 @@
       const hintText = discountSteps.querySelector('.wa-dock__discount-hint-text');
       if (hintText) {
         if (totalQtySteps >= 5) {
-          hintText.innerHTML = '🎉 <strong>Maksimum indirime ulastiniz!</strong>';
+          hintText.innerHTML = '🎉 <strong>Maksimum indirime ulaştınız!</strong>';
         } else {
           const nextTier = totalQtySteps + 1;
           const nextDiscount = Math.round((SYNERGY_CONFIG[nextTier]?.discount || 0) * 100);
-          hintText.innerHTML = `<strong>1 urun</strong> daha ekle, <strong>%${nextDiscount}</strong> indirime ulas!`;
+          hintText.innerHTML = `<strong>1 ürün</strong> daha ekle, <strong>%${nextDiscount}</strong> indirime ulaş!`;
         }
       }
       discountSteps.style.display = 'block';
@@ -3584,7 +3585,7 @@
   function updateDesktopUI(pricing, synergy, tier, rec, ritual, synExp) {
     sidebar.classList.toggle('wa-sidebar--has-items', state.items.length > 0);
     const totalQty = getTotalQuantity();
-    sidebar.querySelector('.wa-sidebar__count').textContent = `${state.items.length} urun${totalQty > state.items.length ? ` (${totalQty} adet)` : ''}`;
+    sidebar.querySelector('.wa-sidebar__count').textContent = `${state.items.length} ürün${totalQty > state.items.length ? ` (${totalQty} adet)` : ''}`;
     sidebar.querySelector('.wa-sidebar__items').innerHTML = state.items.map(i => renderItemHTML(i, 'sidebar')).join('');
 
     // Synergy explanation
@@ -4182,7 +4183,7 @@
       "type": "textarea",
       "id": "subtitle",
       "label": "Alt Baslik",
-      "default": "Size özel önerilerimizle ritüelinizi oluşturun."
+      "default": "Size özel önerilerimizle ritüelinizi oluştürün."
     },
     {
       "type": "collection",
