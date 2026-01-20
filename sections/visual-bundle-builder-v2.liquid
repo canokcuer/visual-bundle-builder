@@ -188,9 +188,6 @@
         </div>
       </div>
 
-      <!-- Synergy Explanation -->
-      <div class="wa-synergy-explanation" style="display: none;"></div>
-
       <!-- Ritual Guide -->
       <div class="wa-ritual-guide" style="display: none;">
         <div class="wa-ritual-guide__header">
@@ -1221,20 +1218,6 @@
     stroke: var(--wa-black);
     stroke-width: 2;
   }
-
-  .wa-synergy-node__glow {
-    fill: none;
-    stroke: var(--wa-amber);
-    stroke-width: 3;
-    opacity: 0.5;
-    animation: node-glow 2s ease-in-out infinite;
-  }
-
-  @keyframes node-glow {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.7; }
-  }
-
 
   /* Living Orbit - Action Badges (Product Card tutarlı) */
   .wa-synergy-badge {
@@ -2452,17 +2435,11 @@
 
     /* Sidebar Boxes */
     .wa-recommendation,
-    .wa-synergy-explanation,
     .wa-ritual-guide {
       background: var(--wa-gray-100);
       border-radius: var(--wa-radius-sm);
       padding: 1rem;
       margin-bottom: 1rem;
-    }
-
-    .wa-synergy-explanation {
-      background: linear-gradient(135deg, var(--wa-gray-100) 0%, #fafafa 100%);
-      border: 1px solid var(--wa-gray-200);
     }
 
     .wa-recommendation { border: 1px dashed var(--wa-gray-300); }
@@ -3143,16 +3120,6 @@
         g.appendChild(img);
       }
 
-      // Glow effect for selected nodes
-      if (isSelected) {
-        const glow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        glow.setAttribute('cx', pos.x);
-        glow.setAttribute('cy', pos.y);
-        glow.setAttribute('r', this.NODE_RADIUS + 4);
-        glow.setAttribute('class', 'wa-synergy-node__glow');
-        g.insertBefore(glow, g.firstChild);
-      }
-
       // Product name label below node
       const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttribute('x', pos.x);
@@ -3672,13 +3639,6 @@
     const totalQty = getTotalQuantity();
     sidebar.querySelector('.wa-sidebar__count').textContent = `${state.items.length} ürün${totalQty > state.items.length ? ` (${totalQty} adet)` : ''}`;
     sidebar.querySelector('.wa-sidebar__items').innerHTML = state.items.map(i => renderItemHTML(i, 'sidebar')).join('');
-
-    // Synergy explanation
-    const synBox = sidebar.querySelector('.wa-synergy-explanation');
-    if (synExp) {
-      synBox.style.display = 'block';
-      synBox.innerHTML = `<div class="wa-synergy-explanation__header">${ICONS.lightning}<span>${synExp.title}</span></div><div class="wa-synergy-explanation__benefit">${synExp.benefit}</div><p class="wa-synergy-explanation__text">${synExp.detail}</p>`;
-    } else { synBox.style.display = 'none'; }
 
     // Recommendation (using cached elements for performance)
     if (rec && sidebarRecElements.container) {
