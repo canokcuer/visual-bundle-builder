@@ -21,10 +21,15 @@
   <div class="wa-container">
     <!-- Product Grid -->
     <div class="wa-products" role="region" aria-label="Mevcut ürünler">
+      <!-- Center Guide - Living Orbit -->
+      <div class="wa-center-guide">
+        <span>Ritüelini Başlat</span>
+      </div>
+
       {% assign collection = collections[section.settings.collection] %}
       {% for product in collection.products limit: section.settings.product_limit %}
         <article
-          class="wa-product-card"
+          class="wa-product-card wa-product-card--passive"
           data-product-id="{{ product.id }}"
           data-product-handle="{{ product.handle }}"
           data-product-title="{{ product.title }}"
@@ -37,6 +42,8 @@
           aria-label="{{ product.title }} ürününü ritüeline ekle"
         >
           <div class="wa-product-card__image-wrapper">
+            <!-- Living Orbit Badge -->
+            <span class="wa-product-card__orbit-badge wa-product-card__orbit-badge--add">+</span>
             <img
               src="{{ product.featured_image | image_url: width: 400 }}"
               alt="{{ product.title }}"
@@ -636,6 +643,98 @@
   }
 
   .wa-product-card--drawer-open .wa-product-card__drawer { max-height: 250px; }
+
+  /* ============================================
+     LIVING ORBIT - Grayscale to Color Animation
+     ============================================ */
+
+  /* Passive State - Unselected Product */
+  .wa-product-card--passive {
+    filter: grayscale(100%) opacity(0.9);
+    animation: breathe 3s ease-in-out infinite;
+    transition: filter 0.4s ease-out, transform 0.4s ease-out;
+  }
+
+  .wa-product-card--passive .wa-product-card__image img {
+    transition: all 0.4s ease-out;
+  }
+
+  /* Active State - Selected Product */
+  .wa-product-card--active {
+    filter: grayscale(0%) opacity(1);
+    transform: scale(1.05);
+    animation: none;
+    transition: filter 0.4s ease-out, transform 0.4s ease-out;
+  }
+
+  .wa-product-card--active .wa-product-card__image img {
+    box-shadow: 0 0 20px rgba(217, 119, 6, 0.35);
+  }
+
+  /* Action Badge */
+  .wa-product-card__orbit-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    z-index: 15;
+    transition: all 0.3s ease;
+    animation: float-badge 2s ease-in-out infinite;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  .wa-product-card__orbit-badge--add {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  }
+
+  .wa-product-card__orbit-badge--added {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    animation: none;
+  }
+
+  /* Center Guide - "Ritüelini Başlat" */
+  .wa-center-guide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--wa-gray-500);
+    font-size: 0.85rem;
+    font-weight: 500;
+    animation: pulse 2.5s ease-in-out infinite;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .wa-center-guide--hidden {
+    opacity: 0;
+  }
+
+  /* Keyframes */
+  @keyframes breathe {
+    0%, 100% { opacity: 0.85; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+  }
+
+  @keyframes float-badge {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
 
   .wa-product-card__drawer-tabs {
     display: flex;
@@ -3466,6 +3565,44 @@
   }
 
   // ============================================
+  // LIVING ORBIT - State Management
+  // ============================================
+  function updateOrbitStates() {
+    const centerGuide = document.querySelector('.wa-center-guide');
+
+    productCards.forEach(card => {
+      const productId = card.dataset.productId;
+      const isSelected = state.items.some(i => i.id === productId);
+      const badge = card.querySelector('.wa-product-card__orbit-badge');
+
+      if (isSelected) {
+        // Active state - selected product
+        card.classList.remove('wa-product-card--passive');
+        card.classList.add('wa-product-card--active');
+        if (badge) {
+          badge.classList.remove('wa-product-card__orbit-badge--add');
+          badge.classList.add('wa-product-card__orbit-badge--added');
+          badge.textContent = '✓';
+        }
+      } else {
+        // Passive state - unselected product
+        card.classList.remove('wa-product-card--active');
+        card.classList.add('wa-product-card--passive');
+        if (badge) {
+          badge.classList.remove('wa-product-card__orbit-badge--added');
+          badge.classList.add('wa-product-card__orbit-badge--add');
+          badge.textContent = '+';
+        }
+      }
+    });
+
+    // Center guide visibility - hidden when items selected
+    if (centerGuide) {
+      centerGuide.classList.toggle('wa-center-guide--hidden', state.items.length > 0);
+    }
+  }
+
+  // ============================================
   // UI UPDATE
   // ============================================
   function updateUI() {
@@ -3488,6 +3625,9 @@
     // Update synergy map with selected product handles
     const selectedHandles = state.items.map(i => matchHandle(i.title));
     SynergyMapRenderer.update(selectedHandles);
+
+    // Living Orbit - update grayscale/color states and badges
+    updateOrbitStates();
 
     if (state.isMobile) {
       updateMobileUI(pricing, synergy, tier, rec, ritual, synExp);
@@ -3885,6 +4025,45 @@
   }
 
   // ============================================
+  // CART ICON INTERCEPTOR (Mobile VBB Redirect)
+  // ============================================
+  function setupCartIconInterceptor() {
+    if (!state.isMobile) return;
+
+    const cartBtn = document.querySelector('[data-vbb-cart-trigger]');
+    if (!cartBtn) return;
+
+    cartBtn.addEventListener('click', (e) => {
+      // Sepet boşsa normal cart drawer davranışı
+      if (state.items.length === 0) return;
+
+      // Sepette ürün var - VBB slider aç
+      e.preventDefault();
+      e.stopPropagation();
+
+      // VBB section'a scroll et
+      const vbbSection = document.querySelector('.wa-bundle-builder');
+      if (vbbSection) {
+        vbbSection.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => {
+          if (!state.isExpanded) {
+            state.isExpanded = true;
+            dock.classList.add('wa-dock--expanded');
+            setBodyScroll(true);
+          }
+        }, 300);
+      } else {
+        // VBB section bulunamazsa, sadece slider aç
+        if (!state.isExpanded) {
+          state.isExpanded = true;
+          dock.classList.add('wa-dock--expanded');
+          setBodyScroll(true);
+        }
+      }
+    });
+  }
+
+  // ============================================
   // INITIALIZE
   // ============================================
   async function init() {
@@ -4054,6 +4233,12 @@
     });
 
     await syncFromShopifyCart();
+
+    // Initialize Living Orbit states (grayscale/color)
+    updateOrbitStates();
+
+    // Setup cart icon interceptor for mobile VBB redirect
+    setupCartIconInterceptor();
 
     // Check for auto-add from URL parameter
     const urlParams = new URLSearchParams(window.location.search);
