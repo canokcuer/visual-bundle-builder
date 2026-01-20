@@ -2859,11 +2859,6 @@
 
   const achievementState = { unlocked: new Set(), pending: [] };
 
-  function hasProducts(state, handles) {
-    const itemHandles = state.items.map(i => matchHandle(i.title));
-    return handles.every(h => itemHandles.includes(h));
-  }
-
   // ============================================
   // STATE
   // ============================================
@@ -3958,42 +3953,28 @@
   function setupCartIconInterceptor() {
     if (!state.isMobile) return;
 
-    // ============================================
-    // STRATEGY: Document-level click intercept (same as product page intercept)
-    // This proven pattern works for add-to-cart, now using for cart icon
-    // ============================================
-
     document.addEventListener('click', (e) => {
-      // Cart icon selectors - check if click target is cart icon or inside it
+      // Common cart icon selectors across themes
       const cartIcon = e.target.closest([
-        '[data-vbb-cart-trigger]',
         '.cart-drawer-button',
-        '[aria-controls="CartDrawer"]',
-        '[aria-controls*="cart"]',
+        '[aria-controls*="cart" i]',
+        '[aria-controls*="Cart"]',
         'a[href="/cart"]',
         'a[href*="/cart"]',
         '.header__icon--cart',
         '.cart-icon',
-        '.cart-link',
-        '[data-cart-trigger]',
-        'cart-icon',
-        '.icon-cart'
+        '[data-cart-trigger]'
       ].join(', '));
 
       if (!cartIcon) return;
+      if (state.items.length === 0) return; // Empty = normal cart
+      if (e.target.closest('#wellness-architect')) return; // Inside VBB = ignore
 
-      // Don't intercept if VBB is empty - let normal cart open
-      if (state.items.length === 0) return;
-
-      // Don't intercept clicks inside our bundle builder
-      if (e.target.closest('#wellness-architect')) return;
-
-      // Intercept! Prevent cart drawer/page from opening
       e.preventDefault();
       e.stopPropagation();
       e.stopImmediatePropagation();
 
-      // Open VBB slider instead
+      // Open VBB slider
       if (!state.isExpanded) {
         state.isExpanded = true;
         dock.classList.add('wa-dock--expanded');
@@ -4002,7 +3983,7 @@
 
       updateUI();
       vibrate(10);
-    }, true); // capture phase - runs BEFORE other handlers
+    }, true);
   }
 
   // ============================================
