@@ -21,15 +21,10 @@
   <div class="wa-container">
     <!-- Product Grid -->
     <div class="wa-products" role="region" aria-label="Mevcut ürünler">
-      <!-- Center Guide - Living Orbit -->
-      <div class="wa-center-guide">
-        <span>Ritüelini Başlat</span>
-      </div>
-
       {% assign collection = collections[section.settings.collection] %}
       {% for product in collection.products limit: section.settings.product_limit %}
         <article
-          class="wa-product-card wa-product-card--passive"
+          class="wa-product-card"
           data-product-id="{{ product.id }}"
           data-product-handle="{{ product.handle }}"
           data-product-title="{{ product.title }}"
@@ -42,8 +37,6 @@
           aria-label="{{ product.title }} ürününü ritüeline ekle"
         >
           <div class="wa-product-card__image-wrapper">
-            <!-- Living Orbit Badge -->
-            <span class="wa-product-card__orbit-badge wa-product-card__orbit-badge--add">+</span>
             <img
               src="{{ product.featured_image | image_url: width: 400 }}"
               alt="{{ product.title }}"
@@ -644,98 +637,6 @@
 
   .wa-product-card--drawer-open .wa-product-card__drawer { max-height: 250px; }
 
-  /* ============================================
-     LIVING ORBIT - Grayscale to Color Animation
-     ============================================ */
-
-  /* Passive State - Unselected Product */
-  .wa-product-card--passive {
-    filter: grayscale(100%) opacity(0.9);
-    animation: breathe 3s ease-in-out infinite;
-    transition: filter 0.4s ease-out, transform 0.4s ease-out;
-  }
-
-  .wa-product-card--passive .wa-product-card__image img {
-    transition: all 0.4s ease-out;
-  }
-
-  /* Active State - Selected Product */
-  .wa-product-card--active {
-    filter: grayscale(0%) opacity(1);
-    transform: scale(1.05);
-    animation: none;
-    transition: filter 0.4s ease-out, transform 0.4s ease-out;
-  }
-
-  .wa-product-card--active .wa-product-card__image img {
-    box-shadow: 0 0 20px rgba(217, 119, 6, 0.35);
-  }
-
-  /* Action Badge */
-  .wa-product-card__orbit-badge {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 700;
-    color: white;
-    z-index: 15;
-    transition: all 0.3s ease;
-    animation: float-badge 2s ease-in-out infinite;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  }
-
-  .wa-product-card__orbit-badge--add {
-    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-  }
-
-  .wa-product-card__orbit-badge--added {
-    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-    animation: none;
-  }
-
-  /* Center Guide - "Ritüelini Başlat" */
-  .wa-center-guide {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: var(--wa-gray-500);
-    font-size: 0.85rem;
-    font-weight: 500;
-    animation: pulse 2.5s ease-in-out infinite;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-    z-index: 5;
-  }
-
-  .wa-center-guide--hidden {
-    opacity: 0;
-  }
-
-  /* Keyframes */
-  @keyframes breathe {
-    0%, 100% { opacity: 0.85; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.02); }
-  }
-
-  @keyframes float-badge {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-3px); }
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
-  }
-
   .wa-product-card__drawer-tabs {
     display: flex;
     border-bottom: 1px solid var(--wa-gray-200);
@@ -1288,12 +1189,34 @@
     stroke-width: 3;
   }
 
+  /* Living Orbit - Inactive/Unselected State */
   .wa-synergy-node--inactive {
-    opacity: 0.4;
+    opacity: 0.85;
+    filter: grayscale(100%);
+    animation: synergy-breathe 3s ease-in-out infinite;
+    transition: filter 0.4s ease-out, opacity 0.4s ease-out, transform 0.3s ease-out;
+  }
+
+  .wa-synergy-node--inactive image {
+    filter: grayscale(100%);
+  }
+
+  /* Living Orbit - Selected/Active State */
+  .wa-synergy-node--selected {
+    filter: grayscale(0%);
+    opacity: 1;
+    animation: none;
+    transform-origin: center;
+  }
+
+  .wa-synergy-node--selected image {
+    filter: grayscale(0%);
   }
 
   .wa-synergy-node:hover {
     opacity: 1;
+    filter: grayscale(0%);
+    transform: scale(1.08);
   }
 
   .wa-synergy-node:hover .wa-synergy-node__bg {
@@ -1303,15 +1226,53 @@
 
   .wa-synergy-node__glow {
     fill: none;
-    stroke: var(--wa-black);
-    stroke-width: 2;
-    opacity: 0.3;
+    stroke: var(--wa-amber);
+    stroke-width: 3;
+    opacity: 0.5;
     animation: node-glow 2s ease-in-out infinite;
   }
 
   @keyframes node-glow {
-    0%, 100% { opacity: 0.2; r: attr(r); }
-    50% { opacity: 0.5; }
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+  }
+
+  @keyframes synergy-breathe {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.03); }
+  }
+
+  /* Living Orbit - Action Badges */
+  .wa-synergy-badge {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    z-index: 20;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  .wa-synergy-badge--add {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    animation: badge-float 2s ease-in-out infinite;
+  }
+
+  .wa-synergy-badge--added {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    animation: none;
+  }
+
+  @keyframes badge-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
   }
 
   .wa-synergy-node__label {
@@ -3046,11 +3007,7 @@
       svg.innerHTML = '';
       labelsContainer.innerHTML = '';
 
-      if (selectedHandles.length === 0) {
-        container.style.display = 'none';
-        return;
-      }
-
+      // Always show synergy map - Living Orbit shows all products
       container.style.display = 'block';
 
       // Render connections first (so they appear behind nodes)
@@ -3058,14 +3015,26 @@
       const connections = this.getActiveConnections(selectedHandles);
       connections.forEach(conn => this.renderConnection(svg, labelsContainer, conn));
 
-      // Render all product nodes
+      // Render all product nodes with Living Orbit badges
       Object.entries(this.POSITIONS).forEach(([handle, pos]) => {
         const isSelected = selectedHandles.includes(handle);
         this.renderNode(svg, handle, pos, isSelected);
+        this.renderBadge(labelsContainer, handle, pos, isSelected);
       });
 
       // Add click handlers to nodes
       this.bindNodeClickHandlers(svg);
+    },
+
+    renderBadge(labelsContainer, handle, pos, isSelected) {
+      const badge = document.createElement('div');
+      badge.className = `wa-synergy-badge ${isSelected ? 'wa-synergy-badge--added' : 'wa-synergy-badge--add'}`;
+      badge.setAttribute('data-badge-handle', handle);
+      // Position badge at top-right of node
+      badge.style.left = `${((pos.x + this.NODE_RADIUS - 8) / 400) * 100}%`;
+      badge.style.top = `${((pos.y - this.NODE_RADIUS + 2) / 280) * 100}%`;
+      badge.textContent = isSelected ? '✓' : '+';
+      labelsContainer.appendChild(badge);
     },
 
     bindNodeClickHandlers(svg) {
@@ -3565,44 +3534,6 @@
   }
 
   // ============================================
-  // LIVING ORBIT - State Management
-  // ============================================
-  function updateOrbitStates() {
-    const centerGuide = document.querySelector('.wa-center-guide');
-
-    productCards.forEach(card => {
-      const productId = card.dataset.productId;
-      const isSelected = state.items.some(i => i.id === productId);
-      const badge = card.querySelector('.wa-product-card__orbit-badge');
-
-      if (isSelected) {
-        // Active state - selected product
-        card.classList.remove('wa-product-card--passive');
-        card.classList.add('wa-product-card--active');
-        if (badge) {
-          badge.classList.remove('wa-product-card__orbit-badge--add');
-          badge.classList.add('wa-product-card__orbit-badge--added');
-          badge.textContent = '✓';
-        }
-      } else {
-        // Passive state - unselected product
-        card.classList.remove('wa-product-card--active');
-        card.classList.add('wa-product-card--passive');
-        if (badge) {
-          badge.classList.remove('wa-product-card__orbit-badge--added');
-          badge.classList.add('wa-product-card__orbit-badge--add');
-          badge.textContent = '+';
-        }
-      }
-    });
-
-    // Center guide visibility - hidden when items selected
-    if (centerGuide) {
-      centerGuide.classList.toggle('wa-center-guide--hidden', state.items.length > 0);
-    }
-  }
-
-  // ============================================
   // UI UPDATE
   // ============================================
   function updateUI() {
@@ -3625,9 +3556,6 @@
     // Update synergy map with selected product handles
     const selectedHandles = state.items.map(i => matchHandle(i.title));
     SynergyMapRenderer.update(selectedHandles);
-
-    // Living Orbit - update grayscale/color states and badges
-    updateOrbitStates();
 
     if (state.isMobile) {
       updateMobileUI(pricing, synergy, tier, rec, ritual, synExp);
@@ -4033,34 +3961,49 @@
     const cartBtn = document.querySelector('[data-vbb-cart-trigger]');
     if (!cartBtn) return;
 
-    cartBtn.addEventListener('click', (e) => {
+    // Use capture phase and stopImmediatePropagation to intercept BEFORE theme handlers
+    const interceptHandler = (e) => {
       // Sepet boşsa normal cart drawer davranışı
       if (state.items.length === 0) return;
 
       // Sepette ürün var - VBB slider aç
       e.preventDefault();
       e.stopPropagation();
+      e.stopImmediatePropagation(); // Stop ALL other handlers
 
-      // VBB section'a scroll et
+      // Close any open cart drawer first (in case theme opened it)
+      const cartDrawer = document.querySelector('cart-drawer, #CartDrawer, [id*="cart-drawer"]');
+      if (cartDrawer) {
+        cartDrawer.removeAttribute('open');
+        cartDrawer.classList.remove('is-open', 'active', 'drawer--is-open');
+      }
+
+      // Open VBB slider
+      if (!state.isExpanded) {
+        state.isExpanded = true;
+        dock.classList.add('wa-dock--expanded');
+        setBodyScroll(true);
+      }
+
+      // Scroll to VBB section if not visible
       const vbbSection = document.querySelector('.wa-bundle-builder');
       if (vbbSection) {
-        vbbSection.scrollIntoView({ behavior: 'smooth' });
-        setTimeout(() => {
-          if (!state.isExpanded) {
-            state.isExpanded = true;
-            dock.classList.add('wa-dock--expanded');
-            setBodyScroll(true);
-          }
-        }, 300);
-      } else {
-        // VBB section bulunamazsa, sadece slider aç
-        if (!state.isExpanded) {
-          state.isExpanded = true;
-          dock.classList.add('wa-dock--expanded');
-          setBodyScroll(true);
+        const rect = vbbSection.getBoundingClientRect();
+        if (rect.top < 0 || rect.bottom > window.innerHeight) {
+          vbbSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }
-    });
+    };
+
+    // Add listener with capture phase (runs BEFORE bubbling handlers)
+    cartBtn.addEventListener('click', interceptHandler, true);
+
+    // Also intercept touch events for mobile
+    cartBtn.addEventListener('touchend', (e) => {
+      if (state.items.length === 0) return;
+      e.preventDefault();
+      interceptHandler(e);
+    }, { capture: true, passive: false });
   }
 
   // ============================================
@@ -4233,9 +4176,6 @@
     });
 
     await syncFromShopifyCart();
-
-    // Initialize Living Orbit states (grayscale/color)
-    updateOrbitStates();
 
     // Setup cart icon interceptor for mobile VBB redirect
     setupCartIconInterceptor();
