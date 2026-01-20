@@ -3021,8 +3021,9 @@
       badge.setAttribute('data-badge-handle', handle);
       // Position badge at top-right edge of circle (45 degree angle)
       const offset = this.NODE_RADIUS * 0.65;
+      const extraY = handle === 'dailyglow' ? 20 : 0; // Dailyglow badge moved down
       badge.style.left = `${((pos.x + offset) / 400) * 100}%`;
-      badge.style.top = `${((pos.y - offset) / 280) * 100}%`;
+      badge.style.top = `${((pos.y - offset + extraY) / 280) * 100}%`;
       // SVG icons matching product card style
       badge.innerHTML = isSelected
         ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>'
