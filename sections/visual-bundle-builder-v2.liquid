@@ -3014,23 +3014,13 @@
       this.bindNodeClickHandlers(svg);
     },
 
-    // Badge position offsets per product (x, y adjustments)
-    BADGE_OFFSETS: {
-      'dailyglow': { x: -45, y: 25 },   // Much more left and down
-      'mindfuel': { x: -50, y: 0 },     // Much more left (off screen fix)
-      'dreamglow': { x: 20, y: 0 },     // Right
-      'thechill': { x: 20, y: 0 },      // Right
-      'reset-button': { x: 0, y: 0 }    // Default
-    },
-
     renderBadge(labelsContainer, handle, pos, isSelected) {
       const badge = document.createElement('div');
       badge.className = `wa-synergy-badge ${isSelected ? 'wa-synergy-badge--added' : 'wa-synergy-badge--add'}`;
       badge.setAttribute('data-badge-handle', handle);
-      // Position badge with per-product offsets
-      const offset = this.BADGE_OFFSETS[handle] || { x: 0, y: 0 };
-      badge.style.left = `${((pos.x + this.NODE_RADIUS - 6 + offset.x) / 400) * 100}%`;
-      badge.style.top = `${((pos.y - this.NODE_RADIUS + offset.y) / 280) * 100}%`;
+      // Position badge at top-right of each node (consistent for all)
+      badge.style.left = `${((pos.x + this.NODE_RADIUS - 10) / 400) * 100}%`;
+      badge.style.top = `${((pos.y - this.NODE_RADIUS + 2) / 280) * 100}%`;
       // SVG icons matching product card style
       badge.innerHTML = isSelected
         ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>'
