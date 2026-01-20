@@ -1248,12 +1248,13 @@
     z-index: 20;
     cursor: pointer;
     pointer-events: auto;
+    transform: translate(-50%, -50%);
     transition: all 0.3s ease;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   }
 
   .wa-synergy-badge:hover {
-    transform: scale(1.1);
+    transform: translate(-50%, -50%) scale(1.1);
   }
 
   .wa-synergy-badge--add {
@@ -3018,9 +3019,10 @@
       const badge = document.createElement('div');
       badge.className = `wa-synergy-badge ${isSelected ? 'wa-synergy-badge--added' : 'wa-synergy-badge--add'}`;
       badge.setAttribute('data-badge-handle', handle);
-      // Position badge at top-right of each node (consistent for all)
-      badge.style.left = `${((pos.x + this.NODE_RADIUS - 10) / 400) * 100}%`;
-      badge.style.top = `${((pos.y - this.NODE_RADIUS + 2) / 280) * 100}%`;
+      // Position badge at top-right edge of circle (45 degree angle)
+      const offset = this.NODE_RADIUS * 0.65;
+      badge.style.left = `${((pos.x + offset) / 400) * 100}%`;
+      badge.style.top = `${((pos.y - offset) / 280) * 100}%`;
       // SVG icons matching product card style
       badge.innerHTML = isSelected
         ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>'
