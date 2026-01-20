@@ -4,8 +4,7 @@
 
 ### 1. Upload Files
 Upload these files to your Shopify theme:
-- `sections/visual-bundle-builder.liquid` → Theme > Edit Code > Sections
-- `snippets/bundle-product-badge.liquid` → Theme > Edit Code > Snippets
+- `sections/visual-bundle-builder-v2.liquid` → Theme > Edit Code > Sections
 
 ### 2. Add Product Tags
 Add these tags to your products in Shopify Admin > Products:
@@ -51,9 +50,11 @@ Edit the `SYNERGY_CONFIG` in the JavaScript to change discount tiers:
 
 ```javascript
 const SYNERGY_CONFIG = {
-  1: { percent: 33, text: 'İyi Başlangıç', discount: 0 },
-  2: { percent: 66, text: 'Birlikte Daha İyi', discount: 0.10 },  // 10% off
-  3: { percent: 100, text: 'Mükemmel Ritüel', discount: 0.15 }    // 15% off
+  1: { percent: 20, text: 'Başlangıç', discount: 0 },
+  2: { percent: 40, text: '%15 İkili Güç', discount: 0.15 },
+  3: { percent: 60, text: '%30 Popüler', discount: 0.30 },
+  4: { percent: 80, text: '%33 Pro', discount: 0.33 },
+  5: { percent: 100, text: '%35 Efsane', discount: 0.35 }
 };
 ```
 

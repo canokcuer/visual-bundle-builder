@@ -3,7 +3,7 @@
 An interactive Shopify bundle builder for wellness supplements with gamification, synergy visualization, and tiered discounts.
 
 ![Tests](https://img.shields.io/badge/tests-84%20passing-brightgreen)
-![Version](https://img.shields.io/badge/version-2.0.0-blue)
+![Version](https://img.shields.io/badge/version-2.1.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## Features
@@ -28,8 +28,15 @@ An interactive Shopify bundle builder for wellness supplements with gamification
 
 ### Integrations
 - **Product Page Intercept** - Captures add-to-cart clicks on product pages
+- **Cart Icon Intercept** - Mobile cart icon opens bundle builder instead of cart drawer
 - **URL Parameter Auto-Add** - Deep linking with `?add=handle`
 - **Shopify Cart Sync** - Real-time synchronization with Shopify cart API
+
+### Synergy Map (Living Orbit)
+- **Interactive Badges** - Clickable +/✓ badges on each product node
+- **Grayscale States** - Unselected products shown in grayscale
+- **Pentagon Layout** - 5 products arranged in visual pentagon formation
+- **Connection Lines** - Animated dashed lines showing active synergies
 
 ## Screenshots
 
@@ -69,7 +76,7 @@ See [BUNDLE-BUILDER-SETUP.md](./BUNDLE-BUILDER-SETUP.md) for detailed setup inst
 ```
 cyra1/
 ├── sections/
-│   └── visual-bundle-builder-v2.liquid   # Main implementation (4167 lines)
+│   └── visual-bundle-builder-v2.liquid   # Main implementation (~4300 lines)
 ├── assets/js/bundle-builder/
 │   ├── pricing.js                        # Discount calculations
 │   ├── achievements.js                   # Gamification logic
@@ -157,11 +164,13 @@ The bundle builder is configured for 5 Cyrasoul wellness products:
 
 | Items | Discount | Turkish Badge |
 |-------|----------|---------------|
-| 1 | 0% | Baslayin |
-| 2 | 15% | %15 Ikili Guc |
-| 3 | 20% | %20 Uclu Sinerji |
-| 4 | 25% | %25 Dortlu Rituel |
-| 5 | 30% | %30 Tam Rituel |
+| 1 | 0% | Başlangıç |
+| 2 | 15% | %15 İkili Güç |
+| 3 | 30% | %30 Popüler |
+| 4 | 33% | %33 Pro |
+| 5 | 35% | %35 Efsane |
+
+**Quantity Discounts:** 3-5 of same product = 30% off, 6+ of same product = 35% off
 
 ## Synergy System
 
@@ -199,6 +208,9 @@ Each synergy displays:
 
 ## Version History
 
+- **V16** - Synergy Map UX improvements (clickable badges, badge positioning, remove animations)
+- **V15** - Cart icon redirect to bundle builder, Living Orbit grayscale states
+- **V14** - Updated discount tiers (30%, 33%, 35%)
 - **V13** - Mobile UX fixes (button positioning, scroll blocking)
 - **V12** - Web scroll, styling, slider hierarchy
 - **V11** - Same-page add-to-cart intercept

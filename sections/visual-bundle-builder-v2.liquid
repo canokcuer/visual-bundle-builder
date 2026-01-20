@@ -146,6 +146,7 @@
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
           </svg>
           <span>Birlikte Kullanım</span>
+          <span class="wa-synergy-hint">Tıkla & Keşfet</span>
         </div>
         <!-- Hexagon Synergy Map -->
         <div class="wa-synergy-map__scroll">
@@ -278,6 +279,7 @@
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
           </svg>
           <span>Birlikte Kullanım</span>
+          <span class="wa-synergy-hint">Tıkla & Keşfet</span>
         </div>
         <!-- Hexagon Synergy Map -->
         <div class="wa-synergy-map__scroll">
@@ -305,9 +307,6 @@
           <button class="wa-dock__recommendation-add">Ekle</button>
         </div>
       </div>
-
-      <!-- Mobile Synergy Explanation -->
-      <div class="wa-dock__synergy-explanation" style="display: none;"></div>
 
       <!-- Mobile Ritual Guide -->
       <div class="wa-dock__ritual" style="display: none;"></div>
@@ -576,7 +575,7 @@
 
   .wa-product-card__add-btn {
     position: absolute;
-    bottom: 0.75rem;
+    top: 0.75rem;
     right: 0.75rem;
     width: 32px;
     height: 32px;
@@ -1086,12 +1085,12 @@
   .wa-synergy-map__svg {
     min-width: 100%;
     width: 100%;
-    height: 260px;
+    height: 300px;
     display: block;
   }
 
   .wa-synergy-node__bg {
-    fill: var(--wa-white);
+    fill: #ffffff;
     stroke: var(--wa-gray-200);
     stroke-width: 2;
   }
@@ -1189,12 +1188,33 @@
     stroke-width: 3;
   }
 
+  /* Living Orbit - Inactive/Unselected State */
   .wa-synergy-node--inactive {
-    opacity: 0.4;
+    opacity: 0.85;
+    filter: grayscale(100%);
+    transition: filter 0.4s ease-out, opacity 0.4s ease-out, transform 0.3s ease-out;
+  }
+
+  .wa-synergy-node--inactive image {
+    filter: grayscale(100%);
+  }
+
+  /* Living Orbit - Selected/Active State */
+  .wa-synergy-node--selected {
+    filter: grayscale(0%);
+    opacity: 1;
+    animation: none;
+    transform-origin: center;
+  }
+
+  .wa-synergy-node--selected image {
+    filter: grayscale(0%);
   }
 
   .wa-synergy-node:hover {
     opacity: 1;
+    filter: grayscale(0%);
+    transform: scale(1.08);
   }
 
   .wa-synergy-node:hover .wa-synergy-node__bg {
@@ -1204,15 +1224,45 @@
 
   .wa-synergy-node__glow {
     fill: none;
-    stroke: var(--wa-black);
-    stroke-width: 2;
-    opacity: 0.3;
+    stroke: var(--wa-amber);
+    stroke-width: 3;
+    opacity: 0.5;
     animation: node-glow 2s ease-in-out infinite;
   }
 
   @keyframes node-glow {
-    0%, 100% { opacity: 0.2; r: attr(r); }
-    50% { opacity: 0.5; }
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+  }
+
+
+  /* Living Orbit - Action Badges (Product Card tutarlı) */
+  .wa-synergy-badge {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    cursor: pointer;
+    pointer-events: auto;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+
+  .wa-synergy-badge:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  .wa-synergy-badge--add {
+    background: var(--wa-black);
+  }
+
+  .wa-synergy-badge--added {
+    background: var(--wa-success);
   }
 
   .wa-synergy-node__label {
@@ -1260,6 +1310,16 @@
 
   .wa-synergy-achievements__header svg {
     color: var(--wa-gray-500);
+  }
+
+  .wa-synergy-hint {
+    background: rgba(34, 197, 94, 0.15);
+    color: #16a34a;
+    font-size: 0.6rem;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 6px;
   }
 
   /* Synergy List (explanations below map) */
@@ -2004,19 +2064,13 @@
     background: var(--wa-gray-800);
   }
 
-  /* Synergy Explanation, Ritual Guide - Dock */
-  .wa-dock__synergy-explanation,
+  /* Ritual Guide - Dock */
   .wa-dock__ritual {
     background: var(--wa-gray-100);
     border-radius: var(--wa-radius-sm);
     padding: 0.75rem;
     margin-bottom: 1rem;
     font-size: 0.75rem;
-  }
-
-  .wa-dock__synergy-explanation {
-    background: linear-gradient(135deg, var(--wa-gray-100) 0%, #fafafa 100%);
-    border: 1px solid var(--wa-gray-200);
   }
 
   .wa-dock__synergy {
@@ -2799,11 +2853,6 @@
 
   const achievementState = { unlocked: new Set(), pending: [] };
 
-  function hasProducts(state, handles) {
-    const itemHandles = state.items.map(i => matchHandle(i.title));
-    return handles.every(h => itemHandles.includes(h));
-  }
-
   // ============================================
   // STATE
   // ============================================
@@ -2930,7 +2979,7 @@
   const SynergyMapRenderer = {
     // Product positions in pentagon layout (x, y coordinates in SVG viewBox 400x280)
     POSITIONS: {
-      'dailyglow': { x: 200, y: 55 },     // Top center
+      'dailyglow': { x: 200, y: 70 },     // Top center
       'mindfuel': { x: 340, y: 120 },     // Right top
       'dreamglow': { x: 300, y: 230 },    // Right bottom
       'thechill': { x: 100, y: 230 },     // Left bottom
@@ -2947,11 +2996,7 @@
       svg.innerHTML = '';
       labelsContainer.innerHTML = '';
 
-      if (selectedHandles.length === 0) {
-        container.style.display = 'none';
-        return;
-      }
-
+      // Always show synergy map - Living Orbit shows all products
       container.style.display = 'block';
 
       // Render connections first (so they appear behind nodes)
@@ -2959,49 +3004,84 @@
       const connections = this.getActiveConnections(selectedHandles);
       connections.forEach(conn => this.renderConnection(svg, labelsContainer, conn));
 
-      // Render all product nodes
+      // Render all product nodes with Living Orbit badges
       Object.entries(this.POSITIONS).forEach(([handle, pos]) => {
         const isSelected = selectedHandles.includes(handle);
         this.renderNode(svg, handle, pos, isSelected);
+        this.renderBadge(labelsContainer, handle, pos, isSelected);
       });
 
       // Add click handlers to nodes
       this.bindNodeClickHandlers(svg);
     },
 
+    renderBadge(labelsContainer, handle, pos, isSelected) {
+      const badge = document.createElement('div');
+      badge.className = `wa-synergy-badge ${isSelected ? 'wa-synergy-badge--added' : 'wa-synergy-badge--add'}`;
+      badge.setAttribute('data-badge-handle', handle);
+      // Position badge at top-right edge of circle (45 degree angle)
+      const offset = this.NODE_RADIUS * 0.65;
+      const extraY = handle === 'dailyglow' ? 20 : 0; // Dailyglow badge moved down
+      badge.style.left = `${((pos.x + offset) / 400) * 100}%`;
+      badge.style.top = `${((pos.y - offset + extraY) / 280) * 100}%`;
+      // SVG icons matching product card style
+      badge.innerHTML = isSelected
+        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>';
+      labelsContainer.appendChild(badge);
+    },
+
+    handleNodeOrBadgeClick(handle, isSelected) {
+      const product = handleToProductMap.get(handle);
+
+      if (isSelected) {
+        // Remove from cart
+        const item = state.items.find(i => matchHandle(i.title) === handle);
+        if (item) removeItem(item.id);
+      } else if (product) {
+        // Add to cart
+        const card = document.querySelector(`.wa-product-card[data-product-handle="${handle}"]`);
+        if (card) {
+          const data = {
+            id: card.dataset.productId,
+            handle: card.dataset.productHandle,
+            title: card.dataset.productTitle,
+            price: parseInt(card.dataset.productPrice),
+            image: card.dataset.productImage,
+            variantId: card.dataset.variantId,
+            url: card.dataset.productUrl,
+            quantity: 1
+          };
+          addItem(data);
+        }
+      }
+    },
+
     bindNodeClickHandlers(svg) {
+      // Node click handlers
       svg.querySelectorAll('.wa-synergy-node').forEach(node => {
         node.addEventListener('click', (e) => {
           e.stopPropagation();
           const handle = node.getAttribute('data-handle');
           if (!handle) return;
-
           const isSelected = node.classList.contains('wa-synergy-node--selected');
-          const product = handleToProductMap.get(handle);
-
-          if (isSelected) {
-            // Remove from cart
-            const item = state.items.find(i => matchHandle(i.title) === handle);
-            if (item) removeItem(item.id);
-          } else if (product) {
-            // Add to cart
-            const card = document.querySelector(`.wa-product-card[data-product-handle="${handle}"]`);
-            if (card) {
-              const data = {
-                id: card.dataset.productId,
-                handle: card.dataset.productHandle,
-                title: card.dataset.productTitle,
-                price: parseInt(card.dataset.productPrice),
-                image: card.dataset.productImage,
-                variantId: card.dataset.variantId,
-                url: card.dataset.productUrl,
-                quantity: 1
-              };
-              addItem(data);
-            }
-          }
+          this.handleNodeOrBadgeClick(handle, isSelected);
         });
       });
+
+      // Badge click handlers
+      const labelsContainer = svg.parentElement.querySelector('.wa-synergy-map__labels');
+      if (labelsContainer) {
+        labelsContainer.querySelectorAll('.wa-synergy-badge').forEach(badge => {
+          badge.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const handle = badge.getAttribute('data-badge-handle');
+            if (!handle) return;
+            const isSelected = badge.classList.contains('wa-synergy-badge--added');
+            this.handleNodeOrBadgeClick(handle, isSelected);
+          });
+        });
+      }
     },
 
     getActiveConnections(selectedHandles) {
@@ -3528,13 +3608,6 @@
     // Items list
     dock.querySelector('.wa-dock__items').innerHTML = state.items.map(i => renderItemHTML(i, 'dock')).join('');
 
-    // Synergy explanation
-    const synBox = dock.querySelector('.wa-dock__synergy-explanation');
-    if (synExp) {
-      synBox.style.display = 'block';
-      synBox.innerHTML = `<div style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:1rem;margin-bottom:8px;">${ICONS.lightning}<span>${synExp.title}</span></div><div style="display:inline-block;background:#000;color:#fff;font-size:0.65rem;padding:2px 6px;border-radius:4px;margin-bottom:8px;">${synExp.benefit}</div><p style="margin:0;color:#525252;line-height:1.5;font-size:0.8rem;font-weight:400;">${synExp.detail}</p>`;
-    } else { synBox.style.display = 'none'; }
-
     // Recommendation (using cached elements for performance)
     if (rec && dockRecElements.container) {
       const rp = getProductDataByHandle(rec.handle);
@@ -3885,6 +3958,45 @@
   }
 
   // ============================================
+  // CART ICON INTERCEPTOR (Mobile VBB Redirect)
+  // ============================================
+  function setupCartIconInterceptor() {
+    if (!state.isMobile) return;
+
+    document.addEventListener('click', (e) => {
+      // Common cart icon selectors across themes
+      const cartIcon = e.target.closest([
+        '.cart-drawer-button',
+        '[aria-controls*="cart" i]',
+        '[aria-controls*="Cart"]',
+        'a[href="/cart"]',
+        'a[href*="/cart"]',
+        '.header__icon--cart',
+        '.cart-icon',
+        '[data-cart-trigger]'
+      ].join(', '));
+
+      if (!cartIcon) return;
+      if (state.items.length === 0) return; // Empty = normal cart
+      if (e.target.closest('#wellness-architect')) return; // Inside VBB = ignore
+
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+
+      // Open VBB slider
+      if (!state.isExpanded) {
+        state.isExpanded = true;
+        dock.classList.add('wa-dock--expanded');
+        setBodyScroll(true);
+      }
+
+      updateUI();
+      vibrate(10);
+    }, true);
+  }
+
+  // ============================================
   // INITIALIZE
   // ============================================
   async function init() {
@@ -4054,6 +4166,9 @@
     });
 
     await syncFromShopifyCart();
+
+    // Setup cart icon interceptor for mobile VBB redirect
+    setupCartIconInterceptor();
 
     // Check for auto-add from URL parameter
     const urlParams = new URLSearchParams(window.location.search);
