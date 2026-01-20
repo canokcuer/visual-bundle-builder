@@ -3959,133 +3959,50 @@
     if (!state.isMobile) return;
 
     // ============================================
-    // STRATEGY: Cart Drawer Hijack with MutationObserver
-    // Watch for cart drawer opening and redirect to VBB
+    // STRATEGY: Document-level click intercept (same as product page intercept)
+    // This proven pattern works for add-to-cart, now using for cart icon
     // ============================================
 
-    let isHijacking = false; // Prevent infinite loops
-
-    function openVBBSlider() {
-      if (state.isExpanded) return;
-      state.isExpanded = true;
-      dock.classList.add('wa-dock--expanded');
-      setBodyScroll(true);
-    }
-
-    function closeCartDrawer(drawer) {
-      if (!drawer) return;
-
-      // Try multiple methods to close the drawer
-      drawer.removeAttribute('open');
-      drawer.classList.remove('is-open', 'active', 'drawer--is-open', 'is-active', 'open');
-      drawer.style.display = 'none';
-
-      // If it's a custom element with close method
-      if (typeof drawer.close === 'function') {
-        drawer.close();
-      }
-
-      // Remove body scroll lock that theme might have added
-      document.body.classList.remove('overflow-hidden', 'no-scroll', 'drawer-open');
-      document.documentElement.classList.remove('overflow-hidden', 'no-scroll');
-
-      // Reset after a tick to allow drawer to fully close
-      setTimeout(() => {
-        drawer.style.display = '';
-      }, 100);
-    }
-
-    // Find all possible cart drawer elements
-    function findCartDrawers() {
-      return document.querySelectorAll([
-        'cart-drawer',
-        '#CartDrawer',
-        '#cart-drawer',
-        '[id*="cart-drawer"]',
-        '[id*="CartDrawer"]',
-        '.cart-drawer',
-        '.drawer[data-cart]',
-        '[data-cart-drawer]'
+    document.addEventListener('click', (e) => {
+      // Cart icon selectors - check if click target is cart icon or inside it
+      const cartIcon = e.target.closest([
+        '[data-vbb-cart-trigger]',
+        '.cart-drawer-button',
+        '[aria-controls="CartDrawer"]',
+        '[aria-controls*="cart"]',
+        'a[href="/cart"]',
+        'a[href*="/cart"]',
+        '.header__icon--cart',
+        '.cart-icon',
+        '.cart-link',
+        '[data-cart-trigger]',
+        'cart-icon',
+        '.icon-cart'
       ].join(', '));
-    }
 
-    // MutationObserver callback
-    function handleMutation(mutations) {
-      if (isHijacking) return;
-      if (state.items.length === 0) return; // Empty cart - let normal drawer open
+      if (!cartIcon) return;
 
-      for (const mutation of mutations) {
-        const target = mutation.target;
+      // Don't intercept if VBB is empty - let normal cart open
+      if (state.items.length === 0) return;
 
-        // Check if a cart drawer is being opened
-        const isOpening =
-          (mutation.attributeName === 'open' && target.hasAttribute('open')) ||
-          (mutation.attributeName === 'class' && (
-            target.classList.contains('is-open') ||
-            target.classList.contains('active') ||
-            target.classList.contains('is-active') ||
-            target.classList.contains('drawer--is-open')
-          )) ||
-          (mutation.attributeName === 'style' &&
-            target.style.display !== 'none' &&
-            target.style.visibility !== 'hidden');
+      // Don't intercept clicks inside our bundle builder
+      if (e.target.closest('#wellness-architect')) return;
 
-        if (isOpening) {
-          isHijacking = true;
+      // Intercept! Prevent cart drawer/page from opening
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
 
-          // Close the cart drawer immediately
-          closeCartDrawer(target);
-
-          // Open VBB slider instead
-          openVBBSlider();
-
-          // Reset hijacking flag after animation
-          setTimeout(() => {
-            isHijacking = false;
-          }, 500);
-
-          return;
-        }
+      // Open VBB slider instead
+      if (!state.isExpanded) {
+        state.isExpanded = true;
+        dock.classList.add('wa-dock--expanded');
+        setBodyScroll(true);
       }
-    }
 
-    // Create observer for cart drawers
-    const observer = new MutationObserver(handleMutation);
-
-    // Observe all cart drawer elements
-    const observeDrawers = () => {
-      const drawers = findCartDrawers();
-      drawers.forEach(drawer => {
-        observer.observe(drawer, {
-          attributes: true,
-          attributeFilter: ['open', 'class', 'style', 'aria-hidden']
-        });
-      });
-    };
-
-    // Initial observation
-    observeDrawers();
-
-    // Re-observe if DOM changes (for dynamically added drawers)
-    const bodyObserver = new MutationObserver(() => {
-      observeDrawers();
-    });
-    bodyObserver.observe(document.body, { childList: true, subtree: true });
-
-    // Also try direct click intercept as backup
-    const cartBtn = document.querySelector('[data-vbb-cart-trigger]');
-    if (cartBtn) {
-      cartBtn.addEventListener('click', (e) => {
-        if (state.items.length === 0) return;
-
-        // Small delay to let our observer catch the drawer opening
-        setTimeout(() => {
-          if (!state.isExpanded) {
-            openVBBSlider();
-          }
-        }, 50);
-      }, true);
-    }
+      updateUI();
+      vibrate(10);
+    }, true); // capture phase - runs BEFORE other handlers
   }
 
   // ============================================
