@@ -575,7 +575,7 @@
 
   .wa-product-card__add-btn {
     position: absolute;
-    bottom: 0.75rem;
+    top: 0.75rem;
     right: 0.75rem;
     width: 32px;
     height: 32px;
@@ -1090,7 +1090,7 @@
   }
 
   .wa-synergy-node__bg {
-    fill: var(--wa-white);
+    fill: #ffffff;
     stroke: var(--wa-gray-200);
     stroke-width: 2;
   }
@@ -1192,7 +1192,6 @@
   .wa-synergy-node--inactive {
     opacity: 0.85;
     filter: grayscale(100%);
-    animation: synergy-breathe 3s ease-in-out infinite;
     transition: filter 0.4s ease-out, opacity 0.4s ease-out, transform 0.3s ease-out;
   }
 
@@ -1236,10 +1235,6 @@
     50% { opacity: 0.7; }
   }
 
-  @keyframes synergy-breathe {
-    0%, 100% { opacity: 0.7; transform: scale(1); }
-    50% { opacity: 0.9; transform: scale(1.03); }
-  }
 
   /* Living Orbit - Action Badges (Product Card tutarlı) */
   .wa-synergy-badge {
@@ -1251,9 +1246,13 @@
     align-items: center;
     justify-content: center;
     z-index: 20;
-    pointer-events: none;
+    cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+
+  .wa-synergy-badge:hover {
+    transform: scale(1.1);
   }
 
   .wa-synergy-badge--add {
@@ -1312,13 +1311,13 @@
   }
 
   .wa-synergy-hint {
-    background: var(--wa-gray-200);
-    color: var(--wa-gray-500);
+    background: rgba(34, 197, 94, 0.15);
+    color: #16a34a;
     font-size: 0.6rem;
     font-weight: 500;
     padding: 2px 8px;
     border-radius: 10px;
-    margin-left: auto;
+    margin-left: 6px;
   }
 
   /* Synergy List (explanations below map) */
@@ -3028,39 +3027,57 @@
       labelsContainer.appendChild(badge);
     },
 
+    handleNodeOrBadgeClick(handle, isSelected) {
+      const product = handleToProductMap.get(handle);
+
+      if (isSelected) {
+        // Remove from cart
+        const item = state.items.find(i => matchHandle(i.title) === handle);
+        if (item) removeItem(item.id);
+      } else if (product) {
+        // Add to cart
+        const card = document.querySelector(`.wa-product-card[data-product-handle="${handle}"]`);
+        if (card) {
+          const data = {
+            id: card.dataset.productId,
+            handle: card.dataset.productHandle,
+            title: card.dataset.productTitle,
+            price: parseInt(card.dataset.productPrice),
+            image: card.dataset.productImage,
+            variantId: card.dataset.variantId,
+            url: card.dataset.productUrl,
+            quantity: 1
+          };
+          addItem(data);
+        }
+      }
+    },
+
     bindNodeClickHandlers(svg) {
+      // Node click handlers
       svg.querySelectorAll('.wa-synergy-node').forEach(node => {
         node.addEventListener('click', (e) => {
           e.stopPropagation();
           const handle = node.getAttribute('data-handle');
           if (!handle) return;
-
           const isSelected = node.classList.contains('wa-synergy-node--selected');
-          const product = handleToProductMap.get(handle);
-
-          if (isSelected) {
-            // Remove from cart
-            const item = state.items.find(i => matchHandle(i.title) === handle);
-            if (item) removeItem(item.id);
-          } else if (product) {
-            // Add to cart
-            const card = document.querySelector(`.wa-product-card[data-product-handle="${handle}"]`);
-            if (card) {
-              const data = {
-                id: card.dataset.productId,
-                handle: card.dataset.productHandle,
-                title: card.dataset.productTitle,
-                price: parseInt(card.dataset.productPrice),
-                image: card.dataset.productImage,
-                variantId: card.dataset.variantId,
-                url: card.dataset.productUrl,
-                quantity: 1
-              };
-              addItem(data);
-            }
-          }
+          this.handleNodeOrBadgeClick(handle, isSelected);
         });
       });
+
+      // Badge click handlers
+      const labelsContainer = svg.parentElement.querySelector('.wa-synergy-map__labels');
+      if (labelsContainer) {
+        labelsContainer.querySelectorAll('.wa-synergy-badge').forEach(badge => {
+          badge.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const handle = badge.getAttribute('data-badge-handle');
+            if (!handle) return;
+            const isSelected = badge.classList.contains('wa-synergy-badge--added');
+            this.handleNodeOrBadgeClick(handle, isSelected);
+          });
+        });
+      }
     },
 
     getActiveConnections(selectedHandles) {
