@@ -146,6 +146,7 @@
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
           </svg>
           <span>Birlikte Kullanım</span>
+          <span class="wa-synergy-hint">Tıkla & Keşfet</span>
         </div>
         <!-- Hexagon Synergy Map -->
         <div class="wa-synergy-map__scroll">
@@ -278,6 +279,7 @@
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
           </svg>
           <span>Birlikte Kullanım</span>
+          <span class="wa-synergy-hint">Tıkla & Keşfet</span>
         </div>
         <!-- Hexagon Synergy Map -->
         <div class="wa-synergy-map__scroll">
@@ -1239,37 +1241,27 @@
     50% { opacity: 0.9; transform: scale(1.03); }
   }
 
-  /* Living Orbit - Action Badges */
+  /* Living Orbit - Action Badges (Product Card tutarlı) */
   .wa-synergy-badge {
     position: absolute;
-    width: 22px;
-    height: 22px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
-    font-weight: 700;
-    color: white;
     z-index: 20;
     pointer-events: none;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   }
 
   .wa-synergy-badge--add {
-    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-    animation: badge-float 2s ease-in-out infinite;
+    background: var(--wa-black);
   }
 
   .wa-synergy-badge--added {
-    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-    animation: none;
-  }
-
-  @keyframes badge-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-2px); }
+    background: var(--wa-success);
   }
 
   .wa-synergy-node__label {
@@ -1317,6 +1309,16 @@
 
   .wa-synergy-achievements__header svg {
     color: var(--wa-gray-500);
+  }
+
+  .wa-synergy-hint {
+    background: var(--wa-gray-200);
+    color: var(--wa-gray-500);
+    font-size: 0.6rem;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: auto;
   }
 
   /* Synergy List (explanations below map) */
@@ -3017,9 +3019,12 @@
       badge.className = `wa-synergy-badge ${isSelected ? 'wa-synergy-badge--added' : 'wa-synergy-badge--add'}`;
       badge.setAttribute('data-badge-handle', handle);
       // Position badge at top-right of node
-      badge.style.left = `${((pos.x + this.NODE_RADIUS - 8) / 400) * 100}%`;
-      badge.style.top = `${((pos.y - this.NODE_RADIUS + 2) / 280) * 100}%`;
-      badge.textContent = isSelected ? '✓' : '+';
+      badge.style.left = `${((pos.x + this.NODE_RADIUS - 6) / 400) * 100}%`;
+      badge.style.top = `${((pos.y - this.NODE_RADIUS) / 280) * 100}%`;
+      // SVG icons matching product card style
+      badge.innerHTML = isSelected
+        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>';
       labelsContainer.appendChild(badge);
     },
 
