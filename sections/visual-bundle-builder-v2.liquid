@@ -306,9 +306,6 @@
         </div>
       </div>
 
-      <!-- Mobile Synergy Explanation -->
-      <div class="wa-dock__synergy-explanation" style="display: none;"></div>
-
       <!-- Mobile Ritual Guide -->
       <div class="wa-dock__ritual" style="display: none;"></div>
 
@@ -2064,19 +2061,13 @@
     background: var(--wa-gray-800);
   }
 
-  /* Synergy Explanation, Ritual Guide - Dock */
-  .wa-dock__synergy-explanation,
+  /* Ritual Guide - Dock */
   .wa-dock__ritual {
     background: var(--wa-gray-100);
     border-radius: var(--wa-radius-sm);
     padding: 0.75rem;
     margin-bottom: 1rem;
     font-size: 0.75rem;
-  }
-
-  .wa-dock__synergy-explanation {
-    background: linear-gradient(135deg, var(--wa-gray-100) 0%, #fafafa 100%);
-    border: 1px solid var(--wa-gray-200);
   }
 
   .wa-dock__synergy {
@@ -3590,13 +3581,6 @@
 
     // Items list
     dock.querySelector('.wa-dock__items').innerHTML = state.items.map(i => renderItemHTML(i, 'dock')).join('');
-
-    // Synergy explanation
-    const synBox = dock.querySelector('.wa-dock__synergy-explanation');
-    if (synExp) {
-      synBox.style.display = 'block';
-      synBox.innerHTML = `<div style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:1rem;margin-bottom:8px;">${ICONS.lightning}<span>${synExp.title}</span></div><div style="display:inline-block;background:#000;color:#fff;font-size:0.65rem;padding:2px 6px;border-radius:4px;margin-bottom:8px;">${synExp.benefit}</div><p style="margin:0;color:#525252;line-height:1.5;font-size:0.8rem;font-weight:400;">${synExp.detail}</p>`;
-    } else { synBox.style.display = 'none'; }
 
     // Recommendation (using cached elements for performance)
     if (rec && dockRecElements.container) {
