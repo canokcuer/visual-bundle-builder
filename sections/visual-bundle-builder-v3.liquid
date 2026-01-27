@@ -1137,6 +1137,8 @@
     width: 100%;
     height: 200px;
     display: block;
+    position: relative;
+    z-index: 1;  /* Ensure SVG is below labels */
   }
 
   /* Slightly taller on larger phones */
@@ -1169,6 +1171,7 @@
     right: 0;
     bottom: 0;
     pointer-events: none;
+    z-index: 10;  /* Ensures labels container stacks above SVG */
   }
 
   .wa-synergy-label {
@@ -2686,6 +2689,8 @@
 (function() {
   'use strict';
 
+  console.log('[VBB v3] Script starting...');
+
   // ============================================
   // ICON REGISTRY (DRY)
   // ============================================
@@ -2943,6 +2948,7 @@
   // DOM ELEMENTS
   // ============================================
   const section = document.getElementById('wellness-architect');
+  console.log('[VBB v3] Section found:', !!section);
   if (!section) return;
 
   const productCards = section.querySelectorAll('.wa-product-card');
@@ -3223,7 +3229,13 @@
       });
 
       // Badge click handlers
-      const labelsContainer = svg.parentElement.querySelector('.wa-synergy-map__labels');
+      // Labels container is a sibling to the SVG, both inside .wa-synergy-map__scroll
+      let labelsContainer = svg.nextElementSibling;
+      // Fallback query if structure changes
+      if (!labelsContainer || !labelsContainer.classList.contains('wa-synergy-map__labels')) {
+        const scrollContainer = svg.closest('.wa-synergy-map__scroll');
+        labelsContainer = scrollContainer?.querySelector('.wa-synergy-map__labels');
+      }
       if (labelsContainer) {
         labelsContainer.querySelectorAll('.wa-synergy-badge').forEach(badge => {
           badge.addEventListener('click', (e) => {
@@ -4125,6 +4137,8 @@
   // INITIALIZE
   // ============================================
   async function init() {
+    console.log('[VBB v3] init() called');
+
     window.addEventListener('resize', () => {
       const was = state.isMobile;
       state.isMobile = window.innerWidth < 768;
@@ -4142,12 +4156,13 @@
     });
 
     productCards.forEach(card => card.addEventListener('click', e => handleProductClick(card, e)));
+    console.log('[VBB v3] Product cards bound:', productCards.length);
 
-    dock.querySelector('.wa-dock__handle').addEventListener('click', toggleDock);
-    dock.querySelector('.wa-dock__expand-btn').addEventListener('click', toggleDock);
-    dock.querySelector('.wa-dock__close-btn').addEventListener('click', toggleDock);
-    dock.querySelector('.wa-dock__checkout-btn').addEventListener('click', handleCheckout);
-    sidebar.querySelector('.wa-sidebar__checkout-btn').addEventListener('click', handleCheckout);
+    dock?.querySelector('.wa-dock__handle')?.addEventListener('click', toggleDock);
+    dock?.querySelector('.wa-dock__expand-btn')?.addEventListener('click', toggleDock);
+    dock?.querySelector('.wa-dock__close-btn')?.addEventListener('click', toggleDock);
+    dock?.querySelector('.wa-dock__checkout-btn')?.addEventListener('click', handleCheckout);
+    sidebar?.querySelector('.wa-sidebar__checkout-btn')?.addEventListener('click', handleCheckout);
 
     // Event delegation for items
     [dock.querySelector('.wa-dock__items'), sidebar.querySelector('.wa-sidebar__items')].forEach(container => {
@@ -4415,7 +4430,7 @@
 
 {% schema %}
 {
-  "name": "Bundle Builder v2",
+  "name": "Bundle Builder v3",
   "tag": "section",
   "class": "section-bundle-builder",
   "settings": [
@@ -4454,7 +4469,7 @@
   ],
   "presets": [
     {
-      "name": "Bundle Builder v2",
+      "name": "Bundle Builder v3",
       "category": "Products"
     }
   ]
