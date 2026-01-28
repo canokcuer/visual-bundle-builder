@@ -82,14 +82,13 @@
             </div>
 
             <p class="ra-card__benefit">
-              {% case product.handle %}
-                {% when 'dreamglow' %}Deep restoration for cellular renewal
-                {% when 'dailyglow' %}Radiance from within, day after day
-                {% when 'mindfuel' %}Clarity and focus without the crash
-                {% when 'thechill' %}Calm the noise, embrace serenity
-                {% when 'reset-button' %}Full system reset and recovery
-                {% else %}Elevate your wellness ritual
-              {% endcase %}
+              {% if product.handle == 'dreamglow' %}Deep restoration for cellular renewal
+              {% elsif product.handle == 'dailyglow' %}Radiance from within, day after day
+              {% elsif product.handle == 'mindfuel' %}Clarity and focus without the crash
+              {% elsif product.handle == 'thechill' %}Calm the noise, embrace serenity
+              {% elsif product.handle == 'reset-button' %}Full system reset and recovery
+              {% else %}Elevate your wellness ritual
+              {% endif %}
             </p>
 
             <!-- Ingredient Pills -->
