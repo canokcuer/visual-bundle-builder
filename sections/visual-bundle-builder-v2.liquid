@@ -55,27 +55,27 @@
           <!-- Keşfet Button -->
           <button class="wa-product-card__kesfet-btn" data-kesfet-toggle aria-label="Ürün detaylarını keşfet">
             <span>Keşfet</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
           </button>
 
           <!-- Keşfet Drawer -->
           <div class="wa-product-card__drawer" aria-hidden="true">
-            <div class="wa-product-card__drawer-tabs">
-              <button class="wa-tab wa-tab--active" data-tab="benefits">Faydalar</button>
-              <button class="wa-tab" data-tab="ingredients">İçindekiler</button>
-              <button class="wa-tab" data-tab="science">Bilim</button>
+            <div class="wa-product-card__drawer-tabs" role="tablist" aria-label="Ürün bilgileri">
+              <button class="wa-tab wa-tab--active" data-tab="benefits" role="tab" aria-selected="true">Faydalar</button>
+              <button class="wa-tab" data-tab="ingredients" role="tab" aria-selected="false">İçindekiler</button>
+              <button class="wa-tab" data-tab="science" role="tab" aria-selected="false">Bilim</button>
             </div>
             <div class="wa-product-card__drawer-content"></div>
           </div>
 
           <button class="wa-product-card__add-btn" aria-label="{{ product.title }} ekle">
-            <svg class="wa-product-card__icon-add" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg class="wa-product-card__icon-add" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-            <svg class="wa-product-card__icon-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg class="wa-product-card__icon-check" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
           </button>
@@ -107,8 +107,8 @@
 
       <!-- Selected Items -->
       <div class="wa-sidebar__items-container">
-        <div class="wa-sidebar__empty-state">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <div class="wa-sidebar__empty-state" role="status">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
           </svg>
           <p>Ritüelinizi oluşturmak için<br>ürün seçin</p>
@@ -117,7 +117,7 @@
       </div>
 
       <!-- Pricing + Checkout (moved up for visibility) -->
-      <div class="wa-sidebar__pricing">
+      <div class="wa-sidebar__pricing" aria-live="polite" aria-atomic="true">
         <div class="wa-sidebar__price-row">
           <span>Ara Toplam</span>
           <span class="wa-sidebar__subtotal">₺0</span>
@@ -134,7 +134,7 @@
 
       <button class="wa-sidebar__checkout-btn" disabled>
         <span class="wa-sidebar__checkout-text">Sepeti Onayla</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
       </button>
@@ -142,7 +142,7 @@
       <!-- Combined Synergy Map + Achievements (v2 merged) -->
       <div class="wa-synergy-achievements" style="display: none;">
         <div class="wa-synergy-achievements__header">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
           </svg>
           <span>Birlikte Kullanım</span>
@@ -163,7 +163,7 @@
       <!-- Recommendation Box -->
       <div class="wa-recommendation" style="display: none;">
         <div class="wa-recommendation__header">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
           </svg>
           <span>Akıllı Öneri</span>
@@ -179,7 +179,7 @@
           <div class="wa-recommendation__bundle-name"></div>
           <p class="wa-recommendation__reason"></p>
           <button class="wa-recommendation__add-btn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
@@ -191,7 +191,7 @@
       <!-- Ritual Guide -->
       <div class="wa-ritual-guide" style="display: none;">
         <div class="wa-ritual-guide__header">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
@@ -212,15 +212,15 @@
           <span class="wa-dock__empty-text">Ürün Seçin</span>
           <div class="wa-dock__thumbnails"></div>
         </div>
-        <div class="wa-dock__collapsed-info">
+        <div class="wa-dock__collapsed-info" aria-live="polite">
           <span class="wa-dock__item-count">0 ürün</span>
           <span class="wa-dock__synergy-badge">Başlayın</span>
         </div>
       </div>
       <div class="wa-dock__collapsed-right">
-        <div class="wa-dock__mini-total">₺0</div>
-        <button class="wa-dock__expand-btn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <div class="wa-dock__mini-total" aria-live="polite">₺0</div>
+        <button class="wa-dock__expand-btn" aria-label="Sepeti genişlet">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <polyline points="18 15 12 9 6 15"></polyline>
           </svg>
         </button>
@@ -243,8 +243,8 @@
     <div class="wa-dock__expanded">
       <div class="wa-dock__expanded-header">
         <h3>Ritüeliniz</h3>
-        <button class="wa-dock__close-btn">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button class="wa-dock__close-btn" aria-label="Sepeti kapat">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
@@ -272,7 +272,7 @@
       <!-- Combined Synergy Map + Synergy List -->
       <div class="wa-dock__synergy-achievements" style="display: none;">
         <div class="wa-synergy-achievements__header">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
           </svg>
           <span>Birlikte Kullanım</span>
@@ -290,7 +290,7 @@
       <!-- Mobile Recommendation -->
       <div class="wa-dock__recommendation" style="display: none;">
         <div class="wa-dock__recommendation-header">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
           </svg>
           <span>Önerilen</span>
@@ -309,7 +309,7 @@
       <div class="wa-dock__ritual" style="display: none;"></div>
 
       <!-- Mobile Pricing Summary -->
-      <div class="wa-dock__pricing">
+      <div class="wa-dock__pricing" aria-live="polite" aria-atomic="true">
         <div class="wa-dock__price-row">
           <span>Ara Toplam</span>
           <span class="wa-dock__subtotal">₺0</span>
@@ -327,13 +327,13 @@
 
     <!-- Sticky Checkout Footer (only visible when expanded via CSS) -->
     <div class="wa-dock__checkout-footer">
-      <div class="wa-dock__checkout-total">
+      <div class="wa-dock__checkout-total" aria-live="polite" aria-atomic="true">
         <span class="wa-dock__checkout-total-label">Toplam</span>
         <span class="wa-dock__checkout-total-value wa-dock__total">₺0</span>
       </div>
       <button class="wa-dock__checkout-btn" disabled>
         <span class="wa-dock__checkout-btn-text">Sepeti Onayla</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
       </button>
@@ -346,13 +346,13 @@
   <div class="wa-kesfet-modal" id="kesfet-modal">
     <div class="wa-kesfet-modal__header">
       <button class="wa-kesfet-modal__back" aria-label="Geri">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
       </button>
       <h3 class="wa-kesfet-modal__title"></h3>
       <button class="wa-kesfet-modal__close" aria-label="Kapat">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M18 6L6 18M6 6l12 12"/>
         </svg>
       </button>
@@ -361,11 +361,11 @@
       <img class="wa-kesfet-modal__image" src="" alt="" width="200" height="200">
       <div class="wa-kesfet-modal__timing"></div>
     </div>
-    <div class="wa-kesfet-modal__tabs">
-      <button class="wa-tab wa-tab--active" data-tab="benefits">Faydalar</button>
-      <button class="wa-tab" data-tab="ingredients">İçindekiler</button>
-      <button class="wa-tab" data-tab="science">Bilim</button>
-      <button class="wa-tab" data-tab="combinations">Kombinasyonlar</button>
+    <div class="wa-kesfet-modal__tabs" role="tablist" aria-label="Ürün detayları">
+      <button class="wa-tab wa-tab--active" data-tab="benefits" role="tab" aria-selected="true">Faydalar</button>
+      <button class="wa-tab" data-tab="ingredients" role="tab" aria-selected="false">İçindekiler</button>
+      <button class="wa-tab" data-tab="science" role="tab" aria-selected="false">Bilim</button>
+      <button class="wa-tab" data-tab="combinations" role="tab" aria-selected="false">Kombinasyonlar</button>
     </div>
     <div class="wa-kesfet-modal__content"></div>
     <div class="wa-kesfet-modal__footer">
@@ -373,12 +373,12 @@
         <span class="wa-kesfet-modal__add-text">Sepete Ekle</span>
       </button>
       <div class="wa-kesfet-modal__qty-controls" style="display:none;">
-        <button class="wa-kesfet-modal__qty-btn wa-kesfet-modal__qty-minus" data-action="minus">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <button class="wa-kesfet-modal__qty-btn wa-kesfet-modal__qty-minus" data-action="minus" aria-label="Miktarı azalt">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
         <span class="wa-kesfet-modal__qty-value">1</span>
-        <button class="wa-kesfet-modal__qty-btn wa-kesfet-modal__qty-plus" data-action="plus">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <button class="wa-kesfet-modal__qty-btn wa-kesfet-modal__qty-plus" data-action="plus" aria-label="Miktarı artır">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
       </div>
     </div>
@@ -387,26 +387,82 @@
 
 <style>
   :root {
-    --wa-black: #000000;
-    --wa-dark: #111111;
-    --wa-gray-900: #1a1a1a;
-    --wa-gray-800: #2d2d2d;
-    --wa-gray-700: #404040;
-    --wa-gray-600: #525252;
-    --wa-gray-500: #737373;
-    --wa-gray-400: #a3a3a3;
-    --wa-gray-300: #d4d4d4;
-    --wa-gray-200: #e5e5e5;
-    --wa-gray-100: #f5f5f5;
-    --wa-white: #ffffff;
+    /* Warm neutral palette */
+    --wa-black: #1C1917;
+    --wa-dark: #292524;
+    --wa-gray-900: #44403C;
+    --wa-gray-800: #57534E;
+    --wa-gray-700: #78716C;
+    --wa-gray-600: #A8A29E;
+    --wa-gray-500: #D6D3D1;
+    --wa-gray-400: #E7E5E4;
+    --wa-gray-300: #F5F5F4;
+    --wa-gray-200: #FAFAF9;
+    --wa-gray-100: #FAFAF9;
+    --wa-white: #FFFFFE;
     --wa-success: #22c55e;
-    --wa-gold: #FFD700;
+    --wa-gold: #C9A962;
+
+    /* Accent colors */
+    --wa-accent: #4A7C59;
+    --wa-accent-light: #E8F0EA;
+    --wa-gold-light: #E8DFC5;
     --wa-radius: 12px;
     --wa-radius-sm: 8px;
     --wa-shadow: 0 1px 3px rgba(0,0,0,0.1);
     --wa-shadow-lg: 0 4px 20px rgba(0,0,0,0.15);
-    --wa-transition: 0.2s ease;
+    --wa-transition: 0.2s var(--wa-ease-out);
     --wa-dock-height: 95px;
+
+    /* Spacing scale (4px base) */
+    --wa-space-1: 0.25rem;
+    --wa-space-2: 0.5rem;
+    --wa-space-3: 0.75rem;
+    --wa-space-4: 1rem;
+    --wa-space-5: 1.5rem;
+    --wa-space-6: 2rem;
+    --wa-space-8: 3rem;
+
+    /* Z-index scale */
+    --wa-z-base: 1;
+    --wa-z-card: 10;
+    --wa-z-sticky: 20;
+    --wa-z-dock: 50;
+    --wa-z-dock-elements: 51;
+    --wa-z-modal-backdrop: 100;
+    --wa-z-modal: 101;
+    --wa-z-notification: 102;
+    --wa-z-particle: 103;
+
+    /* Timing functions */
+    --wa-ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+    --wa-ease-in: cubic-bezier(0.32, 0, 0.67, 0);
+    --wa-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+    /* Touch target minimum */
+    --wa-touch-min: 44px;
+  }
+
+  /* Focus visible styles for accessibility */
+  .wa-product-card__add-btn:focus-visible,
+  .wa-product-card__kesfet-btn:focus-visible,
+  .wa-tab:focus-visible,
+  .wa-dock__expand-btn:focus-visible,
+  .wa-dock__close-btn:focus-visible,
+  .wa-dock__item-qty-btn:focus-visible,
+  .wa-dock__item-remove:focus-visible,
+  .wa-dock__checkout-btn:focus-visible,
+  .wa-dock__recommendation-add:focus-visible,
+  .wa-sidebar__checkout-btn:focus-visible,
+  .wa-sidebar__item-qty-btn:focus-visible,
+  .wa-sidebar__item-remove:focus-visible,
+  .wa-kesfet-modal__back:focus-visible,
+  .wa-kesfet-modal__close:focus-visible,
+  .wa-kesfet-modal__qty-btn:focus-visible,
+  .wa-kesfet-modal__add-btn:focus-visible,
+  .wa-recommendation__add-btn:focus-visible {
+    outline: 2px solid var(--wa-black);
+    outline-offset: 2px;
   }
 
   .wellness-architect {
@@ -414,6 +470,8 @@
     padding: 2rem 1rem;
     padding-bottom: calc(var(--wa-dock-height) + 2rem);
     background: var(--wa-white);
+    background-image: radial-gradient(ellipse at 20% 0%, var(--wa-accent-light) 0%, transparent 50%),
+                      radial-gradient(ellipse at 80% 100%, var(--wa-gold-light) 0%, transparent 50%);
     min-height: 100vh;
     font-family: inherit;
     color: var(--wa-black);
@@ -452,7 +510,7 @@
 
   .wa-header__subtitle {
     font-size: 0.9rem;
-    color: var(--wa-gray-500);
+    color: var(--wa-gray-700);
     margin: 0;
     line-height: 1.5;
   }
@@ -478,6 +536,17 @@
   }
 
   /* Product Card - Mobile optimized with natural proportions */
+  @keyframes wa-card-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .wa-product-card {
     position: relative;
     background: var(--wa-white);
@@ -489,7 +558,17 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    animation: wa-card-reveal 0.5s var(--wa-ease-out) backwards;
   }
+
+  .wa-product-card:nth-child(1) { animation-delay: 0ms; }
+  .wa-product-card:nth-child(2) { animation-delay: 50ms; }
+  .wa-product-card:nth-child(3) { animation-delay: 100ms; }
+  .wa-product-card:nth-child(4) { animation-delay: 150ms; }
+  .wa-product-card:nth-child(5) { animation-delay: 200ms; }
+  .wa-product-card:nth-child(6) { animation-delay: 250ms; }
+  .wa-product-card:nth-child(7) { animation-delay: 300ms; }
+  .wa-product-card:nth-child(8) { animation-delay: 350ms; }
 
   .wa-product-card:hover { border-color: var(--wa-gray-300); }
   .wa-product-card:active { transform: scale(0.98); }
@@ -566,16 +645,16 @@
   .wa-product-card__price {
     font-size: 0.75rem;
     font-weight: 500;
-    color: var(--wa-gray-500);
+    color: var(--wa-gray-700);
     margin: 0;
   }
 
   .wa-product-card__add-btn {
     position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    width: 32px;
-    height: 32px;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: var(--wa-touch-min);
+    height: var(--wa-touch-min);
     border-radius: 50%;
     background: var(--wa-black);
     color: var(--wa-white);
@@ -607,7 +686,7 @@
     font-weight: 600;
     color: var(--wa-gray-600);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s var(--wa-ease-out);
     opacity: 0;
     z-index: 3;
   }
@@ -615,7 +694,12 @@
   .wa-product-card:hover .wa-product-card__kesfet-btn,
   .wa-product-card--drawer-open .wa-product-card__kesfet-btn { opacity: 1; }
 
-  .wa-product-card__kesfet-btn svg { transition: transform 0.3s ease; }
+  /* Always show Keşfet button on touch devices (no hover) */
+  @media (hover: none) {
+    .wa-product-card__kesfet-btn { opacity: 1; }
+  }
+
+  .wa-product-card__kesfet-btn svg { transition: transform 0.3s var(--wa-ease-out); }
   .wa-product-card--drawer-open .wa-product-card__kesfet-btn svg { transform: rotate(180deg); }
 
   .wa-product-card__drawer {
@@ -627,7 +711,7 @@
     border-top: 1px solid var(--wa-gray-200);
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease;
+    transition: max-height 0.3s var(--wa-ease-out);
     z-index: 10;
   }
 
@@ -647,9 +731,9 @@
     border-bottom: 2px solid transparent;
     font-size: 0.65rem;
     font-weight: 600;
-    color: var(--wa-gray-500);
+    color: var(--wa-gray-700);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s var(--wa-ease-out);
   }
 
   .wa-tab--active {
@@ -694,7 +778,7 @@
 
   .wa-benefit-desc {
     font-size: 0.65rem;
-    color: var(--wa-gray-500);
+    color: var(--wa-gray-700);
     margin: 0;
   }
 
@@ -708,8 +792,8 @@
   }
 
   .wa-ingredient-name { font-weight: 600; }
-  .wa-ingredient-amount { color: var(--wa-gray-500); font-size: 0.65rem; }
-  .wa-ingredient-benefit { font-size: 0.6rem; color: var(--wa-gray-400); }
+  .wa-ingredient-amount { color: var(--wa-gray-700); font-size: 0.65rem; }
+  .wa-ingredient-benefit { font-size: 0.6rem; color: var(--wa-gray-700); }
 
   /* Science Content */
   .wa-science-content { line-height: 1.5; color: var(--wa-gray-600); }
@@ -756,8 +840,8 @@
     right: 0;
     background: var(--wa-white);
     border-top: 1px solid var(--wa-gray-200);
-    z-index: 999;
-    transition: height 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+    z-index: var(--wa-z-dock);
+    transition: height 0.3s var(--wa-ease-out), transform 0.3s var(--wa-ease-out), opacity 0.3s var(--wa-ease-out);
     height: var(--wa-dock-height);
     overflow: hidden;
     box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
@@ -818,7 +902,7 @@
 
   .wa-dock__empty-text {
     font-size: 0.85rem;
-    color: var(--wa-gray-500);
+    color: var(--wa-gray-700);
   }
 
   .wa-dock__thumbnails { display: flex; }
@@ -843,7 +927,7 @@
 
   .wa-dock__item-count {
     font-size: 0.7rem;
-    color: var(--wa-gray-500);
+    color: var(--wa-gray-700);
   }
 
   .wa-dock__synergy-badge {
@@ -873,8 +957,8 @@
   }
 
   .wa-dock__expand-btn {
-    width: 36px;
-    height: 36px;
+    width: var(--wa-touch-min);
+    height: var(--wa-touch-min);
     border-radius: 50%;
     background: var(--wa-black);
     color: var(--wa-white);
@@ -1011,8 +1095,8 @@
   }
 
   .wa-dock__item-qty-btn {
-    width: 24px;
-    height: 24px;
+    width: var(--wa-touch-min);
+    height: var(--wa-touch-min);
     border-radius: 4px;
     border: none;
     background: transparent;
@@ -1035,13 +1119,13 @@
   }
 
   .wa-dock__item-remove {
-    width: 28px;
-    height: 28px;
+    width: var(--wa-touch-min);
+    height: var(--wa-touch-min);
     border-radius: 50%;
     background: transparent;
     border: none;
     cursor: pointer;
-    color: var(--wa-gray-400);
+    color: var(--wa-gray-700);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1097,7 +1181,7 @@
     stroke: var(--wa-black);
     stroke-width: 2;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s var(--wa-ease-out);
   }
 
   .wa-synergy-node--active .wa-synergy-node__ring { opacity: 1; }
@@ -1155,7 +1239,7 @@
     align-items: center;
     justify-content: center;
     opacity: 0.4;
-    transition: all 0.3s ease;
+    transition: all 0.3s var(--wa-ease-out);
     flex-shrink: 0;
   }
 
@@ -1166,7 +1250,7 @@
   }
 
   .wa-achievement-icon--unlocking {
-    animation: achievement-unlock 0.5s ease;
+    animation: achievement-unlock 0.5s var(--wa-ease-out);
   }
 
   @keyframes achievement-unlock {
@@ -1189,7 +1273,7 @@
   .wa-synergy-node--inactive {
     opacity: 0.85;
     filter: grayscale(100%);
-    transition: filter 0.4s ease-out, opacity 0.4s ease-out, transform 0.3s ease-out;
+    transition: filter 0.4s var(--wa-ease-out), opacity 0.4s var(--wa-ease-out), transform 0.3s var(--wa-ease-out)-out;
   }
 
   .wa-synergy-node--inactive image {
@@ -1232,7 +1316,7 @@
     cursor: pointer;
     pointer-events: auto;
     transform: translate(-50%, -50%);
-    transition: all 0.3s ease;
+    transition: all 0.3s var(--wa-ease-out);
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   }
 
@@ -1262,7 +1346,7 @@
     stroke-width: 2;
     opacity: 0.6;
     stroke-dasharray: 6 4;
-    animation: line-dash 1s linear infinite;
+    animation: line-dash 1s linear 3;
   }
 
   @keyframes line-dash {
@@ -1292,7 +1376,7 @@
   }
 
   .wa-synergy-achievements__header svg {
-    color: var(--wa-gray-500);
+    color: var(--wa-gray-700);
   }
 
   .wa-synergy-hint {
@@ -1367,7 +1451,7 @@
 
   .wa-synergy-list-detail {
     font-size: 0.7rem;
-    color: var(--wa-gray-500);
+    color: var(--wa-gray-700);
     line-height: 1.4;
   }
 
@@ -1430,7 +1514,7 @@
 
   .wa-achievement-progress__count {
     font-size: 0.7rem;
-    color: var(--wa-gray-500);
+    color: var(--wa-gray-700);
   }
 
   .wa-achievement-progress__bar {
@@ -1444,7 +1528,7 @@
     height: 100%;
     background: linear-gradient(90deg, var(--wa-gold), #FFA500);
     border-radius: 3px;
-    transition: width 0.5s ease;
+    transition: width 0.5s var(--wa-ease-out);
   }
 
   .wa-achievement-progress__badges {
@@ -1463,7 +1547,7 @@
     align-items: center;
     justify-content: center;
     opacity: 0.4;
-    transition: all 0.3s ease;
+    transition: all 0.3s var(--wa-ease-out);
   }
 
   .wa-achievement-badge--unlocked {
@@ -1489,8 +1573,8 @@
     border-radius: var(--wa-radius);
     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
     opacity: 0;
-    transition: all 0.3s ease;
-    z-index: 10000;
+    transition: all 0.3s var(--wa-ease-out);
+    z-index: var(--wa-z-notification);
   }
 
   .wa-achievement-notification--visible {
@@ -1511,14 +1595,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    transition: all 0.3s var(--wa-ease-out);
   }
 
   .wa-achievement-notification__icon--locked { background: var(--wa-gray-600); }
 
   .wa-achievement-notification__icon--unlocking {
     background: var(--wa-gold);
-    animation: unlock-bounce 0.5s ease;
+    animation: unlock-bounce 0.5s var(--wa-ease-out);
   }
 
   @keyframes unlock-bounce {
@@ -1553,9 +1637,9 @@
     right: 0;
     bottom: 0;
     background: var(--wa-white);
-    z-index: 10000;
+    z-index: var(--wa-z-modal);
     transform: translateY(100%);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s var(--wa-ease-out);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -1586,7 +1670,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: background 0.2s var(--wa-ease-out);
   }
 
   .wa-kesfet-modal__back:hover,
@@ -1645,9 +1729,9 @@
     border-bottom: 3px solid transparent;
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--wa-gray-500);
+    color: var(--wa-gray-700);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s var(--wa-ease-out);
   }
 
   .wa-kesfet-modal__tabs .wa-tab--active {
@@ -1682,7 +1766,7 @@
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s var(--wa-ease-out);
     margin: 0 auto;
     display: block;
   }
@@ -1709,8 +1793,8 @@
   }
 
   .wa-kesfet-modal__qty-btn {
-    width: 36px;
-    height: 36px;
+    width: var(--wa-touch-min);
+    height: var(--wa-touch-min);
     border-radius: 50%;
     border: 2px solid var(--wa-gray-300);
     background: var(--wa-white);
@@ -1719,7 +1803,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: all 0.2s var(--wa-ease-out);
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
   }
@@ -1905,7 +1989,7 @@
     height: 6px;
     border-radius: 2px;
     pointer-events: none;
-    z-index: 10001;
+    z-index: var(--wa-z-particle);
     animation: confetti-fly 1s ease-out forwards;
   }
 
@@ -1948,7 +2032,7 @@
     max-width: none;
     border-radius: 50%;
     background: var(--wa-gray-300);
-    transition: all 0.3s ease;
+    transition: all 0.3s var(--wa-ease-out);
   }
 
   .wa-steps--mini .wa-step.active {
@@ -1962,7 +2046,7 @@
     border-radius: 50%;
     background: var(--wa-gray-200);
     border: 3px solid var(--wa-gray-300);
-    transition: all 0.3s ease;
+    transition: all 0.3s var(--wa-ease-out);
   }
 
   .wa-step.active .wa-step__dot {
@@ -1975,9 +2059,9 @@
   .wa-step__label {
     font-size: 0.65rem;
     font-weight: 600;
-    color: var(--wa-gray-400);
+    color: var(--wa-gray-700);
     margin-top: 4px;
-    transition: color 0.3s ease;
+    transition: color 0.3s var(--wa-ease-out);
   }
 
   .wa-step.active .wa-step__label { color: #000; }
@@ -2029,7 +2113,7 @@
   .wa-dock__recommendation-bundle {
     display: block;
     font-size: 0.7rem;
-    color: var(--wa-gray-500);
+    color: var(--wa-gray-700);
   }
 
   .wa-dock__recommendation-add {
@@ -2067,7 +2151,7 @@
     margin-bottom: 0.375rem;
   }
 
-  .wa-dock__synergy-header span:first-child { color: var(--wa-gray-500); }
+  .wa-dock__synergy-header span:first-child { color: var(--wa-gray-700); }
   .wa-dock__synergy-text { font-weight: 600; color: var(--wa-black); }
 
   /* Dock Pricing */
@@ -2078,7 +2162,7 @@
     justify-content: space-between;
     font-size: 0.8rem;
     padding: 0.375rem 0;
-    color: var(--wa-gray-500);
+    color: var(--wa-gray-700);
   }
 
   .wa-dock__price-row--discount { color: var(--wa-success); }
@@ -2149,7 +2233,7 @@
     border-top: 1px solid var(--wa-gray-200);
     box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
     box-sizing: border-box;
-    z-index: 1001;
+    z-index: var(--wa-z-dock-elements);
   }
 
   .wa-dock--expanded .wa-dock__checkout-footer {
@@ -2165,7 +2249,7 @@
 
   .wa-dock__checkout-total-label {
     font-size: 0.65rem;
-    color: var(--wa-gray-500);
+    color: var(--wa-gray-700);
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
@@ -2192,7 +2276,7 @@
     justify-content: center;
     gap: 6px;
     box-shadow: 0 2px 8px rgba(34, 197, 94, 0.35);
-    transition: all 0.2s ease;
+    transition: all 0.2s var(--wa-ease-out);
     flex: 0 1 auto;
     min-width: 0;
     max-width: 50%;
@@ -2236,7 +2320,7 @@
   .wa-flying-ghost {
     position: fixed;
     pointer-events: none;
-    z-index: 9999;
+    z-index: var(--wa-z-notification);
     border-radius: var(--wa-radius-sm);
     box-shadow: var(--wa-shadow-lg);
   }
@@ -2245,7 +2329,7 @@
     position: fixed;
     inset: 0;
     pointer-events: none;
-    z-index: 9998;
+    z-index: var(--wa-z-particle);
   }
 
   .wa-particle {
@@ -2336,7 +2420,7 @@
     }
 
     .wa-sidebar__title { font-size: 1rem; font-weight: 600; margin: 0; }
-    .wa-sidebar__count { font-size: 0.75rem; color: var(--wa-gray-500); }
+    .wa-sidebar__count { font-size: 0.75rem; color: var(--wa-gray-700); }
 
     .wa-sidebar__items-container { min-height: 100px; margin-bottom: 1rem; }
 
@@ -2346,7 +2430,7 @@
       align-items: center;
       justify-content: center;
       min-height: 100px;
-      color: var(--wa-gray-400);
+      color: var(--wa-gray-700);
       text-align: center;
     }
 
@@ -2401,8 +2485,8 @@
     }
 
     .wa-sidebar__item-qty-btn {
-      width: 24px;
-      height: 24px;
+      width: var(--wa-touch-min);
+      height: var(--wa-touch-min);
       border-radius: 4px;
       border: none;
       background: transparent;
@@ -2419,13 +2503,13 @@
     .wa-sidebar__item-qty-value { min-width: 20px; text-align: center; font-size: 0.8rem; font-weight: 600; }
 
     .wa-sidebar__item-remove {
-      width: 28px;
-      height: 28px;
+      width: var(--wa-touch-min);
+      height: var(--wa-touch-min);
       border-radius: 50%;
       background: transparent;
       border: none;
       cursor: pointer;
-      color: var(--wa-gray-400);
+      color: var(--wa-gray-700);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2472,7 +2556,7 @@
     }
 
     .wa-recommendation__info { flex: 1; }
-    .wa-recommendation__label { display: block; font-size: 0.65rem; text-transform: uppercase; color: var(--wa-gray-500); margin-bottom: 0.125rem; }
+    .wa-recommendation__label { display: block; font-size: 0.65rem; text-transform: uppercase; color: var(--wa-gray-700); margin-bottom: 0.125rem; }
     .wa-recommendation__name { display: block; font-size: 0.9rem; font-weight: 700; color: var(--wa-black); }
 
     .wa-recommendation__bundle-name {
@@ -2531,7 +2615,7 @@
       margin-bottom: 0.5rem;
     }
 
-    .wa-sidebar__synergy-header span:first-child { color: var(--wa-gray-500); }
+    .wa-sidebar__synergy-header span:first-child { color: var(--wa-gray-700); }
     .wa-sidebar__synergy-text { font-weight: 600; color: var(--wa-black); }
 
     /* Sidebar Pricing */
@@ -2542,7 +2626,7 @@
       justify-content: space-between;
       font-size: 0.8rem;
       padding: 0.5rem 0;
-      color: var(--wa-gray-500);
+      color: var(--wa-gray-700);
     }
 
     .wa-sidebar__price-row--discount { color: var(--wa-success); }
@@ -2579,6 +2663,30 @@
 
   @media (min-width: 1024px) {
     .wa-container { grid-template-columns: 1fr 400px; gap: 2.5rem; }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    .wa-synergy-line {
+      animation: none;
+      stroke-dasharray: 8 4;
+      stroke-dashoffset: 0;
+    }
+
+    .wa-confetti,
+    .wa-particle,
+    .wa-flying-ghost {
+      display: none !important;
+    }
   }
 </style>
 
@@ -2870,9 +2978,10 @@
   // ============================================
   // HELPERS
   // ============================================
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const MONEY_FORMATTER = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 0 });
   const formatMoney = cents => MONEY_FORMATTER.format(cents / 100);
-  const vibrate = (pattern = 10) => { if ('vibrate' in navigator) navigator.vibrate(pattern); };
+  const vibrate = (pattern = 10) => { if (!prefersReducedMotion && 'vibrate' in navigator) navigator.vibrate(pattern); };
 
   function matchHandle(title) {
     const normalized = title.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -3309,9 +3418,15 @@
     if (state.items.length >= 5) { vibrate([30, 20, 30]); return false; }
 
     const card = [...productCards].find(c => c.dataset.productId === productData.id);
-    if (card) card.classList.add('wa-product-card--loading');
+    if (card) {
+      card.classList.add('wa-product-card--loading');
+      card.setAttribute('aria-busy', 'true');
+    }
     const success = await addToShopifyCart(productData.variantId);
-    if (card) card.classList.remove('wa-product-card--loading');
+    if (card) {
+      card.classList.remove('wa-product-card--loading');
+      card.setAttribute('aria-busy', 'false');
+    }
 
     if (success) {
       state.items.push({ ...productData, quantity: 1 });
@@ -3410,6 +3525,7 @@
   }
 
   function createMiniConfetti(el) {
+    if (prefersReducedMotion) return;
     const rect = el.getBoundingClientRect();
     const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
     const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96E6A1'];
@@ -3498,11 +3614,11 @@
       </a>
       <div class="${prefix}__item-controls">
         <div class="${prefix}__item-qty">
-          <button class="${prefix}__item-qty-btn" data-qty-minus="${item.id}">-</button>
+          <button class="${prefix}__item-qty-btn" data-qty-minus="${item.id}" aria-label="Miktarı azalt">-</button>
           <span class="${prefix}__item-qty-value">${item.quantity}</span>
-          <button class="${prefix}__item-qty-btn" data-qty-plus="${item.id}">+</button>
+          <button class="${prefix}__item-qty-btn" data-qty-plus="${item.id}" aria-label="Miktarı artır">+</button>
         </div>
-        <button class="${prefix}__item-remove" data-remove="${item.id}">${ICONS.close}</button>
+        <button class="${prefix}__item-remove" data-remove="${item.id}" aria-label="${item.title} ürününü kaldır">${ICONS.close}</button>
       </div>
     </div>`;
   }
@@ -3749,6 +3865,37 @@
     return '';
   }
 
+  // Modal focus trap handler
+  let modalFocusTrapHandler = null;
+
+  function setupModalFocusTrap() {
+    const focusableElements = kesfetModal.querySelectorAll('button, [tabindex]:not([tabindex="-1"])');
+    const firstFocusable = focusableElements[0];
+    const lastFocusable = focusableElements[focusableElements.length - 1];
+
+    modalFocusTrapHandler = (e) => {
+      if (e.key === 'Tab') {
+        if (e.shiftKey && document.activeElement === firstFocusable) {
+          e.preventDefault();
+          lastFocusable.focus();
+        } else if (!e.shiftKey && document.activeElement === lastFocusable) {
+          e.preventDefault();
+          firstFocusable.focus();
+        }
+      }
+    };
+
+    kesfetModal.addEventListener('keydown', modalFocusTrapHandler);
+    firstFocusable?.focus();
+  }
+
+  function removeModalFocusTrap() {
+    if (modalFocusTrapHandler) {
+      kesfetModal.removeEventListener('keydown', modalFocusTrapHandler);
+      modalFocusTrapHandler = null;
+    }
+  }
+
   function openKeşfetModal(card) {
     const handle = matchHandle(card.dataset.productTitle);
     const data = EXTENDED_PRODUCT_DATA[handle];
@@ -3792,10 +3939,12 @@
     // Open modal
     kesfetModal.classList.add('wa-kesfet-modal--open');
     setBodyScroll(true);
+    setupModalFocusTrap();
   }
 
   function closeKeşfetModal() {
     kesfetModal.classList.remove('wa-kesfet-modal--open');
+    removeModalFocusTrap();
     // Only unblock if slider is not expanded
     if (!state.isExpanded) {
       setBodyScroll(false);
@@ -3807,7 +3956,11 @@
   function handleModalTab(tab) {
     if (!currentKeşfetHandle) return;
     kesfetModal.querySelector('.wa-kesfet-modal__content').innerHTML = renderModalContent(currentKeşfetHandle, tab);
-    kesfetModal.querySelectorAll('.wa-tab').forEach(t => t.classList.toggle('wa-tab--active', t.dataset.tab === tab));
+    kesfetModal.querySelectorAll('.wa-tab').forEach(t => {
+      const isActive = t.dataset.tab === tab;
+      t.classList.toggle('wa-tab--active', isActive);
+      t.setAttribute('aria-selected', isActive);
+    });
   }
 
   function handleModalAddToCart() {
@@ -4035,6 +4188,13 @@
       // Close on backdrop click (clicking outside modal content)
       kesfetModal.addEventListener('click', e => {
         if (e.target === kesfetModal) closeKeşfetModal();
+      });
+
+      // Close modal on Escape key
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && kesfetModal.classList.contains('wa-kesfet-modal--open')) {
+          closeKeşfetModal();
+        }
       });
     }
 
