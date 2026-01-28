@@ -1,0 +1,3817 @@
+{% comment %}
+  ============================================
+  CYRASOUL - Visual Bundle Builder v4
+  "Bio-Luxury Ritual Architect"
+
+  Aesthetic: Ethereal Precision
+  - Scientific warmth meets organic luxury
+  - Grayscale dormant state → Color awakening
+  - Orbital synergy visualization
+  - Physics-based animations
+
+  Typography: Cormorant Garamond + DM Sans + JetBrains Mono
+  ============================================
+{% endcomment %}
+
+<!-- Skip Link for Accessibility -->
+<a href="#ra-products" class="ra-skip-link">Skip to products</a>
+
+<section
+  id="ritual-architect"
+  class="ritual-architect ritual-architect--dormant"
+  data-section-id="{{ section.id }}"
+>
+  <!-- Awakening Ripple -->
+  <div class="ra-awakening-ripple" aria-hidden="true"></div>
+
+  <!-- Ambient Particles Container -->
+  <div class="ra-particles" aria-hidden="true"></div>
+
+  <!-- Grain Texture Overlay -->
+  <div class="ra-grain" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="ra-header">
+    <span class="ra-header__eyebrow">{{ section.settings.eyebrow_text }}</span>
+    <h2 class="ra-header__title">{{ section.settings.title }}</h2>
+    <p class="ra-header__subtitle">{{ section.settings.subtitle }}</p>
+  </header>
+
+  <div class="ra-container">
+    <!-- Product Grid (Dormant State) -->
+    <div id="ra-products" class="ra-products" role="region" aria-label="Available products">
+      {% assign collection = collections[section.settings.collection] %}
+      {% for product in collection.products limit: section.settings.product_limit %}
+        <article
+          class="ra-card"
+          data-product-id="{{ product.id }}"
+          data-product-handle="{{ product.handle }}"
+          data-product-title="{{ product.title }}"
+          data-product-price="{{ product.price }}"
+          data-product-image="{{ product.featured_image | image_url: width: 600 }}"
+          data-variant-id="{{ product.first_available_variant.id }}"
+          data-product-url="{{ product.url }}"
+          tabindex="0"
+          role="button"
+          aria-label="Add {{ product.title }} to your ritual"
+          style="--card-index: {{ forloop.index0 }}"
+        >
+          <!-- Heartbeat Glow (first card only) -->
+          {% if forloop.first %}
+            <div class="ra-card__heartbeat" aria-hidden="true"></div>
+          {% endif %}
+
+          <div class="ra-card__image-wrap">
+            <img
+              src="{{ product.featured_image | image_url: width: 600 }}"
+              alt="{{ product.title }}"
+              class="ra-card__image"
+              loading="lazy"
+              width="600"
+              height="600"
+            >
+            <div class="ra-card__image-overlay"></div>
+          </div>
+
+          <div class="ra-card__body">
+            <div class="ra-card__header">
+              <h3 class="ra-card__title">{{ product.title }}</h3>
+              <span class="ra-card__price" data-price="{{ product.price }}">
+                {{ product.price | money_without_trailing_zeros }}
+              </span>
+            </div>
+
+            <p class="ra-card__benefit">
+              {% case product.handle %}
+                {% when 'dreamglow' %}Deep restoration for cellular renewal{% endcase %}
+                {% when 'dailyglow' %}Radiance from within, day after day{% endcase %}
+                {% when 'mindfuel' %}Clarity and focus without the crash{% endcase %}
+                {% when 'thechill' %}Calm the noise, embrace serenity{% endcase %}
+                {% when 'reset-button' %}Full system reset and recovery{% endcase %}
+                {% else %}Elevate your wellness ritual{% endcase %}
+              {% endcase %}
+            </p>
+
+            <!-- Ingredient Pills -->
+            <div class="ra-card__ingredients">
+              {% for tag in product.tags limit: 3 %}
+                {% if tag contains 'ingredient:' %}
+                  <span class="ra-pill">{{ tag | remove: 'ingredient:' }}</span>
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            <button class="ra-card__action" aria-label="Add {{ product.title }}">
+              <span class="ra-card__action-text">Add to Ritual</span>
+              <svg class="ra-card__action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <svg class="ra-card__action-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Explore Button -->
+          <button class="ra-card__explore" data-explore aria-label="Explore {{ product.title }} details">
+            <span>Explore</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+        </article>
+      {% endfor %}
+    </div>
+
+    <!-- Desktop Sidebar: Ritual Panel -->
+    <aside class="ra-sidebar" aria-label="Your ritual summary">
+      <div class="ra-sidebar__header">
+        <h3 class="ra-sidebar__title">Your Ritual</h3>
+        <div class="ra-sidebar__synergy-score">
+          <svg class="ra-sidebar__synergy-ring" viewBox="0 0 100 100" aria-hidden="true">
+            <circle class="ra-sidebar__synergy-track" cx="50" cy="50" r="45"/>
+            <circle class="ra-sidebar__synergy-progress" cx="50" cy="50" r="45"/>
+          </svg>
+          <span class="ra-sidebar__synergy-value">0%</span>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="ra-sidebar__empty">
+        <div class="ra-sidebar__empty-icon">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="24" cy="24" r="20" stroke-dasharray="4 4"/>
+            <path d="M24 16v16M16 24h16"/>
+          </svg>
+        </div>
+        <p class="ra-sidebar__empty-text">Begin your ritual by<br>selecting products above</p>
+      </div>
+
+      <!-- Orbital Mini Visualization -->
+      <div class="ra-sidebar__orbit" style="display: none;">
+        <svg class="ra-sidebar__orbit-svg" viewBox="0 0 300 200" aria-label="Synergy visualization">
+          <defs>
+            <filter id="synergy-glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <g class="ra-sidebar__orbit-lines"></g>
+          <g class="ra-sidebar__orbit-nodes"></g>
+        </svg>
+      </div>
+
+      <!-- Selected Items List -->
+      <div class="ra-sidebar__items" aria-live="polite"></div>
+
+      <!-- Discount Tier Progress -->
+      <div class="ra-sidebar__tiers" style="display: none;">
+        <div class="ra-sidebar__tiers-header">
+          <span class="ra-sidebar__tiers-label">Ritual Tier</span>
+          <span class="ra-sidebar__tiers-current">Start</span>
+        </div>
+        <div class="ra-sidebar__tiers-track">
+          <div class="ra-sidebar__tiers-fill"></div>
+          <div class="ra-sidebar__tiers-steps">
+            <span class="ra-tier-step" data-tier="1"></span>
+            <span class="ra-tier-step" data-tier="2">15%</span>
+            <span class="ra-tier-step" data-tier="3">20%</span>
+            <span class="ra-tier-step" data-tier="4">25%</span>
+            <span class="ra-tier-step" data-tier="5">30%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing -->
+      <div class="ra-sidebar__pricing" aria-live="polite" aria-atomic="true">
+        <div class="ra-sidebar__price-row">
+          <span>Subtotal</span>
+          <span class="ra-sidebar__subtotal">₺0</span>
+        </div>
+        <div class="ra-sidebar__price-row ra-sidebar__price-row--discount" style="display: none;">
+          <span>Ritual Discount</span>
+          <span class="ra-sidebar__discount">-₺0</span>
+        </div>
+        <div class="ra-sidebar__price-row ra-sidebar__price-row--total">
+          <span>Total</span>
+          <span class="ra-sidebar__total">₺0</span>
+        </div>
+      </div>
+
+      <!-- Checkout Button -->
+      <button class="ra-sidebar__checkout" disabled>
+        <span class="ra-sidebar__checkout-text">Complete Ritual</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </aside>
+  </div>
+
+  <!-- Mobile Dock -->
+  <div class="ra-dock ra-dock--empty" aria-label="Ritual summary">
+    <div class="ra-dock__handle"><span></span></div>
+
+    <!-- Collapsed View -->
+    <div class="ra-dock__collapsed">
+      <div class="ra-dock__preview">
+        <span class="ra-dock__empty-text">Begin Your Ritual</span>
+        <div class="ra-dock__thumbnails"></div>
+      </div>
+      <div class="ra-dock__info" aria-live="polite">
+        <span class="ra-dock__count">0 items</span>
+        <span class="ra-dock__synergy-badge">Start</span>
+      </div>
+      <div class="ra-dock__mini-total" aria-live="polite">₺0</div>
+      <button class="ra-dock__expand" aria-label="Expand ritual panel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <polyline points="18 15 12 9 6 15"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Expanded View -->
+    <div class="ra-dock__expanded">
+      <div class="ra-dock__expanded-header">
+        <h3>Your Ritual</h3>
+        <button class="ra-dock__close" aria-label="Close ritual panel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Synergy Score -->
+      <div class="ra-dock__synergy">
+        <div class="ra-dock__synergy-circle">
+          <svg viewBox="0 0 80 80" aria-hidden="true">
+            <circle class="ra-dock__synergy-track" cx="40" cy="40" r="35"/>
+            <circle class="ra-dock__synergy-progress" cx="40" cy="40" r="35"/>
+          </svg>
+          <span class="ra-dock__synergy-value">0%</span>
+        </div>
+        <span class="ra-dock__synergy-label">Synergy Score</span>
+      </div>
+
+      <!-- Items List -->
+      <div class="ra-dock__items"></div>
+
+      <!-- Tier Progress -->
+      <div class="ra-dock__tiers" style="display: none;">
+        <div class="ra-dock__tiers-header">
+          <span>Discount Tier</span>
+          <span class="ra-dock__tiers-current">Start</span>
+        </div>
+        <div class="ra-dock__tiers-track">
+          <div class="ra-dock__tiers-fill"></div>
+        </div>
+      </div>
+
+      <!-- Pricing -->
+      <div class="ra-dock__pricing" aria-live="polite" aria-atomic="true">
+        <div class="ra-dock__price-row">
+          <span>Subtotal</span>
+          <span class="ra-dock__subtotal">₺0</span>
+        </div>
+        <div class="ra-dock__price-row ra-dock__price-row--discount" style="display: none;">
+          <span>Discount</span>
+          <span class="ra-dock__discount">-₺0</span>
+        </div>
+        <div class="ra-dock__price-row ra-dock__price-row--total">
+          <span>Total</span>
+          <span class="ra-dock__net-total">₺0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sticky Checkout Footer -->
+    <div class="ra-dock__footer">
+      <div class="ra-dock__footer-total" aria-live="polite" aria-atomic="true">
+        <span class="ra-dock__footer-label">Total</span>
+        <span class="ra-dock__footer-value">₺0</span>
+      </div>
+      <button class="ra-dock__checkout" disabled>
+        <span>Complete Ritual</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Product Detail Modal -->
+  <div class="ra-modal" id="product-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="ra-modal__backdrop"></div>
+    <div class="ra-modal__content">
+      <header class="ra-modal__header">
+        <button class="ra-modal__back" aria-label="Go back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <h3 class="ra-modal__title"></h3>
+        <button class="ra-modal__close" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </header>
+
+      <div class="ra-modal__hero">
+        <img class="ra-modal__image" src="" alt="" width="400" height="400">
+        <div class="ra-modal__timing"></div>
+      </div>
+
+      <nav class="ra-modal__tabs" role="tablist" aria-label="Product information">
+        <button class="ra-modal__tab ra-modal__tab--active" data-tab="benefits" role="tab" aria-selected="true">Benefits</button>
+        <button class="ra-modal__tab" data-tab="ingredients" role="tab" aria-selected="false">Ingredients</button>
+        <button class="ra-modal__tab" data-tab="science" role="tab" aria-selected="false">Science</button>
+        <button class="ra-modal__tab" data-tab="synergies" role="tab" aria-selected="false">Synergies</button>
+      </nav>
+
+      <div class="ra-modal__body" role="tabpanel"></div>
+
+      <footer class="ra-modal__footer">
+        <button class="ra-modal__add">
+          <span class="ra-modal__add-text">Add to Ritual</span>
+        </button>
+        <div class="ra-modal__qty" style="display: none;">
+          <button class="ra-modal__qty-btn ra-modal__qty-minus" aria-label="Decrease quantity">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+          <span class="ra-modal__qty-value">1</span>
+          <button class="ra-modal__qty-btn ra-modal__qty-plus" aria-label="Increase quantity">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Achievement Toast -->
+  <div class="ra-toast" aria-live="polite" aria-atomic="true"></div>
+</section>
+
+<style>
+  /* ============================================
+     BIO-LUXURY DESIGN TOKENS
+     Aesthetic: Ethereal Precision
+     ============================================ */
+
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    /* ─── The Void Palette (Dormant) ─── */
+    --ra-void: #0A0A0A;
+    --ra-ash: #1A1A1A;
+    --ra-mist: #2A2A2A;
+    --ra-smoke: #6B6B6B;
+    --ra-cloud: #E8E4DF;
+    --ra-bone: #FAF8F5;
+    --ra-white: #FFFFFE;
+
+    /* ─── Bio-Luminescence (Awakened) ─── */
+    --ra-amber: #D4A574;
+    --ra-amber-glow: rgba(212, 165, 116, 0.25);
+    --ra-amber-soft: rgba(212, 165, 116, 0.1);
+    --ra-sage: #8B9A7D;
+    --ra-sage-glow: rgba(139, 154, 125, 0.25);
+    --ra-rose: #C4A4A4;
+    --ra-rose-glow: rgba(196, 164, 164, 0.25);
+
+    /* ─── Synergy Spectrum ─── */
+    --ra-synergy-low: #6B6B6B;
+    --ra-synergy-medium: #8B9A7D;
+    --ra-synergy-high: #D4A574;
+    --ra-synergy-perfect: #E8C99B;
+
+    /* ─── Feedback ─── */
+    --ra-success: #8B9A7D;
+    --ra-error: #C4A4A4;
+
+    /* ─── Typography ─── */
+    --ra-font-display: 'Cormorant Garamond', Georgia, serif;
+    --ra-font-body: 'DM Sans', system-ui, sans-serif;
+    --ra-font-mono: 'JetBrains Mono', monospace;
+
+    /* ─── Spacing (4px base) ─── */
+    --ra-space-1: 0.25rem;
+    --ra-space-2: 0.5rem;
+    --ra-space-3: 0.75rem;
+    --ra-space-4: 1rem;
+    --ra-space-5: 1.5rem;
+    --ra-space-6: 2rem;
+    --ra-space-8: 3rem;
+    --ra-space-10: 4rem;
+    --ra-space-12: 5rem;
+
+    /* ─── Borders & Radius ─── */
+    --ra-radius-sm: 6px;
+    --ra-radius-md: 12px;
+    --ra-radius-lg: 20px;
+    --ra-radius-pill: 100px;
+    --ra-radius-circle: 50%;
+
+    /* ─── Shadows ─── */
+    --ra-shadow-sm: 0 1px 2px rgba(10, 10, 10, 0.05);
+    --ra-shadow-md: 0 4px 12px rgba(10, 10, 10, 0.08);
+    --ra-shadow-lg: 0 8px 30px rgba(10, 10, 10, 0.12);
+    --ra-shadow-glow: 0 0 30px var(--ra-amber-glow);
+
+    /* ─── Motion (Physics-Based) ─── */
+    --ra-ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+    --ra-ease-in: cubic-bezier(0.32, 0, 0.67, 0);
+    --ra-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --ra-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ra-ease-organic: cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* ─── Durations ─── */
+    --ra-duration-instant: 100ms;
+    --ra-duration-fast: 200ms;
+    --ra-duration-normal: 400ms;
+    --ra-duration-slow: 600ms;
+    --ra-duration-reveal: 800ms;
+
+    /* ─── Z-Index Scale ─── */
+    --ra-z-base: 1;
+    --ra-z-card: 10;
+    --ra-z-sticky: 20;
+    --ra-z-dock: 50;
+    --ra-z-modal-backdrop: 100;
+    --ra-z-modal: 101;
+    --ra-z-toast: 200;
+    --ra-z-particles: 5;
+
+    /* ─── Layout ─── */
+    --ra-dock-height: 90px;
+    --ra-sidebar-width: 360px;
+    --ra-card-gap: var(--ra-space-5);
+    --ra-touch-min: 44px;
+  }
+
+  /* ============================================
+     SKIP LINK (Accessibility)
+     ============================================ */
+
+  .ra-skip-link {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: var(--ra-z-toast);
+    padding: var(--ra-space-3) var(--ra-space-5);
+    background: var(--ra-void);
+    color: var(--ra-cloud);
+    border-radius: var(--ra-radius-pill);
+    font-family: var(--ra-font-body);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: top var(--ra-duration-fast) var(--ra-ease-out);
+  }
+
+  .ra-skip-link:focus {
+    top: var(--ra-space-4);
+    outline: 2px solid var(--ra-amber);
+    outline-offset: 2px;
+  }
+
+  /* ============================================
+     BASE STYLES
+     ============================================ */
+
+  .ritual-architect {
+    position: relative;
+    min-height: 100vh;
+    padding: var(--ra-space-6) var(--ra-space-4);
+    padding-bottom: calc(var(--ra-dock-height) + var(--ra-space-8));
+    background: var(--ra-white);
+    font-family: var(--ra-font-body);
+    color: var(--ra-void);
+    overflow-x: hidden;
+    transition: background var(--ra-duration-reveal) var(--ra-ease-organic);
+  }
+
+  .ritual-architect * {
+    box-sizing: border-box;
+  }
+
+  /* ─── Dormant State ─── */
+  .ritual-architect--dormant {
+    background: var(--ra-white);
+  }
+
+  .ritual-architect--dormant .ra-card {
+    filter: grayscale(1);
+  }
+
+  .ritual-architect--dormant .ra-card__title,
+  .ritual-architect--dormant .ra-card__benefit,
+  .ritual-architect--dormant .ra-card__price {
+    color: var(--ra-smoke);
+  }
+
+  /* ─── Awakening Ripple Effect ─── */
+  .ra-awakening-ripple {
+    position: fixed;
+    pointer-events: none;
+    z-index: var(--ra-z-particles);
+    width: 10px;
+    height: 10px;
+    border-radius: var(--ra-radius-circle);
+    background: radial-gradient(circle, var(--ra-amber-glow) 0%, transparent 70%);
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+
+  .ra-awakening-ripple--active {
+    animation: awakening-ripple var(--ra-duration-reveal) var(--ra-ease-organic) forwards;
+  }
+
+  @keyframes awakening-ripple {
+    0% {
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(300);
+      opacity: 0;
+    }
+  }
+
+  /* ─── Awakened State ─── */
+  .ritual-architect--awakened {
+    background: linear-gradient(180deg, var(--ra-bone) 0%, var(--ra-cloud) 100%);
+    transition: background var(--ra-duration-reveal) var(--ra-ease-organic);
+  }
+
+  /* ─── Visually Hidden (Screen Reader Only) ─── */
+  .ra-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .ritual-architect--awakened .ra-card {
+    filter: grayscale(0);
+    transition: filter var(--ra-duration-reveal) var(--ra-ease-organic);
+  }
+
+  /* Staggered card awakening based on distance from trigger */
+  .ritual-architect--awakened .ra-card:nth-child(1) { transition-delay: 0ms; }
+  .ritual-architect--awakened .ra-card:nth-child(2) { transition-delay: 80ms; }
+  .ritual-architect--awakened .ra-card:nth-child(3) { transition-delay: 160ms; }
+  .ritual-architect--awakened .ra-card:nth-child(4) { transition-delay: 240ms; }
+  .ritual-architect--awakened .ra-card:nth-child(5) { transition-delay: 320ms; }
+  .ritual-architect--awakened .ra-card:nth-child(6) { transition-delay: 400ms; }
+
+  /* ─── Grain Texture Overlay ─── */
+  .ra-grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: var(--ra-z-particles);
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* ─── Ambient Particles ─── */
+  .ra-particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: var(--ra-z-particles);
+    opacity: 0;
+    transition: opacity var(--ra-duration-slow) var(--ra-ease-out);
+  }
+
+  .ritual-architect--awakened .ra-particles {
+    opacity: 1;
+  }
+
+  .ra-particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: var(--ra-amber);
+    border-radius: var(--ra-radius-circle);
+    opacity: 0.4;
+    animation: particle-float 8s infinite var(--ra-ease-in-out);
+    /* Performance: GPU layer for particles */
+    will-change: transform, opacity;
+    contain: strict;
+  }
+
+  @keyframes particle-float {
+    0%, 100% {
+      transform: translateY(0) translateX(0);
+      opacity: 0.2;
+    }
+    50% {
+      transform: translateY(-30px) translateX(10px);
+      opacity: 0.5;
+    }
+  }
+
+  /* ============================================
+     HEADER
+     ============================================ */
+
+  .ra-header {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto var(--ra-space-8);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: reveal-up var(--ra-duration-slow) var(--ra-ease-organic) forwards;
+  }
+
+  @keyframes reveal-up {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .ra-header__eyebrow {
+    display: block;
+    font-family: var(--ra-font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ra-amber);
+    margin-bottom: var(--ra-space-3);
+  }
+
+  .ra-header__title {
+    font-family: var(--ra-font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--ra-void);
+    margin: 0 0 var(--ra-space-4);
+  }
+
+  .ra-header__subtitle {
+    font-family: var(--ra-font-body);
+    font-size: 1rem;
+    color: var(--ra-smoke);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ============================================
+     CONTAINER LAYOUT
+     ============================================ */
+
+  .ra-container {
+    display: flex;
+    gap: var(--ra-space-8);
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .ra-products {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--ra-card-gap);
+  }
+
+  .ra-sidebar {
+    display: none;
+  }
+
+  /* ============================================
+     PRODUCT CARDS
+     ============================================ */
+
+  .ra-card {
+    position: relative;
+    background: var(--ra-white);
+    border: 1px solid transparent;
+    border-radius: var(--ra-radius-md);
+    overflow: hidden;
+    cursor: pointer;
+    transition:
+      transform var(--ra-duration-fast) var(--ra-ease-out),
+      border-color var(--ra-duration-fast) var(--ra-ease-out),
+      box-shadow var(--ra-duration-fast) var(--ra-ease-out),
+      filter var(--ra-duration-reveal) var(--ra-ease-organic);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: card-reveal var(--ra-duration-slow) var(--ra-ease-organic) forwards;
+    animation-delay: calc(var(--card-index) * 100ms + 200ms);
+    /* Performance: GPU acceleration */
+    will-change: transform, opacity, filter;
+    contain: layout style;
+  }
+
+  @keyframes card-reveal {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .ra-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--ra-mist);
+    box-shadow: var(--ra-shadow-lg);
+  }
+
+  .ra-card:focus-visible {
+    outline: 2px solid var(--ra-amber);
+    outline-offset: 2px;
+  }
+
+  .ra-card--selected {
+    border-color: var(--ra-amber);
+    box-shadow: var(--ra-shadow-glow);
+  }
+
+  /* ─── Heartbeat Glow (First Card) ─── */
+  .ra-card__heartbeat {
+    position: absolute;
+    inset: -2px;
+    border-radius: var(--ra-radius-md);
+    background: transparent;
+    border: 2px solid var(--ra-amber);
+    opacity: 0;
+    animation: heartbeat 2s infinite var(--ra-ease-in-out);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .ritual-architect--dormant .ra-card__heartbeat {
+    opacity: 1;
+  }
+
+  .ritual-architect--awakened .ra-card__heartbeat {
+    animation: none;
+    opacity: 0;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% {
+      opacity: 0;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.6;
+      transform: scale(1.02);
+    }
+  }
+
+  /* ─── Card Image ─── */
+  .ra-card__image-wrap {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--ra-bone);
+  }
+
+  .ra-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--ra-duration-normal) var(--ra-ease-out);
+  }
+
+  .ra-card:hover .ra-card__image {
+    transform: scale(1.05);
+  }
+
+  .ra-card__image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10, 10, 10, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  /* ─── Card Body ─── */
+  .ra-card__body {
+    padding: var(--ra-space-4);
+  }
+
+  .ra-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--ra-space-3);
+    margin-bottom: var(--ra-space-2);
+  }
+
+  .ra-card__title {
+    font-family: var(--ra-font-display);
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--ra-void);
+    margin: 0;
+    transition: color var(--ra-duration-reveal) var(--ra-ease-organic);
+  }
+
+  .ra-card__price {
+    font-family: var(--ra-font-mono);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ra-void);
+    white-space: nowrap;
+    transition: color var(--ra-duration-reveal) var(--ra-ease-organic);
+  }
+
+  .ra-card__benefit {
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--ra-smoke);
+    line-height: 1.5;
+    margin: 0 0 var(--ra-space-3);
+    transition: color var(--ra-duration-reveal) var(--ra-ease-organic);
+  }
+
+  /* ─── Ingredient Pills ─── */
+  .ra-card__ingredients {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ra-space-1);
+    margin-bottom: var(--ra-space-4);
+  }
+
+  .ra-pill {
+    display: inline-block;
+    padding: var(--ra-space-1) var(--ra-space-2);
+    background: var(--ra-bone);
+    border-radius: var(--ra-radius-pill);
+    font-family: var(--ra-font-mono);
+    font-size: 0.65rem;
+    color: var(--ra-smoke);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .ritual-architect--awakened .ra-pill {
+    background: var(--ra-amber-soft);
+    color: var(--ra-amber);
+  }
+
+  /* ─── Card Action Button ─── */
+  .ra-card__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ra-space-2);
+    width: 100%;
+    height: var(--ra-touch-min);
+    padding: 0 var(--ra-space-4);
+    background: var(--ra-void);
+    color: var(--ra-cloud);
+    border: none;
+    border-radius: var(--ra-radius-sm);
+    font-family: var(--ra-font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background var(--ra-duration-fast) var(--ra-ease-out),
+      transform var(--ra-duration-instant) var(--ra-ease-out);
+  }
+
+  .ra-card__action:hover {
+    background: var(--ra-ash);
+  }
+
+  .ra-card__action:active {
+    transform: scale(0.98);
+  }
+
+  .ra-card__action-icon,
+  .ra-card__action-check {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .ra-card__action-check {
+    display: none;
+  }
+
+  .ra-card--selected .ra-card__action {
+    background: var(--ra-amber);
+    color: var(--ra-void);
+  }
+
+  .ra-card--selected .ra-card__action-text {
+    display: none;
+  }
+
+  .ra-card--selected .ra-card__action-icon {
+    display: none;
+  }
+
+  .ra-card--selected .ra-card__action-check {
+    display: block;
+  }
+
+  /* ─── Explore Button ─── */
+  .ra-card__explore {
+    position: absolute;
+    bottom: calc(var(--ra-space-4) + var(--ra-touch-min) + var(--ra-space-4) + 80px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: var(--ra-space-1);
+    padding: var(--ra-space-2) var(--ra-space-3);
+    background: var(--ra-white);
+    border: 1px solid var(--ra-mist);
+    border-radius: var(--ra-radius-pill);
+    font-family: var(--ra-font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--ra-smoke);
+    cursor: pointer;
+    opacity: 0;
+    transition:
+      opacity var(--ra-duration-fast) var(--ra-ease-out),
+      background var(--ra-duration-fast) var(--ra-ease-out),
+      color var(--ra-duration-fast) var(--ra-ease-out);
+    z-index: 2;
+  }
+
+  .ra-card__explore svg {
+    width: 14px;
+    height: 14px;
+    transition: transform var(--ra-duration-fast) var(--ra-ease-out);
+  }
+
+  .ra-card:hover .ra-card__explore {
+    opacity: 1;
+  }
+
+  .ra-card__explore:hover {
+    background: var(--ra-void);
+    color: var(--ra-cloud);
+    border-color: var(--ra-void);
+  }
+
+  /* Touch devices: always show explore */
+  @media (hover: none) {
+    .ra-card__explore {
+      opacity: 1;
+    }
+  }
+
+  /* ============================================
+     FOCUS VISIBLE STATES
+     ============================================ */
+
+  .ra-card__action:focus-visible,
+  .ra-card__explore:focus-visible,
+  .ra-sidebar__checkout:focus-visible,
+  .ra-dock__expand:focus-visible,
+  .ra-dock__close:focus-visible,
+  .ra-dock__checkout:focus-visible,
+  .ra-modal__back:focus-visible,
+  .ra-modal__close:focus-visible,
+  .ra-modal__tab:focus-visible,
+  .ra-modal__add:focus-visible,
+  .ra-modal__qty-btn:focus-visible {
+    outline: 2px solid var(--ra-amber);
+    outline-offset: 2px;
+  }
+
+  /* ============================================
+     REDUCED MOTION
+     ============================================ */
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    .ra-particle {
+      display: none !important;
+    }
+
+    .ra-card__heartbeat {
+      animation: none;
+      opacity: 0.4;
+    }
+  }
+
+  /* ============================================
+     MOBILE DOCK
+     ============================================ */
+
+  .ra-dock {
+    display: none;
+  }
+
+  /* Mobile only */
+  @media (max-width: 1023px) {
+    .ra-dock {
+      display: block;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 10, 10, 0.97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--ra-mist);
+      border-radius: var(--ra-radius-lg) var(--ra-radius-lg) 0 0;
+      z-index: var(--ra-z-dock);
+      color: var(--ra-cloud);
+      transform: translateY(0);
+      transition: transform var(--ra-duration-normal) var(--ra-ease-organic);
+    }
+
+    .ra-dock--hidden {
+      transform: translateY(100%);
+    }
+
+    /* ─── Dock Handle ─── */
+    .ra-dock__handle {
+      display: flex;
+      justify-content: center;
+      padding: var(--ra-space-2) 0;
+      cursor: grab;
+    }
+
+    .ra-dock__handle span {
+      width: 40px;
+      height: 4px;
+      background: var(--ra-mist);
+      border-radius: var(--ra-radius-pill);
+    }
+
+    /* ─── Collapsed View ─── */
+    .ra-dock__collapsed {
+      display: flex;
+      align-items: center;
+      gap: var(--ra-space-3);
+      padding: var(--ra-space-3) var(--ra-space-4);
+    }
+
+    .ra-dock--expanded .ra-dock__collapsed {
+      display: none;
+    }
+
+    .ra-dock__preview {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .ra-dock__empty-text {
+      font-family: var(--ra-font-body);
+      font-size: 0.85rem;
+      color: var(--ra-smoke);
+    }
+
+    .ra-dock__thumbnails {
+      display: flex;
+      gap: calc(var(--ra-space-1) * -1);
+    }
+
+    .ra-dock__thumbnail {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--ra-radius-circle);
+      border: 2px solid var(--ra-ash);
+      object-fit: cover;
+      background: var(--ra-mist);
+    }
+
+    .ra-dock__thumbnail:nth-child(n+2) {
+      margin-left: -8px;
+    }
+
+    .ra-dock__info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: var(--ra-space-1);
+    }
+
+    .ra-dock__count {
+      font-family: var(--ra-font-mono);
+      font-size: 0.75rem;
+      color: var(--ra-smoke);
+    }
+
+    .ra-dock__synergy-badge {
+      font-family: var(--ra-font-mono);
+      font-size: 0.65rem;
+      padding: var(--ra-space-1) var(--ra-space-2);
+      background: var(--ra-amber-soft);
+      color: var(--ra-amber);
+      border-radius: var(--ra-radius-pill);
+    }
+
+    .ra-dock__mini-total {
+      font-family: var(--ra-font-mono);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--ra-cloud);
+      min-width: 60px;
+      text-align: right;
+    }
+
+    .ra-dock__expand {
+      width: var(--ra-touch-min);
+      height: var(--ra-touch-min);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: var(--ra-cloud);
+      cursor: pointer;
+    }
+
+    .ra-dock__expand svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* ─── Expanded View ─── */
+    .ra-dock__expanded {
+      display: none;
+      max-height: 70vh;
+      overflow-y: auto;
+      padding: 0 var(--ra-space-4) var(--ra-space-4);
+    }
+
+    .ra-dock--expanded .ra-dock__expanded {
+      display: block;
+    }
+
+    .ra-dock__expanded-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--ra-space-3) 0;
+      position: sticky;
+      top: 0;
+      background: rgba(10, 10, 10, 0.97);
+      z-index: 1;
+    }
+
+    .ra-dock__expanded-header h3 {
+      font-family: var(--ra-font-display);
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--ra-cloud);
+      margin: 0;
+    }
+
+    .ra-dock__close {
+      width: var(--ra-touch-min);
+      height: var(--ra-touch-min);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: var(--ra-smoke);
+      cursor: pointer;
+    }
+
+    .ra-dock__close svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* ─── Dock Synergy Circle ─── */
+    .ra-dock__synergy {
+      display: flex;
+      align-items: center;
+      gap: var(--ra-space-4);
+      padding: var(--ra-space-4);
+      background: var(--ra-ash);
+      border-radius: var(--ra-radius-md);
+      margin-bottom: var(--ra-space-4);
+    }
+
+    .ra-dock__synergy-circle {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
+    }
+
+    .ra-dock__synergy-circle svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .ra-dock__synergy-track {
+      fill: none;
+      stroke: var(--ra-mist);
+      stroke-width: 4;
+    }
+
+    .ra-dock__synergy-progress {
+      fill: none;
+      stroke: var(--ra-amber);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 220; /* 2πr = 2 × π × 35 */
+      stroke-dashoffset: 220;
+      transition: stroke-dashoffset var(--ra-duration-slow) var(--ra-ease-organic);
+    }
+
+    .ra-dock__synergy-value {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--ra-font-mono);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--ra-cloud);
+    }
+
+    .ra-dock__synergy-label {
+      font-family: var(--ra-font-body);
+      font-size: 0.9rem;
+      color: var(--ra-smoke);
+    }
+
+    /* ─── Dock Items List ─── */
+    .ra-dock__items {
+      display: flex;
+      flex-direction: column;
+      gap: var(--ra-space-3);
+      margin-bottom: var(--ra-space-4);
+    }
+
+    .ra-dock__item {
+      display: flex;
+      align-items: center;
+      gap: var(--ra-space-3);
+      padding: var(--ra-space-3);
+      background: var(--ra-ash);
+      border-radius: var(--ra-radius-sm);
+    }
+
+    .ra-dock__item-image {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--ra-radius-sm);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .ra-dock__item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .ra-dock__item-title {
+      font-family: var(--ra-font-display);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--ra-cloud);
+      margin: 0 0 var(--ra-space-1);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ra-dock__item-price {
+      font-family: var(--ra-font-mono);
+      font-size: 0.75rem;
+      color: var(--ra-smoke);
+    }
+
+    .ra-dock__item-qty {
+      display: flex;
+      align-items: center;
+      gap: var(--ra-space-2);
+    }
+
+    .ra-dock__item-qty-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid var(--ra-mist);
+      border-radius: var(--ra-radius-sm);
+      color: var(--ra-smoke);
+      cursor: pointer;
+      transition:
+        background var(--ra-duration-fast) var(--ra-ease-out),
+        border-color var(--ra-duration-fast) var(--ra-ease-out);
+    }
+
+    .ra-dock__item-qty-btn:hover {
+      background: var(--ra-mist);
+      border-color: var(--ra-smoke);
+    }
+
+    .ra-dock__item-qty-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .ra-dock__item-qty-value {
+      font-family: var(--ra-font-mono);
+      font-size: 0.85rem;
+      color: var(--ra-cloud);
+      min-width: 24px;
+      text-align: center;
+    }
+
+    .ra-dock__item-remove {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: var(--ra-smoke);
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity var(--ra-duration-fast) var(--ra-ease-out);
+    }
+
+    .ra-dock__item-remove:hover {
+      opacity: 1;
+      color: var(--ra-error);
+    }
+
+    .ra-dock__item-remove svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ─── Dock Tier Progress ─── */
+    .ra-dock__tiers {
+      padding: var(--ra-space-3);
+      background: var(--ra-ash);
+      border-radius: var(--ra-radius-sm);
+      margin-bottom: var(--ra-space-4);
+    }
+
+    .ra-dock__tiers-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--ra-space-2);
+      font-family: var(--ra-font-body);
+      font-size: 0.8rem;
+      color: var(--ra-smoke);
+    }
+
+    .ra-dock__tiers-current {
+      font-family: var(--ra-font-mono);
+      color: var(--ra-amber);
+    }
+
+    .ra-dock__tiers-track {
+      height: 4px;
+      background: var(--ra-mist);
+      border-radius: var(--ra-radius-pill);
+      overflow: hidden;
+    }
+
+    .ra-dock__tiers-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--ra-amber), var(--ra-sage));
+      border-radius: var(--ra-radius-pill);
+      transition: width var(--ra-duration-normal) var(--ra-ease-organic);
+      width: 0%;
+    }
+
+    /* ─── Dock Pricing ─── */
+    .ra-dock__pricing {
+      padding: var(--ra-space-3) 0;
+      border-top: 1px solid var(--ra-mist);
+      margin-bottom: var(--ra-space-3);
+    }
+
+    .ra-dock__price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--ra-space-2) 0;
+      font-family: var(--ra-font-body);
+      font-size: 0.85rem;
+      color: var(--ra-smoke);
+    }
+
+    .ra-dock__price-row--discount {
+      color: var(--ra-success);
+    }
+
+    .ra-dock__price-row--total {
+      font-weight: 500;
+      color: var(--ra-cloud);
+      font-size: 1rem;
+    }
+
+    .ra-dock__subtotal,
+    .ra-dock__discount,
+    .ra-dock__net-total {
+      font-family: var(--ra-font-mono);
+    }
+
+    /* ─── Dock Footer (Sticky Checkout) ─── */
+    .ra-dock__footer {
+      display: flex;
+      align-items: center;
+      gap: var(--ra-space-3);
+      padding: var(--ra-space-3) var(--ra-space-4);
+      background: var(--ra-void);
+      border-top: 1px solid var(--ra-mist);
+      margin: 0 calc(var(--ra-space-4) * -1);
+    }
+
+    .ra-dock__footer-total {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ra-dock__footer-label {
+      font-family: var(--ra-font-body);
+      font-size: 0.7rem;
+      color: var(--ra-smoke);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .ra-dock__footer-value {
+      font-family: var(--ra-font-mono);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--ra-cloud);
+    }
+
+    .ra-dock__checkout {
+      flex: 1;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--ra-space-2);
+      background: var(--ra-amber);
+      color: var(--ra-void);
+      border: none;
+      border-radius: var(--ra-radius-md);
+      font-family: var(--ra-font-body);
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition:
+        background var(--ra-duration-fast) var(--ra-ease-out),
+        transform var(--ra-duration-instant) var(--ra-ease-out),
+        opacity var(--ra-duration-fast) var(--ra-ease-out);
+    }
+
+    .ra-dock__checkout:hover:not(:disabled) {
+      background: var(--ra-sage);
+    }
+
+    .ra-dock__checkout:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .ra-dock__checkout:disabled {
+      background: var(--ra-mist);
+      color: var(--ra-smoke);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .ra-dock__checkout svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  /* ============================================
+     SIDEBAR ORBITAL HUB
+     ============================================ */
+
+  .ra-sidebar__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--ra-space-5);
+  }
+
+  .ra-sidebar__title {
+    font-family: var(--ra-font-display);
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--ra-void);
+    margin: 0;
+  }
+
+  /* ─── Synergy Ring (Orbital Hub Center) ─── */
+  .ra-sidebar__synergy-score {
+    position: relative;
+    width: 64px;
+    height: 64px;
+  }
+
+  .ra-sidebar__synergy-ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .ra-sidebar__synergy-track {
+    fill: none;
+    stroke: var(--ra-mist);
+    stroke-width: 4;
+  }
+
+  .ra-sidebar__synergy-progress {
+    fill: none;
+    stroke: var(--ra-amber);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 283; /* 2πr = 2 × π × 45 */
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset var(--ra-duration-slow) var(--ra-ease-organic);
+  }
+
+  .ra-sidebar__synergy-value {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--ra-font-mono);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ra-void);
+  }
+
+  /* ─── Empty State ─── */
+  .ra-sidebar__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--ra-space-8) var(--ra-space-4);
+    text-align: center;
+  }
+
+  .ra-sidebar__empty-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: var(--ra-space-4);
+    color: var(--ra-smoke);
+    opacity: 0.5;
+  }
+
+  .ra-sidebar__empty-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ra-sidebar__empty-text {
+    font-family: var(--ra-font-body);
+    font-size: 0.9rem;
+    color: var(--ra-smoke);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ─── Orbital Visualization ─── */
+  .ra-sidebar__orbit {
+    position: relative;
+    height: 200px;
+    margin-bottom: var(--ra-space-4);
+  }
+
+  .ra-sidebar__orbit-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ra-sidebar__orbit-lines line {
+    stroke: var(--ra-amber);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 4;
+    opacity: 0.4;
+    filter: url(#synergy-glow);
+  }
+
+  .ra-sidebar__orbit-node {
+    cursor: pointer;
+    transition: transform var(--ra-duration-fast) var(--ra-ease-out);
+  }
+
+  .ra-sidebar__orbit-node:hover {
+    transform: scale(1.1);
+  }
+
+  .ra-sidebar__orbit-node circle {
+    fill: var(--ra-white);
+    stroke: var(--ra-mist);
+    stroke-width: 2;
+    transition: stroke var(--ra-duration-fast) var(--ra-ease-out);
+  }
+
+  .ra-sidebar__orbit-node:hover circle {
+    stroke: var(--ra-amber);
+  }
+
+  .ra-sidebar__orbit-node image {
+    border-radius: var(--ra-radius-circle);
+  }
+
+  /* ─── Synergy Badge on Lines ─── */
+  .ra-sidebar__synergy-badge {
+    font-family: var(--ra-font-mono);
+    font-size: 0.65rem;
+    fill: var(--ra-amber);
+    text-anchor: middle;
+    dominant-baseline: middle;
+    opacity: 0;
+    transition: opacity var(--ra-duration-fast) var(--ra-ease-out);
+  }
+
+  .ra-sidebar__orbit-lines:hover .ra-sidebar__synergy-badge {
+    opacity: 1;
+  }
+
+  /* ─── Selected Items List ─── */
+  .ra-sidebar__items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ra-space-3);
+    margin-bottom: var(--ra-space-4);
+    max-height: 300px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ra-mist) transparent;
+  }
+
+  .ra-sidebar__items::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .ra-sidebar__items::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .ra-sidebar__items::-webkit-scrollbar-thumb {
+    background: var(--ra-mist);
+    border-radius: var(--ra-radius-pill);
+  }
+
+  .ra-sidebar__item {
+    display: flex;
+    align-items: center;
+    gap: var(--ra-space-3);
+    padding: var(--ra-space-3);
+    background: var(--ra-bone);
+    border-radius: var(--ra-radius-sm);
+    transition: background var(--ra-duration-fast) var(--ra-ease-out);
+  }
+
+  .ra-sidebar__item:hover {
+    background: var(--ra-cloud);
+  }
+
+  .ra-sidebar__item-image {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--ra-radius-sm);
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .ra-sidebar__item-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ra-sidebar__item-title {
+    font-family: var(--ra-font-display);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--ra-void);
+    margin: 0 0 var(--ra-space-1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ra-sidebar__item-price {
+    font-family: var(--ra-font-mono);
+    font-size: 0.75rem;
+    color: var(--ra-smoke);
+  }
+
+  .ra-sidebar__item-qty {
+    display: flex;
+    align-items: center;
+    gap: var(--ra-space-2);
+  }
+
+  .ra-sidebar__item-qty-btn {
+    width: var(--ra-touch-min);
+    height: var(--ra-touch-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--ra-mist);
+    border-radius: var(--ra-radius-sm);
+    color: var(--ra-smoke);
+    cursor: pointer;
+    transition:
+      background var(--ra-duration-fast) var(--ra-ease-out),
+      border-color var(--ra-duration-fast) var(--ra-ease-out),
+      color var(--ra-duration-fast) var(--ra-ease-out);
+  }
+
+  .ra-sidebar__item-qty-btn:hover {
+    background: var(--ra-void);
+    border-color: var(--ra-void);
+    color: var(--ra-cloud);
+  }
+
+  .ra-sidebar__item-qty-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .ra-sidebar__item-qty-value {
+    font-family: var(--ra-font-mono);
+    font-size: 0.85rem;
+    color: var(--ra-void);
+    min-width: 24px;
+    text-align: center;
+  }
+
+  .ra-sidebar__item-remove {
+    width: var(--ra-touch-min);
+    height: var(--ra-touch-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--ra-smoke);
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity var(--ra-duration-fast) var(--ra-ease-out);
+  }
+
+  .ra-sidebar__item-remove:hover {
+    opacity: 1;
+    color: var(--ra-error);
+  }
+
+  .ra-sidebar__item-remove svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* ─── Tier Progress ─── */
+  .ra-sidebar__tiers {
+    padding: var(--ra-space-4);
+    background: var(--ra-bone);
+    border-radius: var(--ra-radius-sm);
+    margin-bottom: var(--ra-space-4);
+  }
+
+  .ra-sidebar__tiers-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--ra-space-3);
+  }
+
+  .ra-sidebar__tiers-label {
+    font-family: var(--ra-font-body);
+    font-size: 0.8rem;
+    color: var(--ra-smoke);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .ra-sidebar__tiers-current {
+    font-family: var(--ra-font-mono);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ra-amber);
+  }
+
+  .ra-sidebar__tiers-track {
+    position: relative;
+    height: 6px;
+    background: var(--ra-mist);
+    border-radius: var(--ra-radius-pill);
+    overflow: hidden;
+    margin-bottom: var(--ra-space-3);
+  }
+
+  .ra-sidebar__tiers-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: linear-gradient(90deg, var(--ra-amber), var(--ra-sage));
+    border-radius: var(--ra-radius-pill);
+    transition: width var(--ra-duration-normal) var(--ra-ease-organic);
+    width: 0%;
+  }
+
+  .ra-sidebar__tiers-steps {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .ra-tier-step {
+    font-family: var(--ra-font-mono);
+    font-size: 0.65rem;
+    color: var(--ra-smoke);
+    opacity: 0.6;
+    transition: opacity var(--ra-duration-fast) var(--ra-ease-out);
+  }
+
+  .ra-tier-step--active {
+    opacity: 1;
+    color: var(--ra-amber);
+  }
+
+  /* ─── Pricing ─── */
+  .ra-sidebar__pricing {
+    padding-top: var(--ra-space-4);
+    border-top: 1px solid var(--ra-mist);
+    margin-bottom: var(--ra-space-4);
+  }
+
+  .ra-sidebar__price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--ra-space-2) 0;
+    font-family: var(--ra-font-body);
+    font-size: 0.9rem;
+    color: var(--ra-smoke);
+  }
+
+  .ra-sidebar__price-row--discount {
+    color: var(--ra-success);
+  }
+
+  .ra-sidebar__price-row--total {
+    font-weight: 500;
+    color: var(--ra-void);
+    font-size: 1rem;
+    padding-top: var(--ra-space-3);
+    border-top: 1px solid var(--ra-mist);
+    margin-top: var(--ra-space-2);
+  }
+
+  .ra-sidebar__subtotal,
+  .ra-sidebar__discount,
+  .ra-sidebar__total {
+    font-family: var(--ra-font-mono);
+  }
+
+  /* ─── Checkout Button ─── */
+  .ra-sidebar__checkout {
+    width: 100%;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ra-space-3);
+    background: var(--ra-void);
+    color: var(--ra-cloud);
+    border: none;
+    border-radius: var(--ra-radius-md);
+    font-family: var(--ra-font-body);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background var(--ra-duration-fast) var(--ra-ease-out),
+      transform var(--ra-duration-instant) var(--ra-ease-out),
+      opacity var(--ra-duration-fast) var(--ra-ease-out);
+  }
+
+  .ra-sidebar__checkout:hover:not(:disabled) {
+    background: var(--ra-ash);
+  }
+
+  .ra-sidebar__checkout:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  .ra-sidebar__checkout:disabled {
+    background: var(--ra-mist);
+    color: var(--ra-smoke);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .ra-sidebar__checkout svg {
+    width: 20px;
+    height: 20px;
+    transition: transform var(--ra-duration-fast) var(--ra-ease-out);
+  }
+
+  .ra-sidebar__checkout:hover:not(:disabled) svg {
+    transform: translateX(4px);
+  }
+
+  /* ============================================
+     PRODUCT DETAIL MODAL (KEŞFET)
+     ============================================ */
+
+  .ra-modal {
+    position: fixed;
+    inset: 0;
+    z-index: var(--ra-z-modal);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--ra-duration-normal) var(--ra-ease-out),
+      visibility var(--ra-duration-normal);
+  }
+
+  .ra-modal--open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .ra-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .ra-modal__content {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    max-height: 95vh;
+    background: var(--ra-white);
+    border-radius: var(--ra-radius-lg) var(--ra-radius-lg) 0 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(100%);
+    transition: transform var(--ra-duration-normal) var(--ra-ease-organic);
+  }
+
+  .ra-modal--open .ra-modal__content {
+    transform: translateY(0);
+  }
+
+  /* ─── Modal Header ─── */
+  .ra-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--ra-space-3) var(--ra-space-4);
+    border-bottom: 1px solid var(--ra-mist);
+    background: var(--ra-white);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+
+  .ra-modal__back,
+  .ra-modal__close {
+    width: var(--ra-touch-min);
+    height: var(--ra-touch-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--ra-smoke);
+    cursor: pointer;
+    transition: color var(--ra-duration-fast) var(--ra-ease-out);
+  }
+
+  .ra-modal__back:hover,
+  .ra-modal__close:hover {
+    color: var(--ra-void);
+  }
+
+  .ra-modal__back svg,
+  .ra-modal__close svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ra-modal__title {
+    font-family: var(--ra-font-display);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--ra-void);
+    margin: 0;
+    flex: 1;
+    text-align: center;
+  }
+
+  /* ─── Modal Hero ─── */
+  .ra-modal__hero {
+    position: relative;
+    aspect-ratio: 1;
+    background: var(--ra-bone);
+    max-height: 300px;
+    overflow: hidden;
+  }
+
+  .ra-modal__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ra-modal__timing {
+    position: absolute;
+    bottom: var(--ra-space-4);
+    left: var(--ra-space-4);
+    padding: var(--ra-space-2) var(--ra-space-3);
+    background: var(--ra-white);
+    border-radius: var(--ra-radius-pill);
+    font-family: var(--ra-font-mono);
+    font-size: 0.7rem;
+    color: var(--ra-amber);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: var(--ra-shadow-md);
+  }
+
+  /* ─── Modal Tabs ─── */
+  .ra-modal__tabs {
+    display: flex;
+    gap: var(--ra-space-1);
+    padding: var(--ra-space-3) var(--ra-space-4);
+    border-bottom: 1px solid var(--ra-mist);
+    background: var(--ra-white);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .ra-modal__tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ra-modal__tab {
+    flex-shrink: 0;
+    padding: var(--ra-space-2) var(--ra-space-4);
+    background: transparent;
+    border: 1px solid var(--ra-mist);
+    border-radius: var(--ra-radius-pill);
+    font-family: var(--ra-font-body);
+    font-size: 0.8rem;
+    color: var(--ra-smoke);
+    cursor: pointer;
+    transition:
+      background var(--ra-duration-fast) var(--ra-ease-out),
+      border-color var(--ra-duration-fast) var(--ra-ease-out),
+      color var(--ra-duration-fast) var(--ra-ease-out);
+  }
+
+  .ra-modal__tab:hover {
+    border-color: var(--ra-smoke);
+  }
+
+  .ra-modal__tab--active {
+    background: var(--ra-void);
+    border-color: var(--ra-void);
+    color: var(--ra-cloud);
+  }
+
+  /* ─── Modal Body ─── */
+  .ra-modal__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--ra-space-4);
+    font-family: var(--ra-font-body);
+    font-size: 0.9rem;
+    color: var(--ra-void);
+    line-height: 1.7;
+  }
+
+  .ra-modal__section {
+    margin-bottom: var(--ra-space-5);
+  }
+
+  .ra-modal__section:last-child {
+    margin-bottom: 0;
+  }
+
+  .ra-modal__section-title {
+    font-family: var(--ra-font-display);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--ra-void);
+    margin: 0 0 var(--ra-space-3);
+  }
+
+  .ra-modal__benefit-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .ra-modal__benefit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--ra-space-3);
+    padding: var(--ra-space-3) 0;
+    border-bottom: 1px solid var(--ra-bone);
+  }
+
+  .ra-modal__benefit-item:last-child {
+    border-bottom: none;
+  }
+
+  .ra-modal__benefit-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    color: var(--ra-amber);
+  }
+
+  .ra-modal__ingredient-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--ra-space-3);
+  }
+
+  .ra-modal__ingredient {
+    padding: var(--ra-space-3);
+    background: var(--ra-bone);
+    border-radius: var(--ra-radius-sm);
+  }
+
+  .ra-modal__ingredient-name {
+    font-family: var(--ra-font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ra-void);
+    margin-bottom: var(--ra-space-1);
+  }
+
+  .ra-modal__ingredient-amount {
+    font-family: var(--ra-font-mono);
+    font-size: 0.7rem;
+    color: var(--ra-smoke);
+  }
+
+  .ra-modal__synergy-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ra-space-3);
+  }
+
+  .ra-modal__synergy-item {
+    display: flex;
+    align-items: center;
+    gap: var(--ra-space-3);
+    padding: var(--ra-space-3);
+    background: var(--ra-bone);
+    border-radius: var(--ra-radius-sm);
+  }
+
+  .ra-modal__synergy-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--ra-radius-circle);
+    background: var(--ra-mist);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--ra-font-mono);
+    font-size: 0.75rem;
+    color: var(--ra-amber);
+  }
+
+  .ra-modal__synergy-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ra-modal__synergy-name {
+    font-weight: 500;
+    color: var(--ra-void);
+    margin-bottom: var(--ra-space-1);
+  }
+
+  .ra-modal__synergy-reason {
+    font-size: 0.8rem;
+    color: var(--ra-smoke);
+  }
+
+  /* ─── Modal Footer ─── */
+  .ra-modal__footer {
+    padding: var(--ra-space-4);
+    border-top: 1px solid var(--ra-mist);
+    background: var(--ra-white);
+    display: flex;
+    gap: var(--ra-space-3);
+  }
+
+  .ra-modal__add {
+    flex: 1;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ra-void);
+    color: var(--ra-cloud);
+    border: none;
+    border-radius: var(--ra-radius-md);
+    font-family: var(--ra-font-body);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background var(--ra-duration-fast) var(--ra-ease-out),
+      transform var(--ra-duration-instant) var(--ra-ease-out);
+  }
+
+  .ra-modal__add:hover {
+    background: var(--ra-ash);
+  }
+
+  .ra-modal__add:active {
+    transform: scale(0.98);
+  }
+
+  .ra-modal__add--selected {
+    background: var(--ra-amber);
+    color: var(--ra-void);
+  }
+
+  .ra-modal__qty {
+    display: flex;
+    align-items: center;
+    gap: var(--ra-space-2);
+    padding: 0 var(--ra-space-2);
+    border: 1px solid var(--ra-mist);
+    border-radius: var(--ra-radius-md);
+  }
+
+  .ra-modal__qty-btn {
+    width: var(--ra-touch-min);
+    height: var(--ra-touch-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--ra-smoke);
+    cursor: pointer;
+    transition: color var(--ra-duration-fast) var(--ra-ease-out);
+  }
+
+  .ra-modal__qty-btn:hover {
+    color: var(--ra-void);
+  }
+
+  .ra-modal__qty-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .ra-modal__qty-value {
+    font-family: var(--ra-font-mono);
+    font-size: 1rem;
+    color: var(--ra-void);
+    min-width: 24px;
+    text-align: center;
+  }
+
+  /* Desktop modal adjustments */
+  @media (min-width: 768px) {
+    .ra-modal {
+      align-items: center;
+    }
+
+    .ra-modal__content {
+      max-height: 90vh;
+      border-radius: var(--ra-radius-lg);
+      transform: translateY(40px);
+    }
+
+    .ra-modal--open .ra-modal__content {
+      transform: translateY(0);
+    }
+  }
+
+  /* ============================================
+     TOAST / ACHIEVEMENT NOTIFICATIONS
+     ============================================ */
+
+  .ra-toast {
+    position: fixed;
+    top: var(--ra-space-6);
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    z-index: var(--ra-z-toast);
+    display: flex;
+    align-items: center;
+    gap: var(--ra-space-3);
+    padding: var(--ra-space-3) var(--ra-space-5);
+    background: var(--ra-void);
+    color: var(--ra-cloud);
+    border-radius: var(--ra-radius-pill);
+    box-shadow: var(--ra-shadow-lg);
+    opacity: 0;
+    transition:
+      transform var(--ra-duration-normal) var(--ra-ease-organic),
+      opacity var(--ra-duration-normal) var(--ra-ease-out);
+    pointer-events: none;
+  }
+
+  .ra-toast--visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  .ra-toast__icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ra-amber);
+    color: var(--ra-void);
+    border-radius: var(--ra-radius-circle);
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .ra-toast__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ra-space-1);
+  }
+
+  .ra-toast__title {
+    font-family: var(--ra-font-display);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .ra-toast__subtitle {
+    font-family: var(--ra-font-body);
+    font-size: 0.8rem;
+    color: var(--ra-smoke);
+  }
+
+  /* ─── Success Pulse Animation ─── */
+  @keyframes success-pulse {
+    0% {
+      box-shadow: 0 0 0 0 var(--ra-amber-glow);
+    }
+    70% {
+      box-shadow: 0 0 0 15px transparent;
+    }
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
+  }
+
+  .ra-card--success {
+    animation: success-pulse 0.6s var(--ra-ease-out);
+  }
+
+  /* ─── Loading State ─── */
+  .ra-card--loading {
+    pointer-events: none;
+  }
+
+  .ra-card--loading .ra-card__action {
+    position: relative;
+    color: transparent;
+  }
+
+  .ra-card--loading .ra-card__action::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--ra-cloud);
+    border-top-color: transparent;
+    border-radius: var(--ra-radius-circle);
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* ─── Tier Unlock Animation ─── */
+  @keyframes tier-unlock {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+      color: var(--ra-amber);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .ra-tier-step--unlocking {
+    animation: tier-unlock 0.5s var(--ra-ease-bounce);
+  }
+
+  /* ─── Button Press Feedback ─── */
+  .ra-card__action:active,
+  .ra-sidebar__checkout:active,
+  .ra-dock__checkout:active,
+  .ra-modal__add:active {
+    transform: scale(0.96);
+  }
+
+  /* ─── Card Selection Animation ─── */
+  .ra-card--selected {
+    animation: card-select 0.3s var(--ra-ease-bounce);
+  }
+
+  @keyframes card-select {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.98);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  /* ─── Synergy Line Pulse ─── */
+  @keyframes synergy-pulse {
+    0%, 100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  .ra-sidebar__orbit-lines line {
+    animation: synergy-pulse 2s infinite var(--ra-ease-in-out);
+  }
+
+  .ra-sidebar__orbit-lines line:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+
+  .ra-sidebar__orbit-lines line:nth-child(3) {
+    animation-delay: 0.6s;
+  }
+
+  /* ============================================
+     DESKTOP BREAKPOINT
+     ============================================ */
+
+  @media (min-width: 1024px) {
+    .ritual-architect {
+      padding-bottom: var(--ra-space-8);
+    }
+
+    .ra-sidebar {
+      display: block;
+      position: sticky;
+      top: var(--ra-space-6);
+      width: var(--ra-sidebar-width);
+      flex-shrink: 0;
+      height: fit-content;
+      max-height: calc(100vh - var(--ra-space-12));
+      overflow-y: auto;
+      background: var(--ra-white);
+      border: 1px solid var(--ra-mist);
+      border-radius: var(--ra-radius-lg);
+      padding: var(--ra-space-5);
+    }
+
+    .ra-products {
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+  }
+
+  /* ============================================
+     MOBILE BREAKPOINT
+     ============================================ */
+
+  @media (max-width: 1023px) {
+    .ra-dock {
+      display: block;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--ra-mist);
+      z-index: var(--ra-z-dock);
+      color: var(--ra-cloud);
+    }
+  }
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  // ============================================
+  // DOM REFERENCES
+  // ============================================
+  const section = document.getElementById('ritual-architect');
+  if (!section) return;
+
+  const productCards = section.querySelectorAll('.ra-card');
+  const sidebar = section.querySelector('.ra-sidebar');
+  const dock = section.querySelector('.ra-dock');
+  const modal = section.querySelector('.ra-modal');
+  const particles = section.querySelector('.ra-particles');
+
+  // ============================================
+  // STATE
+  // ============================================
+  const state = {
+    items: [],
+    isAwakened: false,
+    isExpanded: false,
+    isMobile: window.innerWidth < 1024
+  };
+
+  // ============================================
+  // SYNERGY DATA
+  // ============================================
+  const SYNERGY_MAP = {
+    'dreamglow': {
+      name: 'DreamGlow',
+      timing: 'Before Sleep',
+      synergies: {
+        'thechill': { score: 92, reason: 'TheChill preps nervous system for deep sleep' },
+        'dailyglow': { score: 78, reason: 'Skin regenerates during sleep cycles' },
+        'reset-button': { score: 85, reason: 'Full recovery protocol activated' }
+      }
+    },
+    'dailyglow': {
+      name: 'DailyGlow',
+      timing: 'Morning',
+      synergies: {
+        'mindfuel': { score: 88, reason: 'Radiance + clarity for peak mornings' },
+        'dreamglow': { score: 78, reason: 'Day/night beauty cycle complete' }
+      }
+    },
+    'mindfuel': {
+      name: 'MindFuel',
+      timing: 'Morning / Midday',
+      synergies: {
+        'thechill': { score: 95, reason: 'Focus without anxiety—the perfect balance' },
+        'dailyglow': { score: 88, reason: 'Mental + physical vitality combined' }
+      }
+    },
+    'thechill': {
+      name: 'TheChill',
+      timing: 'Evening',
+      synergies: {
+        'mindfuel': { score: 95, reason: 'Balances stimulation with calm' },
+        'dreamglow': { score: 92, reason: 'Wind down to deep restoration' },
+        'reset-button': { score: 87, reason: 'Complete stress release protocol' }
+      }
+    },
+    'reset-button': {
+      name: 'Reset Button',
+      timing: 'As Needed',
+      synergies: {
+        'dreamglow': { score: 85, reason: 'Recovery amplified during sleep' },
+        'thechill': { score: 87, reason: 'Stress relief + system reset' }
+      }
+    }
+  };
+
+  // ============================================
+  // DISCOUNT TIERS
+  // ============================================
+  const DISCOUNT_TIERS = [
+    { min: 0, discount: 0, label: 'Start' },
+    { min: 2, discount: 15, label: '15% Off' },
+    { min: 3, discount: 20, label: '20% Off' },
+    { min: 4, discount: 25, label: '25% Off' },
+    { min: 5, discount: 30, label: '30% Off' }
+  ];
+
+  // ============================================
+  // HELPERS
+  // ============================================
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const formatMoney = cents => new Intl.NumberFormat('tr-TR', {
+    style: 'currency',
+    currency: 'TRY',
+    minimumFractionDigits: 0
+  }).format(cents / 100);
+
+  const vibrate = (pattern = 10) => {
+    if (!prefersReducedMotion && 'vibrate' in navigator) {
+      navigator.vibrate(pattern);
+    }
+  };
+
+  // Performance: Debounce utility
+  function debounce(fn, wait) {
+    let timeout;
+    return function(...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => fn.apply(this, args), wait);
+    };
+  }
+
+  function matchHandle(title) {
+    const normalized = title.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const handles = ['dreamglow', 'dailyglow', 'mindfuel', 'thechill', 'resetbutton'];
+    for (const h of handles) {
+      if (normalized.includes(h.replace('-', ''))) {
+        return h === 'resetbutton' ? 'reset-button' : h;
+      }
+    }
+    return normalized;
+  }
+
+  // ============================================
+  // AWAKENING
+  // ============================================
+  function awaken(triggerCard) {
+    if (state.isAwakened) return;
+    state.isAwakened = true;
+
+    // Create ripple effect from the card that triggered awakening
+    if (!prefersReducedMotion && triggerCard) {
+      const ripple = section.querySelector('.ra-awakening-ripple');
+      const rect = triggerCard.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      ripple.style.left = centerX + 'px';
+      ripple.style.top = centerY + 'px';
+      ripple.classList.add('ra-awakening-ripple--active');
+
+      // Remove ripple after animation
+      setTimeout(() => {
+        ripple.classList.remove('ra-awakening-ripple--active');
+      }, 800);
+    }
+
+    section.classList.remove('ritual-architect--dormant');
+    section.classList.add('ritual-architect--awakened');
+
+    // Spawn particles
+    if (!prefersReducedMotion) {
+      spawnParticles();
+    }
+  }
+
+  function spawnParticles() {
+    // Performance: Fewer particles on mobile
+    const count = state.isMobile ? 15 : 25;
+
+    // Use DocumentFragment for batch DOM insertion
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < count; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'ra-particle';
+      particle.style.cssText = `
+        left: ${Math.random() * 100}%;
+        top: ${Math.random() * 100}%;
+        animation-delay: ${Math.random() * 8}s;
+        animation-duration: ${6 + Math.random() * 4}s;
+      `;
+      fragment.appendChild(particle);
+    }
+
+    particles.appendChild(fragment);
+  }
+
+  // ============================================
+  // CART OPERATIONS
+  // ============================================
+  async function addToShopifyCart(variantId) {
+    try {
+      const res = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
+      });
+      return res.ok;
+    } catch (e) {
+      console.error('Cart error:', e);
+      return false;
+    }
+  }
+
+  async function removeFromShopifyCart(variantId) {
+    try {
+      await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: variantId.toString(), quantity: 0 })
+      });
+    } catch (e) {
+      console.error('Cart remove error:', e);
+    }
+  }
+
+  // ============================================
+  // ITEM MANAGEMENT
+  // ============================================
+  async function addItem(productData) {
+    const existing = state.items.find(i => i.id === productData.id);
+    if (existing) {
+      await removeItem(productData.id);
+      return false;
+    }
+
+    if (state.items.length >= 5) {
+      vibrate([30, 20, 30]);
+      return false;
+    }
+
+    const card = [...productCards].find(c => c.dataset.productId === productData.id);
+    if (card) {
+      card.classList.add('ra-card--loading');
+      card.setAttribute('aria-busy', 'true');
+    }
+
+    const success = await addToShopifyCart(productData.variantId);
+
+    if (card) {
+      card.classList.remove('ra-card--loading');
+      card.setAttribute('aria-busy', 'false');
+    }
+
+    if (success) {
+      // Awaken on first item
+      if (state.items.length === 0) {
+        awaken(card);
+      }
+
+      state.items.push({ ...productData, quantity: 1 });
+      vibrate(10);
+      updateUI();
+      return true;
+    }
+    return false;
+  }
+
+  async function removeItem(productId) {
+    const item = state.items.find(i => i.id === productId);
+    if (item) {
+      await removeFromShopifyCart(item.variantId);
+    }
+    state.items = state.items.filter(i => i.id !== productId);
+    vibrate(10);
+    updateUI();
+  }
+
+  // ============================================
+  // PRICING CALCULATIONS
+  // ============================================
+  function calculatePricing() {
+    const subtotal = state.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const tier = DISCOUNT_TIERS.slice().reverse().find(t => state.items.length >= t.min) || DISCOUNT_TIERS[0];
+    const discountAmount = Math.round(subtotal * tier.discount / 100);
+    const total = subtotal - discountAmount;
+
+    return {
+      subtotal,
+      discount: discountAmount,
+      discountPercent: tier.discount,
+      total,
+      tierLabel: tier.label
+    };
+  }
+
+  // ============================================
+  // SYNERGY CALCULATIONS
+  // ============================================
+  function calculateSynergy() {
+    if (state.items.length < 2) return { score: 0, connections: [] };
+
+    const connections = [];
+    let totalScore = 0;
+    let pairs = 0;
+
+    for (let i = 0; i < state.items.length; i++) {
+      for (let j = i + 1; j < state.items.length; j++) {
+        const handleA = matchHandle(state.items[i].title);
+        const handleB = matchHandle(state.items[j].title);
+
+        const dataA = SYNERGY_MAP[handleA];
+        if (dataA?.synergies?.[handleB]) {
+          const synergy = dataA.synergies[handleB];
+          connections.push({
+            from: handleA,
+            to: handleB,
+            score: synergy.score,
+            reason: synergy.reason
+          });
+          totalScore += synergy.score;
+          pairs++;
+        }
+      }
+    }
+
+    return {
+      score: pairs > 0 ? Math.round(totalScore / pairs) : 0,
+      connections
+    };
+  }
+
+  // ============================================
+  // UI UPDATE
+  // ============================================
+  function updateUI() {
+    const pricing = calculatePricing();
+    const synergy = calculateSynergy();
+
+    // Update card states
+    productCards.forEach(card => {
+      const isSelected = state.items.some(i => i.id === card.dataset.productId);
+      card.classList.toggle('ra-card--selected', isSelected);
+    });
+
+    // Update sidebar
+    updateSidebar(pricing, synergy);
+
+    // Update dock
+    updateDock(pricing, synergy);
+
+    // Check for achievements
+    checkAchievements(pricing, synergy);
+
+    console.log('Ritual updated:', { items: state.items.length, synergy: synergy.score, pricing });
+  }
+
+  // ============================================
+  // SIDEBAR UPDATE
+  // ============================================
+  function updateSidebar(pricing, synergy) {
+    if (!sidebar) return;
+
+    const itemsContainer = sidebar.querySelector('.ra-sidebar__items');
+    const emptyState = sidebar.querySelector('.ra-sidebar__empty');
+    const orbitContainer = sidebar.querySelector('.ra-sidebar__orbit');
+    const tiersContainer = sidebar.querySelector('.ra-sidebar__tiers');
+    const synergyProgress = sidebar.querySelector('.ra-sidebar__synergy-progress');
+    const synergyValue = sidebar.querySelector('.ra-sidebar__synergy-value');
+    const checkoutBtn = sidebar.querySelector('.ra-sidebar__checkout');
+
+    // Toggle empty state vs items
+    const hasItems = state.items.length > 0;
+    emptyState.style.display = hasItems ? 'none' : 'flex';
+    orbitContainer.style.display = hasItems && state.items.length >= 2 ? 'block' : 'none';
+    tiersContainer.style.display = hasItems ? 'block' : 'none';
+
+    // Update synergy ring
+    const circumference = 2 * Math.PI * 45; // r=45
+    const offset = circumference - (synergy.score / 100) * circumference;
+    synergyProgress.style.strokeDashoffset = offset;
+    synergyValue.textContent = synergy.score + '%';
+
+    // Render items list
+    renderSidebarItems(itemsContainer);
+
+    // Render orbital visualization
+    if (state.items.length >= 2) {
+      renderOrbitalVisualization(synergy.connections);
+    }
+
+    // Update tier progress
+    updateTierProgress(pricing);
+
+    // Update pricing
+    updateSidebarPricing(pricing);
+
+    // Checkout button state
+    checkoutBtn.disabled = !hasItems;
+  }
+
+  function renderSidebarItems(container) {
+    container.innerHTML = state.items.map(item => `
+      <div class="ra-sidebar__item" data-item-id="${item.id}">
+        <img src="${item.image}" alt="${item.title}" class="ra-sidebar__item-image" width="48" height="48">
+        <div class="ra-sidebar__item-info">
+          <h4 class="ra-sidebar__item-title">${item.title}</h4>
+          <span class="ra-sidebar__item-price">${formatMoney(item.price)}</span>
+        </div>
+        <div class="ra-sidebar__item-qty">
+          <button class="ra-sidebar__item-qty-btn" data-action="decrease" aria-label="Decrease quantity">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+          <span class="ra-sidebar__item-qty-value">${item.quantity}</span>
+          <button class="ra-sidebar__item-qty-btn" data-action="increase" aria-label="Increase quantity">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+        </div>
+        <button class="ra-sidebar__item-remove" data-action="remove" aria-label="Remove ${item.title}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    `).join('');
+
+    // Add event listeners
+    container.querySelectorAll('.ra-sidebar__item').forEach(itemEl => {
+      const itemId = itemEl.dataset.itemId;
+
+      itemEl.querySelector('[data-action="decrease"]')?.addEventListener('click', () => {
+        const item = state.items.find(i => i.id === itemId);
+        if (item && item.quantity > 1) {
+          item.quantity--;
+          updateUI();
+        }
+      });
+
+      itemEl.querySelector('[data-action="increase"]')?.addEventListener('click', () => {
+        const item = state.items.find(i => i.id === itemId);
+        if (item && item.quantity < 10) {
+          item.quantity++;
+          updateUI();
+        }
+      });
+
+      itemEl.querySelector('[data-action="remove"]')?.addEventListener('click', () => {
+        removeItem(itemId);
+      });
+    });
+  }
+
+  function renderOrbitalVisualization(connections) {
+    const linesGroup = sidebar.querySelector('.ra-sidebar__orbit-lines');
+    const nodesGroup = sidebar.querySelector('.ra-sidebar__orbit-nodes');
+
+    // Calculate node positions in orbital layout
+    const centerX = 150;
+    const centerY = 100;
+    const radius = 70;
+    const nodeRadius = 24;
+
+    const positions = state.items.map((item, i) => {
+      const angle = (i * 2 * Math.PI / state.items.length) - Math.PI / 2;
+      return {
+        id: item.id,
+        handle: matchHandle(item.title),
+        x: centerX + radius * Math.cos(angle),
+        y: centerY + radius * Math.sin(angle),
+        image: item.image,
+        title: item.title
+      };
+    });
+
+    // Render connection lines
+    let linesHTML = '';
+    connections.forEach(conn => {
+      const fromPos = positions.find(p => p.handle === conn.from);
+      const toPos = positions.find(p => p.handle === conn.to);
+      if (fromPos && toPos) {
+        const midX = (fromPos.x + toPos.x) / 2;
+        const midY = (fromPos.y + toPos.y) / 2;
+        linesHTML += `
+          <line x1="${fromPos.x}" y1="${fromPos.y}" x2="${toPos.x}" y2="${toPos.y}"/>
+          <text class="ra-sidebar__synergy-badge" x="${midX}" y="${midY - 8}">${conn.score}%</text>
+        `;
+      }
+    });
+    linesGroup.innerHTML = linesHTML;
+
+    // Render nodes
+    let nodesHTML = '';
+    positions.forEach(pos => {
+      nodesHTML += `
+        <g class="ra-sidebar__orbit-node" transform="translate(${pos.x - nodeRadius}, ${pos.y - nodeRadius})">
+          <circle cx="${nodeRadius}" cy="${nodeRadius}" r="${nodeRadius}"/>
+          <clipPath id="clip-${pos.id}">
+            <circle cx="${nodeRadius}" cy="${nodeRadius}" r="${nodeRadius - 2}"/>
+          </clipPath>
+          <image href="${pos.image}" width="${nodeRadius * 2}" height="${nodeRadius * 2}" clip-path="url(#clip-${pos.id})" preserveAspectRatio="xMidYMid slice"/>
+        </g>
+      `;
+    });
+    nodesGroup.innerHTML = nodesHTML;
+  }
+
+  function updateTierProgress(pricing) {
+    const tiersContainer = sidebar.querySelector('.ra-sidebar__tiers');
+    const fill = tiersContainer.querySelector('.ra-sidebar__tiers-fill');
+    const currentLabel = tiersContainer.querySelector('.ra-sidebar__tiers-current');
+    const steps = tiersContainer.querySelectorAll('.ra-tier-step');
+
+    // Calculate progress (0-5 items maps to 0-100%)
+    const progress = Math.min(state.items.length / 5 * 100, 100);
+    fill.style.width = progress + '%';
+    currentLabel.textContent = pricing.tierLabel;
+
+    // Highlight active tier steps
+    steps.forEach((step, i) => {
+      const tierMin = i === 0 ? 0 : DISCOUNT_TIERS[i]?.min || 0;
+      step.classList.toggle('ra-tier-step--active', state.items.length >= tierMin);
+    });
+  }
+
+  function updateSidebarPricing(pricing) {
+    const subtotalEl = sidebar.querySelector('.ra-sidebar__subtotal');
+    const discountRow = sidebar.querySelector('.ra-sidebar__price-row--discount');
+    const discountEl = sidebar.querySelector('.ra-sidebar__discount');
+    const totalEl = sidebar.querySelector('.ra-sidebar__total');
+
+    subtotalEl.textContent = formatMoney(pricing.subtotal);
+
+    if (pricing.discount > 0) {
+      discountRow.style.display = 'flex';
+      discountEl.textContent = '-' + formatMoney(pricing.discount);
+    } else {
+      discountRow.style.display = 'none';
+    }
+
+    totalEl.textContent = formatMoney(pricing.total);
+  }
+
+  // ============================================
+  // DOCK UPDATE
+  // ============================================
+  function updateDock(pricing, synergy) {
+    if (!dock) return;
+
+    const hasItems = state.items.length > 0;
+    const thumbnails = dock.querySelector('.ra-dock__thumbnails');
+    const emptyText = dock.querySelector('.ra-dock__empty-text');
+    const countEl = dock.querySelector('.ra-dock__count');
+    const synergyBadge = dock.querySelector('.ra-dock__synergy-badge');
+    const miniTotal = dock.querySelector('.ra-dock__mini-total');
+    const itemsContainer = dock.querySelector('.ra-dock__items');
+    const tiersContainer = dock.querySelector('.ra-dock__tiers');
+    const synergyProgress = dock.querySelector('.ra-dock__synergy-progress');
+    const synergyValue = dock.querySelector('.ra-dock__synergy-value');
+    const checkoutBtn = dock.querySelector('.ra-dock__checkout');
+    const footerValue = dock.querySelector('.ra-dock__footer-value');
+
+    // Toggle empty state
+    dock.classList.toggle('ra-dock--empty', !hasItems);
+    emptyText.style.display = hasItems ? 'none' : 'block';
+    thumbnails.style.display = hasItems ? 'flex' : 'none';
+
+    // Collapsed view: thumbnails
+    if (hasItems) {
+      thumbnails.innerHTML = state.items.slice(0, 4).map(item =>
+        `<img src="${item.image}" alt="${item.title}" class="ra-dock__thumbnail" width="32" height="32">`
+      ).join('') + (state.items.length > 4 ? `<span class="ra-dock__thumbnail" style="display:flex;align-items:center;justify-content:center;font-size:0.7rem;">+${state.items.length - 4}</span>` : '');
+    }
+
+    // Update count and synergy badge
+    countEl.textContent = `${state.items.length} item${state.items.length !== 1 ? 's' : ''}`;
+    synergyBadge.textContent = synergy.score > 0 ? `${synergy.score}% Synergy` : pricing.tierLabel;
+    miniTotal.textContent = formatMoney(pricing.total);
+
+    // Expanded view: synergy ring
+    const circumference = 2 * Math.PI * 35; // r=35
+    const offset = circumference - (synergy.score / 100) * circumference;
+    synergyProgress.style.strokeDashoffset = offset;
+    synergyValue.textContent = synergy.score + '%';
+
+    // Expanded view: items list
+    renderDockItems(itemsContainer);
+
+    // Tier progress
+    tiersContainer.style.display = hasItems ? 'block' : 'none';
+    if (hasItems) {
+      const tierFill = tiersContainer.querySelector('.ra-dock__tiers-fill');
+      const tierCurrent = tiersContainer.querySelector('.ra-dock__tiers-current');
+      const progress = Math.min(state.items.length / 5 * 100, 100);
+      tierFill.style.width = progress + '%';
+      tierCurrent.textContent = pricing.tierLabel;
+    }
+
+    // Pricing
+    const subtotalEl = dock.querySelector('.ra-dock__subtotal');
+    const discountRow = dock.querySelector('.ra-dock__price-row--discount');
+    const discountEl = dock.querySelector('.ra-dock__discount');
+    const netTotalEl = dock.querySelector('.ra-dock__net-total');
+
+    subtotalEl.textContent = formatMoney(pricing.subtotal);
+    if (pricing.discount > 0) {
+      discountRow.style.display = 'flex';
+      discountEl.textContent = '-' + formatMoney(pricing.discount);
+    } else {
+      discountRow.style.display = 'none';
+    }
+    netTotalEl.textContent = formatMoney(pricing.total);
+
+    // Footer
+    footerValue.textContent = formatMoney(pricing.total);
+    checkoutBtn.disabled = !hasItems;
+  }
+
+  function renderDockItems(container) {
+    container.innerHTML = state.items.map(item => `
+      <div class="ra-dock__item" data-item-id="${item.id}">
+        <img src="${item.image}" alt="${item.title}" class="ra-dock__item-image" width="48" height="48">
+        <div class="ra-dock__item-info">
+          <h4 class="ra-dock__item-title">${item.title}</h4>
+          <span class="ra-dock__item-price">${formatMoney(item.price)}</span>
+        </div>
+        <div class="ra-dock__item-qty">
+          <button class="ra-dock__item-qty-btn" data-action="decrease" aria-label="Decrease quantity">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+          <span class="ra-dock__item-qty-value">${item.quantity}</span>
+          <button class="ra-dock__item-qty-btn" data-action="increase" aria-label="Increase quantity">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+        </div>
+        <button class="ra-dock__item-remove" data-action="remove" aria-label="Remove ${item.title}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    `).join('');
+
+    // Add event listeners
+    container.querySelectorAll('.ra-dock__item').forEach(itemEl => {
+      const itemId = itemEl.dataset.itemId;
+
+      itemEl.querySelector('[data-action="decrease"]')?.addEventListener('click', () => {
+        const item = state.items.find(i => i.id === itemId);
+        if (item && item.quantity > 1) {
+          item.quantity--;
+          updateUI();
+        }
+      });
+
+      itemEl.querySelector('[data-action="increase"]')?.addEventListener('click', () => {
+        const item = state.items.find(i => i.id === itemId);
+        if (item && item.quantity < 10) {
+          item.quantity++;
+          updateUI();
+        }
+      });
+
+      itemEl.querySelector('[data-action="remove"]')?.addEventListener('click', () => {
+        removeItem(itemId);
+      });
+    });
+  }
+
+  function toggleDockExpanded(expand) {
+    if (expand === undefined) {
+      expand = !state.isExpanded;
+    }
+    state.isExpanded = expand;
+    dock.classList.toggle('ra-dock--expanded', expand);
+
+    if (expand) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+
+  // ============================================
+  // EVENT HANDLERS
+  // ============================================
+  function handleCardClick(card, e) {
+    // If clicking explore button, open modal
+    if (e.target.closest('[data-explore]')) {
+      e.stopPropagation();
+      openModal(card);
+      return;
+    }
+
+    // Add/remove from ritual
+    const productData = {
+      id: card.dataset.productId,
+      handle: card.dataset.productHandle,
+      title: card.dataset.productTitle,
+      price: parseInt(card.dataset.productPrice),
+      image: card.dataset.productImage,
+      variantId: card.dataset.variantId,
+      url: card.dataset.productUrl,
+      quantity: 1
+    };
+    addItem(productData);
+  }
+
+  // ============================================
+  // MODAL
+  // ============================================
+  let currentModalProduct = null;
+
+  function openModal(card) {
+    if (!modal) return;
+
+    const productData = {
+      id: card.dataset.productId,
+      handle: card.dataset.productHandle,
+      title: card.dataset.productTitle,
+      price: parseInt(card.dataset.productPrice),
+      image: card.dataset.productImage,
+      variantId: card.dataset.variantId,
+      url: card.dataset.productUrl
+    };
+
+    currentModalProduct = productData;
+
+    // Populate modal content
+    const title = modal.querySelector('.ra-modal__title');
+    const image = modal.querySelector('.ra-modal__image');
+    const timing = modal.querySelector('.ra-modal__timing');
+    const body = modal.querySelector('.ra-modal__body');
+    const addBtn = modal.querySelector('.ra-modal__add');
+    const qtyContainer = modal.querySelector('.ra-modal__qty');
+
+    title.textContent = productData.title;
+    image.src = productData.image;
+    image.alt = productData.title;
+
+    // Get synergy data for timing
+    const synergyData = SYNERGY_MAP[matchHandle(productData.title)];
+    timing.textContent = synergyData?.timing || 'Any Time';
+
+    // Set active tab
+    const tabs = modal.querySelectorAll('.ra-modal__tab');
+    tabs.forEach(tab => tab.classList.remove('ra-modal__tab--active'));
+    tabs[0].classList.add('ra-modal__tab--active');
+    tabs[0].setAttribute('aria-selected', 'true');
+
+    // Render benefits tab content
+    renderModalTab('benefits', productData);
+
+    // Update add button state
+    const isSelected = state.items.some(i => i.id === productData.id);
+    addBtn.classList.toggle('ra-modal__add--selected', isSelected);
+    addBtn.querySelector('.ra-modal__add-text').textContent = isSelected ? 'Remove from Ritual' : 'Add to Ritual';
+    qtyContainer.style.display = isSelected ? 'flex' : 'none';
+
+    if (isSelected) {
+      const item = state.items.find(i => i.id === productData.id);
+      modal.querySelector('.ra-modal__qty-value').textContent = item?.quantity || 1;
+    }
+
+    // Show modal
+    modal.classList.add('ra-modal--open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    // Focus management
+    modal.querySelector('.ra-modal__close').focus();
+  }
+
+  function closeModal() {
+    if (!modal) return;
+
+    modal.classList.remove('ra-modal--open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    currentModalProduct = null;
+
+    // Return focus to trigger element
+    const selectedCard = [...productCards].find(c => c.dataset.productId === currentModalProduct?.id);
+    if (selectedCard) {
+      selectedCard.focus();
+    }
+  }
+
+  // Focus trap for modal
+  function trapFocus(e) {
+    if (!modal || !modal.classList.contains('ra-modal--open')) return;
+
+    const focusableElements = modal.querySelectorAll(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+
+    if (focusableElements.length === 0) return;
+
+    const firstFocusable = focusableElements[0];
+    const lastFocusable = focusableElements[focusableElements.length - 1];
+
+    if (e.key === 'Tab') {
+      if (e.shiftKey) {
+        // Shift + Tab
+        if (document.activeElement === firstFocusable) {
+          e.preventDefault();
+          lastFocusable.focus();
+        }
+      } else {
+        // Tab
+        if (document.activeElement === lastFocusable) {
+          e.preventDefault();
+          firstFocusable.focus();
+        }
+      }
+    }
+  }
+
+  function renderModalTab(tabName, productData) {
+    const body = modal.querySelector('.ra-modal__body');
+    const handle = matchHandle(productData.title);
+    const synergyData = SYNERGY_MAP[handle];
+
+    const PRODUCT_DATA = {
+      'dreamglow': {
+        benefits: [
+          { icon: '🌙', text: 'Promotes deep, restorative sleep cycles' },
+          { icon: '✨', text: 'Supports overnight skin regeneration' },
+          { icon: '🧬', text: 'Activates cellular repair processes' }
+        ],
+        ingredients: [
+          { name: 'Magnesium Glycinate', amount: '400mg' },
+          { name: 'L-Theanine', amount: '200mg' },
+          { name: 'GABA', amount: '150mg' },
+          { name: 'Ashwagandha', amount: '300mg' }
+        ],
+        science: 'DreamGlow combines clinically-studied sleep nutrients with adaptogenic herbs. Magnesium glycinate crosses the blood-brain barrier more effectively than other forms, supporting GABA receptor function for deeper sleep.'
+      },
+      'dailyglow': {
+        benefits: [
+          { icon: '☀️', text: 'Enhances natural radiance from within' },
+          { icon: '💧', text: 'Deep hydration at cellular level' },
+          { icon: '🛡️', text: 'Antioxidant protection against daily stress' }
+        ],
+        ingredients: [
+          { name: 'Hyaluronic Acid', amount: '120mg' },
+          { name: 'Vitamin C', amount: '500mg' },
+          { name: 'Collagen Peptides', amount: '5g' },
+          { name: 'Astaxanthin', amount: '4mg' }
+        ],
+        science: 'DailyGlow leverages the synergy between vitamin C and collagen synthesis. Hyaluronic acid attracts 1000x its weight in water, while astaxanthin provides 6000x more antioxidant power than vitamin C alone.'
+      },
+      'mindfuel': {
+        benefits: [
+          { icon: '🧠', text: 'Sharp mental clarity and focus' },
+          { icon: '⚡', text: 'Sustained energy without jitters' },
+          { icon: '🎯', text: 'Enhanced cognitive performance' }
+        ],
+        ingredients: [
+          { name: 'Lion\'s Mane', amount: '500mg' },
+          { name: 'Alpha-GPC', amount: '300mg' },
+          { name: 'Rhodiola Rosea', amount: '200mg' },
+          { name: 'B-Vitamin Complex', amount: '100%DV' }
+        ],
+        science: 'MindFuel combines nootropic compounds that support acetylcholine production and nerve growth factor (NGF). Lion\'s Mane has been shown to stimulate NGF synthesis, supporting long-term cognitive health.'
+      },
+      'thechill': {
+        benefits: [
+          { icon: '🧘', text: 'Calm mind without drowsiness' },
+          { icon: '💆', text: 'Reduces tension and stress response' },
+          { icon: '🌿', text: 'Supports balanced mood throughout the day' }
+        ],
+        ingredients: [
+          { name: 'L-Theanine', amount: '300mg' },
+          { name: 'Lemon Balm', amount: '300mg' },
+          { name: 'Passionflower', amount: '250mg' },
+          { name: 'Holy Basil', amount: '200mg' }
+        ],
+        science: 'TheChill features L-Theanine, which promotes alpha brainwave activity associated with calm alertness. Combined with adaptogenic herbs, it modulates the HPA axis to reduce cortisol without sedation.'
+      },
+      'reset-button': {
+        benefits: [
+          { icon: '🔄', text: 'Full-body system reset and recovery' },
+          { icon: '🌱', text: 'Supports liver detoxification pathways' },
+          { icon: '💪', text: 'Replenishes essential nutrients' }
+        ],
+        ingredients: [
+          { name: 'Milk Thistle', amount: '450mg' },
+          { name: 'NAC', amount: '600mg' },
+          { name: 'Glutathione', amount: '100mg' },
+          { name: 'B-Complex', amount: '200%DV' }
+        ],
+        science: 'Reset Button combines powerful detox support nutrients. NAC is a precursor to glutathione, the body\'s master antioxidant. Milk thistle\'s silymarin complex has been shown to support liver cell regeneration.'
+      }
+    };
+
+    const data = PRODUCT_DATA[handle] || PRODUCT_DATA['dreamglow'];
+
+    switch (tabName) {
+      case 'benefits':
+        body.innerHTML = `
+          <div class="ra-modal__section">
+            <h4 class="ra-modal__section-title">Key Benefits</h4>
+            <ul class="ra-modal__benefit-list">
+              ${data.benefits.map(b => `
+                <li class="ra-modal__benefit-item">
+                  <span class="ra-modal__benefit-icon">${b.icon}</span>
+                  <span>${b.text}</span>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        `;
+        break;
+
+      case 'ingredients':
+        body.innerHTML = `
+          <div class="ra-modal__section">
+            <h4 class="ra-modal__section-title">Active Ingredients</h4>
+            <div class="ra-modal__ingredient-grid">
+              ${data.ingredients.map(i => `
+                <div class="ra-modal__ingredient">
+                  <div class="ra-modal__ingredient-name">${i.name}</div>
+                  <div class="ra-modal__ingredient-amount">${i.amount}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'science':
+        body.innerHTML = `
+          <div class="ra-modal__section">
+            <h4 class="ra-modal__section-title">The Science</h4>
+            <p>${data.science}</p>
+          </div>
+        `;
+        break;
+
+      case 'synergies':
+        const synergies = synergyData?.synergies || {};
+        const synergyEntries = Object.entries(synergies);
+
+        if (synergyEntries.length === 0) {
+          body.innerHTML = `
+            <div class="ra-modal__section">
+              <p style="color: var(--ra-smoke);">No synergy data available for this product.</p>
+            </div>
+          `;
+        } else {
+          body.innerHTML = `
+            <div class="ra-modal__section">
+              <h4 class="ra-modal__section-title">Best Combined With</h4>
+              <div class="ra-modal__synergy-list">
+                ${synergyEntries.map(([key, value]) => {
+                  const partnerData = SYNERGY_MAP[key];
+                  return `
+                    <div class="ra-modal__synergy-item">
+                      <div class="ra-modal__synergy-icon">${value.score}%</div>
+                      <div class="ra-modal__synergy-info">
+                        <div class="ra-modal__synergy-name">${partnerData?.name || key}</div>
+                        <div class="ra-modal__synergy-reason">${value.reason}</div>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+        }
+        break;
+    }
+  }
+
+  // ============================================
+  // INITIALIZATION
+  // ============================================
+  function init() {
+    // Card click handlers
+    productCards.forEach(card => {
+      card.addEventListener('click', e => handleCardClick(card, e));
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleCardClick(card, e);
+        }
+      });
+    });
+
+    // Dock handlers
+    if (dock) {
+      const expandBtn = dock.querySelector('.ra-dock__expand');
+      const closeBtn = dock.querySelector('.ra-dock__close');
+      const handle = dock.querySelector('.ra-dock__handle');
+      const collapsed = dock.querySelector('.ra-dock__collapsed');
+
+      expandBtn?.addEventListener('click', () => toggleDockExpanded(true));
+      closeBtn?.addEventListener('click', () => toggleDockExpanded(false));
+      collapsed?.addEventListener('click', (e) => {
+        if (!e.target.closest('button')) {
+          toggleDockExpanded(true);
+        }
+      });
+
+      // Swipe to expand/collapse
+      let touchStartY = 0;
+      let touchCurrentY = 0;
+
+      handle?.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      handle?.addEventListener('touchmove', (e) => {
+        touchCurrentY = e.touches[0].clientY;
+      }, { passive: true });
+
+      handle?.addEventListener('touchend', () => {
+        const diff = touchStartY - touchCurrentY;
+        if (Math.abs(diff) > 50) {
+          toggleDockExpanded(diff > 0);
+        }
+      });
+
+      // Escape key to close
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && state.isExpanded) {
+          toggleDockExpanded(false);
+        }
+      });
+    }
+
+    // Sidebar checkout button
+    sidebar?.querySelector('.ra-sidebar__checkout')?.addEventListener('click', handleCheckout);
+
+    // Dock checkout button
+    dock?.querySelector('.ra-dock__checkout')?.addEventListener('click', handleCheckout);
+
+    // Modal handlers
+    if (modal) {
+      const backdrop = modal.querySelector('.ra-modal__backdrop');
+      const closeBtn = modal.querySelector('.ra-modal__close');
+      const backBtn = modal.querySelector('.ra-modal__back');
+      const tabs = modal.querySelectorAll('.ra-modal__tab');
+      const addBtn = modal.querySelector('.ra-modal__add');
+      const qtyMinus = modal.querySelector('.ra-modal__qty-minus');
+      const qtyPlus = modal.querySelector('.ra-modal__qty-plus');
+
+      backdrop?.addEventListener('click', closeModal);
+      closeBtn?.addEventListener('click', closeModal);
+      backBtn?.addEventListener('click', closeModal);
+
+      // Tab switching
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => {
+            t.classList.remove('ra-modal__tab--active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          tab.classList.add('ra-modal__tab--active');
+          tab.setAttribute('aria-selected', 'true');
+
+          if (currentModalProduct) {
+            renderModalTab(tab.dataset.tab, currentModalProduct);
+          }
+        });
+      });
+
+      // Add/remove button
+      addBtn?.addEventListener('click', async () => {
+        if (!currentModalProduct) return;
+
+        const isSelected = state.items.some(i => i.id === currentModalProduct.id);
+
+        if (isSelected) {
+          await removeItem(currentModalProduct.id);
+        } else {
+          await addItem({ ...currentModalProduct, quantity: 1 });
+        }
+
+        // Update button state
+        const nowSelected = state.items.some(i => i.id === currentModalProduct.id);
+        addBtn.classList.toggle('ra-modal__add--selected', nowSelected);
+        addBtn.querySelector('.ra-modal__add-text').textContent = nowSelected ? 'Remove from Ritual' : 'Add to Ritual';
+        modal.querySelector('.ra-modal__qty').style.display = nowSelected ? 'flex' : 'none';
+
+        if (nowSelected) {
+          const item = state.items.find(i => i.id === currentModalProduct.id);
+          modal.querySelector('.ra-modal__qty-value').textContent = item?.quantity || 1;
+        }
+      });
+
+      // Quantity controls
+      qtyMinus?.addEventListener('click', () => {
+        if (!currentModalProduct) return;
+        const item = state.items.find(i => i.id === currentModalProduct.id);
+        if (item && item.quantity > 1) {
+          item.quantity--;
+          modal.querySelector('.ra-modal__qty-value').textContent = item.quantity;
+          updateUI();
+        }
+      });
+
+      qtyPlus?.addEventListener('click', () => {
+        if (!currentModalProduct) return;
+        const item = state.items.find(i => i.id === currentModalProduct.id);
+        if (item && item.quantity < 10) {
+          item.quantity++;
+          modal.querySelector('.ra-modal__qty-value').textContent = item.quantity;
+          updateUI();
+        }
+      });
+
+      // Escape key and focus trap
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('ra-modal--open')) {
+          closeModal();
+        }
+        trapFocus(e);
+      });
+    }
+
+    // Resize handler (debounced for performance)
+    window.addEventListener('resize', debounce(() => {
+      state.isMobile = window.innerWidth < 1024;
+      if (!state.isMobile && state.isExpanded) {
+        toggleDockExpanded(false);
+      }
+    }, 150));
+
+    console.log('Ritual Architect v4 initialized');
+  }
+
+  function handleCheckout() {
+    if (state.items.length === 0) return;
+    window.location.href = '/checkout';
+  }
+
+  // ============================================
+  // TOAST / ACHIEVEMENTS
+  // ============================================
+  const ACHIEVEMENTS = {
+    firstItem: { icon: '✨', title: 'Ritual Begun', subtitle: 'Your wellness journey starts now' },
+    twoItems: { icon: '🔗', title: 'Synergy Unlocked', subtitle: 'Products working together' },
+    threeItems: { icon: '🎯', title: '20% Off Unlocked', subtitle: 'You\'re building something special' },
+    fourItems: { icon: '💫', title: '25% Off Unlocked', subtitle: 'Protocol Master status' },
+    fiveItems: { icon: '👑', title: 'Maximum Savings', subtitle: '30% off your complete ritual' },
+    highSynergy: { icon: '🌟', title: 'Perfect Synergy', subtitle: '90%+ compatibility achieved' }
+  };
+
+  let previousItemCount = 0;
+  let previousSynergyScore = 0;
+
+  function checkAchievements(pricing, synergy) {
+    const currentCount = state.items.length;
+
+    // First item
+    if (previousItemCount === 0 && currentCount === 1) {
+      showToast(ACHIEVEMENTS.firstItem);
+    }
+
+    // Synergy unlocked
+    if (previousItemCount < 2 && currentCount >= 2) {
+      setTimeout(() => showToast(ACHIEVEMENTS.twoItems), 500);
+    }
+
+    // Tier unlocks
+    if (previousItemCount < 3 && currentCount >= 3) {
+      setTimeout(() => showToast(ACHIEVEMENTS.threeItems), 300);
+    }
+
+    if (previousItemCount < 4 && currentCount >= 4) {
+      setTimeout(() => showToast(ACHIEVEMENTS.fourItems), 300);
+    }
+
+    if (previousItemCount < 5 && currentCount >= 5) {
+      setTimeout(() => showToast(ACHIEVEMENTS.fiveItems), 300);
+    }
+
+    // High synergy achievement
+    if (previousSynergyScore < 90 && synergy.score >= 90) {
+      setTimeout(() => showToast(ACHIEVEMENTS.highSynergy), 600);
+    }
+
+    previousItemCount = currentCount;
+    previousSynergyScore = synergy.score;
+  }
+
+  function showToast(achievement) {
+    const toast = section.querySelector('.ra-toast');
+    if (!toast || prefersReducedMotion) return;
+
+    toast.innerHTML = `
+      <div class="ra-toast__icon">${achievement.icon}</div>
+      <div class="ra-toast__content">
+        <div class="ra-toast__title">${achievement.title}</div>
+        <div class="ra-toast__subtitle">${achievement.subtitle}</div>
+      </div>
+    `;
+
+    toast.classList.add('ra-toast--visible');
+    vibrate([10, 50, 10]);
+
+    setTimeout(() => {
+      toast.classList.remove('ra-toast--visible');
+    }, 3000);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Bundle Builder v4",
+  "tag": "section",
+  "class": "section-bundle-builder-v4",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow Text",
+      "default": "Your Personal Ritual"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Ritual Architect"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Curate your wellness journey with synergistic formulas designed to work together."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Product Collection"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Product Limit",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bundle Builder v4",
+      "category": "Products"
+    }
+  ]
+}
+{% endschema %}
