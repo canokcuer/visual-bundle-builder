@@ -1,0 +1,3529 @@
+{% comment %}
+  ============================================
+  CYRASOUL - Visual Bundle Builder v5
+  "The Atelier"
+
+  Aesthetic: Minimalist Luxury + Organic Warmth
+  - Warm stone palette with cream backgrounds
+  - Editorial magazine-style product cards
+  - Golden geometry synergy visualization
+  - Staggered reveal animations
+
+  Typography: Playfair Display + Inter + JetBrains Mono
+  ============================================
+{% endcomment %}
+
+<!-- Skip Link for Accessibility -->
+<a href="#ab-products" class="ab-skip-link">Skip to products</a>
+
+<section
+  id="the-atelier"
+  class="ab-atelier ab-atelier--dormant"
+  data-section-id="{{ section.id }}"
+>
+  <!-- Ambient Orbs (replaces v4 particle system) -->
+  <div class="ab-ambient" aria-hidden="true">
+    <div class="ab-ambient__orb ab-ambient__orb--1"></div>
+    <div class="ab-ambient__orb ab-ambient__orb--2"></div>
+    <div class="ab-ambient__orb ab-ambient__orb--3"></div>
+  </div>
+
+  <!-- Screen Reader Announcements -->
+  <div class="ab-visually-hidden" aria-live="polite" aria-atomic="true" id="ab-sr-announcements"></div>
+
+  <!-- Header -->
+  <header class="ab-header">
+    <span class="ab-header__eyebrow">{{ section.settings.eyebrow_text }}</span>
+    <h2 class="ab-header__title">{{ section.settings.title }}</h2>
+    <p class="ab-header__subtitle">{{ section.settings.subtitle }}</p>
+  </header>
+
+  <div class="ab-layout">
+    <!-- Product Grid -->
+    <div id="ab-products" class="ab-grid" role="region" aria-label="Available products">
+      {% assign collection = collections[section.settings.collection] %}
+      {% for product in collection.products limit: section.settings.product_limit %}
+        <article
+          class="ab-card"
+          data-product-id="{{ product.id }}"
+          data-product-handle="{{ product.handle }}"
+          data-product-title="{{ product.title }}"
+          data-product-price="{{ product.price }}"
+          data-product-image="{{ product.featured_image | image_url: width: 600 }}"
+          data-variant-id="{{ product.first_available_variant.id }}"
+          data-product-url="{{ product.url }}"
+          tabindex="0"
+          role="button"
+          aria-pressed="false"
+          aria-label="Add {{ product.title }} to your ritual"
+          style="--card-index: {{ forloop.index0 }}; --card-color: {% if product.handle == 'mindfuel' %}#3B82F6{% elsif product.handle == 'reset-button' %}#10B981{% elsif product.handle == 'dreamglow' %}#8B5CF6{% elsif product.handle == 'dailyglow' %}#F59E0B{% elsif product.handle == 'thechill' %}#06B6D4{% else %}#B8976A{% endif %}"
+        >
+          <!-- Product Color Accent Bar -->
+          <div class="ab-card__accent" aria-hidden="true"></div>
+
+          <div class="ab-card__image-wrap">
+            <img
+              src="{{ product.featured_image | image_url: width: 600 }}"
+              alt="{{ product.title }}"
+              class="ab-card__image"
+              loading="lazy"
+              width="600"
+              height="600"
+            >
+            <div class="ab-card__vignette" aria-hidden="true"></div>
+          </div>
+
+          <div class="ab-card__body">
+            <div class="ab-card__meta">
+              <h3 class="ab-card__title">{{ product.title }}</h3>
+              <span class="ab-card__price" data-price="{{ product.price }}">
+                {{ product.price | money_without_trailing_zeros }}
+              </span>
+            </div>
+
+            <p class="ab-card__description">
+              {% if product.handle == 'dreamglow' %}Deep restoration for cellular renewal
+              {% elsif product.handle == 'dailyglow' %}Radiance from within, day after day
+              {% elsif product.handle == 'mindfuel' %}Clarity and focus without the crash
+              {% elsif product.handle == 'thechill' %}Calm the noise, embrace serenity
+              {% elsif product.handle == 'reset-button' %}Full system reset and recovery
+              {% else %}Elevate your wellness ritual
+              {% endif %}
+            </p>
+
+            <!-- Ingredient Pills -->
+            <div class="ab-card__ingredients">
+              {% for tag in product.tags limit: 3 %}
+                {% if tag contains 'ingredient:' %}
+                  <span class="ab-pill">{{ tag | remove: 'ingredient:' }}</span>
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            <button class="ab-card__action" aria-label="Add {{ product.title }}">
+              <span class="ab-card__action-text">Add to Ritual</span>
+              <span class="ab-card__action-loading" aria-hidden="true">
+                <svg class="ab-spinner" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-dasharray="31.4 31.4" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <svg class="ab-card__action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <svg class="ab-card__action-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Explore Button (always visible on touch) -->
+          <button class="ab-card__explore" data-explore aria-label="Explore {{ product.title }} details">
+            <span>Explore</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+        </article>
+      {% endfor %}
+    </div>
+
+    <!-- Desktop Sidebar -->
+    <aside class="ab-sidebar" aria-label="Your ritual summary">
+      <div class="ab-sidebar__header">
+        <h3 class="ab-sidebar__title">Your Ritual</h3>
+        <div class="ab-sidebar__synergy-ring">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <circle class="ab-sidebar__ring-track" cx="50" cy="50" r="42" fill="none" stroke-width="4"/>
+            <circle class="ab-sidebar__ring-progress" cx="50" cy="50" r="42" fill="none" stroke-width="4"/>
+          </svg>
+          <span class="ab-sidebar__ring-value">0%</span>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="ab-sidebar__empty">
+        <div class="ab-sidebar__empty-icon" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="32" cy="32" r="24" stroke-dasharray="6 4" opacity="0.4"/>
+            <circle cx="32" cy="20" r="3" fill="currentColor" stroke="none" opacity="0.3"/>
+            <circle cx="20" cy="38" r="3" fill="currentColor" stroke="none" opacity="0.3"/>
+            <circle cx="44" cy="38" r="3" fill="currentColor" stroke="none" opacity="0.3"/>
+            <line x1="32" y1="20" x2="20" y2="38" stroke-dasharray="3 3" opacity="0.2"/>
+            <line x1="32" y1="20" x2="44" y2="38" stroke-dasharray="3 3" opacity="0.2"/>
+            <line x1="20" y1="38" x2="44" y2="38" stroke-dasharray="3 3" opacity="0.2"/>
+          </svg>
+        </div>
+        <p class="ab-sidebar__empty-text">Select products to build<br>your wellness ritual</p>
+      </div>
+
+      <!-- Synergy Visualization ("The Octagon" / Golden Geometry) -->
+      <div class="ab-sidebar__synergy-viz" style="display: none;">
+        <svg class="ab-synergy-svg" viewBox="0 0 300 220" role="img" aria-label="Synergy visualization showing connections between selected products">
+          <title>Product Synergy Map</title>
+          <desc>Visual representation of how your selected products work together</desc>
+          <defs>
+            <filter id="ab-node-shadow" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.15)"/>
+            </filter>
+          </defs>
+          <g class="ab-synergy__connections"></g>
+          <g class="ab-synergy__scores"></g>
+          <g class="ab-synergy__nodes"></g>
+          <g class="ab-synergy__center"></g>
+        </svg>
+      </div>
+
+      <!-- Selected Items List -->
+      <div class="ab-sidebar__items" role="list" aria-label="Selected products"></div>
+
+      <!-- Tier Progress -->
+      <div class="ab-sidebar__tiers" style="display: none;">
+        <div class="ab-sidebar__tiers-header">
+          <span class="ab-sidebar__tiers-label">Ritual Tier</span>
+          <span class="ab-sidebar__tiers-current">Start</span>
+        </div>
+        <div class="ab-sidebar__tiers-track">
+          <div class="ab-sidebar__tiers-fill"></div>
+          <div class="ab-sidebar__tiers-steps">
+            <span class="ab-tier-step" data-tier="1"></span>
+            <span class="ab-tier-step" data-tier="2">15%</span>
+            <span class="ab-tier-step" data-tier="3">20%</span>
+            <span class="ab-tier-step" data-tier="4">25%</span>
+            <span class="ab-tier-step" data-tier="5">30%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing -->
+      <div class="ab-sidebar__pricing" aria-live="polite" aria-atomic="true">
+        <div class="ab-sidebar__price-row">
+          <span>Subtotal</span>
+          <span class="ab-sidebar__subtotal">&#8378;0</span>
+        </div>
+        <div class="ab-sidebar__price-row ab-sidebar__price-row--discount" style="display: none;">
+          <span>Ritual Discount</span>
+          <span class="ab-sidebar__discount">-&#8378;0</span>
+        </div>
+        <div class="ab-sidebar__price-row ab-sidebar__price-row--total">
+          <span>Total</span>
+          <span class="ab-sidebar__total">&#8378;0</span>
+        </div>
+      </div>
+
+      <!-- Checkout Button -->
+      <button class="ab-sidebar__checkout" disabled aria-label="Complete your ritual and proceed to checkout">
+        <span class="ab-sidebar__checkout-text">Complete Ritual</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </aside>
+  </div>
+
+  <!-- Mobile Dock -->
+  <div class="ab-dock ab-dock--empty" role="complementary" aria-label="Ritual summary dock">
+    <div class="ab-dock__handle" aria-hidden="true"><span></span></div>
+
+    <!-- Collapsed View -->
+    <div class="ab-dock__collapsed">
+      <div class="ab-dock__preview">
+        <span class="ab-dock__empty-text">Begin Your Ritual</span>
+        <div class="ab-dock__thumbnails" aria-hidden="true"></div>
+      </div>
+      <div class="ab-dock__info">
+        <span class="ab-dock__count" aria-live="polite">0 items</span>
+        <span class="ab-dock__tier-badge">Start</span>
+      </div>
+      <div class="ab-dock__mini-total" aria-live="polite">&#8378;0</div>
+      <button class="ab-dock__expand" aria-label="Expand ritual panel" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <polyline points="18 15 12 9 6 15"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Expanded View -->
+    <div class="ab-dock__expanded" aria-hidden="true">
+      <div class="ab-dock__expanded-header">
+        <h3>Your Ritual</h3>
+        <button class="ab-dock__close" aria-label="Close ritual panel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Dock Synergy Score -->
+      <div class="ab-dock__synergy">
+        <div class="ab-dock__synergy-circle">
+          <svg viewBox="0 0 80 80" aria-hidden="true">
+            <circle class="ab-dock__ring-track" cx="40" cy="40" r="32" fill="none" stroke-width="3.5"/>
+            <circle class="ab-dock__ring-progress" cx="40" cy="40" r="32" fill="none" stroke-width="3.5"/>
+          </svg>
+          <span class="ab-dock__synergy-value">0%</span>
+        </div>
+        <span class="ab-dock__synergy-label">Synergy Score</span>
+      </div>
+
+      <!-- Dock Items List -->
+      <div class="ab-dock__items" role="list" aria-label="Selected products"></div>
+
+      <!-- Dock Tier Progress -->
+      <div class="ab-dock__tiers" style="display: none;">
+        <div class="ab-dock__tiers-header">
+          <span>Discount Tier</span>
+          <span class="ab-dock__tiers-current">Start</span>
+        </div>
+        <div class="ab-dock__tiers-track">
+          <div class="ab-dock__tiers-fill"></div>
+        </div>
+      </div>
+
+      <!-- Dock Pricing -->
+      <div class="ab-dock__pricing" aria-live="polite" aria-atomic="true">
+        <div class="ab-dock__price-row">
+          <span>Subtotal</span>
+          <span class="ab-dock__subtotal">&#8378;0</span>
+        </div>
+        <div class="ab-dock__price-row ab-dock__price-row--discount" style="display: none;">
+          <span>Discount</span>
+          <span class="ab-dock__discount">-&#8378;0</span>
+        </div>
+        <div class="ab-dock__price-row ab-dock__price-row--total">
+          <span>Total</span>
+          <span class="ab-dock__net-total">&#8378;0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sticky Checkout Footer in Dock -->
+    <div class="ab-dock__footer">
+      <div class="ab-dock__footer-total" aria-live="polite" aria-atomic="true">
+        <span class="ab-dock__footer-label">Total</span>
+        <span class="ab-dock__footer-value">&#8378;0</span>
+      </div>
+      <button class="ab-dock__checkout" disabled aria-label="Complete your ritual and proceed to checkout">
+        <span>Complete Ritual</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Product Detail Modal -->
+  <div class="ab-modal" id="ab-product-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Product details">
+    <div class="ab-modal__backdrop"></div>
+    <div class="ab-modal__panel">
+      <header class="ab-modal__header">
+        <button class="ab-modal__back" aria-label="Go back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <h3 class="ab-modal__title"></h3>
+        <button class="ab-modal__close" aria-label="Close product details">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </header>
+
+      <div class="ab-modal__scroll">
+        <div class="ab-modal__hero">
+          <img class="ab-modal__image" src="" alt="" width="400" height="400">
+          <div class="ab-modal__timing"></div>
+        </div>
+
+        <nav class="ab-modal__tabs" role="tablist" aria-label="Product information">
+          <button class="ab-modal__tab ab-modal__tab--active" data-tab="benefits" role="tab" aria-selected="true" aria-controls="ab-tab-benefits" id="ab-tab-btn-benefits">Benefits</button>
+          <button class="ab-modal__tab" data-tab="ingredients" role="tab" aria-selected="false" aria-controls="ab-tab-ingredients" id="ab-tab-btn-ingredients">Ingredients</button>
+          <button class="ab-modal__tab" data-tab="science" role="tab" aria-selected="false" aria-controls="ab-tab-science" id="ab-tab-btn-science">Science</button>
+          <button class="ab-modal__tab" data-tab="synergies" role="tab" aria-selected="false" aria-controls="ab-tab-synergies" id="ab-tab-btn-synergies">Synergies</button>
+          <div class="ab-modal__tab-indicator" aria-hidden="true"></div>
+        </nav>
+
+        <div class="ab-modal__body">
+          <div class="ab-modal__tab-panel" id="ab-tab-benefits" role="tabpanel" aria-labelledby="ab-tab-btn-benefits"></div>
+          <div class="ab-modal__tab-panel" id="ab-tab-ingredients" role="tabpanel" aria-labelledby="ab-tab-btn-ingredients" hidden></div>
+          <div class="ab-modal__tab-panel" id="ab-tab-science" role="tabpanel" aria-labelledby="ab-tab-btn-science" hidden></div>
+          <div class="ab-modal__tab-panel" id="ab-tab-synergies" role="tabpanel" aria-labelledby="ab-tab-btn-synergies" hidden></div>
+        </div>
+      </div>
+
+      <footer class="ab-modal__footer">
+        <button class="ab-modal__add">
+          <span class="ab-modal__add-text">Add to Ritual</span>
+        </button>
+        <div class="ab-modal__qty" style="display: none;">
+          <button class="ab-modal__qty-btn ab-modal__qty-minus" aria-label="Decrease quantity">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+          <span class="ab-modal__qty-value" aria-label="Quantity">1</span>
+          <button class="ab-modal__qty-btn ab-modal__qty-plus" aria-label="Increase quantity">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Achievement Toast -->
+  <div class="ab-toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- SR-only live region for announcements -->
+  <div id="ab-live-region" aria-live="polite" aria-atomic="true" class="ab-visually-hidden"></div>
+</section>
+<style>
+  /* ============================================
+     THE ATELIER — DESIGN TOKENS
+     Namespace: --ab-*
+     ============================================ */
+
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    /* ─── Warm Stone Scale ─── */
+    --ab-stone-50: #FAF7F2;
+    --ab-stone-100: #F5F0E8;
+    --ab-stone-200: #E8E0D4;
+    --ab-stone-300: #D4C9B9;
+    --ab-stone-400: #B8A99A;
+    --ab-stone-500: #9C8E7E;
+    --ab-stone-600: #7A6E62;
+    --ab-stone-700: #5C524A;
+    --ab-stone-800: #3D3632;
+    --ab-stone-900: #1C1917;
+
+    /* ─── Accent Colors ─── */
+    --ab-cream: #FAF7F2;
+    --ab-parchment: #F0EBE1;
+    --ab-amber: #C8956C;
+    --ab-amber-light: rgba(200, 149, 108, 0.15);
+    --ab-amber-glow: rgba(200, 149, 108, 0.25);
+    --ab-sage: #7D8B6F;
+    --ab-sage-light: rgba(125, 139, 111, 0.15);
+    --ab-gold: #B8976A;
+    --ab-gold-light: rgba(184, 151, 106, 0.12);
+
+    /* ─── Product Colors ─── */
+    --ab-color-mindfuel: #3B82F6;
+    --ab-color-reset: #10B981;
+    --ab-color-dreamglow: #8B5CF6;
+    --ab-color-dailyglow: #F59E0B;
+    --ab-color-thechill: #06B6D4;
+
+    /* ─── Feedback ─── */
+    --ab-success: #7D8B6F;
+    --ab-error: #C07070;
+
+    /* ─── Typography ─── */
+    --ab-font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --ab-font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --ab-font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+    /* ─── Spacing (4px base grid) ─── */
+    --ab-space-1: 0.25rem;
+    --ab-space-2: 0.5rem;
+    --ab-space-3: 0.75rem;
+    --ab-space-4: 1rem;
+    --ab-space-5: 1.25rem;
+    --ab-space-6: 1.5rem;
+    --ab-space-8: 2rem;
+    --ab-space-10: 2.5rem;
+    --ab-space-12: 3rem;
+    --ab-space-14: 3.5rem;
+    --ab-space-16: 4rem;
+    --ab-space-20: 5rem;
+
+    /* ─── Border Radius ─── */
+    --ab-radius-xs: 4px;
+    --ab-radius-sm: 6px;
+    --ab-radius-md: 10px;
+    --ab-radius-lg: 16px;
+    --ab-radius-xl: 24px;
+    --ab-radius-pill: 100px;
+    --ab-radius-circle: 50%;
+
+    /* ─── Warm Shadows (5 levels) ─── */
+    --ab-shadow-1: 0 1px 3px rgba(28, 25, 23, 0.04), 0 1px 2px rgba(28, 25, 23, 0.03);
+    --ab-shadow-2: 0 3px 8px rgba(28, 25, 23, 0.06), 0 1px 3px rgba(28, 25, 23, 0.04);
+    --ab-shadow-3: 0 6px 16px rgba(28, 25, 23, 0.08), 0 2px 6px rgba(28, 25, 23, 0.04);
+    --ab-shadow-4: 0 12px 32px rgba(28, 25, 23, 0.1), 0 4px 12px rgba(28, 25, 23, 0.05);
+    --ab-shadow-5: 0 20px 48px rgba(28, 25, 23, 0.14), 0 8px 20px rgba(28, 25, 23, 0.06);
+
+    /* ─── Motion ─── */
+    --ab-ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+    --ab-ease-in: cubic-bezier(0.32, 0, 0.67, 0);
+    --ab-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --ab-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ab-ease-organic: cubic-bezier(0.16, 1, 0.3, 1);
+    --ab-ease-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    /* ─── Durations ─── */
+    --ab-duration-instant: 80ms;
+    --ab-duration-fast: 150ms;
+    --ab-duration-normal: 300ms;
+    --ab-duration-slow: 500ms;
+    --ab-duration-reveal: 800ms;
+    --ab-duration-dramatic: 1000ms;
+
+    /* ─── Z-Index Scale ─── */
+    --ab-z-base: 0;
+    --ab-z-card: 10;
+    --ab-z-card-hover: 15;
+    --ab-z-sticky: 50;
+    --ab-z-dock: 100;
+    --ab-z-modal-backdrop: 150;
+    --ab-z-modal: 200;
+    --ab-z-toast: 250;
+    --ab-z-skip-link: 300;
+
+    /* ─── Layout ─── */
+    --ab-sidebar-width: 380px;
+    --ab-dock-collapsed: 76px;
+    --ab-max-width: 1400px;
+    --ab-touch-min: 44px;
+  }
+
+  /* ============================================
+     VISUALLY HIDDEN UTILITY
+     ============================================ */
+
+  .ab-visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  /* ============================================
+     SKIP LINK
+     ============================================ */
+
+  .ab-skip-link {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: var(--ab-z-skip-link);
+    padding: var(--ab-space-3) var(--ab-space-6);
+    background: var(--ab-stone-900);
+    color: var(--ab-stone-100);
+    border-radius: var(--ab-radius-pill);
+    font-family: var(--ab-font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: top var(--ab-duration-fast) var(--ab-ease-out);
+  }
+
+  .ab-skip-link:focus {
+    top: var(--ab-space-4);
+    outline: 2px solid var(--ab-amber);
+    outline-offset: 3px;
+  }
+
+  /* ============================================
+     BASE STYLES
+     ============================================ */
+
+  .ab-atelier {
+    position: relative;
+    min-height: 100vh;
+    padding: var(--ab-space-14) var(--ab-space-6) var(--ab-space-8);
+    background: var(--ab-cream);
+    font-family: var(--ab-font-body);
+    color: var(--ab-stone-800);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    transition: background var(--ab-duration-reveal) var(--ab-ease-organic);
+  }
+
+  .ab-atelier *,
+  .ab-atelier *::before,
+  .ab-atelier *::after {
+    box-sizing: border-box;
+  }
+
+  /* ─── Dormant State ─── */
+  .ab-atelier--dormant {
+    background: var(--ab-cream);
+  }
+
+  .ab-atelier--dormant .ab-card {
+    filter: saturate(0.9);
+    transition: filter var(--ab-duration-slow) var(--ab-ease-organic);
+  }
+
+  .ab-atelier--dormant .ab-ambient__orb {
+    opacity: 0;
+  }
+
+  /* ─── Awakened State ─── */
+  .ab-atelier--awakened {
+    background: linear-gradient(180deg, var(--ab-cream) 0%, var(--ab-parchment) 60%, var(--ab-cream) 100%);
+  }
+
+  .ab-atelier--awakened .ab-card {
+    filter: saturate(1);
+  }
+
+  .ab-atelier--awakened .ab-ambient__orb {
+    opacity: 0.4;
+    transition: opacity var(--ab-duration-dramatic) var(--ab-ease-organic);
+  }
+
+  /* ============================================
+     AMBIENT ORBS
+     ============================================ */
+
+  .ab-ambient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: var(--ab-z-base);
+    overflow: hidden;
+  }
+
+  .ab-ambient__orb {
+    position: absolute;
+    border-radius: var(--ab-radius-circle);
+    filter: blur(80px);
+    opacity: 0;
+    will-change: opacity;
+    transition: opacity var(--ab-duration-dramatic) var(--ab-ease-organic);
+  }
+
+  .ab-ambient__orb--1 {
+    top: 10%;
+    left: 15%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--ab-amber-light) 0%, transparent 70%);
+  }
+
+  .ab-ambient__orb--2 {
+    top: 50%;
+    right: 10%;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, var(--ab-sage-light) 0%, transparent 70%);
+  }
+
+  .ab-ambient__orb--3 {
+    bottom: 15%;
+    left: 40%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--ab-gold-light) 0%, transparent 70%);
+  }
+
+  /* ============================================
+     HEADER
+     ============================================ */
+
+  .ab-header {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto var(--ab-space-14);
+    padding: 0 var(--ab-space-4);
+  }
+
+  .ab-header__eyebrow {
+    display: block;
+    font-family: var(--ab-font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ab-amber);
+    margin-bottom: var(--ab-space-4);
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .ab-atelier--visible .ab-header__eyebrow {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--ab-duration-slow) var(--ab-ease-out),
+                transform var(--ab-duration-slow) var(--ab-ease-out);
+  }
+
+  .ab-header__title {
+    font-family: var(--ab-font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 500;
+    color: var(--ab-stone-900);
+    line-height: 1.15;
+    margin: 0 0 var(--ab-space-4);
+    letter-spacing: -0.01em;
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .ab-atelier--visible .ab-header__title {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--ab-duration-slow) var(--ab-ease-out) 100ms,
+                transform var(--ab-duration-slow) var(--ab-ease-out) 100ms;
+  }
+
+  .ab-header__subtitle {
+    font-family: var(--ab-font-body);
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    font-weight: 300;
+    color: var(--ab-stone-500);
+    line-height: 1.65;
+    margin: 0;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .ab-atelier--visible .ab-header__subtitle {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--ab-duration-slow) var(--ab-ease-out) 200ms,
+                transform var(--ab-duration-slow) var(--ab-ease-out) 200ms;
+  }
+
+  /* ============================================
+     LAYOUT CONTAINER
+     ============================================ */
+
+  .ab-layout {
+    display: flex;
+    gap: var(--ab-space-10);
+    max-width: var(--ab-max-width);
+    margin: 0 auto;
+    align-items: flex-start;
+  }
+
+  .ab-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--ab-space-6);
+  }
+
+  /* ============================================
+     PRODUCT CARDS — Editorial Magazine Style
+     ============================================ */
+
+  .ab-card {
+    position: relative;
+    background: var(--ab-stone-50);
+    border-radius: var(--ab-radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    box-shadow: var(--ab-shadow-2);
+    transition: transform var(--ab-duration-normal) var(--ab-ease-out),
+                box-shadow var(--ab-duration-normal) var(--ab-ease-out),
+                border-color var(--ab-duration-normal) var(--ab-ease-out);
+    z-index: var(--ab-z-card);
+    opacity: 0;
+    transform: translateY(20px);
+    outline: none;
+  }
+
+  .ab-atelier--visible .ab-card {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--ab-duration-slow) var(--ab-ease-out) calc(300ms + var(--card-index) * 100ms),
+                transform var(--ab-duration-slow) var(--ab-ease-out) calc(300ms + var(--card-index) * 100ms),
+                box-shadow var(--ab-duration-normal) var(--ab-ease-out),
+                border-color var(--ab-duration-normal) var(--ab-ease-out);
+  }
+
+  .ab-card:focus-visible {
+    outline: 2px solid var(--ab-amber);
+    outline-offset: 3px;
+    z-index: var(--ab-z-card-hover);
+  }
+
+  .ab-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--ab-shadow-4);
+    z-index: var(--ab-z-card-hover);
+  }
+
+  .ab-atelier--visible .ab-card:hover {
+    transform: translateY(-3px);
+  }
+
+  /* ─── Card Accent Bar ─── */
+  .ab-card__accent {
+    height: 3px;
+    background: var(--card-color, var(--ab-amber));
+    border-radius: var(--ab-radius-lg) var(--ab-radius-lg) 0 0;
+    opacity: 0.7;
+  }
+
+  /* ─── Card Image ─── */
+  .ab-card__image-wrap {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: var(--ab-stone-100);
+  }
+
+  .ab-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--ab-duration-slow) var(--ab-ease-out);
+  }
+
+  .ab-card:hover .ab-card__image {
+    transform: scale(1.04);
+  }
+
+  .ab-card__vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(28, 25, 23, 0.08) 100%);
+    pointer-events: none;
+  }
+
+  /* ─── Card Body ─── */
+  .ab-card__body {
+    padding: var(--ab-space-5) var(--ab-space-5) var(--ab-space-6);
+  }
+
+  .ab-card__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: var(--ab-space-2);
+    gap: var(--ab-space-3);
+  }
+
+  .ab-card__title {
+    font-family: var(--ab-font-display);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--ab-stone-900);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .ab-card__price {
+    font-family: var(--ab-font-mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--ab-stone-600);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .ab-card__description {
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--ab-stone-500);
+    line-height: 1.55;
+    margin: 0 0 var(--ab-space-4);
+  }
+
+  /* ─── Ingredient Pills ─── */
+  .ab-card__ingredients {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ab-space-2);
+    margin-bottom: var(--ab-space-5);
+  }
+
+  .ab-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--ab-space-1) var(--ab-space-3);
+    background: var(--ab-stone-100);
+    border: 1px solid var(--ab-stone-200);
+    border-radius: var(--ab-radius-pill);
+    font-family: var(--ab-font-mono);
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--ab-stone-600);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  /* ─── Card Action Button ─── */
+  .ab-card__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ab-space-2);
+    width: 100%;
+    min-height: var(--ab-touch-min);
+    padding: var(--ab-space-3) var(--ab-space-5);
+    background: var(--ab-stone-900);
+    color: var(--ab-stone-50);
+    border: none;
+    border-radius: var(--ab-radius-md);
+    font-family: var(--ab-font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: background var(--ab-duration-fast) var(--ab-ease-out),
+                transform var(--ab-duration-fast) var(--ab-ease-out);
+  }
+
+  .ab-card__action:hover {
+    background: var(--ab-stone-800);
+  }
+
+  .ab-card__action:active {
+    transform: scale(0.97);
+  }
+
+  .ab-card__action-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    transition: transform var(--ab-duration-normal) var(--ab-ease-spring);
+  }
+
+  .ab-card__action-check {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    display: none;
+  }
+
+  .ab-card__action-loading {
+    display: none;
+  }
+
+  .ab-spinner {
+    width: 18px;
+    height: 18px;
+    animation: ab-spin 0.8s linear infinite;
+  }
+
+  @keyframes ab-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* ─── Card Loading State ─── */
+  .ab-card--loading .ab-card__action-text { display: none; }
+  .ab-card--loading .ab-card__action-icon { display: none; }
+  .ab-card--loading .ab-card__action-loading { display: flex; }
+
+  /* ─── Card Selected State ─── */
+  .ab-card--selected {
+    border-color: var(--ab-amber);
+    box-shadow: var(--ab-shadow-3), 0 0 0 1px var(--ab-amber-light);
+  }
+
+  .ab-card--selected .ab-card__accent {
+    opacity: 1;
+  }
+
+  .ab-card--selected .ab-card__action {
+    background: var(--ab-amber);
+    color: white;
+  }
+
+  .ab-card--selected .ab-card__action-text { content: 'Added'; }
+  .ab-card--selected .ab-card__action-icon { display: none; }
+  .ab-card--selected .ab-card__action-check {
+    display: block;
+    animation: ab-check-in var(--ab-duration-normal) var(--ab-ease-spring);
+  }
+
+  @keyframes ab-check-in {
+    from { transform: scale(0) rotate(-45deg); opacity: 0; }
+    to { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  /* ─── Explore Button ─── */
+  .ab-card__explore {
+    position: absolute;
+    bottom: var(--ab-space-5);
+    right: var(--ab-space-5);
+    display: flex;
+    align-items: center;
+    gap: var(--ab-space-1);
+    padding: var(--ab-space-2) var(--ab-space-3);
+    min-height: var(--ab-touch-min);
+    min-width: var(--ab-touch-min);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--ab-stone-200);
+    border-radius: var(--ab-radius-pill);
+    font-family: var(--ab-font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--ab-stone-700);
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity var(--ab-duration-fast) var(--ab-ease-out),
+                transform var(--ab-duration-fast) var(--ab-ease-out),
+                background var(--ab-duration-fast) var(--ab-ease-out);
+    z-index: 2;
+  }
+
+  .ab-card__explore svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .ab-card:hover .ab-card__explore,
+  .ab-card:focus-within .ab-card__explore {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ab-card__explore:hover {
+    background: white;
+    border-color: var(--ab-stone-300);
+  }
+
+  .ab-card__explore:focus-visible {
+    outline: 2px solid var(--ab-amber);
+    outline-offset: 2px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Always show explore on touch devices */
+  @media (hover: none) {
+    .ab-card__explore {
+      opacity: 1;
+      transform: translateY(0);
+      position: relative;
+      bottom: auto;
+      right: auto;
+      margin: 0 var(--ab-space-5) var(--ab-space-5);
+      width: fit-content;
+    }
+  }
+  /* ============================================
+     SIDEBAR — 380px Sticky Panel
+     ============================================ */
+
+  .ab-sidebar {
+    position: sticky;
+    top: var(--ab-space-8);
+    width: var(--ab-sidebar-width);
+    flex-shrink: 0;
+    background: white;
+    border-radius: var(--ab-radius-xl);
+    box-shadow: var(--ab-shadow-3);
+    padding: var(--ab-space-6);
+    display: none;
+    flex-direction: column;
+    gap: var(--ab-space-5);
+    max-height: calc(100vh - var(--ab-space-16));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ab-stone-300) transparent;
+  }
+
+  @media (min-width: 1024px) {
+    .ab-sidebar {
+      display: flex;
+    }
+  }
+
+  .ab-sidebar__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: var(--ab-space-4);
+    border-bottom: 1px solid var(--ab-stone-200);
+  }
+
+  .ab-sidebar__title {
+    font-family: var(--ab-font-display);
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--ab-stone-900);
+    margin: 0;
+  }
+
+  /* ─── Synergy Ring ─── */
+  .ab-sidebar__synergy-ring {
+    position: relative;
+    width: 56px;
+    height: 56px;
+  }
+
+  .ab-sidebar__synergy-ring svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .ab-sidebar__ring-track {
+    stroke: var(--ab-stone-200);
+  }
+
+  .ab-sidebar__ring-progress {
+    stroke: var(--ab-amber);
+    stroke-dasharray: 264;
+    stroke-dashoffset: 264;
+    stroke-linecap: round;
+    transition: stroke-dashoffset var(--ab-duration-slow) var(--ab-ease-organic);
+  }
+
+  .ab-sidebar__ring-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--ab-font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--ab-stone-700);
+  }
+
+  /* ─── Empty State ─── */
+  .ab-sidebar__empty {
+    text-align: center;
+    padding: var(--ab-space-10) var(--ab-space-4);
+  }
+
+  .ab-sidebar__empty-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--ab-space-4);
+    color: var(--ab-stone-400);
+  }
+
+  .ab-sidebar__empty-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ab-sidebar__empty-text {
+    font-size: 0.875rem;
+    color: var(--ab-stone-400);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ─── Synergy Visualization ─── */
+  .ab-sidebar__synergy-viz {
+    padding: var(--ab-space-4) 0;
+    border-bottom: 1px solid var(--ab-stone-200);
+  }
+
+  .ab-synergy-svg {
+    width: 100%;
+    height: auto;
+  }
+
+  .ab-synergy__connection {
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0.7;
+    transition: opacity var(--ab-duration-normal) var(--ab-ease-out);
+  }
+
+  .ab-synergy__score-badge {
+    font-family: var(--ab-font-mono);
+    font-size: 9px;
+    font-weight: 500;
+  }
+
+  .ab-synergy__node {
+    cursor: pointer;
+    outline: none;
+  }
+
+  .ab-synergy__node:focus-visible circle:first-child {
+    stroke: var(--ab-amber);
+    stroke-width: 3;
+  }
+
+  .ab-synergy__center-score {
+    font-family: var(--ab-font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    fill: var(--ab-stone-800);
+  }
+
+  /* ─── Selected Items List ─── */
+  .ab-sidebar__items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ab-space-2);
+  }
+
+  .ab-sidebar__item {
+    display: flex;
+    align-items: center;
+    gap: var(--ab-space-3);
+    padding: var(--ab-space-3);
+    background: var(--ab-stone-50);
+    border-radius: var(--ab-radius-md);
+    transition: background var(--ab-duration-fast) var(--ab-ease-out);
+    animation: ab-item-in var(--ab-duration-normal) var(--ab-ease-spring);
+  }
+
+  @keyframes ab-item-in {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .ab-sidebar__item:hover {
+    background: var(--ab-stone-100);
+  }
+
+  .ab-sidebar__item-image {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--ab-radius-sm);
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .ab-sidebar__item-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ab-sidebar__item-title {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ab-stone-800);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ab-sidebar__item-price {
+    font-family: var(--ab-font-mono);
+    font-size: 0.75rem;
+    color: var(--ab-stone-500);
+  }
+
+  .ab-sidebar__item-remove {
+    width: var(--ab-touch-min);
+    height: var(--ab-touch-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--ab-stone-400);
+    cursor: pointer;
+    border-radius: var(--ab-radius-sm);
+    flex-shrink: 0;
+    transition: color var(--ab-duration-fast) var(--ab-ease-out),
+                background var(--ab-duration-fast) var(--ab-ease-out);
+  }
+
+  .ab-sidebar__item-remove:hover {
+    color: var(--ab-error);
+    background: rgba(192, 112, 112, 0.1);
+  }
+
+  .ab-sidebar__item-remove:focus-visible {
+    outline: 2px solid var(--ab-amber);
+    outline-offset: 2px;
+  }
+
+  .ab-sidebar__item-remove svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* ─── Tier Progress ─── */
+  .ab-sidebar__tiers {
+    padding: var(--ab-space-4) 0;
+    border-top: 1px solid var(--ab-stone-200);
+  }
+
+  .ab-sidebar__tiers-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--ab-space-3);
+  }
+
+  .ab-sidebar__tiers-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--ab-stone-600);
+  }
+
+  .ab-sidebar__tiers-current {
+    font-family: var(--ab-font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--ab-amber);
+    background: var(--ab-amber-light);
+    padding: var(--ab-space-1) var(--ab-space-3);
+    border-radius: var(--ab-radius-pill);
+  }
+
+  .ab-sidebar__tiers-track {
+    position: relative;
+    height: 6px;
+    background: var(--ab-stone-200);
+    border-radius: var(--ab-radius-pill);
+    overflow: visible;
+  }
+
+  .ab-sidebar__tiers-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--ab-amber), var(--ab-gold));
+    border-radius: var(--ab-radius-pill);
+    width: 0%;
+    transition: width var(--ab-duration-slow) var(--ab-ease-organic);
+  }
+
+  .ab-sidebar__tiers-steps {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .ab-tier-step {
+    font-family: var(--ab-font-mono);
+    font-size: 0.6rem;
+    color: var(--ab-stone-400);
+    transform: translateY(14px);
+    white-space: nowrap;
+  }
+
+  .ab-tier-step--active {
+    color: var(--ab-amber);
+    font-weight: 600;
+  }
+
+  /* ─── Pricing ─── */
+  .ab-sidebar__pricing {
+    padding-top: var(--ab-space-4);
+    border-top: 1px solid var(--ab-stone-200);
+    display: flex;
+    flex-direction: column;
+    gap: var(--ab-space-2);
+  }
+
+  .ab-sidebar__price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--ab-stone-600);
+  }
+
+  .ab-sidebar__price-row--discount {
+    color: var(--ab-success);
+  }
+
+  .ab-sidebar__price-row--total {
+    font-weight: 600;
+    color: var(--ab-stone-900);
+    font-size: 1rem;
+    padding-top: var(--ab-space-2);
+    border-top: 1px solid var(--ab-stone-200);
+    margin-top: var(--ab-space-1);
+  }
+
+  .ab-sidebar__subtotal,
+  .ab-sidebar__discount,
+  .ab-sidebar__total {
+    font-family: var(--ab-font-mono);
+    font-weight: 500;
+  }
+
+  /* ─── Checkout Button ─── */
+  .ab-sidebar__checkout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ab-space-3);
+    width: 100%;
+    min-height: 52px;
+    padding: var(--ab-space-4) var(--ab-space-6);
+    background: var(--ab-stone-900);
+    color: white;
+    border: none;
+    border-radius: var(--ab-radius-md);
+    font-family: var(--ab-font-body);
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: background var(--ab-duration-fast) var(--ab-ease-out),
+                transform var(--ab-duration-fast) var(--ab-ease-out),
+                opacity var(--ab-duration-fast) var(--ab-ease-out);
+  }
+
+  .ab-sidebar__checkout:hover:not(:disabled) {
+    background: var(--ab-stone-800);
+    transform: translateY(-1px);
+  }
+
+  .ab-sidebar__checkout:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  .ab-sidebar__checkout:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .ab-sidebar__checkout:focus-visible {
+    outline: 2px solid var(--ab-amber);
+    outline-offset: 3px;
+  }
+
+  .ab-sidebar__checkout svg {
+    width: 18px;
+    height: 18px;
+    transition: transform var(--ab-duration-fast) var(--ab-ease-out);
+  }
+
+  .ab-sidebar__checkout:hover:not(:disabled) svg {
+    transform: translateX(3px);
+  }
+
+  /* ============================================
+     MOBILE DOCK
+     ============================================ */
+
+  .ab-dock {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--ab-z-dock);
+    background: white;
+    border-radius: var(--ab-radius-xl) var(--ab-radius-xl) 0 0;
+    box-shadow: 0 -4px 24px rgba(28, 25, 23, 0.1);
+    transition: transform var(--ab-duration-normal) var(--ab-ease-organic);
+    display: block;
+  }
+
+  @media (min-width: 1024px) {
+    .ab-dock {
+      display: none;
+    }
+  }
+
+  .ab-dock__handle {
+    display: flex;
+    justify-content: center;
+    padding: var(--ab-space-3) 0 var(--ab-space-1);
+    cursor: grab;
+  }
+
+  .ab-dock__handle span {
+    width: 40px;
+    height: 4px;
+    background: var(--ab-stone-300);
+    border-radius: var(--ab-radius-pill);
+  }
+
+  /* ─── Collapsed View ─── */
+  .ab-dock__collapsed {
+    display: flex;
+    align-items: center;
+    gap: var(--ab-space-3);
+    padding: 0 var(--ab-space-5) var(--ab-space-4);
+    min-height: 52px;
+  }
+
+  .ab-dock__preview {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ab-dock__empty-text {
+    font-size: 0.85rem;
+    color: var(--ab-stone-400);
+    font-weight: 400;
+  }
+
+  .ab-dock__thumbnails {
+    display: flex;
+    gap: var(--ab-space-1);
+  }
+
+  .ab-dock__thumbnail {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--ab-radius-sm);
+    object-fit: cover;
+    border: 1.5px solid white;
+    box-shadow: var(--ab-shadow-1);
+  }
+
+  .ab-dock__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .ab-dock__count {
+    font-size: 0.75rem;
+    color: var(--ab-stone-500);
+    font-weight: 500;
+  }
+
+  .ab-dock__tier-badge {
+    font-family: var(--ab-font-mono);
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--ab-amber);
+    background: var(--ab-amber-light);
+    padding: 1px var(--ab-space-2);
+    border-radius: var(--ab-radius-pill);
+  }
+
+  .ab-dock__mini-total {
+    font-family: var(--ab-font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ab-stone-900);
+    flex-shrink: 0;
+  }
+
+  .ab-dock__expand {
+    width: var(--ab-touch-min);
+    height: var(--ab-touch-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ab-stone-100);
+    border: none;
+    border-radius: var(--ab-radius-circle);
+    color: var(--ab-stone-600);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background var(--ab-duration-fast) var(--ab-ease-out);
+  }
+
+  .ab-dock__expand:hover {
+    background: var(--ab-stone-200);
+  }
+
+  .ab-dock__expand:focus-visible {
+    outline: 2px solid var(--ab-amber);
+    outline-offset: 2px;
+  }
+
+  .ab-dock__expand svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* ─── Expanded View ─── */
+  .ab-dock__expanded {
+    display: none;
+    flex-direction: column;
+    gap: var(--ab-space-4);
+    padding: 0 var(--ab-space-5) var(--ab-space-4);
+    max-height: 75vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .ab-dock--open .ab-dock__collapsed {
+    display: none;
+  }
+
+  .ab-dock--open .ab-dock__expanded {
+    display: flex;
+  }
+
+  .ab-dock__expanded-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ab-dock__expanded-header h3 {
+    font-family: var(--ab-font-display);
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--ab-stone-900);
+    margin: 0;
+  }
+
+  .ab-dock__close {
+    width: var(--ab-touch-min);
+    height: var(--ab-touch-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--ab-stone-500);
+    cursor: pointer;
+    border-radius: var(--ab-radius-sm);
+    transition: color var(--ab-duration-fast) var(--ab-ease-out);
+  }
+
+  .ab-dock__close:hover {
+    color: var(--ab-stone-800);
+  }
+
+  .ab-dock__close:focus-visible {
+    outline: 2px solid var(--ab-amber);
+    outline-offset: 2px;
+  }
+
+  .ab-dock__close svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* ─── Dock Synergy ─── */
+  .ab-dock__synergy {
+    display: flex;
+    align-items: center;
+    gap: var(--ab-space-3);
+    padding: var(--ab-space-3) 0;
+  }
+
+  .ab-dock__synergy-circle {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+  }
+
+  .ab-dock__synergy-circle svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .ab-dock__ring-track {
+    stroke: var(--ab-stone-200);
+  }
+
+  .ab-dock__ring-progress {
+    stroke: var(--ab-amber);
+    stroke-dasharray: 201;
+    stroke-dashoffset: 201;
+    stroke-linecap: round;
+    transition: stroke-dashoffset var(--ab-duration-slow) var(--ab-ease-organic);
+  }
+
+  .ab-dock__synergy-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--ab-font-mono);
+    font-size: 0.6rem;
+    font-weight: 500;
+    color: var(--ab-stone-700);
+  }
+
+  .ab-dock__synergy-label {
+    font-size: 0.8rem;
+    color: var(--ab-stone-500);
+  }
+
+  /* ─── Dock Items ─── */
+  .ab-dock__items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ab-space-2);
+  }
+
+  .ab-dock__item {
+    display: flex;
+    align-items: center;
+    gap: var(--ab-space-3);
+    padding: var(--ab-space-2) var(--ab-space-3);
+    background: var(--ab-stone-50);
+    border-radius: var(--ab-radius-sm);
+  }
+
+  .ab-dock__item-image {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--ab-radius-xs);
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .ab-dock__item-title {
+    flex: 1;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--ab-stone-800);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ab-dock__item-price {
+    font-family: var(--ab-font-mono);
+    font-size: 0.7rem;
+    color: var(--ab-stone-500);
+    flex-shrink: 0;
+  }
+
+  .ab-dock__item-remove {
+    width: var(--ab-touch-min);
+    height: var(--ab-touch-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--ab-stone-400);
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: var(--ab-radius-xs);
+  }
+
+  .ab-dock__item-remove:hover {
+    color: var(--ab-error);
+  }
+
+  .ab-dock__item-remove:focus-visible {
+    outline: 2px solid var(--ab-amber);
+    outline-offset: 2px;
+  }
+
+  .ab-dock__item-remove svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* ─── Dock Tiers ─── */
+  .ab-dock__tiers {
+    padding: var(--ab-space-3) 0;
+  }
+
+  .ab-dock__tiers-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--ab-stone-500);
+    margin-bottom: var(--ab-space-2);
+  }
+
+  .ab-dock__tiers-current {
+    font-family: var(--ab-font-mono);
+    color: var(--ab-amber);
+    font-weight: 500;
+  }
+
+  .ab-dock__tiers-track {
+    height: 4px;
+    background: var(--ab-stone-200);
+    border-radius: var(--ab-radius-pill);
+    overflow: hidden;
+  }
+
+  .ab-dock__tiers-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--ab-amber), var(--ab-gold));
+    border-radius: var(--ab-radius-pill);
+    width: 0%;
+    transition: width var(--ab-duration-slow) var(--ab-ease-organic);
+  }
+
+  /* ─── Dock Pricing ─── */
+  .ab-dock__pricing {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ab-space-2);
+    padding-top: var(--ab-space-3);
+    border-top: 1px solid var(--ab-stone-200);
+  }
+
+  .ab-dock__price-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--ab-stone-600);
+  }
+
+  .ab-dock__price-row--discount {
+    color: var(--ab-success);
+  }
+
+  .ab-dock__price-row--total {
+    font-weight: 600;
+    color: var(--ab-stone-900);
+    padding-top: var(--ab-space-2);
+    border-top: 1px solid var(--ab-stone-200);
+  }
+
+  .ab-dock__subtotal,
+  .ab-dock__discount,
+  .ab-dock__net-total {
+    font-family: var(--ab-font-mono);
+    font-weight: 500;
+  }
+
+  /* ─── Dock Footer ─── */
+  .ab-dock__footer {
+    display: flex;
+    align-items: center;
+    gap: var(--ab-space-3);
+    padding: var(--ab-space-3) var(--ab-space-5) var(--ab-space-4);
+    padding-bottom: max(var(--ab-space-4), env(safe-area-inset-bottom));
+    border-top: 1px solid var(--ab-stone-200);
+    background: white;
+  }
+
+  .ab-dock--empty .ab-dock__footer {
+    display: none;
+  }
+
+  .ab-dock__footer-total {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .ab-dock__footer-label {
+    font-size: 0.65rem;
+    color: var(--ab-stone-400);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .ab-dock__footer-value {
+    font-family: var(--ab-font-mono);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ab-stone-900);
+  }
+
+  .ab-dock__checkout {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ab-space-2);
+    min-height: var(--ab-touch-min);
+    padding: var(--ab-space-3) var(--ab-space-5);
+    background: var(--ab-stone-900);
+    color: white;
+    border: none;
+    border-radius: var(--ab-radius-md);
+    font-family: var(--ab-font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: background var(--ab-duration-fast) var(--ab-ease-out),
+                opacity var(--ab-duration-fast) var(--ab-ease-out);
+  }
+
+  .ab-dock__checkout:hover:not(:disabled) {
+    background: var(--ab-stone-800);
+  }
+
+  .ab-dock__checkout:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .ab-dock__checkout:focus-visible {
+    outline: 2px solid var(--ab-amber);
+    outline-offset: 2px;
+  }
+
+  .ab-dock__checkout svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* ============================================
+     PRODUCT DETAIL MODAL
+     ============================================ */
+
+  .ab-modal {
+    position: fixed;
+    inset: 0;
+    z-index: var(--ab-z-modal);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .ab-modal--open {
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .ab-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(28, 25, 23, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity var(--ab-duration-normal) var(--ab-ease-out);
+    z-index: var(--ab-z-modal-backdrop);
+  }
+
+  .ab-modal--open .ab-modal__backdrop {
+    opacity: 1;
+  }
+
+  .ab-modal__panel {
+    position: relative;
+    z-index: var(--ab-z-modal);
+    width: 100%;
+    max-height: 95vh;
+    background: white;
+    border-radius: var(--ab-radius-xl) var(--ab-radius-xl) 0 0;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(100%);
+    transition: transform var(--ab-duration-normal) var(--ab-ease-organic);
+    overflow: hidden;
+  }
+
+  .ab-modal--open .ab-modal__panel {
+    transform: translateY(0);
+  }
+
+  @media (min-width: 768px) {
+    .ab-modal {
+      align-items: center;
+      padding: var(--ab-space-8);
+    }
+
+    .ab-modal__panel {
+      max-width: 560px;
+      max-height: 85vh;
+      border-radius: var(--ab-radius-xl);
+      transform: translateY(24px) scale(0.97);
+      opacity: 0;
+      transition: transform var(--ab-duration-normal) var(--ab-ease-organic),
+                  opacity var(--ab-duration-normal) var(--ab-ease-out);
+    }
+
+    .ab-modal--open .ab-modal__panel {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  .ab-modal__header {
+    display: flex;
+    align-items: center;
+    gap: var(--ab-space-3);
+    padding: var(--ab-space-4) var(--ab-space-5);
+    border-bottom: 1px solid var(--ab-stone-200);
+    flex-shrink: 0;
+  }
+
+  .ab-modal__title {
+    flex: 1;
+    font-family: var(--ab-font-display);
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--ab-stone-900);
+    margin: 0;
+    text-align: center;
+  }
+
+  .ab-modal__back,
+  .ab-modal__close {
+    width: var(--ab-touch-min);
+    height: var(--ab-touch-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--ab-stone-500);
+    cursor: pointer;
+    border-radius: var(--ab-radius-sm);
+    flex-shrink: 0;
+    transition: color var(--ab-duration-fast) var(--ab-ease-out),
+                background var(--ab-duration-fast) var(--ab-ease-out);
+  }
+
+  .ab-modal__back:hover,
+  .ab-modal__close:hover {
+    color: var(--ab-stone-800);
+    background: var(--ab-stone-100);
+  }
+
+  .ab-modal__back:focus-visible,
+  .ab-modal__close:focus-visible {
+    outline: 2px solid var(--ab-amber);
+    outline-offset: 2px;
+  }
+
+  .ab-modal__back svg,
+  .ab-modal__close svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* ─── Modal Scroll Area ─── */
+  .ab-modal__scroll {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* ─── Modal Hero ─── */
+  .ab-modal__hero {
+    position: relative;
+    background: var(--ab-stone-100);
+    padding: var(--ab-space-6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ab-modal__image {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    border-radius: var(--ab-radius-md);
+  }
+
+  .ab-modal__timing {
+    position: absolute;
+    bottom: var(--ab-space-3);
+    right: var(--ab-space-4);
+    font-family: var(--ab-font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--ab-stone-500);
+    background: rgba(255, 255, 255, 0.8);
+    padding: var(--ab-space-1) var(--ab-space-3);
+    border-radius: var(--ab-radius-pill);
+  }
+
+  /* ─── Modal Tabs ─── */
+  .ab-modal__tabs {
+    display: flex;
+    position: relative;
+    border-bottom: 1px solid var(--ab-stone-200);
+    padding: 0 var(--ab-space-5);
+  }
+
+  .ab-modal__tab {
+    flex: 1;
+    min-height: var(--ab-touch-min);
+    padding: var(--ab-space-3) var(--ab-space-2);
+    background: none;
+    border: none;
+    font-family: var(--ab-font-body);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--ab-stone-400);
+    cursor: pointer;
+    transition: color var(--ab-duration-fast) var(--ab-ease-out);
+    position: relative;
+    z-index: 1;
+  }
+
+  .ab-modal__tab:hover {
+    color: var(--ab-stone-600);
+  }
+
+  .ab-modal__tab--active {
+    color: var(--ab-stone-900);
+  }
+
+  .ab-modal__tab:focus-visible {
+    outline: 2px solid var(--ab-amber);
+    outline-offset: -2px;
+    border-radius: var(--ab-radius-xs);
+  }
+
+  .ab-modal__tab-indicator {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background: var(--ab-amber);
+    border-radius: var(--ab-radius-pill);
+    transition: left var(--ab-duration-normal) var(--ab-ease-organic),
+                width var(--ab-duration-normal) var(--ab-ease-organic);
+  }
+
+  /* ─── Modal Body ─── */
+  .ab-modal__body {
+    padding: var(--ab-space-5);
+    min-height: 200px;
+  }
+
+  .ab-modal__tab-panel {
+    animation: ab-tab-fade var(--ab-duration-fast) var(--ab-ease-out);
+  }
+
+  @keyframes ab-tab-fade {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Benefits */
+  .ab-benefit {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--ab-space-3);
+    padding: var(--ab-space-3) 0;
+  }
+
+  .ab-benefit + .ab-benefit {
+    border-top: 1px solid var(--ab-stone-100);
+  }
+
+  .ab-benefit__icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ab-stone-100);
+    border-radius: var(--ab-radius-sm);
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .ab-benefit__text {
+    font-size: 0.875rem;
+    color: var(--ab-stone-700);
+    line-height: 1.5;
+    padding-top: 4px;
+  }
+
+  /* Ingredients */
+  .ab-ingredient {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--ab-space-3) 0;
+  }
+
+  .ab-ingredient + .ab-ingredient {
+    border-top: 1px solid var(--ab-stone-100);
+  }
+
+  .ab-ingredient__name {
+    font-size: 0.875rem;
+    color: var(--ab-stone-800);
+    font-weight: 500;
+  }
+
+  .ab-ingredient__amount {
+    font-family: var(--ab-font-mono);
+    font-size: 0.8rem;
+    color: var(--ab-stone-500);
+    font-weight: 500;
+  }
+
+  /* Science */
+  .ab-science-text {
+    font-size: 0.875rem;
+    color: var(--ab-stone-600);
+    line-height: 1.7;
+  }
+
+  /* Synergy List in Modal */
+  .ab-synergy-pair {
+    display: flex;
+    align-items: center;
+    gap: var(--ab-space-3);
+    padding: var(--ab-space-3) 0;
+  }
+
+  .ab-synergy-pair + .ab-synergy-pair {
+    border-top: 1px solid var(--ab-stone-100);
+  }
+
+  .ab-synergy-pair__score {
+    font-family: var(--ab-font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--ab-amber);
+    background: var(--ab-amber-light);
+    padding: var(--ab-space-1) var(--ab-space-2);
+    border-radius: var(--ab-radius-pill);
+    flex-shrink: 0;
+    min-width: 40px;
+    text-align: center;
+  }
+
+  .ab-synergy-pair__info {
+    flex: 1;
+  }
+
+  .ab-synergy-pair__name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ab-stone-800);
+    margin-bottom: 2px;
+  }
+
+  .ab-synergy-pair__reason {
+    font-size: 0.75rem;
+    color: var(--ab-stone-500);
+    line-height: 1.4;
+  }
+
+  /* ─── Modal Footer ─── */
+  .ab-modal__footer {
+    padding: var(--ab-space-4) var(--ab-space-5);
+    padding-bottom: max(var(--ab-space-4), env(safe-area-inset-bottom));
+    border-top: 1px solid var(--ab-stone-200);
+    display: flex;
+    align-items: center;
+    gap: var(--ab-space-3);
+    flex-shrink: 0;
+    background: white;
+  }
+
+  .ab-modal__add {
+    flex: 1;
+    min-height: var(--ab-touch-min);
+    padding: var(--ab-space-3) var(--ab-space-5);
+    background: var(--ab-stone-900);
+    color: white;
+    border: none;
+    border-radius: var(--ab-radius-md);
+    font-family: var(--ab-font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background var(--ab-duration-fast) var(--ab-ease-out);
+  }
+
+  .ab-modal__add:hover {
+    background: var(--ab-stone-800);
+  }
+
+  .ab-modal__add:focus-visible {
+    outline: 2px solid var(--ab-amber);
+    outline-offset: 2px;
+  }
+
+  .ab-modal__add--added {
+    background: var(--ab-amber);
+  }
+
+  .ab-modal__qty {
+    display: flex;
+    align-items: center;
+    gap: var(--ab-space-2);
+    background: var(--ab-stone-100);
+    border-radius: var(--ab-radius-md);
+    padding: var(--ab-space-1);
+  }
+
+  .ab-modal__qty-btn {
+    width: var(--ab-touch-min);
+    height: var(--ab-touch-min);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 1px solid var(--ab-stone-200);
+    border-radius: var(--ab-radius-sm);
+    color: var(--ab-stone-700);
+    cursor: pointer;
+    transition: background var(--ab-duration-fast) var(--ab-ease-out);
+  }
+
+  .ab-modal__qty-btn:hover {
+    background: var(--ab-stone-50);
+  }
+
+  .ab-modal__qty-btn:focus-visible {
+    outline: 2px solid var(--ab-amber);
+    outline-offset: 2px;
+  }
+
+  .ab-modal__qty-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .ab-modal__qty-value {
+    font-family: var(--ab-font-mono);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--ab-stone-800);
+    min-width: 28px;
+    text-align: center;
+  }
+
+  /* ============================================
+     TOAST NOTIFICATIONS
+     ============================================ */
+
+  .ab-toast {
+    position: fixed;
+    top: var(--ab-space-6);
+    left: 50%;
+    transform: translateX(-50%) translateY(-120%);
+    z-index: var(--ab-z-toast);
+    background: var(--ab-stone-900);
+    color: white;
+    padding: var(--ab-space-3) var(--ab-space-5);
+    border-radius: var(--ab-radius-pill);
+    font-family: var(--ab-font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    box-shadow: var(--ab-shadow-4);
+    pointer-events: none;
+    transition: transform var(--ab-duration-normal) var(--ab-ease-spring);
+    white-space: nowrap;
+    max-width: 90vw;
+    text-align: center;
+  }
+
+  .ab-toast--visible {
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+  }
+
+  .ab-toast__content {
+    display: flex;
+    align-items: center;
+    gap: var(--ab-space-2);
+  }
+
+  .ab-toast__icon {
+    font-size: 1.1rem;
+  }
+
+  /* ============================================
+     RESPONSIVE BREAKPOINTS
+     ============================================ */
+
+  /* Mobile: 0-479px — 1 card per row */
+  @media (max-width: 479px) {
+    .ab-atelier {
+      padding: var(--ab-space-8) var(--ab-space-4) calc(var(--ab-dock-collapsed) + var(--ab-space-6));
+    }
+
+    .ab-grid {
+      grid-template-columns: 1fr;
+      gap: var(--ab-space-5);
+    }
+
+    .ab-header {
+      margin-bottom: var(--ab-space-10);
+    }
+  }
+
+  /* Small tablet: 480-767px — 2 cards per row */
+  @media (min-width: 480px) and (max-width: 767px) {
+    .ab-atelier {
+      padding-bottom: calc(var(--ab-dock-collapsed) + var(--ab-space-6));
+    }
+
+    .ab-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Tablet: 768-1023px — 2 cards per row with dock */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .ab-atelier {
+      padding-bottom: calc(var(--ab-dock-collapsed) + var(--ab-space-6));
+    }
+
+    .ab-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Desktop: 1024-1399px — sidebar visible, 2-3 cards */
+  @media (min-width: 1024px) and (max-width: 1399px) {
+    .ab-atelier {
+      padding-bottom: var(--ab-space-8);
+    }
+
+    .ab-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Wide desktop: 1400px+ — 3 cards */
+  @media (min-width: 1400px) {
+    .ab-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* ============================================
+     REDUCED MOTION
+     ============================================ */
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    .ab-ambient__orb {
+      display: none !important;
+    }
+
+    .ab-atelier--visible .ab-card {
+      opacity: 1;
+      transform: none;
+    }
+
+    .ab-atelier--visible .ab-header__eyebrow,
+    .ab-atelier--visible .ab-header__title,
+    .ab-atelier--visible .ab-header__subtitle {
+      opacity: 1;
+      transform: none;
+    }
+
+    .ab-card:hover {
+      transform: none;
+    }
+
+    .ab-card:hover .ab-card__image {
+      transform: none;
+    }
+
+    .ab-toast {
+      transition: none;
+    }
+
+    .ab-spinner {
+      animation: none;
+    }
+  }
+</style>
+<script>
+(function() {
+  'use strict';
+
+  /* ============================================
+     DATA CONSTANTS
+     ============================================ */
+
+  const SYNERGY_MAP = {
+    'dreamglow': {
+      name: 'DreamGlow',
+      timing: 'Before Sleep',
+      synergies: {
+        'thechill': { score: 92, reason: 'TheChill preps nervous system for deep sleep' },
+        'dailyglow': { score: 78, reason: 'Skin regenerates during sleep cycles' },
+        'reset-button': { score: 85, reason: 'Full recovery protocol activated' }
+      }
+    },
+    'dailyglow': {
+      name: 'DailyGlow',
+      timing: 'Morning',
+      synergies: {
+        'mindfuel': { score: 88, reason: 'Radiance + clarity for peak mornings' },
+        'dreamglow': { score: 78, reason: 'Day/night beauty cycle complete' }
+      }
+    },
+    'mindfuel': {
+      name: 'MindFuel',
+      timing: 'Morning / Midday',
+      synergies: {
+        'thechill': { score: 95, reason: 'Focus without anxiety—the perfect balance' },
+        'dailyglow': { score: 88, reason: 'Mental + physical vitality combined' }
+      }
+    },
+    'thechill': {
+      name: 'TheChill',
+      timing: 'Evening',
+      synergies: {
+        'mindfuel': { score: 95, reason: 'Balances stimulation with calm' },
+        'dreamglow': { score: 92, reason: 'Wind down to deep restoration' },
+        'reset-button': { score: 87, reason: 'Complete stress release protocol' }
+      }
+    },
+    'reset-button': {
+      name: 'Reset Button',
+      timing: 'As Needed',
+      synergies: {
+        'dreamglow': { score: 85, reason: 'Recovery amplified during sleep' },
+        'thechill': { score: 87, reason: 'Stress relief + system reset' }
+      }
+    }
+  };
+
+  const DISCOUNT_TIERS = [
+    { min: 0, discount: 0, label: 'Start' },
+    { min: 2, discount: 15, label: '15% Off' },
+    { min: 3, discount: 20, label: '20% Off' },
+    { min: 4, discount: 25, label: '25% Off' },
+    { min: 5, discount: 30, label: '30% Off' }
+  ];
+
+  const PRODUCT_DATA = {
+    'dreamglow': {
+      benefits: [
+        { icon: '🌙', text: 'Promotes deep, restorative sleep cycles' },
+        { icon: '✨', text: 'Supports overnight skin regeneration' },
+        { icon: '🧬', text: 'Activates cellular repair processes' }
+      ],
+      ingredients: [
+        { name: 'Magnesium Glycinate', amount: '400mg' },
+        { name: 'L-Theanine', amount: '200mg' },
+        { name: 'GABA', amount: '150mg' },
+        { name: 'Ashwagandha', amount: '300mg' }
+      ],
+      science: 'DreamGlow combines clinically-studied sleep nutrients with adaptogenic herbs. Magnesium glycinate crosses the blood-brain barrier more effectively than other forms, supporting GABA receptor function for deeper sleep.'
+    },
+    'dailyglow': {
+      benefits: [
+        { icon: '☀️', text: 'Enhances natural radiance from within' },
+        { icon: '💧', text: 'Deep hydration at cellular level' },
+        { icon: '🛡️', text: 'Antioxidant protection against daily stress' }
+      ],
+      ingredients: [
+        { name: 'Hyaluronic Acid', amount: '120mg' },
+        { name: 'Vitamin C', amount: '500mg' },
+        { name: 'Collagen Peptides', amount: '5g' },
+        { name: 'Astaxanthin', amount: '4mg' }
+      ],
+      science: 'DailyGlow leverages the synergy between vitamin C and collagen synthesis. Hyaluronic acid attracts 1000x its weight in water, while astaxanthin provides 6000x more antioxidant power than vitamin C alone.'
+    },
+    'mindfuel': {
+      benefits: [
+        { icon: '🧠', text: 'Sharp mental clarity and focus' },
+        { icon: '⚡', text: 'Sustained energy without jitters' },
+        { icon: '🎯', text: 'Enhanced cognitive performance' }
+      ],
+      ingredients: [
+        { name: "Lion's Mane", amount: '500mg' },
+        { name: 'Alpha-GPC', amount: '300mg' },
+        { name: 'Rhodiola Rosea', amount: '200mg' },
+        { name: 'B-Vitamin Complex', amount: '100%DV' }
+      ],
+      science: "MindFuel combines nootropic compounds that support acetylcholine production and nerve growth factor (NGF). Lion's Mane has been shown to stimulate NGF synthesis, supporting long-term cognitive health."
+    },
+    'thechill': {
+      benefits: [
+        { icon: '🧘', text: 'Calm mind without drowsiness' },
+        { icon: '💆', text: 'Reduces tension and stress response' },
+        { icon: '🌿', text: 'Supports balanced mood throughout the day' }
+      ],
+      ingredients: [
+        { name: 'L-Theanine', amount: '300mg' },
+        { name: 'Lemon Balm', amount: '300mg' },
+        { name: 'Passionflower', amount: '250mg' },
+        { name: 'Holy Basil', amount: '200mg' }
+      ],
+      science: 'TheChill features L-Theanine, which promotes alpha brainwave activity associated with calm alertness. Combined with adaptogenic herbs, it modulates the HPA axis to reduce cortisol without sedation.'
+    },
+    'reset-button': {
+      benefits: [
+        { icon: '🔄', text: 'Full-body system reset and recovery' },
+        { icon: '🌱', text: 'Supports liver detoxification pathways' },
+        { icon: '💪', text: 'Replenishes essential nutrients' }
+      ],
+      ingredients: [
+        { name: 'Milk Thistle', amount: '450mg' },
+        { name: 'NAC', amount: '600mg' },
+        { name: 'Glutathione', amount: '100mg' },
+        { name: 'B-Complex', amount: '200%DV' }
+      ],
+      science: "Reset Button combines powerful detox support nutrients. NAC is a precursor to glutathione, the body's master antioxidant. Milk thistle's silymarin complex has been shown to support liver cell regeneration."
+    }
+  };
+
+  const ACHIEVEMENTS = {
+    firstItem: { icon: '✨', title: 'Ritual Begun', subtitle: 'Your wellness journey starts now' },
+    twoItems: { icon: '🔗', title: 'Synergy Unlocked', subtitle: 'Products working together' },
+    threeItems: { icon: '🎯', title: '20% Off Unlocked', subtitle: "You're building something special" },
+    fourItems: { icon: '💫', title: '25% Off Unlocked', subtitle: 'Protocol Master status' },
+    fiveItems: { icon: '👑', title: 'Maximum Savings', subtitle: '30% off your complete ritual' },
+    highSynergy: { icon: '🌟', title: 'Perfect Synergy', subtitle: '90%+ compatibility achieved' }
+  };
+
+  const PRODUCT_COLORS = {
+    'mindfuel': '#3B82F6',
+    'reset-button': '#10B981',
+    'dreamglow': '#8B5CF6',
+    'dailyglow': '#F59E0B',
+    'thechill': '#06B6D4'
+  };
+
+  /* ============================================
+     DOM CACHE — All queries happen once at init
+     ============================================ */
+
+  const section = document.getElementById('the-atelier');
+  if (!section) return;
+
+  const DOM = {
+    section: section,
+    grid: section.querySelector('.ab-grid'),
+    cards: section.querySelectorAll('.ab-card'),
+    sidebar: section.querySelector('.ab-sidebar'),
+    sidebarEmpty: section.querySelector('.ab-sidebar__empty'),
+    sidebarSynergyViz: section.querySelector('.ab-sidebar__synergy-viz'),
+    sidebarItems: section.querySelector('.ab-sidebar__items'),
+    sidebarTiers: section.querySelector('.ab-sidebar__tiers'),
+    sidebarTiersFill: section.querySelector('.ab-sidebar__tiers-fill'),
+    sidebarTiersCurrent: section.querySelector('.ab-sidebar__tiers-current'),
+    sidebarSubtotal: section.querySelector('.ab-sidebar__subtotal'),
+    sidebarDiscount: section.querySelector('.ab-sidebar__discount'),
+    sidebarDiscountRow: section.querySelector('.ab-sidebar__price-row--discount'),
+    sidebarTotal: section.querySelector('.ab-sidebar__total'),
+    sidebarCheckout: section.querySelector('.ab-sidebar__checkout'),
+    sidebarRingProgress: section.querySelector('.ab-sidebar__ring-progress'),
+    sidebarRingValue: section.querySelector('.ab-sidebar__ring-value'),
+    // Synergy SVG groups
+    synergyConnections: section.querySelector('.ab-synergy__connections'),
+    synergyScores: section.querySelector('.ab-synergy__scores'),
+    synergyNodes: section.querySelector('.ab-synergy__nodes'),
+    synergyCenter: section.querySelector('.ab-synergy__center'),
+    // Dock
+    dock: section.querySelector('.ab-dock'),
+    dockExpand: section.querySelector('.ab-dock__expand'),
+    dockClose: section.querySelector('.ab-dock__close'),
+    dockThumbnails: section.querySelector('.ab-dock__thumbnails'),
+    dockEmptyText: section.querySelector('.ab-dock__empty-text'),
+    dockCount: section.querySelector('.ab-dock__count'),
+    dockTierBadge: section.querySelector('.ab-dock__tier-badge'),
+    dockMiniTotal: section.querySelector('.ab-dock__mini-total'),
+    dockExpanded: section.querySelector('.ab-dock__expanded'),
+    dockItems: section.querySelector('.ab-dock__items'),
+    dockTiers: section.querySelector('.ab-dock__tiers'),
+    dockTiersFill: section.querySelector('.ab-dock__tiers-fill'),
+    dockTiersCurrent: section.querySelector('.ab-dock__tiers-current'),
+    dockSubtotal: section.querySelector('.ab-dock__subtotal'),
+    dockDiscount: section.querySelector('.ab-dock__discount'),
+    dockDiscountRow: section.querySelector('.ab-dock__price-row--discount'),
+    dockNetTotal: section.querySelector('.ab-dock__net-total'),
+    dockSynergyProgress: section.querySelector('.ab-dock__ring-progress'),
+    dockSynergyValue: section.querySelector('.ab-dock__synergy-value'),
+    dockCheckout: section.querySelector('.ab-dock__checkout'),
+    dockFooterValue: section.querySelector('.ab-dock__footer-value'),
+    // Modal
+    modal: section.querySelector('.ab-modal'),
+    modalPanel: section.querySelector('.ab-modal__panel'),
+    modalBackdrop: section.querySelector('.ab-modal__backdrop'),
+    modalTitle: section.querySelector('.ab-modal__title'),
+    modalImage: section.querySelector('.ab-modal__image'),
+    modalTiming: section.querySelector('.ab-modal__timing'),
+    modalTabs: section.querySelectorAll('.ab-modal__tab'),
+    modalTabIndicator: section.querySelector('.ab-modal__tab-indicator'),
+    modalPanels: section.querySelectorAll('.ab-modal__tab-panel'),
+    modalBody: section.querySelector('.ab-modal__body'),
+    modalBack: section.querySelector('.ab-modal__back'),
+    modalClose: section.querySelector('.ab-modal__close'),
+    modalAdd: section.querySelector('.ab-modal__add'),
+    modalAddText: section.querySelector('.ab-modal__add-text'),
+    modalQty: section.querySelector('.ab-modal__qty'),
+    modalQtyValue: section.querySelector('.ab-modal__qty-value'),
+    modalQtyMinus: section.querySelector('.ab-modal__qty-minus'),
+    modalQtyPlus: section.querySelector('.ab-modal__qty-plus'),
+    modalScroll: section.querySelector('.ab-modal__scroll'),
+    // Toast
+    toast: section.querySelector('.ab-toast'),
+    // Live region
+    liveRegion: section.querySelector('#ab-live-region')
+  };
+
+  /* ============================================
+     STATE
+     ============================================ */
+
+  const state = {
+    items: [],
+    isAwakened: false,
+    isDockExpanded: false,
+    isMobile: window.innerWidth < 1024,
+    modalProduct: null,
+    toastTimeout: null,
+    announceTimeout: null,
+    achievedMilestones: new Set()
+  };
+
+  /* ============================================
+     UTILITY FUNCTIONS
+     ============================================ */
+
+  function formatPrice(priceInCents) {
+    const lira = priceInCents / 100;
+    return '₺' + lira.toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  }
+
+  function getSynergyScore(handleA, handleB) {
+    const a = SYNERGY_MAP[handleA];
+    if (a && a.synergies[handleB]) return a.synergies[handleB];
+    const b = SYNERGY_MAP[handleB];
+    if (b && b.synergies[handleA]) return b.synergies[handleA];
+    return null;
+  }
+
+  function calculateOverallSynergy() {
+    if (state.items.length < 2) return 0;
+    let total = 0, count = 0;
+    for (let i = 0; i < state.items.length; i++) {
+      for (let j = i + 1; j < state.items.length; j++) {
+        const syn = getSynergyScore(state.items[i].handle, state.items[j].handle);
+        if (syn) { total += syn.score; count++; }
+      }
+    }
+    return count > 0 ? Math.round(total / count) : 0;
+  }
+
+  function getCurrentTier() {
+    let tier = DISCOUNT_TIERS[0];
+    for (const t of DISCOUNT_TIERS) {
+      if (state.items.length >= t.min) tier = t;
+    }
+    return tier;
+  }
+
+  function announce(message) {
+    if (state.announceTimeout) clearTimeout(state.announceTimeout);
+    state.announceTimeout = setTimeout(function() {
+      if (DOM.liveRegion) {
+        DOM.liveRegion.textContent = '';
+        requestAnimationFrame(function() {
+          DOM.liveRegion.textContent = message;
+        });
+      }
+    }, 150);
+  }
+
+  /* ============================================
+     CART API (with 1-retry on failure)
+     ============================================ */
+
+  async function addToShopifyCart(variantId) {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const res = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
+        });
+        if (res.ok) return true;
+        if (attempt === 0) continue;
+        showToast('Could not add to cart. Please try again.', 'error');
+        return false;
+      } catch (e) {
+        if (attempt === 0) continue;
+        console.error('Cart error:', e);
+        showToast('Network error. Please check your connection.', 'error');
+        return false;
+      }
+    }
+    return false;
+  }
+
+  async function removeFromShopifyCart(variantId) {
+    try {
+      await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: variantId.toString(), quantity: 0 })
+      });
+    } catch (e) {
+      console.error('Cart remove error:', e);
+    }
+  }
+
+  /* ============================================
+     TOAST NOTIFICATIONS
+     ============================================ */
+
+  function showToast(message, type) {
+    if (state.toastTimeout) {
+      clearTimeout(state.toastTimeout);
+    }
+    DOM.toast.innerHTML = '<div class="ab-toast__content">' +
+      (type === 'error' ? '<span class="ab-toast__icon">⚠️</span>' : '') +
+      '<span>' + message + '</span></div>';
+    DOM.toast.classList.add('ab-toast--visible');
+    state.toastTimeout = setTimeout(function() {
+      DOM.toast.classList.remove('ab-toast--visible');
+    }, 3000);
+  }
+
+  function showAchievement(key) {
+    if (state.achievedMilestones.has(key)) return;
+    state.achievedMilestones.add(key);
+    var a = ACHIEVEMENTS[key];
+    if (!a) return;
+    showToast(a.icon + ' ' + a.title + ' — ' + a.subtitle);
+    announce(a.title + '. ' + a.subtitle);
+  }
+
+  /* ============================================
+     AWAKENING TRANSITION
+     ============================================ */
+
+  function awakenSection() {
+    if (state.isAwakened) return;
+    state.isAwakened = true;
+    DOM.section.classList.remove('ab-atelier--dormant');
+    DOM.section.classList.add('ab-atelier--awakened');
+  }
+
+  function dormantSection() {
+    if (!state.isAwakened) return;
+    state.isAwakened = false;
+    DOM.section.classList.remove('ab-atelier--awakened');
+    DOM.section.classList.add('ab-atelier--dormant');
+  }
+
+  /* ============================================
+     ADD / REMOVE PRODUCT
+     ============================================ */
+
+  async function addProduct(card) {
+    const handle = card.dataset.productHandle;
+    if (state.items.find(function(i) { return i.handle === handle; })) {
+      removeProduct(handle);
+      return;
+    }
+
+    // Loading state
+    card.classList.add('ab-card--loading');
+
+    const productData = {
+      id: card.dataset.productId,
+      handle: handle,
+      title: card.dataset.productTitle,
+      price: parseInt(card.dataset.productPrice),
+      image: card.dataset.productImage,
+      variantId: card.dataset.variantId,
+      url: card.dataset.productUrl,
+      quantity: 1
+    };
+
+    // Add to Shopify cart
+    const success = await addToShopifyCart(productData.variantId);
+    card.classList.remove('ab-card--loading');
+
+    if (!success) return;
+
+    // Add to state
+    state.items.push(productData);
+    card.classList.add('ab-card--selected');
+    card.setAttribute('aria-pressed', 'true');
+    card.setAttribute('aria-label', 'Remove ' + productData.title + ' from your ritual');
+
+    // Update action button text
+    var actionText = card.querySelector('.ab-card__action-text');
+    if (actionText) actionText.textContent = 'Added';
+
+    // Awaken on first add
+    if (state.items.length === 1) {
+      awakenSection();
+      showAchievement('firstItem');
+    }
+    if (state.items.length === 2) showAchievement('twoItems');
+    if (state.items.length === 3) showAchievement('threeItems');
+    if (state.items.length === 4) showAchievement('fourItems');
+    if (state.items.length === 5) showAchievement('fiveItems');
+
+    var synergy = calculateOverallSynergy();
+    if (synergy >= 90) showAchievement('highSynergy');
+
+    announce(productData.title + ' added to ritual. ' + state.items.length + ' products selected.');
+    updateUI();
+  }
+
+  function removeProduct(handle) {
+    var idx = state.items.findIndex(function(i) { return i.handle === handle; });
+    if (idx === -1) return;
+    var item = state.items[idx];
+
+    removeFromShopifyCart(item.variantId);
+    state.items.splice(idx, 1);
+
+    // Reset card state
+    var card = DOM.grid.querySelector('[data-product-handle="' + handle + '"]');
+    if (card) {
+      card.classList.remove('ab-card--selected');
+      card.setAttribute('aria-pressed', 'false');
+      card.setAttribute('aria-label', 'Add ' + item.title + ' to your ritual');
+      var actionText = card.querySelector('.ab-card__action-text');
+      if (actionText) actionText.textContent = 'Add to Ritual';
+    }
+
+    if (state.items.length === 0) {
+      dormantSection();
+    }
+
+    announce(item.title + ' removed from ritual. ' + state.items.length + ' products remaining.');
+    updateUI();
+  }
+
+  /* ============================================
+     UPDATE UI — Batched DOM writes
+     ============================================ */
+
+  function updateUI() {
+    requestAnimationFrame(function() {
+      updateSidebar();
+      updateDock();
+      updateSynergyViz();
+      updatePricing();
+      updateTiers();
+      updateSynergyRings();
+    });
+  }
+
+  function updateSidebar() {
+    var hasItems = state.items.length > 0;
+    DOM.sidebarEmpty.style.display = hasItems ? 'none' : 'block';
+    DOM.sidebarSynergyViz.style.display = state.items.length >= 2 ? 'block' : 'none';
+    DOM.sidebarCheckout.disabled = !hasItems;
+
+    // Render items
+    DOM.sidebarItems.innerHTML = state.items.map(function(item) {
+      return '<div class="ab-sidebar__item" role="listitem">' +
+        '<img src="' + item.image + '" alt="' + item.title + '" class="ab-sidebar__item-image" width="44" height="44">' +
+        '<div class="ab-sidebar__item-info">' +
+          '<div class="ab-sidebar__item-title">' + item.title + '</div>' +
+          '<div class="ab-sidebar__item-price">' + formatPrice(item.price) + '</div>' +
+        '</div>' +
+        '<button class="ab-sidebar__item-remove" data-remove="' + item.handle + '" aria-label="Remove ' + item.title + '">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">' +
+            '<path d="M18 6L6 18M6 6l12 12"/>' +
+          '</svg>' +
+        '</button>' +
+      '</div>';
+    }).join('');
+  }
+
+  function updateDock() {
+    var hasItems = state.items.length > 0;
+    DOM.dock.classList.toggle('ab-dock--empty', !hasItems);
+    DOM.dockCheckout.disabled = !hasItems;
+
+    // Thumbnails
+    if (hasItems) {
+      DOM.dockEmptyText.style.display = 'none';
+      DOM.dockThumbnails.innerHTML = state.items.map(function(item) {
+        return '<img src="' + item.image + '" alt="' + item.title + '" class="ab-dock__thumbnail" width="32" height="32">';
+      }).join('');
+    } else {
+      DOM.dockEmptyText.style.display = '';
+      DOM.dockThumbnails.innerHTML = '';
+    }
+
+    DOM.dockCount.textContent = state.items.length + ' item' + (state.items.length !== 1 ? 's' : '');
+
+    // Dock items list (expanded view)
+    DOM.dockItems.innerHTML = state.items.map(function(item) {
+      return '<div class="ab-dock__item" role="listitem">' +
+        '<img src="' + item.image + '" alt="' + item.title + '" class="ab-dock__item-image" width="36" height="36">' +
+        '<span class="ab-dock__item-title">' + item.title + '</span>' +
+        '<span class="ab-dock__item-price">' + formatPrice(item.price) + '</span>' +
+        '<button class="ab-dock__item-remove" data-remove="' + item.handle + '" aria-label="Remove ' + item.title + '">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">' +
+            '<path d="M18 6L6 18M6 6l12 12"/>' +
+          '</svg>' +
+        '</button>' +
+      '</div>';
+    }).join('');
+  }
+
+  function updatePricing() {
+    var subtotal = state.items.reduce(function(sum, i) { return sum + i.price; }, 0);
+    var tier = getCurrentTier();
+    var discountAmount = Math.round(subtotal * tier.discount / 100);
+    var total = subtotal - discountAmount;
+
+    // Sidebar pricing
+    DOM.sidebarSubtotal.textContent = formatPrice(subtotal);
+    DOM.sidebarDiscount.textContent = '-' + formatPrice(discountAmount);
+    DOM.sidebarDiscountRow.style.display = tier.discount > 0 ? 'flex' : 'none';
+    DOM.sidebarTotal.textContent = formatPrice(total);
+
+    // Dock pricing
+    DOM.dockSubtotal.textContent = formatPrice(subtotal);
+    DOM.dockDiscount.textContent = '-' + formatPrice(discountAmount);
+    DOM.dockDiscountRow.style.display = tier.discount > 0 ? 'flex' : 'none';
+    DOM.dockNetTotal.textContent = formatPrice(total);
+    DOM.dockMiniTotal.textContent = formatPrice(total);
+    DOM.dockFooterValue.textContent = formatPrice(total);
+  }
+
+  function updateTiers() {
+    var tier = getCurrentTier();
+    var count = state.items.length;
+    var hasTier = count >= 2;
+
+    DOM.sidebarTiers.style.display = hasTier ? 'block' : 'none';
+    DOM.dockTiers.style.display = hasTier ? 'block' : 'none';
+
+    DOM.sidebarTiersCurrent.textContent = tier.label;
+    DOM.dockTiersCurrent.textContent = tier.label;
+    DOM.dockTierBadge.textContent = tier.label;
+
+    // Progress fill: 0 items=0%, 2=25%, 3=50%, 4=75%, 5=100%
+    var pct = count <= 1 ? 0 : Math.min(((count - 1) / 4) * 100, 100);
+    DOM.sidebarTiersFill.style.width = pct + '%';
+    DOM.dockTiersFill.style.width = pct + '%';
+
+    // Activate tier steps
+    var steps = DOM.sidebarTiers.querySelectorAll('.ab-tier-step');
+    steps.forEach(function(step) {
+      var stepTier = parseInt(step.dataset.tier);
+      step.classList.toggle('ab-tier-step--active', count >= stepTier);
+    });
+  }
+
+  function updateSynergyRings() {
+    var synergy = calculateOverallSynergy();
+
+    // Sidebar ring (r=42, circumference = 2*PI*42 ≈ 264)
+    var sidebarOffset = 264 - (264 * synergy / 100);
+    DOM.sidebarRingProgress.style.strokeDashoffset = sidebarOffset;
+    DOM.sidebarRingValue.textContent = synergy + '%';
+
+    // Dock ring (r=32, circumference = 2*PI*32 ≈ 201)
+    var dockOffset = 201 - (201 * synergy / 100);
+    DOM.dockSynergyProgress.style.strokeDashoffset = dockOffset;
+    DOM.dockSynergyValue.textContent = synergy + '%';
+  }
+  /* ============================================
+     SYNERGY VISUALIZATION — "Golden Geometry"
+     ============================================ */
+
+  function updateSynergyViz() {
+    if (state.items.length < 2) {
+      DOM.sidebarSynergyViz.style.display = 'none';
+      return;
+    }
+    DOM.sidebarSynergyViz.style.display = 'block';
+
+    var items = state.items;
+    var count = items.length;
+    var cx = 150, cy = 110; // Center of the 300x220 SVG viewBox
+    var radius = 70;
+
+    // Calculate node positions in a regular polygon
+    var positions = items.map(function(item, i) {
+      var angle = (2 * Math.PI * i / count) - Math.PI / 2; // Start from top
+      return {
+        x: cx + radius * Math.cos(angle),
+        y: cy + radius * Math.sin(angle),
+        handle: item.handle,
+        title: item.title,
+        image: item.image,
+        color: PRODUCT_COLORS[item.handle] || '#B8976A'
+      };
+    });
+
+    // Render connections (quadratic bezier curves)
+    var connectionsHTML = '';
+    var scoresHTML = '';
+    for (var i = 0; i < positions.length; i++) {
+      for (var j = i + 1; j < positions.length; j++) {
+        var a = positions[i], b = positions[j];
+        var syn = getSynergyScore(a.handle, b.handle);
+        if (!syn) continue;
+
+        // Quadratic bezier with control point pulled toward center
+        var midX = (a.x + b.x) / 2;
+        var midY = (a.y + b.y) / 2;
+        var dx = midX - cx, dy = midY - cy;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        var pullFactor = 0.3;
+        var ctrlX = midX - dx * pullFactor;
+        var ctrlY = midY - dy * pullFactor;
+
+        var strokeWidth = 1.5 + (syn.score / 100) * 1.5;
+        var gradId = 'ab-grad-' + i + '-' + j;
+
+        connectionsHTML += '<defs><linearGradient id="' + gradId + '" x1="' + (a.x/300*100) + '%" y1="' + (a.y/220*100) + '%" x2="' + (b.x/300*100) + '%" y2="' + (b.y/220*100) + '%">' +
+          '<stop offset="0%" stop-color="' + a.color + '" stop-opacity="0.6"/>' +
+          '<stop offset="100%" stop-color="' + b.color + '" stop-opacity="0.6"/>' +
+          '</linearGradient></defs>';
+
+        connectionsHTML += '<path class="ab-synergy__connection" d="M' + a.x + ' ' + a.y + ' Q' + ctrlX + ' ' + ctrlY + ' ' + b.x + ' ' + b.y + '" stroke="url(#' + gradId + ')" stroke-width="' + strokeWidth + '" stroke-dasharray="' + getPathLength(a, b, ctrlX, ctrlY) + '" stroke-dashoffset="' + getPathLength(a, b, ctrlX, ctrlY) + '" style="animation: ab-draw-line 0.6s var(--ab-ease-organic) ' + (i * 0.1) + 's forwards"/>';
+
+        // Score badge at curve midpoint
+        var badgeX = (a.x + 2*ctrlX + b.x) / 4;
+        var badgeY = (a.y + 2*ctrlY + b.y) / 4;
+        scoresHTML += '<g transform="translate(' + badgeX + ',' + badgeY + ')">' +
+          '<rect x="-16" y="-9" width="32" height="18" rx="9" fill="#B8976A" opacity="0.9"/>' +
+          '<text class="ab-synergy__score-badge" text-anchor="middle" dy="4" fill="white">' + syn.score + '%</text>' +
+          '</g>';
+      }
+    }
+
+    // Render nodes (product images in circles)
+    var nodeRadius = 22;
+    var nodesHTML = '';
+    positions.forEach(function(pos, idx) {
+      var clipId = 'ab-clip-' + pos.handle;
+      nodesHTML += '<g class="ab-synergy__node" tabindex="0" role="button" aria-label="' + pos.title + ' synergy node" data-handle="' + pos.handle + '" style="animation: ab-node-pop 0.4s var(--ab-ease-spring) ' + (idx * 0.1 + 0.2) + 's both">' +
+        '<defs><clipPath id="' + clipId + '"><circle cx="' + pos.x + '" cy="' + pos.y + '" r="' + nodeRadius + '"/></clipPath></defs>' +
+        '<circle cx="' + pos.x + '" cy="' + pos.y + '" r="' + (nodeRadius + 3) + '" fill="white" filter="url(#ab-node-shadow)"/>' +
+        '<circle cx="' + pos.x + '" cy="' + pos.y + '" r="' + (nodeRadius + 2) + '" fill="none" stroke="' + pos.color + '" stroke-width="2"/>' +
+        '<image href="' + pos.image + '" x="' + (pos.x - nodeRadius) + '" y="' + (pos.y - nodeRadius) + '" width="' + (nodeRadius*2) + '" height="' + (nodeRadius*2) + '" clip-path="url(#' + clipId + ')" preserveAspectRatio="xMidYMid slice"/>' +
+        '</g>';
+    });
+
+    // Center element: overall synergy score
+    var overallSynergy = calculateOverallSynergy();
+    var centerHTML = '';
+    if (overallSynergy > 0) {
+      centerHTML = '<circle cx="' + cx + '" cy="' + cy + '" r="18" fill="#B8976A" opacity="0.15"/>' +
+        '<circle cx="' + cx + '" cy="' + cy + '" r="14" fill="white" filter="url(#ab-node-shadow)"/>' +
+        '<text class="ab-synergy__center-score" x="' + cx + '" y="' + cy + '" text-anchor="middle" dy="5">' + overallSynergy + '%</text>';
+    }
+
+    DOM.synergyConnections.innerHTML = connectionsHTML;
+    DOM.synergyScores.innerHTML = scoresHTML;
+    DOM.synergyNodes.innerHTML = nodesHTML;
+    DOM.synergyCenter.innerHTML = centerHTML;
+  }
+
+  function getPathLength(a, b, cx, cy) {
+    // Approximate quadratic bezier length
+    var dx = b.x - a.x, dy = b.y - a.y;
+    var straightLen = Math.sqrt(dx*dx + dy*dy);
+    return Math.round(straightLen * 1.2);
+  }
+
+  /* ============================================
+     MODAL — Open / Close / Tabs / Focus Trap
+     ============================================ */
+
+  var previouslyFocused = null;
+
+  function openModal(handle) {
+    var product = PRODUCT_DATA[handle];
+    var synData = SYNERGY_MAP[handle];
+    if (!product || !synData) return;
+
+    previouslyFocused = document.activeElement;
+    state.modalProduct = handle;
+
+    // Populate header
+    DOM.modalTitle.textContent = synData.name;
+    var item = state.items.find(function(i) { return i.handle === handle; });
+    var card = DOM.grid.querySelector('[data-product-handle="' + handle + '"]');
+
+    DOM.modalImage.src = card ? card.dataset.productImage : '';
+    DOM.modalImage.alt = synData.name;
+    DOM.modalTiming.textContent = synData.timing;
+
+    // Populate tabs
+    populateModalTab('benefits', product.benefits.map(function(b) {
+      return '<div class="ab-benefit"><div class="ab-benefit__icon">' + b.icon + '</div><div class="ab-benefit__text">' + b.text + '</div></div>';
+    }).join(''));
+
+    populateModalTab('ingredients', product.ingredients.map(function(ig) {
+      return '<div class="ab-ingredient"><span class="ab-ingredient__name">' + ig.name + '</span><span class="ab-ingredient__amount">' + ig.amount + '</span></div>';
+    }).join(''));
+
+    populateModalTab('science', '<p class="ab-science-text">' + product.science + '</p>');
+
+    // Synergies tab
+    var synergiesHTML = '';
+    var synergies = SYNERGY_MAP[handle].synergies;
+    for (var partner in synergies) {
+      if (synergies.hasOwnProperty(partner)) {
+        var s = synergies[partner];
+        var partnerName = SYNERGY_MAP[partner] ? SYNERGY_MAP[partner].name : partner;
+        synergiesHTML += '<div class="ab-synergy-pair">' +
+          '<span class="ab-synergy-pair__score">' + s.score + '%</span>' +
+          '<div class="ab-synergy-pair__info">' +
+            '<div class="ab-synergy-pair__name">+ ' + partnerName + '</div>' +
+            '<div class="ab-synergy-pair__reason">' + s.reason + '</div>' +
+          '</div>' +
+        '</div>';
+      }
+    }
+    populateModalTab('synergies', synergiesHTML || '<p class="ab-science-text">No synergy data available.</p>');
+
+    // Update add button state
+    var isSelected = state.items.some(function(i) { return i.handle === handle; });
+    DOM.modalAddText.textContent = isSelected ? 'Added to Ritual' : 'Add to Ritual';
+    DOM.modalAdd.classList.toggle('ab-modal__add--added', isSelected);
+
+    // Reset to first tab
+    switchModalTab('benefits');
+
+    // Show modal
+    DOM.modal.classList.add('ab-modal--open');
+    DOM.modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    // Focus the close button after transition
+    setTimeout(function() {
+      DOM.modalClose.focus();
+    }, 300);
+  }
+
+  function populateModalTab(name, html) {
+    var panel = DOM.modal.querySelector('#ab-tab-' + name);
+    if (panel) panel.innerHTML = html;
+  }
+
+  function closeModal() {
+    DOM.modal.classList.remove('ab-modal--open');
+    DOM.modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    state.modalProduct = null;
+
+    if (previouslyFocused) {
+      previouslyFocused.focus();
+      previouslyFocused = null;
+    }
+  }
+
+  function switchModalTab(tabName) {
+    DOM.modalTabs.forEach(function(tab) {
+      var isActive = tab.dataset.tab === tabName;
+      tab.classList.toggle('ab-modal__tab--active', isActive);
+      tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+
+    DOM.modalPanels.forEach(function(panel) {
+      var isActive = panel.id === 'ab-tab-' + tabName;
+      panel.hidden = !isActive;
+    });
+
+    // Move tab indicator
+    var activeTab = DOM.modal.querySelector('.ab-modal__tab--active');
+    if (activeTab && DOM.modalTabIndicator) {
+      DOM.modalTabIndicator.style.left = activeTab.offsetLeft + 'px';
+      DOM.modalTabIndicator.style.width = activeTab.offsetWidth + 'px';
+    }
+  }
+
+  // Focus trap for modal
+  function trapFocus(e) {
+    if (!DOM.modal.classList.contains('ab-modal--open')) return;
+    var focusable = DOM.modalPanel.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (focusable.length === 0) return;
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+
+  /* ============================================
+     DOCK EXPAND / COLLAPSE
+     ============================================ */
+
+  function expandDock() {
+    state.isDockExpanded = true;
+    DOM.dock.classList.add('ab-dock--open');
+    DOM.dockExpand.setAttribute('aria-expanded', 'true');
+    DOM.dockExpanded.setAttribute('aria-hidden', 'false');
+    DOM.dockClose.focus();
+  }
+
+  function collapseDock() {
+    state.isDockExpanded = false;
+    DOM.dock.classList.remove('ab-dock--open');
+    DOM.dockExpand.setAttribute('aria-expanded', 'false');
+    DOM.dockExpanded.setAttribute('aria-hidden', 'true');
+    DOM.dockExpand.focus();
+  }
+
+  /* ============================================
+     CHECKOUT
+     ============================================ */
+
+  function handleCheckout() {
+    if (state.items.length === 0) return;
+    window.location.href = '/cart';
+  }
+
+  /* ============================================
+     EVENT HANDLERS — Event delegation
+     ============================================ */
+
+  // Grid: card clicks and explore buttons
+  DOM.grid.addEventListener('click', function(e) {
+    var exploreBtn = e.target.closest('[data-explore]');
+    if (exploreBtn) {
+      e.stopPropagation();
+      var card = exploreBtn.closest('.ab-card');
+      if (card) openModal(card.dataset.productHandle);
+      return;
+    }
+
+    var card = e.target.closest('.ab-card');
+    if (card && !e.target.closest('.ab-card__explore')) {
+      addProduct(card);
+    }
+  });
+
+  // Grid: keyboard support for cards
+  DOM.grid.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      var card = e.target.closest('.ab-card');
+      if (card && e.target === card) {
+        e.preventDefault();
+        addProduct(card);
+      }
+    }
+  });
+
+  // Sidebar: remove buttons (event delegation)
+  DOM.sidebarItems.addEventListener('click', function(e) {
+    var removeBtn = e.target.closest('[data-remove]');
+    if (removeBtn) {
+      removeProduct(removeBtn.dataset.remove);
+    }
+  });
+
+  // Sidebar: checkout
+  DOM.sidebarCheckout.addEventListener('click', handleCheckout);
+
+  // Dock: expand/collapse
+  DOM.dockExpand.addEventListener('click', expandDock);
+  DOM.dockClose.addEventListener('click', collapseDock);
+
+  // Dock: remove buttons (event delegation)
+  DOM.dockItems.addEventListener('click', function(e) {
+    var removeBtn = e.target.closest('[data-remove]');
+    if (removeBtn) {
+      removeProduct(removeBtn.dataset.remove);
+    }
+  });
+
+  // Dock: checkout
+  DOM.dockCheckout.addEventListener('click', handleCheckout);
+
+  // Dock: handle swipe gesture
+  var touchStartY = 0;
+  DOM.dock.addEventListener('touchstart', function(e) {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  DOM.dock.addEventListener('touchend', function(e) {
+    var touchEndY = e.changedTouches[0].clientY;
+    var diff = touchStartY - touchEndY;
+    if (diff > 50 && !state.isDockExpanded) {
+      expandDock();
+    } else if (diff < -50 && state.isDockExpanded) {
+      collapseDock();
+    }
+  }, { passive: true });
+
+  // Modal: backdrop click
+  DOM.modalBackdrop.addEventListener('click', closeModal);
+  DOM.modalBack.addEventListener('click', closeModal);
+  DOM.modalClose.addEventListener('click', closeModal);
+
+  // Modal: tabs
+  DOM.modalTabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      switchModalTab(tab.dataset.tab);
+    });
+  });
+
+  // Modal: tab keyboard navigation (arrow keys)
+  DOM.modal.querySelector('.ab-modal__tabs').addEventListener('keydown', function(e) {
+    var tabs = Array.from(DOM.modalTabs);
+    var current = tabs.findIndex(function(t) { return t.classList.contains('ab-modal__tab--active'); });
+
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      var next;
+      if (e.key === 'ArrowRight') {
+        next = (current + 1) % tabs.length;
+      } else {
+        next = (current - 1 + tabs.length) % tabs.length;
+      }
+      switchModalTab(tabs[next].dataset.tab);
+      tabs[next].focus();
+    }
+  });
+
+  // Modal: add button
+  DOM.modalAdd.addEventListener('click', function() {
+    if (!state.modalProduct) return;
+    var card = DOM.grid.querySelector('[data-product-handle="' + state.modalProduct + '"]');
+    if (card) {
+      addProduct(card);
+      // Update button state
+      var isNowSelected = state.items.some(function(i) { return i.handle === state.modalProduct; });
+      DOM.modalAddText.textContent = isNowSelected ? 'Added to Ritual' : 'Add to Ritual';
+      DOM.modalAdd.classList.toggle('ab-modal__add--added', isNowSelected);
+    }
+  });
+
+  // Global: Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (DOM.modal.classList.contains('ab-modal--open')) {
+        closeModal();
+      } else if (state.isDockExpanded) {
+        collapseDock();
+      }
+    }
+    // Focus trap
+    if (e.key === 'Tab' && DOM.modal.classList.contains('ab-modal--open')) {
+      trapFocus(e);
+    }
+  });
+
+  // Synergy viz: keyboard navigation for nodes
+  DOM.sidebarSynergyViz.addEventListener('keydown', function(e) {
+    var node = e.target.closest('.ab-synergy__node');
+    if (!node) return;
+
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      var handle = node.getAttribute('data-handle');
+      if (handle) openModal(handle);
+    }
+
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      var nodes = Array.from(DOM.synergyNodes.querySelectorAll('.ab-synergy__node'));
+      var idx = nodes.indexOf(node);
+      var next;
+      if (e.key === 'ArrowRight') {
+        next = (idx + 1) % nodes.length;
+      } else {
+        next = (idx - 1 + nodes.length) % nodes.length;
+      }
+      nodes[next].focus();
+    }
+  });
+
+  /* ============================================
+     RESIZE OBSERVER — Responsive behavior
+     ============================================ */
+
+  if (typeof ResizeObserver !== 'undefined') {
+    var resizeObserver = new ResizeObserver(function(entries) {
+      var width = entries[0].contentRect.width;
+      var wasMobile = state.isMobile;
+      state.isMobile = width < 1024;
+
+      if (wasMobile !== state.isMobile && state.isDockExpanded) {
+        collapseDock();
+      }
+    });
+    resizeObserver.observe(DOM.section);
+  }
+
+  /* ============================================
+     INITIALIZATION
+     ============================================ */
+
+  // Staggered reveal via IntersectionObserver
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('ab-atelier--visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  observer.observe(DOM.section);
+
+  // Add line draw keyframe dynamically (for synergy connections)
+  var styleSheet = document.createElement('style');
+  styleSheet.textContent = '@keyframes ab-draw-line { to { stroke-dashoffset: 0; } } @keyframes ab-node-pop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }';
+  document.head.appendChild(styleSheet);
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Bundle Builder v5",
+  "tag": "section",
+  "class": "section-bundle-builder-v5",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow Text",
+      "default": "The Wellness Atelier"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Build Your Ritual"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Curate a personalized wellness protocol with synergistic formulas designed to work in harmony."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Product Collection"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Product Limit",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bundle Builder v5",
+      "category": "Products"
+    }
+  ]
+}
+{% endschema %}
