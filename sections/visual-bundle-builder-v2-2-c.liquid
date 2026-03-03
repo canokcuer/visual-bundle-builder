@@ -3010,6 +3010,9 @@
       const labelsContainer = container.querySelector('.wa-synergy-map__labels');
       if (!svg || !labelsContainer) return;
 
+      // Clear spotlight state before re-render
+      svg.classList.remove('wa-synergy-map--spotlight');
+
       svg.innerHTML = '';
       labelsContainer.innerHTML = '';
       container.style.display = 'block';
