@@ -1279,7 +1279,6 @@
     border-radius: 6px;
     background: #fff;
     cursor: pointer;
-    transition: background 0.2s ease, box-shadow 0.2s ease;
   }
 
   .wa-synergy-list-avatars {
@@ -1336,16 +1335,14 @@
     box-shadow: inset 0 0 0 1.5px #bbf7d0;
   }
 
-  /* Spotlight mode: dim everything except focused pair */
+  /* Spotlight mode: dim everything except focused pair — NO transitions to avoid interfering with add/remove animations */
   .wa-synergy-map--spotlight .wa-synergy-node {
     opacity: 0.12 !important;
     filter: grayscale(100%) !important;
-    transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
   }
 
   .wa-synergy-map--spotlight .wa-synergy-line {
     opacity: 0.06 !important;
-    transition: opacity 0.3s ease;
   }
 
   .wa-synergy-map--spotlight .wa-synergy-node--spotlight {
@@ -3263,32 +3260,36 @@
       if (!svg || !listContainer) return;
       const self = this;
 
-      listContainer.querySelectorAll('.wa-synergy-list-item').forEach(item => {
+      // Use event delegation on list container — no per-item listeners needed
+      listContainer.onclick = function(e) {
+        const item = e.target.closest('.wa-synergy-list-item');
+        if (!item) return;
         const handles = (item.dataset.handles || '').split(',');
+        const wasActive = item.classList.contains('wa-synergy-list-item--active');
+        self.clearSpotlight(container);
+        if (wasActive) return;
 
-        item.addEventListener('click', () => {
-          const wasActive = item.classList.contains('wa-synergy-list-item--active');
-          self.clearSpotlight(container);
-          if (wasActive) return;
+        item.classList.add('wa-synergy-list-item--active');
+        svg.classList.add('wa-synergy-map--spotlight');
 
-          item.classList.add('wa-synergy-list-item--active');
-          svg.classList.add('wa-synergy-map--spotlight');
-
-          handles.forEach(h => {
-            const node = svg.querySelector(`.wa-synergy-node[data-handle="${h}"]`);
-            if (node) node.classList.add('wa-synergy-node--spotlight');
-          });
-
-          const key = handles.slice().sort().join('+');
-          svg.querySelectorAll('.wa-synergy-line').forEach(line => {
-            if (line.getAttribute('data-handles') === key) line.classList.add('wa-synergy-line--spotlight');
-          });
+        handles.forEach(h => {
+          const node = svg.querySelector(`.wa-synergy-node[data-handle="${h}"]`);
+          if (node) node.classList.add('wa-synergy-node--spotlight');
         });
-      });
 
-      svg.addEventListener('click', (e) => {
-        if (!e.target.closest('.wa-synergy-node')) self.clearSpotlight(container);
-      });
+        const key = handles.slice().sort().join('+');
+        svg.querySelectorAll('.wa-synergy-line').forEach(line => {
+          if (line.getAttribute('data-handles') === key) line.classList.add('wa-synergy-line--spotlight');
+        });
+      };
+
+      // Bind SVG dismiss listener only once — use a flag to prevent accumulation
+      if (!svg._spotlightBound) {
+        svg._spotlightBound = true;
+        svg.addEventListener('click', (e) => {
+          if (!e.target.closest('.wa-synergy-node')) self.clearSpotlight(container);
+        });
+      }
     },
 
     update(selectedHandles) {
