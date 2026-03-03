@@ -101,6 +101,7 @@
         <p class="wa-sidebar__synergy-nudge"></p>
       </div>
 
+      <div class="wa-sidebar__savings-chip" style="display:none;"></div>
       <!-- Selected Items -->
       <div class="wa-sidebar__items-container">
         <div class="wa-sidebar__empty-state">
@@ -246,6 +247,7 @@
         </button>
       </div>
 
+      <div class="wa-dock__savings-chip" style="display:none;"></div>
       <div class="wa-dock__items"></div>
 
       <!-- Discount Steps (moved to top) -->
@@ -3346,10 +3348,11 @@
 
   async function removeItem(productId) {
     const item = state.items.find(i => i.id === productId);
-    if (item) await removeFromShopifyCart(item.variantId);
+    // Optimistic UI — remove instantly, sync in background
     state.items = state.items.filter(i => i.id !== productId);
     vibrate(10);
     updateUI();
+    if (item) removeFromShopifyCart(item.variantId);
   }
 
   function animateQtyRoll(productId, direction) {
@@ -3603,7 +3606,7 @@
   // ============================================
   // TIER CELEBRATION
   // ============================================
-  function showTierCelebration(tier, synergy) {
+  function showTierCelebration(tier, synergy, pricing) {
     const existing = document.querySelector('.wa-tier-celebration');
     if (existing) existing.remove();
 
@@ -3638,8 +3641,16 @@
     // Discount label
     const labelEl = document.createElement('div');
     labelEl.textContent = t.label;
-    labelEl.style.cssText = `font-size:1.5rem;font-weight:800;background:${t.gradient};-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;`;
+    labelEl.style.cssText = `font-size:1.5rem;font-weight:800;background:${t.gradient};-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;`;
     card.appendChild(labelEl);
+
+    // Savings amount
+    if (pricing && pricing.discount > 0) {
+      const savingsEl = document.createElement('div');
+      savingsEl.textContent = formatMoney(pricing.discount) + ' kazandın';
+      savingsEl.style.cssText = 'font-size:0.85rem;color:#737373;font-weight:500;';
+      card.appendChild(savingsEl);
+    }
 
     overlay.appendChild(card);
 
@@ -3688,7 +3699,7 @@
     }, 1500);
   }
 
-  function celebrateTierUnlock(tier, synergy) {
+  function celebrateTierUnlock(tier, synergy, pricing) {
     // Pulse synergy text elements
     const pulseTargets = [
       dock?.querySelector('.wa-dock__synergy-badge'),
@@ -3701,7 +3712,7 @@
       setTimeout(() => { el.style.animation = ''; }, 2000);
     });
 
-    showTierCelebration(tier, synergy);
+    showTierCelebration(tier, synergy, pricing);
   }
 
   // ============================================
@@ -3718,7 +3729,7 @@
 
     // Tier celebration: detect tier boundary crossing
     if (state.previousTier >= 0 && tier > state.previousTier && tier >= 2) {
-      celebrateTierUnlock(tier, synergy);
+      celebrateTierUnlock(tier, synergy, pricing);
     }
     state.previousTier = tier;
 
@@ -3771,6 +3782,17 @@
         miniSavings.style.display = 'block';
       } else {
         miniSavings.style.display = 'none';
+      }
+    }
+
+    // Savings chip (expanded view)
+    const dockSavingsChip = dock.querySelector('.wa-dock__savings-chip');
+    if (dockSavingsChip) {
+      if (pricing.discount > 0) {
+        dockSavingsChip.textContent = '🎉 ' + formatMoney(pricing.discount) + ' kazandın!';
+        dockSavingsChip.style.cssText = 'display:block;background:#f0fdf4;color:#16a34a;font-size:0.8rem;font-weight:700;padding:8px 12px;border-radius:8px;text-align:center;border:1px solid #bbf7d0;margin-bottom:8px;';
+      } else {
+        dockSavingsChip.style.display = 'none';
       }
     }
 
@@ -3892,6 +3914,17 @@
       ritBox.style.display = 'block';
       ritBox.querySelector('.wa-ritual-guide__content').innerHTML = ritual.map(r => `<div class="wa-ritual-guide__item"><span class="wa-ritual-guide__time">${r.time}</span><div><span class="wa-ritual-guide__product">${r.product}</span> <span class="wa-ritual-guide__text">${r.text}</span></div></div>`).join('');
     } else { ritBox.style.display = 'none'; }
+
+    // Savings chip (desktop)
+    const sidebarSavingsChip = sidebar.querySelector('.wa-sidebar__savings-chip');
+    if (sidebarSavingsChip) {
+      if (pricing.discount > 0) {
+        sidebarSavingsChip.textContent = '🎉 ' + formatMoney(pricing.discount) + ' kazandın!';
+        sidebarSavingsChip.style.cssText = 'display:block;background:#f0fdf4;color:#16a34a;font-size:0.8rem;font-weight:700;padding:8px 12px;border-radius:8px;text-align:center;border:1px solid #bbf7d0;margin-bottom:8px;';
+      } else {
+        sidebarSavingsChip.style.display = 'none';
+      }
+    }
 
     // Steps & Pricing
     updateStepIndicators(sidebar.querySelector('.wa-sidebar__synergy wa-progress-bar'), tier);
