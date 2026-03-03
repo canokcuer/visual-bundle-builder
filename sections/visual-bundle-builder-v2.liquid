@@ -569,9 +569,10 @@
     color: var(--wa-black);
     margin: 0 0 0.15rem 0;
     line-height: 1.3;
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .wa-product-card__price {
