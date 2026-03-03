@@ -145,6 +145,7 @@
         </div>
       </div>
 
+      <span class="wa-sidebar__checkout-discount-badge" style="display:none;"></span>
       <button class="wa-sidebar__checkout-btn" disabled>
         <span class="wa-sidebar__checkout-text">Sepeti Onayla</span>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -361,6 +362,7 @@
           <span class="wa-dock__checkout-total-value wa-dock__total">₺0</span>
         </span>
       </div>
+      <span class="wa-dock__checkout-discount-badge" style="display:none;"></span>
       <button class="wa-dock__checkout-btn" disabled>
         <span class="wa-dock__checkout-btn-text">Sepeti Onayla</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -1947,68 +1949,6 @@
     }
   }
 
-  /* Progress Bar */
-  .wellness-architect .wa-progress-bar {
-    margin-top: 8px;
-    position: relative;
-  }
-
-  .wellness-architect .wa-progress-bar__track {
-    position: relative;
-    height: 10px;
-    background: var(--wa-gray-200);
-    border-radius: 5px;
-    overflow: hidden;
-  }
-
-  .wellness-architect .wa-progress-bar__fill {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    background: linear-gradient(90deg, #22c55e, #16a34a);
-    border-radius: 5px;
-    transition: width 0.5s ease;
-  }
-
-  .wellness-architect .wa-progress-bar__segment {
-    position: absolute;
-    top: 0;
-    width: 2px;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.7);
-    transform: translateX(-50%);
-    z-index: 1;
-  }
-
-  .wellness-architect .wa-progress-bar__labels {
-    position: relative;
-    height: 18px;
-    margin-top: 4px;
-  }
-
-  .wellness-architect .wa-progress-bar__label {
-    position: absolute;
-    transform: translateX(-50%);
-    font-size: 0.6rem;
-    font-weight: 600;
-    color: var(--wa-gray-400);
-  }
-
-  /* Mini progress bar (collapsed dock) */
-  .wellness-architect .wa-progress-bar--mini {
-    margin: 4px 0 2px 0;
-  }
-
-  .wellness-architect .wa-progress-bar--mini .wa-progress-bar__track {
-    height: 6px;
-    border-radius: 3px;
-  }
-
-  .wellness-architect .wa-progress-bar--mini .wa-progress-bar__fill {
-    border-radius: 3px;
-  }
-
   /* Tier celebration pulse */
   @keyframes wa-tier-pulse {
     0% { transform: scale(1); }
@@ -2151,10 +2091,6 @@
     font-size: 0.75rem;
     font-weight: 700;
     color: #16a34a;
-  }
-
-  .wellness-architect .wa-progress-bar--top {
-    margin-bottom: 8px;
   }
 
   .wa-dock__discount-hint-text {
@@ -3599,9 +3535,44 @@
 
   function updateStepIndicators(container, level) {
     if (!container) return;
+    const isMini = container.classList.contains('wa-progress-bar--mini');
+
+    // Container
+    container.style.cssText = isMini
+      ? 'margin:4px 0 2px 0;position:relative;'
+      : 'margin-top:8px;position:relative;';
+
+    // Track
+    const track = container.querySelector('.wa-progress-bar__track');
+    if (track) {
+      track.style.cssText = isMini
+        ? 'position:relative;height:6px;background:#e5e5e5;border-radius:3px;overflow:hidden;'
+        : 'position:relative;height:10px;background:#e5e5e5;border-radius:5px;overflow:hidden;';
+    }
+
+    // Fill
     const fill = container.querySelector('.wa-progress-bar__fill');
     if (fill) {
-      fill.style.width = (level * 20) + '%';
+      const radius = isMini ? '3px' : '5px';
+      fill.style.cssText = 'position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);border-radius:' + radius + ';transition:width 0.5s ease;width:' + (level * 20) + '%;';
+    }
+
+    // Segments — preserve left from HTML
+    container.querySelectorAll('.wa-progress-bar__segment').forEach(seg => {
+      const left = seg.style.left || seg.getAttribute('style')?.match(/left:\s*([^;]+)/)?.[1] || '0';
+      seg.style.cssText = 'position:absolute;top:0;width:2px;height:100%;background:rgba(255,255,255,0.7);transform:translateX(-50%);z-index:1;left:' + left + ';';
+    });
+
+    // Labels (full bars only)
+    if (!isMini) {
+      const labels = container.querySelector('.wa-progress-bar__labels');
+      if (labels) {
+        labels.style.cssText = 'position:relative;height:18px;margin-top:4px;';
+      }
+      container.querySelectorAll('.wa-progress-bar__label').forEach(lbl => {
+        const left = lbl.style.left || lbl.getAttribute('style')?.match(/left:\s*([^;]+)/)?.[1] || '0';
+        lbl.style.cssText = 'position:absolute;transform:translateX(-50%);font-size:0.6rem;font-weight:600;color:#a3a3a3;left:' + left + ';';
+      });
     }
   }
 
@@ -3760,12 +3731,15 @@
     dock.querySelector('.wa-dock__price-row--discount').style.display = pricing.discount > 0 ? 'flex' : 'none';
     dock.querySelector('.wa-dock__checkout-btn').disabled = state.items.length === 0;
 
-    // Dynamic checkout button text
-    const dockBtnText = dock.querySelector('.wa-dock__checkout-btn-text');
-    if (dockBtnText) {
-      dockBtnText.textContent = synergy.discount > 0
-        ? `Sepeti Onayla (%${Math.round(synergy.discount * 100)} indirim)`
-        : 'Sepeti Onayla';
+    // Mobile discount badge
+    const mobileBadge = dock.querySelector('.wa-dock__checkout-discount-badge');
+    if (mobileBadge) {
+      if (synergy.discount > 0) {
+        mobileBadge.textContent = `%${Math.round(synergy.discount * 100)} indirim`;
+        mobileBadge.style.cssText = 'display:inline-block;background:#22c55e;color:#fff;font-size:0.65rem;font-weight:700;padding:4px 8px;border-radius:100px;white-space:nowrap;flex-shrink:0;';
+      } else {
+        mobileBadge.style.display = 'none';
+      }
     }
 
     // Strikethrough original price (mobile expanded pricing + sticky footer)
@@ -3846,12 +3820,15 @@
     sidebar.querySelector('.wa-sidebar__price-row--discount').style.display = pricing.discount > 0 ? 'flex' : 'none';
     sidebar.querySelector('.wa-sidebar__checkout-btn').disabled = state.items.length === 0;
 
-    // Dynamic checkout button text
-    const sidebarBtnText = sidebar.querySelector('.wa-sidebar__checkout-text');
-    if (sidebarBtnText) {
-      sidebarBtnText.textContent = synergy.discount > 0
-        ? `Sepeti Onayla (%${Math.round(synergy.discount * 100)} indirim)`
-        : 'Sepeti Onayla';
+    // Desktop discount badge
+    const desktopBadge = sidebar.querySelector('.wa-sidebar__checkout-discount-badge');
+    if (desktopBadge) {
+      if (synergy.discount > 0) {
+        desktopBadge.textContent = `%${Math.round(synergy.discount * 100)} indirim`;
+        desktopBadge.style.cssText = 'display:block;background:#22c55e;color:#fff;font-size:0.7rem;font-weight:700;padding:5px 12px;border-radius:100px;text-align:center;margin:0 auto 8px;width:fit-content;';
+      } else {
+        desktopBadge.style.display = 'none';
+      }
     }
 
     // Strikethrough original price (desktop)
