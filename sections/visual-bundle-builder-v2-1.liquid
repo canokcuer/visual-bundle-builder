@@ -3517,30 +3517,41 @@
           <style>
             :host { display:block; ${isMini ? 'margin:4px 0 2px 0' : 'margin-top:8px'}; position:relative; }
             .track { position:relative; height:${trackH}px; background:#e5e5e5; border-radius:${r}px; overflow:hidden; }
-            .fill  { position:absolute; top:0; left:0; height:100%; background:linear-gradient(90deg,#22c55e,#16a34a); border-radius:${r}px; transition:width 0.5s ease; width:0%; }
+            .fill  { position:absolute; top:0; left:0; height:100%; border-radius:${r}px; transition:width 0.5s ease, background 0.5s ease; width:0%; }
             .seg   { position:absolute; top:0; width:2px; height:100%; background:rgba(255,255,255,0.7); transform:translateX(-50%); z-index:1; }
             .labels { position:relative; height:18px; margin-top:4px; }
             .lbl   { position:absolute; transform:translateX(-50%); font-size:0.6rem; font-weight:600; color:#a3a3a3; }
+            .lbl-end { position:absolute; right:0; font-size:0.6rem; font-weight:600; color:#a3a3a3; }
           </style>
           <div class="track">
             <div class="fill"></div>
-            <div class="seg" style="left:20%"></div>
-            <div class="seg" style="left:40%"></div>
-            <div class="seg" style="left:60%"></div>
-            <div class="seg" style="left:80%"></div>
+            <div class="seg" style="left:25%"></div>
+            <div class="seg" style="left:50%"></div>
+            <div class="seg" style="left:75%"></div>
           </div>
           ${!isMini ? `<div class="labels">
-            <span class="lbl" style="left:20%">%15</span>
-            <span class="lbl" style="left:40%">%30</span>
-            <span class="lbl" style="left:60%">%33</span>
-            <span class="lbl" style="left:80%">%35</span>
+            <span class="lbl" style="left:25%">%15</span>
+            <span class="lbl" style="left:50%">%30</span>
+            <span class="lbl" style="left:75%">%33</span>
+            <span class="lbl-end">%35</span>
           </div>` : ''}`;
 
         this._fill = this.shadowRoot.querySelector('.fill');
       }
 
       setProgress(level) {
-        if (this._fill) this._fill.style.width = (level * 20) + '%';
+        if (!this._fill) return;
+        const TIER_GRADIENTS = [
+          'linear-gradient(90deg,#d4d4d4,#a3a3a3)',
+          'linear-gradient(90deg,#d4d4d4,#a3a3a3)',
+          'linear-gradient(90deg,#22c55e,#16a34a)',
+          'linear-gradient(90deg,#06b6d4,#0891b2)',
+          'linear-gradient(90deg,#8b5cf6,#7c3aed)',
+          'linear-gradient(90deg,#f59e0b,#d97706)'
+        ];
+        const pct = level <= 1 ? 0 : (level - 1) * 25;
+        this._fill.style.width = pct + '%';
+        this._fill.style.background = TIER_GRADIENTS[Math.min(level, 5)] || TIER_GRADIENTS[0];
       }
     }
     customElements.define('wa-progress-bar', WaProgressBar);
@@ -3553,31 +3564,95 @@
   // ============================================
   // TIER CELEBRATION
   // ============================================
-  function showTierToast(tier, synergy) {
-    const existing = document.querySelector('.wa-tier-toast');
+  function showTierCelebration(tier, synergy) {
+    const existing = document.querySelector('.wa-tier-celebration');
     if (existing) existing.remove();
 
-    const label = tier >= 5
-      ? 'Maksimum %35'
-      : `%${Math.round(synergy.discount * 100)}`;
+    const TIER_THEMES = {
+      2: { gradient: 'linear-gradient(135deg,#22c55e,#16a34a)', emoji: '🌿', glow: 'rgba(34,197,94,0.3)', label: '%15 İndirim', sub: 'İkili güç aktif!' },
+      3: { gradient: 'linear-gradient(135deg,#06b6d4,#0891b2)', emoji: '🌊', glow: 'rgba(6,182,212,0.3)', label: '%30 İndirim', sub: 'Üçlü sinerji!' },
+      4: { gradient: 'linear-gradient(135deg,#8b5cf6,#7c3aed)', emoji: '💎', glow: 'rgba(139,92,246,0.3)', label: '%33 İndirim', sub: 'Pro seviye!' },
+      5: { gradient: 'linear-gradient(135deg,#f59e0b,#d97706)', emoji: '👑', glow: 'rgba(245,158,11,0.3)', label: 'MAX %35 İndirim', sub: 'Efsane pakete ulaştın!' }
+    };
+    const t = TIER_THEMES[tier] || TIER_THEMES[2];
 
-    const toast = document.createElement('div');
-    toast.className = 'wa-tier-toast';
-    toast.textContent = `🎉 ${label} İndirim Kazandın!`;
-    toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-20px);background:#000;color:#fff;padding:12px 24px;border-radius:100px;font-size:0.85rem;font-weight:600;z-index:10001;opacity:0;transition:opacity 0.3s ease,transform 0.3s ease;pointer-events:none;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+    // Overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'wa-tier-celebration';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:10001;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0);transition:background 0.3s ease;pointer-events:none;';
 
-    document.body.appendChild(toast);
+    // Card
+    const card = document.createElement('div');
+    card.style.cssText = `position:relative;background:#fff;border-radius:20px;padding:32px 40px;text-align:center;transform:scale(0.3);opacity:0;transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1),opacity 0.3s ease;box-shadow:0 20px 60px rgba(0,0,0,0.15),0 0 80px ${t.glow};max-width:280px;width:90%;`;
 
+    // Accent bar at top of card
+    const accent = document.createElement('div');
+    accent.style.cssText = `position:absolute;top:0;left:0;right:0;height:4px;border-radius:20px 20px 0 0;background:${t.gradient};`;
+    card.appendChild(accent);
+
+    // Emoji
+    const emojiEl = document.createElement('div');
+    emojiEl.textContent = t.emoji;
+    emojiEl.style.cssText = 'font-size:3rem;margin-bottom:8px;animation:wa-cele-bounce 0.6s ease 0.3s both;';
+    card.appendChild(emojiEl);
+
+    // Discount label
+    const labelEl = document.createElement('div');
+    labelEl.textContent = t.label;
+    labelEl.style.cssText = `font-size:1.5rem;font-weight:800;background:${t.gradient};-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;`;
+    card.appendChild(labelEl);
+
+    // Sub text
+    const subEl = document.createElement('div');
+    subEl.textContent = t.sub;
+    subEl.style.cssText = 'font-size:0.85rem;color:#737373;font-weight:500;';
+    card.appendChild(subEl);
+
+    overlay.appendChild(card);
+
+    // Confetti particles
+    const colors = ['#22c55e','#06b6d4','#8b5cf6','#f59e0b','#ef4444','#ec4899'];
+    for (let i = 0; i < 40; i++) {
+      const p = document.createElement('div');
+      const size = Math.random() * 8 + 4;
+      const angle = (Math.PI * 2 * i) / 40;
+      const dist = Math.random() * 120 + 60;
+      const tx = Math.cos(angle) * dist;
+      const ty = Math.sin(angle) * dist - 40;
+      const rot = Math.random() * 360;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const shape = Math.random() > 0.5 ? '50%' : '2px';
+      p.style.cssText = `position:absolute;width:${size}px;height:${size}px;background:${color};border-radius:${shape};top:50%;left:50%;opacity:0;pointer-events:none;z-index:-1;animation:wa-cele-confetti 0.8s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s both;--tx:${tx}px;--ty:${ty}px;--rot:${rot}deg;`;
+      overlay.appendChild(p);
+    }
+
+    // Inject keyframes (once)
+    if (!document.getElementById('wa-cele-keyframes')) {
+      const style = document.createElement('style');
+      style.id = 'wa-cele-keyframes';
+      style.textContent = `
+        @keyframes wa-cele-bounce { 0%{transform:scale(0) rotate(-10deg)} 50%{transform:scale(1.3) rotate(5deg)} 100%{transform:scale(1) rotate(0)} }
+        @keyframes wa-cele-confetti { 0%{transform:translate(0,0) rotate(0) scale(1);opacity:1} 100%{transform:translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(0);opacity:0} }
+      `;
+      document.head.appendChild(style);
+    }
+
+    document.body.appendChild(overlay);
+
+    // Animate in
     requestAnimationFrame(() => {
-      toast.style.opacity = '1';
-      toast.style.transform = 'translateX(-50%) translateY(0)';
+      overlay.style.background = 'rgba(0,0,0,0.12)';
+      card.style.transform = 'scale(1)';
+      card.style.opacity = '1';
     });
 
+    // Animate out
     setTimeout(() => {
-      toast.style.opacity = '0';
-      toast.style.transform = 'translateX(-50%) translateY(-20px)';
-      setTimeout(() => toast.remove(), 300);
-    }, 2000);
+      card.style.transform = 'scale(0.8)';
+      card.style.opacity = '0';
+      overlay.style.background = 'rgba(0,0,0,0)';
+      setTimeout(() => overlay.remove(), 400);
+    }, 2500);
   }
 
   function celebrateTierUnlock(tier, synergy) {
@@ -3593,7 +3668,7 @@
       setTimeout(() => { el.style.animation = ''; }, 2000);
     });
 
-    showTierToast(tier, synergy);
+    showTierCelebration(tier, synergy);
   }
 
   // ============================================
