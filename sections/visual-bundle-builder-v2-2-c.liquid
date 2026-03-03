@@ -2829,6 +2829,8 @@
     isMobile: window.innerWidth < 768,
     previousTier: -1
   };
+  const pendingAddIds = new Set();
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ============================================
   // DOM ELEMENTS
@@ -2877,6 +2879,16 @@
 
   function animateValue(el, newCents, prefix = '') {
     if (!el) return;
+    if (prefersReducedMotion) {
+      el.textContent = prefix + formatMoney(newCents);
+      return;
+    }
+
+    if (el._waAnimationFrame) {
+      cancelAnimationFrame(el._waAnimationFrame);
+      el._waAnimationFrame = null;
+    }
+
     const text = el.textContent.replace(/[^0-9.,]/g, '').replace('.', '').replace(',', '.');
     const oldCents = Math.round(parseFloat(text || '0') * 100);
     if (oldCents === newCents) { el.textContent = prefix + formatMoney(newCents); return; }
@@ -2887,9 +2899,13 @@
       const ease = 1 - Math.pow(1 - t, 3); // ease-out cubic
       const current = Math.round(oldCents + (newCents - oldCents) * ease);
       el.textContent = prefix + formatMoney(current);
-      if (t < 1) requestAnimationFrame(tick);
+      if (t < 1) {
+        el._waAnimationFrame = requestAnimationFrame(tick);
+      } else {
+        el._waAnimationFrame = null;
+      }
     }
-    requestAnimationFrame(tick);
+    el._waAnimationFrame = requestAnimationFrame(tick);
   }
 
   function matchHandle(title) {
@@ -2908,6 +2924,7 @@
   // Flying ghost animation (v1 approach)
   function createFlyingGhost(sourceEl, targetEl, imageSrc) {
     if (!sourceEl || !targetEl) return Promise.resolve();
+    if (prefersReducedMotion) return Promise.resolve();
 
     const sourceRect = sourceEl.getBoundingClientRect();
     const targetRect = targetEl.getBoundingClientRect();
@@ -3383,13 +3400,17 @@
   // STATE MANAGEMENT
   // ============================================
   async function addItem(productData, qty = 1) {
+    if (pendingAddIds.has(productData.id)) return false;
+
     const existing = state.items.find(i => i.id === productData.id);
     if (existing) { await removeItem(productData.id); return false; }
     if (state.items.length >= 5) { vibrate([30, 20, 30]); return false; }
 
     const card = [...productCards].find(c => c.dataset.productId === productData.id);
+    pendingAddIds.add(productData.id);
     if (card) card.classList.add('wa-product-card--loading');
     const success = await addToShopifyCart(productData.variantId, qty);
+    pendingAddIds.delete(productData.id);
     if (card) card.classList.remove('wa-product-card--loading');
 
     if (success) {
@@ -4231,6 +4252,12 @@
       return;
     }
 
+    // Ignore interactive child clicks that should not trigger add/remove toggle
+    const interactiveTarget = e.target.closest('a, input, select, textarea, [data-tab], .wa-product-card__drawer, .wa-kesfet-modal, button');
+    if (interactiveTarget && !interactiveTarget.classList.contains('wa-product-card__add-btn')) {
+      return;
+    }
+
     // Otherwise add to cart
     const data = { id: card.dataset.productId, handle: card.dataset.productHandle, title: card.dataset.productTitle, price: parseInt(card.dataset.productPrice), image: card.dataset.productImage, variantId: card.dataset.variantId, url: card.dataset.productUrl, quantity: 1 };
     addItem(data);
@@ -4358,7 +4385,7 @@
 
     // Recommendation buttons with flying ghost animation
     dockRecElements.addBtn?.addEventListener('click', async e => {
-      const h = e.target.dataset.recHandle;
+      const h = e.currentTarget.dataset.recHandle;
       if (h) {
         const p = getProductDataByHandle(h);
         if (p) {
@@ -4370,7 +4397,7 @@
       }
     });
     sidebarRecElements.addBtn?.addEventListener('click', async e => {
-      const h = e.target.dataset.recHandle;
+      const h = e.currentTarget.dataset.recHandle;
       if (h) {
         const p = getProductDataByHandle(h);
         if (p) {
