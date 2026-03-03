@@ -3724,11 +3724,11 @@
     labelEl.style.cssText = `font-size:1.5rem;font-weight:800;background:${t.gradient};-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;`;
     card.appendChild(labelEl);
 
-    // Savings amount
+    // Savings amount — tier-colored like the progress bar
     if (pricing && pricing.discount > 0) {
       const savingsEl = document.createElement('div');
       savingsEl.textContent = formatMoney(pricing.discount) + ' kazandın';
-      savingsEl.style.cssText = 'font-size:0.85rem;color:#737373;font-weight:500;';
+      savingsEl.style.cssText = `font-size:0.9rem;font-weight:700;background:${t.gradient};-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;`;
       card.appendChild(savingsEl);
     }
 
@@ -3775,8 +3775,8 @@
       card.style.transform = 'scale(0.8)';
       card.style.opacity = '0';
       overlay.style.background = 'rgba(0,0,0,0)';
-      setTimeout(() => overlay.remove(), 400);
-    }, 1500);
+      setTimeout(() => overlay.remove(), 300);
+    }, 1000);
   }
 
   function celebrateTierUnlock(tier, synergy, pricing) {
