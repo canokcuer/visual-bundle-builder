@@ -151,7 +151,7 @@
         </div>
         <!-- Hexagon Synergy Map -->
         <div class="wa-synergy-map__scroll">
-          <svg class="wa-synergy-map__svg" viewBox="0 0 400 280"></svg>
+          <svg class="wa-synergy-map__svg" viewBox="0 0 400 300"></svg>
           <div class="wa-synergy-map__labels"></div>
         </div>
         <!-- Synergy achievements are shown in the synergy list below -->
@@ -271,7 +271,7 @@
         </div>
         <!-- Hexagon Synergy Map -->
         <div class="wa-synergy-map__scroll">
-          <svg class="wa-synergy-map__svg" viewBox="0 0 400 280"></svg>
+          <svg class="wa-synergy-map__svg" viewBox="0 0 400 300"></svg>
           <div class="wa-synergy-map__labels"></div>
         </div>
         <!-- Synergy Explanations List (icons + descriptions) -->
@@ -1084,35 +1084,23 @@
   }
 
   .wa-synergy-map__scroll {
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
     position: relative;
-    padding: 12px;
+    padding: 8px 12px;
   }
 
   .wa-synergy-map__svg {
-    min-width: 100%;
     width: 100%;
-    height: 300px;
+    height: auto;
     display: block;
   }
 
   .wa-synergy-node__bg {
     fill: #ffffff;
-    stroke: var(--wa-gray-200);
+    stroke: #e5e5e5;
     stroke-width: 2;
+    transition: stroke 0.3s ease, stroke-width 0.3s ease;
   }
-
-  .wa-synergy-node__ring {
-    fill: none;
-    stroke: var(--wa-black);
-    stroke-width: 2;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .wa-synergy-node--active .wa-synergy-node__ring { opacity: 1; }
 
   .wa-synergy-map__labels {
     position: absolute;
@@ -1123,119 +1111,61 @@
     pointer-events: none;
   }
 
-  .wa-synergy-label {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    border-radius: 4px;
-    padding: 2px 8px;
-    font-size: 0.6rem;
-    font-weight: 600;
-    color: #fff;
-    white-space: nowrap;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-  }
-
-  .wa-synergy-label--icon {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.6rem;
-    z-index: 10;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-  }
-
-  /* Achievement Icons Row */
-  .wa-achievement-icons {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    padding: 12px 8px;
-    margin-top: 8px;
-    border-top: 1px solid var(--wa-gray-200);
-  }
-
-  .wa-achievement-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--wa-gray-200);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.4;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-  }
-
-  .wa-achievement-icon--unlocked {
-    background: var(--wa-gold);
-    opacity: 1;
-    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
-  }
-
-  .wa-achievement-icon--unlocking {
-    animation: achievement-unlock 0.5s ease;
-  }
-
-  @keyframes achievement-unlock {
-    0% { transform: scale(0.8) rotate(-10deg); }
-    50% { transform: scale(1.2) rotate(10deg); }
-    100% { transform: scale(1) rotate(0deg); }
-  }
-
-  .wa-achievement-icon__emoji {
-    font-size: 1.1rem;
-    line-height: 1;
+  /* Synergy Node States */
+  .wa-synergy-node {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
   }
 
   .wa-synergy-node--selected .wa-synergy-node__bg {
-    stroke: var(--wa-black);
+    stroke: #171717;
     stroke-width: 3;
   }
 
-  /* Living Orbit - Inactive/Unselected State */
   .wa-synergy-node--inactive {
-    opacity: 0.85;
+    opacity: 0.35;
     filter: grayscale(100%);
-    transition: filter 0.4s ease-out, opacity 0.4s ease-out, transform 0.3s ease-out;
   }
 
   .wa-synergy-node--inactive image {
     filter: grayscale(100%);
   }
 
-  /* Living Orbit - Selected/Active State */
   .wa-synergy-node--selected {
-    filter: grayscale(0%);
     opacity: 1;
-    animation: none;
-    transform-origin: center;
+    filter: none;
   }
 
   .wa-synergy-node--selected image {
-    filter: grayscale(0%);
+    filter: none;
+  }
+
+  .wa-synergy-node--best-next {
+    opacity: 0.7;
+    filter: grayscale(50%);
+    animation: wa-best-next-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes wa-best-next-pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 0.9; }
   }
 
   .wa-synergy-node:hover {
     opacity: 1;
-    filter: grayscale(0%);
-    transform: scale(1.08);
+    filter: none;
   }
 
   .wa-synergy-node:hover .wa-synergy-node__bg {
-    stroke: var(--wa-black);
+    stroke: #171717;
     stroke-width: 2;
   }
 
-  /* Living Orbit - Action Badges (Product Card tutarlı) */
+  /* Action Badges */
   .wa-synergy-badge {
     position: absolute;
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -1244,8 +1174,8 @@
     cursor: pointer;
     pointer-events: auto;
     transform: translate(-50%, -50%);
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    transition: transform 0.2s ease;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
   }
 
   .wa-synergy-badge:hover {
@@ -1253,36 +1183,47 @@
   }
 
   .wa-synergy-badge--add {
-    background: var(--wa-black);
+    background: #171717;
   }
 
   .wa-synergy-badge--added {
-    background: var(--wa-success);
+    background: #22c55e;
   }
 
   .wa-synergy-node__label {
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 600;
-    fill: var(--wa-gray-600);
+    fill: #a3a3a3;
+    transition: fill 0.3s ease;
   }
 
   .wa-synergy-node--selected .wa-synergy-node__label {
-    fill: var(--wa-black);
+    fill: #171717;
   }
 
+  /* Connection Lines */
   .wa-synergy-line {
     stroke-width: 2;
-    opacity: 0.6;
-    stroke-dasharray: 6 4;
-    animation: line-dash 1s linear infinite;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    stroke-linecap: round;
   }
 
-  @keyframes line-dash {
-    to { stroke-dashoffset: -10; }
+  .wa-synergy-line--visible {
+    opacity: 0.5;
   }
 
-  .wa-synergy-line--strong { stroke-width: 3; opacity: 0.8; }
-  .wa-synergy-line--medium { stroke-width: 2; opacity: 0.7; }
+  .wa-synergy-line--strong { stroke-width: 2.5; }
+  .wa-synergy-line--medium { stroke-width: 2; }
+
+  /* Empty state hint */
+  .wa-synergy-empty {
+    text-align: center;
+    padding: 12px 8px 4px;
+    font-size: 0.65rem;
+    color: #a3a3a3;
+    line-height: 1.4;
+  }
 
   /* Combined Synergy + Achievements (v2 merged) */
   .wa-synergy-achievements,
@@ -1317,80 +1258,68 @@
     margin-left: 6px;
   }
 
-  /* Synergy List (explanations below map) */
+  /* Synergy List (compact single-line items) */
   .wa-synergy-list {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--wa-gray-200);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #e5e5e5;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 
   .wa-synergy-list-item {
     display: flex;
-    gap: 10px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--wa-gray-100);
-  }
-
-  .wa-synergy-list-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-
-  .wa-synergy-list-item:first-child {
-    padding-top: 0;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    background: #fff;
   }
 
   .wa-synergy-list-icon {
-    width: 32px;
-    height: 32px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    font-size: 1rem;
-  }
-
-  .wa-synergy-list-content {
-    flex: 1;
-    min-width: 0;
+    font-size: 0.7rem;
   }
 
   .wa-synergy-list-title {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--wa-black);
-    margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .wa-synergy-list-emoji {
-    font-size: 1rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #171717;
+    white-space: nowrap;
   }
 
   .wa-synergy-list-benefit {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--wa-gray-700);
-    margin-bottom: 2px;
+    font-size: 0.65rem;
+    color: #737373;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .wa-synergy-list-detail {
-    font-size: 0.7rem;
-    color: var(--wa-gray-500);
-    line-height: 1.4;
+  /* Best-next glow ring for recommended node */
+  .wa-synergy-node__glow {
+    fill: none;
+    stroke: #22c55e;
+    stroke-width: 2;
+    opacity: 0;
+    transition: opacity 0.4s ease;
   }
 
-  /* Synergy connection icon on map */
-  .wa-synergy-connection-icon {
-    font-size: 0.7rem;
-    pointer-events: none;
+  .wa-synergy-node--best-next .wa-synergy-node__glow {
+    opacity: 0.5;
+    animation: wa-glow-ring 2s ease-in-out infinite;
   }
 
-  .wa-synergy-connection-icon-bg {
-    fill: white;
+  @keyframes wa-glow-ring {
+    0%, 100% { opacity: 0.3; stroke-width: 2; }
+    50% { opacity: 0.6; stroke-width: 3; }
   }
 
   @keyframes slide-up {
@@ -2262,10 +2191,7 @@
       font-size: 0.9rem;
     }
 
-    /* Bigger hexagon on desktop */
-    .wa-synergy-map__svg {
-      height: 260px;
-    }
+    /* Synergy map auto-sizes via viewBox */
     .wa-dock { display: none; }
 
     .wa-sidebar {
@@ -2986,57 +2912,86 @@
   // SYNERGY MAP RENDERER (v2)
   // ============================================
   const SynergyMapRenderer = {
-    // Product positions in pentagon layout (x, y coordinates in SVG viewBox 400x280)
+    // Regular pentagon: center (200, 145), radius 100
+    // Angles: -π/2 + i * 2π/5 for i = 0..4
     POSITIONS: {
-      'dailyglow': { x: 200, y: 70 },     // Top center
-      'mindfuel': { x: 340, y: 120 },     // Right top
-      'dreamglow': { x: 300, y: 230 },    // Right bottom
-      'thechill': { x: 100, y: 230 },     // Left bottom
-      'reset-button': { x: 60, y: 120 }   // Left top
+      'dailyglow':    { x: 200, y: 45 },   // Top center
+      'mindfuel':     { x: 295, y: 114 },   // Right top
+      'dreamglow':    { x: 259, y: 226 },   // Right bottom
+      'thechill':     { x: 141, y: 226 },   // Left bottom
+      'reset-button': { x: 105, y: 114 }    // Left top
     },
-    NODE_RADIUS: 35,
+    NODE_RADIUS: 30,
+    VIEW_W: 400,
+    VIEW_H: 300,
+
+    // Find the best unselected node to recommend (most new synergies)
+    getBestNextHandle(selectedHandles) {
+      const allHandles = Object.keys(this.POSITIONS);
+      const unselected = allHandles.filter(h => !selectedHandles.includes(h));
+      if (selectedHandles.length === 0 || unselected.length === 0) return null;
+
+      let best = null, bestCount = 0;
+      unselected.forEach(candidate => {
+        let count = 0;
+        selectedHandles.forEach(sel => {
+          const key = [candidate, sel].sort().join('+');
+          if (SYNERGY_CONNECTIONS[key]) count++;
+        });
+        if (count > bestCount) { bestCount = count; best = candidate; }
+      });
+      return bestCount > 0 ? best : null;
+    },
 
     render(container, selectedHandles) {
       const svg = container.querySelector('.wa-synergy-map__svg');
       const labelsContainer = container.querySelector('.wa-synergy-map__labels');
       if (!svg || !labelsContainer) return;
 
-      // Clear previous
       svg.innerHTML = '';
       labelsContainer.innerHTML = '';
-
-      // Always show synergy map - Living Orbit shows all products
       container.style.display = 'block';
 
-      // Render connections first (so they appear behind nodes)
-      this.connectionIndex = 0; // Reset for each render
-      const connections = this.getActiveConnections(selectedHandles);
-      connections.forEach(conn => this.renderConnection(svg, labelsContainer, conn));
+      const bestNext = this.getBestNextHandle(selectedHandles);
 
-      // Render all product nodes with Living Orbit badges
+      // Render connections (behind nodes) — only between selected products
+      const connections = this.getActiveConnections(selectedHandles);
+      connections.forEach(conn => this.renderConnection(svg, conn));
+
+      // Render all product nodes
       Object.entries(this.POSITIONS).forEach(([handle, pos]) => {
         const isSelected = selectedHandles.includes(handle);
-        this.renderNode(svg, handle, pos, isSelected);
+        const isBestNext = handle === bestNext;
+        this.renderNode(svg, handle, pos, isSelected, isBestNext);
         this.renderBadge(labelsContainer, handle, pos, isSelected);
       });
 
-      // Add click handlers to nodes
+      // Empty state hint
+      this.renderEmptyState(labelsContainer, selectedHandles);
+
       this.bindNodeClickHandlers(svg);
+    },
+
+    renderEmptyState(labelsContainer, selectedHandles) {
+      if (selectedHandles.length >= 2) return;
+      const hint = document.createElement('div');
+      hint.className = 'wa-synergy-empty';
+      hint.textContent = selectedHandles.length === 0
+        ? 'Ürün ekleyerek sinerjileri keşfedin'
+        : 'Bir ürün daha ekleyin — sinerjiler görünsün';
+      labelsContainer.appendChild(hint);
     },
 
     renderBadge(labelsContainer, handle, pos, isSelected) {
       const badge = document.createElement('div');
       badge.className = `wa-synergy-badge ${isSelected ? 'wa-synergy-badge--added' : 'wa-synergy-badge--add'}`;
       badge.setAttribute('data-badge-handle', handle);
-      // Position badge at top-right edge of circle (45 degree angle)
-      const offset = this.NODE_RADIUS * 0.65;
-      const extraY = handle === 'dailyglow' ? 20 : 0; // Dailyglow badge moved down
-      badge.style.left = `${((pos.x + offset) / 400) * 100}%`;
-      badge.style.top = `${((pos.y - offset + extraY) / 280) * 100}%`;
-      // SVG icons matching product card style
+      const offset = this.NODE_RADIUS * 0.6;
+      badge.style.left = `${((pos.x + offset) / this.VIEW_W) * 100}%`;
+      badge.style.top = `${((pos.y - offset) / this.VIEW_H) * 100}%`;
       badge.innerHTML = isSelected
-        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>'
-        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>';
+        ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+        : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>';
       labelsContainer.appendChild(badge);
     },
 
@@ -3044,14 +2999,12 @@
       const product = handleToProductMap.get(handle);
 
       if (isSelected) {
-        // Remove from cart
         const item = state.items.find(i => matchHandle(i.title) === handle);
         if (item) removeItem(item.id);
       } else if (product) {
-        // Add to cart
         const card = document.querySelector(`.wa-product-card[data-product-handle="${handle}"]`);
         if (card) {
-          const data = {
+          addItem({
             id: card.dataset.productId,
             handle: card.dataset.productHandle,
             title: card.dataset.productTitle,
@@ -3060,25 +3013,21 @@
             variantId: card.dataset.variantId,
             url: card.dataset.productUrl,
             quantity: 1
-          };
-          addItem(data);
+          });
         }
       }
     },
 
     bindNodeClickHandlers(svg) {
-      // Node click handlers
       svg.querySelectorAll('.wa-synergy-node').forEach(node => {
         node.addEventListener('click', (e) => {
           e.stopPropagation();
           const handle = node.getAttribute('data-handle');
           if (!handle) return;
-          const isSelected = node.classList.contains('wa-synergy-node--selected');
-          this.handleNodeOrBadgeClick(handle, isSelected);
+          this.handleNodeOrBadgeClick(handle, node.classList.contains('wa-synergy-node--selected'));
         });
       });
 
-      // Badge click handlers
       const labelsContainer = svg.parentElement.querySelector('.wa-synergy-map__labels');
       if (labelsContainer) {
         labelsContainer.querySelectorAll('.wa-synergy-badge').forEach(badge => {
@@ -3086,8 +3035,7 @@
             e.stopPropagation();
             const handle = badge.getAttribute('data-badge-handle');
             if (!handle) return;
-            const isSelected = badge.classList.contains('wa-synergy-badge--added');
-            this.handleNodeOrBadgeClick(handle, isSelected);
+            this.handleNodeOrBadgeClick(handle, badge.classList.contains('wa-synergy-badge--added'));
           });
         });
       }
@@ -3113,12 +3061,23 @@
       return connections;
     },
 
-    renderNode(svg, handle, pos, isSelected) {
+    renderNode(svg, handle, pos, isSelected, isBestNext) {
       const product = handleToProductMap.get(handle);
       const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      g.setAttribute('class', `wa-synergy-node ${isSelected ? 'wa-synergy-node--selected' : 'wa-synergy-node--inactive'}`);
+      let cls = 'wa-synergy-node';
+      if (isSelected) cls += ' wa-synergy-node--selected';
+      else if (isBestNext) cls += ' wa-synergy-node--best-next';
+      else cls += ' wa-synergy-node--inactive';
+      g.setAttribute('class', cls);
       g.setAttribute('data-handle', handle);
-      g.style.cursor = 'pointer';
+
+      // Glow ring (for best-next recommendation)
+      const glow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      glow.setAttribute('cx', pos.x);
+      glow.setAttribute('cy', pos.y);
+      glow.setAttribute('r', this.NODE_RADIUS + 4);
+      glow.setAttribute('class', 'wa-synergy-node__glow');
+      g.appendChild(glow);
 
       // Background circle
       const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -3129,7 +3088,7 @@
       g.appendChild(circle);
 
       // Clip path for image
-      const clipId = `clip-${handle}`;
+      const clipId = `clip-${handle}-${Date.now()}`;
       const clipPath = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
       clipPath.setAttribute('id', clipId);
       const clipCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -3164,55 +3123,30 @@
       svg.appendChild(g);
     },
 
-    connectionIndex: 0, // Track connection index for spreading emojis
+    renderConnection(svg, conn) {
+      const { from, to, color, strength } = conn;
 
-    renderConnection(svg, labelsContainer, conn) {
-      const { from, to, color, label, strength, icon } = conn;
-
-      // Create curved path between nodes
+      // Gentle curve between nodes
       const midX = (from.x + to.x) / 2;
       const midY = (from.y + to.y) / 2;
       const dx = to.x - from.x, dy = to.y - from.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-
-      // Vary curve offset based on connection index to spread curves apart
-      const baseOffset = 35;
-      const curveVariation = (this.connectionIndex % 3 - 1) * 12; // -12, 0, or +12
-      const perpX = -dy / dist * (baseOffset + curveVariation);
-      const perpY = dx / dist * (baseOffset + curveVariation);
+      const perpX = -dy / dist * 25;
+      const perpY = dx / dist * 25;
       const ctrlX = midX + perpX, ctrlY = midY + perpY;
 
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       path.setAttribute('d', `M ${from.x} ${from.y} Q ${ctrlX} ${ctrlY} ${to.x} ${to.y}`);
-      path.setAttribute('class', `wa-synergy-line wa-synergy-line--${strength}`);
+      path.setAttribute('class', `wa-synergy-line wa-synergy-line--${strength} wa-synergy-line--visible`);
       path.setAttribute('stroke', color);
       path.setAttribute('fill', 'none');
       svg.insertBefore(path, svg.firstChild);
-
-      // Distribute emojis along curve at different positions (25%, 50%, 75%) to prevent overlap
-      const curvePositions = [0.3, 0.5, 0.7];
-      const t = curvePositions[this.connectionIndex % 3];
-      this.connectionIndex++;
-
-      // Quadratic Bezier formula: B(t) = (1-t)²P0 + 2(1-t)tP1 + t²P2
-      const emojiX = (1-t)*(1-t)*from.x + 2*(1-t)*t*ctrlX + t*t*to.x;
-      const emojiY = (1-t)*(1-t)*from.y + 2*(1-t)*t*ctrlY + t*t*to.y;
-
-      // Add icon on connection line (positioned relative to SVG)
-      const labelEl = document.createElement('div');
-      labelEl.className = 'wa-synergy-label wa-synergy-label--icon';
-      labelEl.style.left = `${(emojiX / 400) * 100}%`;
-      labelEl.style.top = `${(emojiY / 280) * 100}%`;
-      labelEl.style.background = color;
-      labelEl.innerHTML = `<span>${icon || '⚡'}</span>`;
-      labelsContainer.appendChild(labelEl);
     },
 
     renderSynergyList(container, selectedHandles) {
       const listContainer = container.querySelector('.wa-synergy-list');
       if (!listContainer) return;
 
-      // Get all active connections/synergies
       const connections = this.getActiveConnections(selectedHandles);
 
       if (connections.length === 0) {
@@ -3220,24 +3154,16 @@
         return;
       }
 
-      // Build list HTML
       let html = '';
       connections.forEach(conn => {
         const key = conn.handles.sort().join('+');
         const expl = SYNERGY_EXPLANATIONS[key];
         if (expl) {
-          html += `
-            <div class="wa-synergy-list-item">
-              <div class="wa-synergy-list-icon" style="background: ${conn.color}20; color: ${conn.color};">
-                ${conn.icon || '⚡'}
-              </div>
-              <div class="wa-synergy-list-content">
-                <div class="wa-synergy-list-title">${expl.title}</div>
-                <div class="wa-synergy-list-benefit">${expl.benefit}</div>
-                <div class="wa-synergy-list-detail">${expl.detail}</div>
-              </div>
-            </div>
-          `;
+          html += `<div class="wa-synergy-list-item">
+              <div class="wa-synergy-list-icon" style="background:${conn.color}15;color:${conn.color};">${conn.icon || '⚡'}</div>
+              <span class="wa-synergy-list-title">${expl.title}</span>
+              <span class="wa-synergy-list-benefit">— ${expl.benefit}</span>
+            </div>`;
         }
       });
 
@@ -3245,7 +3171,6 @@
     },
 
     update(selectedHandles) {
-      // Update both mobile and desktop synergy maps (in merged containers)
       const dockMap = dock?.querySelector('.wa-dock__synergy-achievements');
       const sidebarMap = sidebar?.querySelector('.wa-synergy-achievements');
       if (dockMap) {
