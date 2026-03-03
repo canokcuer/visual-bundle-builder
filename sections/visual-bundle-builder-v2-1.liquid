@@ -97,21 +97,7 @@
           <span>İndirim Seviyesi</span>
           <span class="wa-sidebar__synergy-text">Başlayın</span>
         </div>
-        <div class="wa-progress-bar">
-          <div class="wa-progress-bar__track">
-            <div class="wa-progress-bar__fill" style="width: 0%;"></div>
-            <div class="wa-progress-bar__segment" style="left: 20%;"></div>
-            <div class="wa-progress-bar__segment" style="left: 40%;"></div>
-            <div class="wa-progress-bar__segment" style="left: 60%;"></div>
-            <div class="wa-progress-bar__segment" style="left: 80%;"></div>
-          </div>
-          <div class="wa-progress-bar__labels">
-            <span class="wa-progress-bar__label" style="left: 20%;">%15</span>
-            <span class="wa-progress-bar__label" style="left: 40%;">%30</span>
-            <span class="wa-progress-bar__label" style="left: 60%;">%33</span>
-            <span class="wa-progress-bar__label" style="left: 80%;">%35</span>
-          </div>
-        </div>
+        <wa-progress-bar></wa-progress-bar>
         <p class="wa-sidebar__synergy-nudge"></p>
       </div>
 
@@ -244,15 +230,7 @@
 
     <!-- Mobile Synergy Summary -->
     <div class="wa-dock__synergy-summary" style="display: none;">
-      <div class="wa-progress-bar wa-progress-bar--mini">
-        <div class="wa-progress-bar__track">
-          <div class="wa-progress-bar__fill" style="width: 0%;"></div>
-          <div class="wa-progress-bar__segment" style="left: 20%;"></div>
-          <div class="wa-progress-bar__segment" style="left: 40%;"></div>
-          <div class="wa-progress-bar__segment" style="left: 60%;"></div>
-          <div class="wa-progress-bar__segment" style="left: 80%;"></div>
-        </div>
-      </div>
+      <wa-progress-bar mini></wa-progress-bar>
       <p class="wa-dock__synergy-summary-text"></p>
     </div>
 
@@ -276,21 +254,7 @@
           <span class="wa-dock__discount-steps-title">İndirim Seviyesi</span>
           <span class="wa-dock__discount-steps-current">Başlayın</span>
         </div>
-        <div class="wa-progress-bar">
-          <div class="wa-progress-bar__track">
-            <div class="wa-progress-bar__fill" style="width: 0%;"></div>
-            <div class="wa-progress-bar__segment" style="left: 20%;"></div>
-            <div class="wa-progress-bar__segment" style="left: 40%;"></div>
-            <div class="wa-progress-bar__segment" style="left: 60%;"></div>
-            <div class="wa-progress-bar__segment" style="left: 80%;"></div>
-          </div>
-          <div class="wa-progress-bar__labels">
-            <span class="wa-progress-bar__label" style="left: 20%;">%15</span>
-            <span class="wa-progress-bar__label" style="left: 40%;">%30</span>
-            <span class="wa-progress-bar__label" style="left: 60%;">%33</span>
-            <span class="wa-progress-bar__label" style="left: 80%;">%35</span>
-          </div>
-        </div>
+        <wa-progress-bar></wa-progress-bar>
         <p class="wa-dock__discount-hint-text"></p>
       </div>
 
@@ -3533,47 +3497,57 @@
     </div>`;
   }
 
-  function updateStepIndicators(container, level) {
-    if (!container) return;
-    const isMini = container.classList.contains('wa-progress-bar--mini');
-
-    // Container
-    container.style.cssText = isMini
-      ? 'margin:4px 0 2px 0;position:relative;'
-      : 'margin-top:8px;position:relative;';
-
-    // Track
-    const track = container.querySelector('.wa-progress-bar__track');
-    if (track) {
-      track.style.cssText = isMini
-        ? 'position:relative;height:6px;background:#e5e5e5;border-radius:3px;overflow:hidden;'
-        : 'position:relative;height:10px;background:#e5e5e5;border-radius:5px;overflow:hidden;';
-    }
-
-    // Fill
-    const fill = container.querySelector('.wa-progress-bar__fill');
-    if (fill) {
-      const radius = isMini ? '3px' : '5px';
-      fill.style.cssText = 'position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);border-radius:' + radius + ';transition:width 0.5s ease;width:' + (level * 20) + '%;';
-    }
-
-    // Segments — preserve left from HTML
-    container.querySelectorAll('.wa-progress-bar__segment').forEach(seg => {
-      const left = seg.style.left || seg.getAttribute('style')?.match(/left:\s*([^;]+)/)?.[1] || '0';
-      seg.style.cssText = 'position:absolute;top:0;width:2px;height:100%;background:rgba(255,255,255,0.7);transform:translateX(-50%);z-index:1;left:' + left + ';';
-    });
-
-    // Labels (full bars only)
-    if (!isMini) {
-      const labels = container.querySelector('.wa-progress-bar__labels');
-      if (labels) {
-        labels.style.cssText = 'position:relative;height:18px;margin-top:4px;';
+  // ============================================
+  // PROGRESS BAR — Shadow DOM Web Component
+  // ============================================
+  // Shadow DOM encapsulates styles so Shopify theme CSS cannot interfere.
+  if (!customElements.get('wa-progress-bar')) {
+    class WaProgressBar extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
       }
-      container.querySelectorAll('.wa-progress-bar__label').forEach(lbl => {
-        const left = lbl.style.left || lbl.getAttribute('style')?.match(/left:\s*([^;]+)/)?.[1] || '0';
-        lbl.style.cssText = 'position:absolute;transform:translateX(-50%);font-size:0.6rem;font-weight:600;color:#a3a3a3;left:' + left + ';';
-      });
+
+      connectedCallback() {
+        const isMini = this.hasAttribute('mini');
+        const trackH = isMini ? 6 : 10;
+        const r = isMini ? 3 : 5;
+
+        this.shadowRoot.innerHTML = `
+          <style>
+            :host { display:block; ${isMini ? 'margin:4px 0 2px 0' : 'margin-top:8px'}; position:relative; }
+            .track { position:relative; height:${trackH}px; background:#e5e5e5; border-radius:${r}px; overflow:hidden; }
+            .fill  { position:absolute; top:0; left:0; height:100%; background:linear-gradient(90deg,#22c55e,#16a34a); border-radius:${r}px; transition:width 0.5s ease; width:0%; }
+            .seg   { position:absolute; top:0; width:2px; height:100%; background:rgba(255,255,255,0.7); transform:translateX(-50%); z-index:1; }
+            .labels { position:relative; height:18px; margin-top:4px; }
+            .lbl   { position:absolute; transform:translateX(-50%); font-size:0.6rem; font-weight:600; color:#a3a3a3; }
+          </style>
+          <div class="track">
+            <div class="fill"></div>
+            <div class="seg" style="left:20%"></div>
+            <div class="seg" style="left:40%"></div>
+            <div class="seg" style="left:60%"></div>
+            <div class="seg" style="left:80%"></div>
+          </div>
+          ${!isMini ? `<div class="labels">
+            <span class="lbl" style="left:20%">%15</span>
+            <span class="lbl" style="left:40%">%30</span>
+            <span class="lbl" style="left:60%">%33</span>
+            <span class="lbl" style="left:80%">%35</span>
+          </div>` : ''}`;
+
+        this._fill = this.shadowRoot.querySelector('.fill');
+      }
+
+      setProgress(level) {
+        if (this._fill) this._fill.style.width = (level * 20) + '%';
+      }
     }
+    customElements.define('wa-progress-bar', WaProgressBar);
+  }
+
+  function updateStepIndicators(el, level) {
+    if (el && typeof el.setProgress === 'function') el.setProgress(level);
   }
 
   // ============================================
@@ -3695,7 +3669,7 @@
     // Synergy summary
     const summary = dock.querySelector('.wa-dock__synergy-summary');
     summary.style.display = state.items.length > 0 ? 'block' : 'none';
-    updateStepIndicators(summary.querySelector('.wa-progress-bar'), tier);
+    updateStepIndicators(summary.querySelector('wa-progress-bar'), tier);
     const sumTxt = dock.querySelector('.wa-dock__synergy-summary-text');
     if (sumTxt) sumTxt.textContent = synExp ? `⚡ ${synExp.benefit}` : '';
 
@@ -3761,7 +3735,7 @@
       const currentPercent = Math.round(currentDiscount * 100);
 
       // Update step indicators
-      updateStepIndicators(discountSteps.querySelector('.wa-progress-bar'), tier);
+      updateStepIndicators(discountSteps.querySelector('wa-progress-bar'), tier);
 
       // Update current discount text
       discountSteps.querySelector('.wa-dock__discount-steps-current').textContent = currentPercent > 0 ? `%${currentPercent} indirim` : 'Başlayın';
@@ -3812,7 +3786,7 @@
     } else { ritBox.style.display = 'none'; }
 
     // Steps & Pricing
-    updateStepIndicators(sidebar.querySelector('.wa-sidebar__synergy .wa-progress-bar'), tier);
+    updateStepIndicators(sidebar.querySelector('.wa-sidebar__synergy wa-progress-bar'), tier);
     sidebar.querySelector('.wa-sidebar__synergy-text').textContent = synergy.text;
     sidebar.querySelector('.wa-sidebar__subtotal').textContent = formatMoney(pricing.subtotal);
     sidebar.querySelector('.wa-sidebar__discount').textContent = '-' + formatMoney(pricing.discount);
