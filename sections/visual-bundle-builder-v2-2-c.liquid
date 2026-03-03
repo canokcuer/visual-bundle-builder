@@ -3705,7 +3705,7 @@
 
     // Card
     const card = document.createElement('div');
-    card.style.cssText = `position:relative;background:#fff;border-radius:20px;padding:32px 40px;text-align:center;transform:scale(0.3);opacity:0;transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1),opacity 0.3s ease;box-shadow:0 20px 60px rgba(0,0,0,0.15),0 0 80px ${t.glow};max-width:280px;width:90%;pointer-events:none;`;
+    card.style.cssText = `position:relative;background:#fff;border-radius:20px;padding:32px 40px;text-align:center;transform:scale(0.3);opacity:0;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),opacity 0.2s ease;box-shadow:0 20px 60px rgba(0,0,0,0.15),0 0 80px ${t.glow};max-width:280px;width:90%;pointer-events:none;`;
 
     // Accent bar at top of card
     const accent = document.createElement('div');
@@ -3715,7 +3715,7 @@
     // Emoji
     const emojiEl = document.createElement('div');
     emojiEl.textContent = t.emoji;
-    emojiEl.style.cssText = 'font-size:3rem;margin-bottom:8px;animation:wa-cele-bounce 0.6s ease 0.3s both;';
+    emojiEl.style.cssText = 'font-size:3rem;margin-bottom:8px;animation:wa-cele-bounce 0.4s ease 0.1s both;';
     card.appendChild(emojiEl);
 
     // Discount label
@@ -3724,11 +3724,11 @@
     labelEl.style.cssText = `font-size:1.5rem;font-weight:800;background:${t.gradient};-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;`;
     card.appendChild(labelEl);
 
-    // Savings amount — tier-colored like the progress bar
+    // Savings amount — tier-colored pill with background
     if (pricing && pricing.discount > 0) {
       const savingsEl = document.createElement('div');
       savingsEl.textContent = formatMoney(pricing.discount) + ' kazandın';
-      savingsEl.style.cssText = `font-size:0.9rem;font-weight:700;background:${t.gradient};-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;`;
+      savingsEl.style.cssText = `display:inline-block;font-size:0.8rem;font-weight:700;color:#fff;background:${t.gradient};padding:4px 14px;border-radius:100px;margin-top:4px;`;
       card.appendChild(savingsEl);
     }
 
@@ -3746,7 +3746,7 @@
       const rot = Math.random() * 360;
       const color = colors[Math.floor(Math.random() * colors.length)];
       const shape = Math.random() > 0.5 ? '50%' : '2px';
-      p.style.cssText = `position:absolute;width:${size}px;height:${size}px;background:${color};border-radius:${shape};top:50%;left:50%;opacity:0;pointer-events:none;z-index:-1;animation:wa-cele-confetti 0.8s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s both;--tx:${tx}px;--ty:${ty}px;--rot:${rot}deg;`;
+      p.style.cssText = `position:absolute;width:${size}px;height:${size}px;background:${color};border-radius:${shape};top:50%;left:50%;opacity:0;pointer-events:none;z-index:-1;animation:wa-cele-confetti 0.5s cubic-bezier(0.25,0.46,0.45,0.94) 0.05s both;--tx:${tx}px;--ty:${ty}px;--rot:${rot}deg;`;
       overlay.appendChild(p);
     }
 
@@ -3770,13 +3770,13 @@
       card.style.opacity = '1';
     });
 
-    // Animate out
+    // Animate out — total visible ~1s
     setTimeout(() => {
       card.style.transform = 'scale(0.8)';
       card.style.opacity = '0';
       overlay.style.background = 'rgba(0,0,0,0)';
-      setTimeout(() => overlay.remove(), 300);
-    }, 1000);
+      setTimeout(() => overlay.remove(), 250);
+    }, 750);
   }
 
   function celebrateTierUnlock(tier, synergy, pricing) {
