@@ -520,7 +520,19 @@
     z-index: 5;
   }
 
-  .wa-product-card--loading { pointer-events: none; opacity: 0.7; }
+  .wa-product-card--loading { pointer-events: none; }
+  .wa-product-card--loading .wa-product-card__add-btn { position: relative; color: transparent; }
+  .wa-product-card--loading .wa-product-card__add-btn::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: wa-btn-spin 0.6s linear infinite;
+  }
+  @keyframes wa-btn-spin { to { transform: rotate(360deg); } }
 
   .wa-product-card__image-wrapper {
     width: 100%;
@@ -569,10 +581,10 @@
 
   .wa-product-card__add-btn {
     position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    width: 32px;
-    height: 32px;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     background: var(--wa-black);
     color: var(--wa-white);
@@ -596,10 +608,11 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    padding: 5px 10px;
+    padding: 10px 14px;
+    min-height: 44px;
     background: var(--wa-white);
     border: 1px solid var(--wa-gray-300);
-    border-radius: 16px;
+    border-radius: 22px;
     font-size: 0.65rem;
     font-weight: 600;
     color: var(--wa-gray-600);
@@ -1008,9 +1021,9 @@
   }
 
   .wa-dock__item-qty-btn {
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
     border: none;
     background: transparent;
     color: var(--wa-gray-600);
@@ -1018,7 +1031,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
   }
 
@@ -1032,8 +1045,8 @@
   }
 
   .wa-dock__item-remove {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: transparent;
     border: none;
@@ -2158,7 +2171,7 @@
   }
 
   .wa-dock__checkout-btn:not(:disabled):hover {
-    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    background: linear-gradient(145deg, #16a34a 0%, #15803d 100%);
     box-shadow: 0 4px 12px rgba(34, 197, 94, 0.45);
     transform: translateY(-1px);
   }
@@ -2336,9 +2349,9 @@
     }
 
     .wa-sidebar__item-qty-btn {
-      width: 24px;
-      height: 24px;
-      border-radius: 4px;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
       border: none;
       background: transparent;
       color: var(--wa-gray-600);
@@ -2354,8 +2367,8 @@
     .wa-sidebar__item-qty-value { min-width: 20px; text-align: center; font-size: 0.8rem; font-weight: 600; }
 
     .wa-sidebar__item-remove {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       background: transparent;
       border: none;
@@ -2510,7 +2523,7 @@
       box-shadow: 0 2px 8px rgba(34, 197, 94, 0.35);
     }
 
-    .wa-sidebar__checkout-btn:hover:not(:disabled) { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); box-shadow: 0 4px 12px rgba(34, 197, 94, 0.45); transform: translateY(-1px); }
+    .wa-sidebar__checkout-btn:hover:not(:disabled) { background: linear-gradient(145deg, #16a34a 0%, #15803d 100%); box-shadow: 0 4px 12px rgba(34, 197, 94, 0.45); transform: translateY(-1px); }
     .wa-sidebar__checkout-btn:disabled { background: var(--wa-gray-300); cursor: not-allowed; box-shadow: none; }
   }
 
@@ -2863,6 +2876,23 @@
   const MONEY_FORMATTER = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 0 });
   const formatMoney = cents => MONEY_FORMATTER.format(cents / 100);
   const vibrate = (pattern = 10) => { if ('vibrate' in navigator) navigator.vibrate(pattern); };
+
+  function animateValue(el, newCents, prefix = '') {
+    if (!el) return;
+    const text = el.textContent.replace(/[^0-9.,]/g, '').replace('.', '').replace(',', '.');
+    const oldCents = Math.round(parseFloat(text || '0') * 100);
+    if (oldCents === newCents) { el.textContent = prefix + formatMoney(newCents); return; }
+    const start = performance.now();
+    const duration = 300;
+    function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - t, 3); // ease-out cubic
+      const current = Math.round(oldCents + (newCents - oldCents) * ease);
+      el.textContent = prefix + formatMoney(current);
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
 
   function matchHandle(title) {
     const normalized = title.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -3322,26 +3352,35 @@
     updateUI();
   }
 
+  function animateQtyRoll(productId, direction) {
+    document.querySelectorAll(`[data-qty-minus="${productId}"], [data-qty-plus="${productId}"]`).forEach(btn => {
+      const valueSpan = btn.parentElement?.querySelector('[class$="item-qty-value"]');
+      if (!valueSpan) return;
+      const inner = valueSpan.firstElementChild;
+      if (!inner) return;
+      const from = direction > 0 ? '100%' : '-100%';
+      inner.style.transform = `translateY(${from})`;
+      requestAnimationFrame(() => { inner.style.transform = 'translateY(0)'; });
+    });
+  }
+
   function updateQuantity(productId, delta) {
     const item = state.items.find(i => i.id === productId);
     if (!item) return;
 
     const newQty = item.quantity + delta;
     if (newQty <= 0) {
-      // Remove item when quantity reaches 0
       removeItem(productId);
     } else {
-      // Optimistic UI update - instant feedback
       const clampedQty = Math.min(10, newQty);
       const oldQty = item.quantity;
       item.quantity = clampedQty;
       vibrate(5);
       updateUI();
+      animateQtyRoll(productId, delta);
 
-      // Background cart sync
       updateShopifyCartQty(item.variantId, clampedQty).then(success => {
         if (!success) {
-          // Revert on failure
           item.quantity = oldQty;
           updateUI();
         }
@@ -3489,7 +3528,7 @@
       <div class="${prefix}__item-controls">
         <div class="${prefix}__item-qty">
           <button class="${prefix}__item-qty-btn" data-qty-minus="${item.id}">-</button>
-          <span class="${prefix}__item-qty-value">${item.quantity}</span>
+          <span class="${prefix}__item-qty-value" style="display:inline-block;overflow:hidden;height:1.2em;vertical-align:middle;position:relative;"><span style="display:block;transition:transform 0.2s ease;">${item.quantity}</span></span>
           <button class="${prefix}__item-qty-btn" data-qty-plus="${item.id}">+</button>
         </div>
         <button class="${prefix}__item-remove" data-remove="${item.id}">${ICONS.close}</button>
@@ -3722,7 +3761,7 @@
     const badge = dock.querySelector('.wa-dock__synergy-badge');
     badge.textContent = synergy.text;
     badge.classList.toggle('wa-dock__synergy-badge--active', tier >= 2);
-    dock.querySelector('.wa-dock__mini-total').textContent = formatMoney(pricing.total);
+    animateValue(dock.querySelector('.wa-dock__mini-total'), pricing.total);
 
     // Savings chip on collapsed dock
     const miniSavings = dock.querySelector('.wa-dock__mini-savings');
@@ -3768,9 +3807,9 @@
 
     // Pricing
     dock.querySelector('.wa-dock__subtotal').textContent = formatMoney(pricing.subtotal);
-    dock.querySelector('.wa-dock__discount').textContent = '-' + formatMoney(pricing.discount);
-    dock.querySelector('.wa-dock__net-total').textContent = formatMoney(pricing.total);
-    dock.querySelector('.wa-dock__total').textContent = formatMoney(pricing.total);
+    animateValue(dock.querySelector('.wa-dock__discount'), pricing.discount, '-');
+    animateValue(dock.querySelector('.wa-dock__net-total'), pricing.total);
+    animateValue(dock.querySelector('.wa-dock__total'), pricing.total);
     dock.querySelector('.wa-dock__price-row--discount').style.display = pricing.discount > 0 ? 'flex' : 'none';
     dock.querySelector('.wa-dock__checkout-btn').disabled = state.items.length === 0;
 
@@ -3858,8 +3897,8 @@
     updateStepIndicators(sidebar.querySelector('.wa-sidebar__synergy wa-progress-bar'), tier);
     sidebar.querySelector('.wa-sidebar__synergy-text').textContent = synergy.text;
     sidebar.querySelector('.wa-sidebar__subtotal').textContent = formatMoney(pricing.subtotal);
-    sidebar.querySelector('.wa-sidebar__discount').textContent = '-' + formatMoney(pricing.discount);
-    sidebar.querySelector('.wa-sidebar__total').textContent = formatMoney(pricing.total);
+    animateValue(sidebar.querySelector('.wa-sidebar__discount'), pricing.discount, '-');
+    animateValue(sidebar.querySelector('.wa-sidebar__total'), pricing.total);
     sidebar.querySelector('.wa-sidebar__price-row--discount').style.display = pricing.discount > 0 ? 'flex' : 'none';
     sidebar.querySelector('.wa-sidebar__checkout-btn').disabled = state.items.length === 0;
 
