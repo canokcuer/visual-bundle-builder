@@ -3569,10 +3569,10 @@
     if (existing) existing.remove();
 
     const TIER_THEMES = {
-      2: { gradient: 'linear-gradient(135deg,#22c55e,#16a34a)', emoji: '🌿', glow: 'rgba(34,197,94,0.3)', label: '%15 İndirim', sub: 'İkili güç aktif!' },
-      3: { gradient: 'linear-gradient(135deg,#06b6d4,#0891b2)', emoji: '🌊', glow: 'rgba(6,182,212,0.3)', label: '%30 İndirim', sub: 'Üçlü sinerji!' },
-      4: { gradient: 'linear-gradient(135deg,#8b5cf6,#7c3aed)', emoji: '💎', glow: 'rgba(139,92,246,0.3)', label: '%33 İndirim', sub: 'Pro seviye!' },
-      5: { gradient: 'linear-gradient(135deg,#f59e0b,#d97706)', emoji: '👑', glow: 'rgba(245,158,11,0.3)', label: 'MAX %35 İndirim', sub: 'Efsane pakete ulaştın!' }
+      2: { gradient: 'linear-gradient(135deg,#22c55e,#16a34a)', emoji: '🌿', glow: 'rgba(34,197,94,0.3)', label: '%15 İndirim' },
+      3: { gradient: 'linear-gradient(135deg,#06b6d4,#0891b2)', emoji: '🌊', glow: 'rgba(6,182,212,0.3)', label: '%30 İndirim' },
+      4: { gradient: 'linear-gradient(135deg,#8b5cf6,#7c3aed)', emoji: '💎', glow: 'rgba(139,92,246,0.3)', label: '%33 İndirim' },
+      5: { gradient: 'linear-gradient(135deg,#f59e0b,#d97706)', emoji: '👑', glow: 'rgba(245,158,11,0.3)', label: 'MAX %35 İndirim' }
     };
     const t = TIER_THEMES[tier] || TIER_THEMES[2];
 
@@ -3599,14 +3599,8 @@
     // Discount label
     const labelEl = document.createElement('div');
     labelEl.textContent = t.label;
-    labelEl.style.cssText = `font-size:1.5rem;font-weight:800;background:${t.gradient};-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;`;
+    labelEl.style.cssText = `font-size:1.5rem;font-weight:800;background:${t.gradient};-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;`;
     card.appendChild(labelEl);
-
-    // Sub text
-    const subEl = document.createElement('div');
-    subEl.textContent = t.sub;
-    subEl.style.cssText = 'font-size:0.85rem;color:#737373;font-weight:500;';
-    card.appendChild(subEl);
 
     overlay.appendChild(card);
 
@@ -3652,7 +3646,7 @@
       card.style.opacity = '0';
       overlay.style.background = 'rgba(0,0,0,0)';
       setTimeout(() => overlay.remove(), 400);
-    }, 2500);
+    }, 1500);
   }
 
   function celebrateTierUnlock(tier, synergy) {
