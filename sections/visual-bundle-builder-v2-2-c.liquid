@@ -1059,9 +1059,11 @@
     justify-content: center;
   }
 
-  .wa-dock__item-remove:hover {
-    background: #fee2e2;
-    color: #ef4444;
+  @media (hover: hover) {
+    .wa-dock__item-remove:hover {
+      background: #fee2e2;
+      color: #ef4444;
+    }
   }
 
   /* Synergy Map */
@@ -2369,7 +2371,9 @@
       justify-content: center;
     }
 
-    .wa-sidebar__item-remove:hover { background: #fee2e2; color: #ef4444; }
+    @media (hover: hover) {
+      .wa-sidebar__item-remove:hover { background: #fee2e2; color: #ef4444; }
+    }
 
     /* Sidebar Boxes */
     .wa-recommendation,
@@ -3063,12 +3067,7 @@
       labelsContainer.appendChild(badge);
     },
 
-    _clickLock: false,
     handleNodeOrBadgeClick(handle) {
-      if (this._clickLock) return;
-      this._clickLock = true;
-      setTimeout(() => { this._clickLock = false; }, 300);
-
       // Check state directly — never rely on stale DOM classes
       const isInCart = state.items.some(i => matchHandle(i.title) === handle);
 
@@ -3808,10 +3807,9 @@
     const ritual = getRitualGuide();
     const synExp = getSynergyExplanation();
 
-    // Tier celebration: detect tier boundary crossing (slight delay so UI settles first)
+    // Tier celebration: detect tier boundary crossing
     if (state.previousTier >= 0 && tier > state.previousTier && tier >= 2) {
-      const _tier = tier, _syn = synergy, _pr = pricing;
-      setTimeout(() => celebrateTierUnlock(_tier, _syn, _pr), 350);
+      celebrateTierUnlock(tier, synergy, pricing);
     }
     state.previousTier = tier;
 
