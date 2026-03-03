@@ -3303,18 +3303,18 @@
   // ============================================
   // STATE MANAGEMENT
   // ============================================
-  async function addItem(productData) {
+  async function addItem(productData, qty = 1) {
     const existing = state.items.find(i => i.id === productData.id);
     if (existing) { await removeItem(productData.id); return false; }
     if (state.items.length >= 5) { vibrate([30, 20, 30]); return false; }
 
     const card = [...productCards].find(c => c.dataset.productId === productData.id);
     if (card) card.classList.add('wa-product-card--loading');
-    const success = await addToShopifyCart(productData.variantId);
+    const success = await addToShopifyCart(productData.variantId, qty);
     if (card) card.classList.remove('wa-product-card--loading');
 
     if (success) {
-      state.items.push({ ...productData, quantity: 1 });
+      state.items.push({ ...productData, quantity: qty });
       vibrate(10);
       updateUI();
       checkAchievements();
@@ -4186,27 +4186,16 @@
           }
 
           // Add to bundle builder (with quantity)
-          for (let i = 0; i < quantity; i++) {
-            if (!state.items.find(item => item.id === productData.id)) {
-              await addItem(productData);
-            } else {
-              // Product already in bundle, increase quantity
-              const existingItem = state.items.find(item => item.id === productData.id);
-              if (existingItem) {
-                existingItem.quantity = (existingItem.quantity || 1) + 1;
-              }
-            }
-          }
+          const existingItem = state.items.find(item => item.id === productData.id);
 
-          // Also add to Shopify cart
-          try {
-            await fetch('/cart/add.js', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ items: [{ id: parseInt(productData.variantId), quantity: quantity }] })
-            });
-          } catch (err) {
-            console.error('Cart add error:', err);
+          if (!existingItem) {
+            // New item: add to bundle + cart with user's selected quantity
+            await addItem(productData, quantity);
+          } else {
+            // Existing item: increase quantity in both local state and Shopify cart
+            const newQty = (existingItem.quantity || 1) + quantity;
+            existingItem.quantity = newQty;
+            await updateShopifyCartQty(existingItem.variantId, newQty);
           }
 
           // Mobile: Open slider / Desktop: Scroll to bundle builder
