@@ -3699,7 +3699,10 @@
     if (pricing && pricing.discount > 0) {
       const savingsEl = document.createElement('div');
       savingsEl.textContent = formatMoney(pricing.discount) + ' kazandın';
-      savingsEl.style.cssText = 'font-size:0.85rem;color:#737373;font-weight:500;';
+      const savingsColor = TIER_COLORS[Math.min(tier, 5)]?.text || '#737373';
+      const savingsBg = TIER_COLORS[Math.min(tier, 5)]?.bg || '#f5f5f5';
+      const savingsBorder = TIER_COLORS[Math.min(tier, 5)]?.border || '#e5e5e5';
+      savingsEl.style.cssText = `font-size:0.85rem;color:${savingsColor};font-weight:600;background:${savingsBg};border:1px solid ${savingsBorder};padding:4px 10px;border-radius:999px;display:inline-block;margin-top:6px;`;
       card.appendChild(savingsEl);
     }
 
