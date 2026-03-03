@@ -2826,7 +2826,7 @@
   // ============================================
   const ACHIEVEMENTS = {
     'first-step': { id: 'first-step', title: 'İlk Adım', emoji: '🌱', description: 'İlk ürününü ekleyerek wellness yolculuğuna başladınız!', icon: 'star', condition: s => s.items.length >= 1 },
-    'power-duo': { id: 'power-duo', title: 'Güçlü İkili', emoji: '⚡', description: 'İki ürün birlikte %15 sinerji indirimi kazandınız!', icon: 'lightning', condition: s => s.items.length >= 2 },
+    'power-duo': { id: 'power-duo', title: 'Güçlü İkili', emoji: '⚡', description: 'İki ürün birlikte %15 sinerji indirimi kazandınız', icon: 'lightning', condition: s => s.items.length >= 2 },
     'triple-threat': { id: 'triple-threat', title: 'Üçlü Kuvvet', emoji: '🔥', description: 'Üç ürünle ritüelinizi güçlendirdiniz. %30 indirim!', icon: 'fire', condition: s => s.items.length >= 3 },
     'ritual-master': { id: 'ritual-master', title: 'Ritüel Ustası', emoji: '✨', description: 'Dört ürünle tam bir günlük ritüel oluşturuyorsunuz. %33 indirim!', icon: 'sparkle', condition: s => s.items.length >= 4 },
     'wellness-architect': { id: 'wellness-architect', title: 'Wellness Architect', emoji: '🏆', description: 'Tüm 5 ürünü eklediniz! Maksimum %35 sinerji indirimi!', icon: 'trophy', condition: s => s.items.length >= 5 }
@@ -2878,6 +2878,16 @@
   const MONEY_FORMATTER = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 0 });
   const formatMoney = cents => MONEY_FORMATTER.format(cents / 100);
   const vibrate = (pattern = 10) => { if ('vibrate' in navigator) navigator.vibrate(pattern); };
+
+  // Tier color palette — shared between progress bar, savings chip, celebration
+  const TIER_COLORS = [
+    { text: '#a3a3a3', bg: '#f5f5f5', border: '#e5e5e5' },  // 0: grey
+    { text: '#a3a3a3', bg: '#f5f5f5', border: '#e5e5e5' },  // 1: grey
+    { text: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0' },  // 2: green
+    { text: '#0891b2', bg: '#ecfeff', border: '#a5f3fc' },  // 3: teal
+    { text: '#7c3aed', bg: '#f5f3ff', border: '#ddd6fe' },  // 4: purple
+    { text: '#d97706', bg: '#fffbeb', border: '#fde68a' },  // 5: gold
+  ];
 
   function animateValue(el, newCents, prefix = '') {
     if (!el) return;
@@ -3785,12 +3795,13 @@
       }
     }
 
-    // Savings chip (expanded view)
+    // Savings chip (expanded view) — colors sync with progress bar tier
     const dockSavingsChip = dock.querySelector('.wa-dock__savings-chip');
     if (dockSavingsChip) {
       if (pricing.discount > 0) {
-        dockSavingsChip.textContent = '🎉 ' + formatMoney(pricing.discount) + ' kazandın!';
-        dockSavingsChip.style.cssText = 'display:block;background:#f0fdf4;color:#16a34a;font-size:0.8rem;font-weight:700;padding:8px 12px;border-radius:8px;text-align:center;border:1px solid #bbf7d0;margin-bottom:8px;';
+        const tc = TIER_COLORS[Math.min(tier, 5)];
+        dockSavingsChip.textContent = formatMoney(pricing.discount) + ' kazandın';
+        dockSavingsChip.style.cssText = `display:block;background:${tc.bg};color:${tc.text};font-size:0.7rem;font-weight:600;padding:5px 10px;border-radius:6px;text-align:center;border:1px solid ${tc.border};margin-bottom:6px;transition:color 0.3s,background 0.3s,border-color 0.3s;`;
       } else {
         dockSavingsChip.style.display = 'none';
       }
@@ -3874,11 +3885,11 @@
       const hintText = discountSteps.querySelector('.wa-dock__discount-hint-text');
       if (hintText) {
         if (totalQtySteps >= 5) {
-          hintText.innerHTML = '🎉 <strong>Maksimum indirime ulaştınız!</strong>';
+          hintText.innerHTML = '<strong>Maksimum indirime ulaştınız</strong>';
         } else {
           const nextTier = totalQtySteps + 1;
           const nextDiscount = Math.round((SYNERGY_CONFIG[nextTier]?.discount || 0) * 100);
-          hintText.innerHTML = `<strong>1 ürün</strong> daha ekle, <strong>%${nextDiscount}</strong> indirime ulaş!`;
+          hintText.innerHTML = `<strong>1 ürün</strong> daha ekle, <strong>%${nextDiscount}</strong> indirime ulaş`;
         }
       }
       discountSteps.style.display = 'block';
@@ -3915,12 +3926,13 @@
       ritBox.querySelector('.wa-ritual-guide__content').innerHTML = ritual.map(r => `<div class="wa-ritual-guide__item"><span class="wa-ritual-guide__time">${r.time}</span><div><span class="wa-ritual-guide__product">${r.product}</span> <span class="wa-ritual-guide__text">${r.text}</span></div></div>`).join('');
     } else { ritBox.style.display = 'none'; }
 
-    // Savings chip (desktop)
+    // Savings chip (desktop) — colors sync with progress bar tier
     const sidebarSavingsChip = sidebar.querySelector('.wa-sidebar__savings-chip');
     if (sidebarSavingsChip) {
       if (pricing.discount > 0) {
-        sidebarSavingsChip.textContent = '🎉 ' + formatMoney(pricing.discount) + ' kazandın!';
-        sidebarSavingsChip.style.cssText = 'display:block;background:#f0fdf4;color:#16a34a;font-size:0.8rem;font-weight:700;padding:8px 12px;border-radius:8px;text-align:center;border:1px solid #bbf7d0;margin-bottom:8px;';
+        const tc = TIER_COLORS[Math.min(tier, 5)];
+        sidebarSavingsChip.textContent = formatMoney(pricing.discount) + ' kazandın';
+        sidebarSavingsChip.style.cssText = `display:block;background:${tc.bg};color:${tc.text};font-size:0.7rem;font-weight:600;padding:5px 10px;border-radius:6px;text-align:center;border:1px solid ${tc.border};margin-bottom:6px;transition:color 0.3s,background 0.3s,border-color 0.3s;`;
       } else {
         sidebarSavingsChip.style.display = 'none';
       }
@@ -3962,11 +3974,11 @@
     if (nudge) {
       const totalQtyNudge = getTotalQuantity();
       if (totalQtyNudge >= 5) {
-        nudge.innerHTML = '<strong>Maksimum indirime ulaştınız!</strong>';
+        nudge.innerHTML = '<strong>Maksimum indirime ulaştınız</strong>';
       } else if (totalQtyNudge > 0) {
         const nextTier = totalQtyNudge + 1;
         const nextDiscount = Math.round((SYNERGY_CONFIG[nextTier]?.discount || 0) * 100);
-        nudge.innerHTML = `<strong>1 ürün</strong> daha ekle, <strong>%${nextDiscount}</strong> indirime ulaş!`;
+        nudge.innerHTML = `<strong>1 ürün</strong> daha ekle, <strong>%${nextDiscount}</strong> indirime ulaş`;
       } else {
         nudge.innerHTML = '';
       }
