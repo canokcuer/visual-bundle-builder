@@ -337,7 +337,10 @@
     <div class="wa-dock__checkout-footer">
       <div class="wa-dock__checkout-total">
         <span class="wa-dock__checkout-total-label">Toplam</span>
-        <span class="wa-dock__checkout-total-value wa-dock__total">₺0</span>
+        <span class="wa-dock__checkout-footer-prices">
+          <span class="wa-dock__checkout-original-price"></span>
+          <span class="wa-dock__checkout-total-value wa-dock__total">₺0</span>
+        </span>
       </div>
       <button class="wa-dock__checkout-btn" disabled>
         <span class="wa-dock__checkout-btn-text">Sepeti Onayla</span>
@@ -2600,11 +2603,18 @@
   }
 
   .wa-sidebar__original-price,
-  .wa-dock__original-price {
+  .wa-dock__original-price,
+  .wa-dock__checkout-original-price {
     font-size: 0.75rem;
     font-weight: 500;
     color: var(--wa-gray-400);
     text-decoration: line-through;
+  }
+
+  .wa-dock__checkout-footer-prices {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
   }
 
   /* Mobile collapsed dock savings chip */
@@ -3670,16 +3680,16 @@
     dock.querySelector('.wa-dock__price-row--discount').style.display = pricing.discount > 0 ? 'flex' : 'none';
     dock.querySelector('.wa-dock__checkout-btn').disabled = state.items.length === 0;
 
-    // Strikethrough original price (mobile)
-    const dockOriginal = dock.querySelector('.wa-dock__original-price');
-    if (dockOriginal) {
+    // Strikethrough original price (mobile expanded pricing + sticky footer)
+    [dock.querySelector('.wa-dock__original-price'), dock.querySelector('.wa-dock__checkout-original-price')].forEach(el => {
+      if (!el) return;
       if (pricing.discount > 0) {
-        dockOriginal.textContent = formatMoney(pricing.subtotal);
-        dockOriginal.style.display = 'inline';
+        el.textContent = formatMoney(pricing.subtotal);
+        el.style.display = 'inline';
       } else {
-        dockOriginal.style.display = 'none';
+        el.style.display = 'none';
       }
-    }
+    });
 
     // Discount steps (top section with step indicators)
     const discountSteps = dock.querySelector('.wa-dock__discount-steps');
