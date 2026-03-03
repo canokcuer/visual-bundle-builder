@@ -103,6 +103,7 @@
           <div class="wa-step" data-step="4"><span class="wa-step__dot"></span><span class="wa-step__label">%33</span></div>
           <div class="wa-step" data-step="5"><span class="wa-step__dot"></span><span class="wa-step__label">%35</span></div>
         </div>
+        <p class="wa-sidebar__synergy-nudge"></p>
       </div>
 
       <!-- Selected Items -->
@@ -128,7 +129,10 @@
         </div>
         <div class="wa-sidebar__price-row wa-sidebar__price-row--total">
           <span>Toplam</span>
-          <span class="wa-sidebar__total">₺0</span>
+          <span class="wa-sidebar__total-wrapper">
+            <span class="wa-sidebar__original-price"></span>
+            <span class="wa-sidebar__total">₺0</span>
+          </span>
         </div>
       </div>
 
@@ -218,6 +222,7 @@
         </div>
       </div>
       <div class="wa-dock__collapsed-right">
+        <div class="wa-dock__mini-savings" style="display: none;"></div>
         <div class="wa-dock__mini-total">₺0</div>
         <button class="wa-dock__expand-btn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -320,7 +325,10 @@
         </div>
         <div class="wa-dock__price-row wa-dock__price-row--total">
           <span>Net Tutar</span>
-          <span class="wa-dock__net-total">₺0</span>
+          <span class="wa-dock__total-wrapper">
+            <span class="wa-dock__original-price"></span>
+            <span class="wa-dock__net-total">₺0</span>
+          </span>
         </div>
       </div>
     </div>
@@ -2559,7 +2567,7 @@
     .wa-sidebar__checkout-btn {
       width: 100%;
       height: 48px;
-      background: var(--wa-black);
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
       color: var(--wa-white);
       border: none;
       border-radius: var(--wa-radius-sm);
@@ -2569,16 +2577,63 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background var(--wa-transition);
+      gap: 6px;
+      transition: all 0.2s ease;
       font-family: inherit;
+      box-shadow: 0 2px 8px rgba(34, 197, 94, 0.35);
     }
 
-    .wa-sidebar__checkout-btn:hover:not(:disabled) { background: var(--wa-gray-800); }
-    .wa-sidebar__checkout-btn:disabled { background: var(--wa-gray-300); cursor: not-allowed; }
+    .wa-sidebar__checkout-btn:hover:not(:disabled) { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); box-shadow: 0 4px 12px rgba(34, 197, 94, 0.45); transform: translateY(-1px); }
+    .wa-sidebar__checkout-btn:disabled { background: var(--wa-gray-300); cursor: not-allowed; box-shadow: none; }
   }
 
   @media (min-width: 1024px) {
     .wa-container { grid-template-columns: 1fr 400px; gap: 2.5rem; }
+  }
+
+  /* Strikethrough original price */
+  .wa-sidebar__total-wrapper,
+  .wa-dock__total-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .wa-sidebar__original-price,
+  .wa-dock__original-price {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--wa-gray-400);
+    text-decoration: line-through;
+  }
+
+  /* Mobile collapsed dock savings chip */
+  .wa-dock__mini-savings {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #16a34a;
+    background: rgba(34, 197, 94, 0.1);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* Desktop sidebar next-tier nudge */
+  .wa-sidebar__synergy-nudge {
+    font-size: 0.7rem;
+    color: var(--wa-gray-600);
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .wa-sidebar__synergy-nudge strong {
+    color: #16a34a;
+    font-weight: 600;
+  }
+
+  /* Keşfet button always visible on mobile */
+  @media (max-width: 767px) {
+    .wa-product-card__kesfet-btn { opacity: 1; }
   }
 </style>
 
@@ -3565,6 +3620,17 @@
     badge.classList.toggle('wa-dock__synergy-badge--active', tier >= 2);
     dock.querySelector('.wa-dock__mini-total').textContent = formatMoney(pricing.total);
 
+    // Savings chip on collapsed dock
+    const miniSavings = dock.querySelector('.wa-dock__mini-savings');
+    if (miniSavings) {
+      if (pricing.discount > 0) {
+        miniSavings.textContent = '-' + formatMoney(pricing.discount);
+        miniSavings.style.display = 'block';
+      } else {
+        miniSavings.style.display = 'none';
+      }
+    }
+
     // Synergy summary
     const summary = dock.querySelector('.wa-dock__synergy-summary');
     summary.style.display = state.items.length > 0 ? 'block' : 'none';
@@ -3603,6 +3669,17 @@
     dock.querySelector('.wa-dock__total').textContent = formatMoney(pricing.total);
     dock.querySelector('.wa-dock__price-row--discount').style.display = pricing.discount > 0 ? 'flex' : 'none';
     dock.querySelector('.wa-dock__checkout-btn').disabled = state.items.length === 0;
+
+    // Strikethrough original price (mobile)
+    const dockOriginal = dock.querySelector('.wa-dock__original-price');
+    if (dockOriginal) {
+      if (pricing.discount > 0) {
+        dockOriginal.textContent = formatMoney(pricing.subtotal);
+        dockOriginal.style.display = 'inline';
+      } else {
+        dockOriginal.style.display = 'none';
+      }
+    }
 
     // Discount steps (top section with step indicators)
     const discountSteps = dock.querySelector('.wa-dock__discount-steps');
@@ -3670,6 +3747,32 @@
     sidebar.querySelector('.wa-sidebar__total').textContent = formatMoney(pricing.total);
     sidebar.querySelector('.wa-sidebar__price-row--discount').style.display = pricing.discount > 0 ? 'flex' : 'none';
     sidebar.querySelector('.wa-sidebar__checkout-btn').disabled = state.items.length === 0;
+
+    // Strikethrough original price (desktop)
+    const sidebarOriginal = sidebar.querySelector('.wa-sidebar__original-price');
+    if (sidebarOriginal) {
+      if (pricing.discount > 0) {
+        sidebarOriginal.textContent = formatMoney(pricing.subtotal);
+        sidebarOriginal.style.display = 'inline';
+      } else {
+        sidebarOriginal.style.display = 'none';
+      }
+    }
+
+    // Next-tier nudge text (desktop)
+    const nudge = sidebar.querySelector('.wa-sidebar__synergy-nudge');
+    if (nudge) {
+      const totalQtyNudge = getTotalQuantity();
+      if (totalQtyNudge >= 5) {
+        nudge.innerHTML = '<strong>Maksimum indirime ulaştınız!</strong>';
+      } else if (totalQtyNudge > 0) {
+        const nextTier = totalQtyNudge + 1;
+        const nextDiscount = Math.round((SYNERGY_CONFIG[nextTier]?.discount || 0) * 100);
+        nudge.innerHTML = `<strong>1 ürün</strong> daha ekle, <strong>%${nextDiscount}</strong> indirime ulaş!`;
+      } else {
+        nudge.innerHTML = '';
+      }
+    }
   }
 
   // ============================================
