@@ -3063,23 +3063,29 @@
       labelsContainer.appendChild(badge);
     },
 
-    handleNodeOrBadgeClick(handle, isSelected) {
-      const product = handleToProductMap.get(handle);
+    _clickLock: false,
+    handleNodeOrBadgeClick(handle) {
+      if (this._clickLock) return;
+      this._clickLock = true;
+      setTimeout(() => { this._clickLock = false; }, 300);
 
-      if (isSelected) {
+      // Check state directly — never rely on stale DOM classes
+      const isInCart = state.items.some(i => matchHandle(i.title) === handle);
+
+      if (isInCart) {
         const item = state.items.find(i => matchHandle(i.title) === handle);
         if (item) removeItem(item.id);
-      } else if (product) {
-        const card = document.querySelector(`.wa-product-card[data-product-handle="${handle}"]`);
-        if (card) {
+      } else {
+        const product = handleToProductMap.get(handle);
+        if (product) {
           addItem({
-            id: card.dataset.productId,
-            handle: card.dataset.productHandle,
-            title: card.dataset.productTitle,
-            price: parseInt(card.dataset.productPrice),
-            image: card.dataset.productImage,
-            variantId: card.dataset.variantId,
-            url: card.dataset.productUrl,
+            id: product.id,
+            handle: product.handle,
+            title: product.title,
+            price: product.price,
+            image: product.image,
+            variantId: product.variantId,
+            url: product.url,
             quantity: 1
           });
         }
@@ -3091,8 +3097,7 @@
         node.addEventListener('click', (e) => {
           e.stopPropagation();
           const handle = node.getAttribute('data-handle');
-          if (!handle) return;
-          this.handleNodeOrBadgeClick(handle, node.classList.contains('wa-synergy-node--selected'));
+          if (handle) this.handleNodeOrBadgeClick(handle);
         });
       });
 
@@ -3102,8 +3107,7 @@
           badge.addEventListener('click', (e) => {
             e.stopPropagation();
             const handle = badge.getAttribute('data-badge-handle');
-            if (!handle) return;
-            this.handleNodeOrBadgeClick(handle, badge.classList.contains('wa-synergy-badge--added'));
+            if (handle) this.handleNodeOrBadgeClick(handle);
           });
         });
       }
@@ -3398,23 +3402,29 @@
   // ============================================
   async function addItem(productData, qty = 1) {
     const existing = state.items.find(i => i.id === productData.id);
-    if (existing) { await removeItem(productData.id); return false; }
+    if (existing) { removeItem(productData.id); return false; }
     if (state.items.length >= 5) { vibrate([30, 20, 30]); return false; }
 
+    // Optimistic UI — update state and render immediately
+    state.items.push({ ...productData, quantity: qty });
+    vibrate(10);
+    updateUI();
+    checkAchievements();
+    if (state.isMobile && !state.isExpanded) setTimeout(() => { state.isExpanded = true; dock.classList.add('wa-dock--expanded'); setBodyScroll(true); }, 400);
+
+    // Sync with Shopify cart in background
     const card = [...productCards].find(c => c.dataset.productId === productData.id);
     if (card) card.classList.add('wa-product-card--loading');
     const success = await addToShopifyCart(productData.variantId, qty);
     if (card) card.classList.remove('wa-product-card--loading');
 
-    if (success) {
-      state.items.push({ ...productData, quantity: qty });
-      vibrate(10);
+    if (!success) {
+      // Rollback on failure
+      state.items = state.items.filter(i => i.id !== productData.id);
       updateUI();
-      checkAchievements();
-      if (state.isMobile && !state.isExpanded) setTimeout(() => { state.isExpanded = true; dock.classList.add('wa-dock--expanded'); setBodyScroll(true); }, 400);
-      return true;
+      return false;
     }
-    return false;
+    return true;
   }
 
   async function removeItem(productId) {
