@@ -1278,6 +1278,24 @@
     background: #fff;
   }
 
+  .wa-synergy-list-avatars {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .wa-synergy-list-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid #fff;
+    box-shadow: 0 0 0 0.5px #e5e5e5;
+  }
+
+  .wa-synergy-list-avatar + .wa-synergy-list-avatar {
+    margin-left: -6px;
+  }
+
   .wa-synergy-list-icon {
     width: 22px;
     height: 22px;
@@ -1318,23 +1336,22 @@
     width: 100%;
   }
 
-  /* Best-next glow ring for recommended node */
+  /* Best-next glow ring for recommended node — color set dynamically via JS to match progress bar tier */
   .wa-synergy-node__glow {
     fill: none;
     stroke: #22c55e;
-    stroke-width: 2;
+    stroke-width: 3;
     opacity: 0;
-    transition: opacity 0.4s ease;
   }
 
   .wa-synergy-node--best-next .wa-synergy-node__glow {
-    opacity: 0.6;
-    animation: wa-glow-ring 1.8s ease-in-out infinite;
+    opacity: 1;
+    animation: wa-glow-ring 1.5s ease-in-out infinite;
   }
 
   @keyframes wa-glow-ring {
-    0%, 100% { opacity: 0.4; stroke-width: 2.5; }
-    50% { opacity: 0.8; stroke-width: 4; }
+    0%, 100% { opacity: 0.6; stroke-width: 3; }
+    50% { opacity: 1; stroke-width: 6; }
   }
 
   @keyframes slide-up {
@@ -2990,14 +3007,6 @@
     renderEmptyState(container, selectedHandles) {
       const existing = container.querySelector('.wa-synergy-empty');
       if (existing) existing.remove();
-      if (selectedHandles.length >= 2) return;
-      const hint = document.createElement('div');
-      hint.className = 'wa-synergy-empty';
-      hint.textContent = selectedHandles.length === 0
-        ? 'Ürün ekleyerek sinerjileri keşfedin'
-        : 'Bir ürün daha ekleyin — sinerjiler görünsün';
-      const scrollArea = container.querySelector('.wa-synergy-map__scroll');
-      if (scrollArea) scrollArea.after(hint);
     },
 
     renderBadge(labelsContainer, handle, pos, isSelected) {
@@ -3089,12 +3098,15 @@
       g.setAttribute('class', cls);
       g.setAttribute('data-handle', handle);
 
-      // Glow ring (for best-next recommendation)
+      // Glow ring (for best-next recommendation) — color matches next tier's progress bar
+      const GLOW_COLORS = ['#a3a3a3','#a3a3a3','#22c55e','#06b6d4','#8b5cf6','#f59e0b'];
+      const nextTier = Math.min(state.items.length + 1, 5);
       const glow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       glow.setAttribute('cx', pos.x);
       glow.setAttribute('cy', pos.y);
-      glow.setAttribute('r', this.NODE_RADIUS + 6);
+      glow.setAttribute('r', this.NODE_RADIUS + 8);
       glow.setAttribute('class', 'wa-synergy-node__glow');
+      glow.setAttribute('stroke', GLOW_COLORS[nextTier]);
       g.appendChild(glow);
 
       // Background circle
@@ -3177,9 +3189,14 @@
         const key = conn.handles.sort().join('+');
         const expl = SYNERGY_EXPLANATIONS[key];
         if (expl) {
+          const [h1, h2] = conn.handles;
+          const p1 = handleToProductMap.get(h1);
+          const p2 = handleToProductMap.get(h2);
+          const img1 = p1?.image ? `<img src="${p1.image}" alt="" width="20" height="20" class="wa-synergy-list-avatar">` : '';
+          const img2 = p2?.image ? `<img src="${p2.image}" alt="" width="20" height="20" class="wa-synergy-list-avatar">` : '';
           const names = conn.handles.map(h => SYNERGY_MAP[h]?.name || h).join(' + ');
           html += `<div class="wa-synergy-list-item">
-              <div class="wa-synergy-list-icon" style="background:${conn.color}15;color:${conn.color};">${conn.icon || '⚡'}</div>
+              <div class="wa-synergy-list-avatars">${img1}${img2}</div>
               <div class="wa-synergy-list-text">
                 <span class="wa-synergy-list-title">${expl.title}</span>
                 <span class="wa-synergy-list-benefit">— ${expl.benefit}</span>
@@ -3601,11 +3618,11 @@
     labelEl.style.cssText = `font-size:1.5rem;font-weight:800;background:${t.gradient};-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;`;
     card.appendChild(labelEl);
 
-    // Savings amount
+    // Savings amount — pill badge with tier-matching background
     if (pricing && pricing.discount > 0) {
       const savingsEl = document.createElement('div');
       savingsEl.textContent = formatMoney(pricing.discount) + ' kazandın';
-      savingsEl.style.cssText = 'font-size:0.85rem;color:#737373;font-weight:500;';
+      savingsEl.style.cssText = `display:inline-block;font-size:0.8rem;color:#fff;font-weight:700;padding:6px 16px;border-radius:100px;margin-top:4px;background:${t.gradient};`;
       card.appendChild(savingsEl);
     }
 
