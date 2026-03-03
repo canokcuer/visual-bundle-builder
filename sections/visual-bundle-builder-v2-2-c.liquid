@@ -3411,14 +3411,9 @@
     checkAchievements();
     if (state.isMobile && !state.isExpanded) setTimeout(() => { state.isExpanded = true; dock.classList.add('wa-dock--expanded'); setBodyScroll(true); }, 400);
 
-    // Sync with Shopify cart in background
-    const card = [...productCards].find(c => c.dataset.productId === productData.id);
-    if (card) card.classList.add('wa-product-card--loading');
+    // Sync with Shopify cart in background (no loading spinner — UI already updated)
     const success = await addToShopifyCart(productData.variantId, qty);
-    if (card) card.classList.remove('wa-product-card--loading');
-
     if (!success) {
-      // Rollback on failure
       state.items = state.items.filter(i => i.id !== productData.id);
       updateUI();
       return false;
@@ -3770,13 +3765,13 @@
       card.style.opacity = '1';
     });
 
-    // Animate out — total visible ~1s
+    // Animate out — total visible ~1.5s
     setTimeout(() => {
       card.style.transform = 'scale(0.8)';
       card.style.opacity = '0';
       overlay.style.background = 'rgba(0,0,0,0)';
-      setTimeout(() => overlay.remove(), 250);
-    }, 750);
+      setTimeout(() => overlay.remove(), 350);
+    }, 1200);
   }
 
   function celebrateTierUnlock(tier, synergy, pricing) {
