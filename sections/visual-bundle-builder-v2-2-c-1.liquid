@@ -772,32 +772,38 @@
     background: var(--wa-white);
     border-top: 1px solid var(--wa-gray-200);
     z-index: 999;
-    transform: translateY(calc(85vh - var(--wa-dock-height)));
+    -webkit-transform: translateY(calc(85vh - var(--wa-dock-height))) translateZ(0);
+    transform: translateY(calc(85vh - var(--wa-dock-height))) translateZ(0);
+    -webkit-transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease;
     transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease;
     will-change: transform;
     overflow: hidden;
     box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-    -webkit-transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
   }
 
   .wa-dock--empty {
+    -webkit-transform: translateY(100%);
     transform: translateY(100%);
     opacity: 0;
     pointer-events: none;
   }
 
   .wa-dock--expanded {
-    transform: translateY(0);
+    -webkit-transform: translateY(0) translateZ(0);
+    transform: translateY(0) translateZ(0);
     border-radius: var(--wa-radius) var(--wa-radius) 0 0;
     border-top: none;
     box-shadow: var(--wa-shadow-lg);
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
   }
 
   /* Disable CSS transition when JS is driving drag-follow */
   .wa-dock--dragging {
+    -webkit-transition: none !important;
     transition: none !important;
   }
 
@@ -2276,6 +2282,7 @@
 
     /* Synergy map auto-sizes via viewBox */
     .wa-dock { display: none; }
+    .wa-dock-backdrop { display: none; }
 
     .wa-sidebar {
       display: block;
@@ -4560,9 +4567,9 @@
             dragState.isDragging = true;
             dock.classList.add('wa-dock--dragging');
           }
-          // Drag-follow: translate dock down by drag distance (with rubber-band for negative)
+          // Drag-follow: translate dock down by drag distance
           const clamped = Math.max(0, diff);
-          dock.style.transform = `translateY(${clamped}px)`;
+          dock.style.transform = `translateY(${clamped}px) translateZ(0)`;
           // Fade backdrop proportionally
           if (dockBackdrop) {
             const progress = Math.min(clamped / DOCK_EXPANDED_HEIGHT(), 1);
@@ -4611,7 +4618,7 @@
         // Drag-follow: reduce the collapsed offset by drag distance
         const maxTravel = DOCK_COLLAPSED_OFFSET();
         const clamped = Math.min(diff, maxTravel);
-        dock.style.transform = `translateY(${maxTravel - clamped}px)`;
+        dock.style.transform = `translateY(${maxTravel - clamped}px) translateZ(0)`;
         // Show backdrop proportionally
         if (dockBackdrop) {
           const progress = Math.min(clamped / maxTravel, 1);
