@@ -203,8 +203,6 @@
     </aside>
   </div>
 
-  <!-- Mobile Dock Backdrop -->
-  <div class="wa-dock-backdrop"></div>
   <!-- Mobile Dock -->
   <div class="wa-dock wa-dock--empty">
     <div class="wa-dock__handle"><span></span></div>
@@ -762,66 +760,37 @@
   /* Desktop Sidebar - Hidden on mobile */
   .wa-sidebar { display: none; }
 
-  /* Mobile Dock — GPU-accelerated with transform instead of height */
+  /* Mobile Dock */
   .wa-dock {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 85vh;
     background: var(--wa-white);
     border-top: 1px solid var(--wa-gray-200);
     z-index: 999;
-    -webkit-transform: translateY(calc(85vh - var(--wa-dock-height))) translateZ(0);
-    transform: translateY(calc(85vh - var(--wa-dock-height))) translateZ(0);
-    -webkit-transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease;
-    transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease;
-    will-change: transform;
+    transition: height 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+    height: var(--wa-dock-height);
     overflow: hidden;
     box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
   }
 
   .wa-dock--empty {
-    -webkit-transform: translateY(100%);
     transform: translateY(100%);
     opacity: 0;
     pointer-events: none;
   }
 
   .wa-dock--expanded {
-    -webkit-transform: translateY(0) translateZ(0);
-    transform: translateY(0) translateZ(0);
+    height: 85vh;
     border-radius: var(--wa-radius) var(--wa-radius) 0 0;
     border-top: none;
     box-shadow: var(--wa-shadow-lg);
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
   }
 
-  /* Disable CSS transition when JS is driving drag-follow */
-  .wa-dock--dragging {
-    -webkit-transition: none !important;
-    transition: none !important;
-  }
-
-  /* Backdrop scrim when slider is expanded */
-  .wa-dock-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.25);
-    z-index: 998;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.32s cubic-bezier(0.32, 0.72, 0, 1);
-    -webkit-tap-highlight-color: transparent;
-  }
-  .wa-dock-backdrop--visible {
-    opacity: 1;
-    pointer-events: auto;
-  }
+  /* No backdrop when slider is expanded - clean white look */
 
   .wa-dock__handle {
     display: flex;
@@ -2282,7 +2251,6 @@
 
     /* Synergy map auto-sizes via viewBox */
     .wa-dock { display: none; }
-    .wa-dock-backdrop { display: none; }
 
     .wa-sidebar {
       display: block;
@@ -2871,7 +2839,6 @@
 
   const productCards = section.querySelectorAll('.wa-product-card');
   const dock = section.querySelector('.wa-dock');
-  const dockBackdrop = section.querySelector('.wa-dock-backdrop');
   const sidebar = section.querySelector('.wa-sidebar');
   const particles = section.querySelector('.wa-particles');
 
@@ -3486,7 +3453,7 @@
     checkAchievements();
 
     if (state.isMobile && !state.isExpanded) {
-      setTimeout(() => { state.isExpanded = true; dock.classList.add('wa-dock--expanded'); if (dockBackdrop) dockBackdrop.classList.add('wa-dock-backdrop--visible'); setBodyScroll(true); }, 400);
+      setTimeout(() => { state.isExpanded = true; dock.classList.add('wa-dock--expanded'); setBodyScroll(true); }, 400);
     }
 
     // Fire network call in background with rollback on failure
@@ -3926,8 +3893,7 @@
     if (state.items.length === 0 && state.isExpanded) {
       state.isExpanded = false;
       dock.classList.remove('wa-dock--expanded');
-      if (dockBackdrop) dockBackdrop.classList.remove('wa-dock-backdrop--visible');
-      setBodyScroll(false);
+      setBodyScroll(false); // Reset overflow when auto-closing empty slider
     }
 
     // Thumbnails
@@ -4349,31 +4315,15 @@
     addItem(data);
   }
 
-  let savedScrollY = 0;
   function setBodyScroll(blocked) {
-    if (blocked) {
-      savedScrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${savedScrollY}px`;
-      document.body.style.left = '0';
-      document.body.style.right = '0';
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
-    } else {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-      window.scrollTo(0, savedScrollY);
-    }
+    document.body.style.overflow = blocked ? 'hidden' : '';
+    document.documentElement.style.overflow = blocked ? 'hidden' : '';
   }
 
   function toggleDock() {
     state.isExpanded = !state.isExpanded;
     dock.classList.toggle('wa-dock--expanded', state.isExpanded);
-    if (dockBackdrop) dockBackdrop.classList.toggle('wa-dock-backdrop--visible', state.isExpanded);
+    // Block/unblock body scroll when slider is expanded
     setBodyScroll(state.isExpanded);
   }
 
@@ -4437,7 +4387,6 @@
       if (!state.isExpanded) {
         state.isExpanded = true;
         dock.classList.add('wa-dock--expanded');
-        if (dockBackdrop) dockBackdrop.classList.add('wa-dock-backdrop--visible');
         setBodyScroll(true);
       }
 
@@ -4458,10 +4407,10 @@
         if (state.isExpanded) {
           state.isExpanded = false;
           dock.classList.remove('wa-dock--expanded');
-          if (dockBackdrop) dockBackdrop.classList.remove('wa-dock-backdrop--visible');
         }
         // Always ensure overflow is reset on mode change
-        setBodyScroll(false);
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
         updateUI();
       }
     });
@@ -4528,124 +4477,81 @@
       });
     }
 
-    // ============================================
-    // iOS-STYLE DRAG-FOLLOW + VELOCITY DISMISS
-    // ============================================
+    // Swipe gestures for dock
+    let touchStartY = 0;
+    let touchCurrentY = 0;
+    const expandedContent = dock.querySelector('.wa-dock__expanded');
+
+    // Swipe-down to close (when expanded) - only from handle area, not content
     const dockHandle = dock.querySelector('.wa-dock__handle');
     const expandedHeader = dock.querySelector('.wa-dock__expanded-header');
-    const DOCK_EXPANDED_HEIGHT = () => window.innerHeight * 0.85;
-    const DOCK_COLLAPSED_OFFSET = () => DOCK_EXPANDED_HEIGHT() - 95; // translateY for collapsed
-    const VELOCITY_THRESHOLD = 0.4; // px/ms — fast flick dismisses
-    const DISTANCE_RATIO_THRESHOLD = 0.25; // 25% of dock height = slow drag dismisses
 
-    let dragState = null; // { startY, startTime, lastY, lastTime, isDragging, mode }
-
-    // Backdrop click to close
-    if (dockBackdrop) {
-      dockBackdrop.addEventListener('click', () => {
-        if (state.isExpanded) toggleDock();
-      });
-    }
-
-    // --- Swipe-down to close (handle + header drag) ---
+    // Only attach swipe-to-close on the handle and header, not the entire content
     [dockHandle, expandedHeader].forEach(el => {
       if (!el) return;
 
       el.addEventListener('touchstart', e => {
-        if (!state.isExpanded) return;
-        const y = e.touches[0].clientY;
-        dragState = { startY: y, startTime: Date.now(), lastY: y, lastTime: Date.now(), isDragging: false, mode: 'close' };
+        if (state.isExpanded) {
+          touchStartY = e.touches[0].clientY;
+        }
       }, { passive: true });
 
       el.addEventListener('touchmove', e => {
-        if (!dragState || dragState.mode !== 'close') return;
-        const y = e.touches[0].clientY;
-        const diff = y - dragState.startY;
-        if (diff > 8) {
-          e.preventDefault();
-          if (!dragState.isDragging) {
-            dragState.isDragging = true;
-            dock.classList.add('wa-dock--dragging');
-          }
-          // Drag-follow: translate dock down by drag distance
-          const clamped = Math.max(0, diff);
-          dock.style.transform = `translateY(${clamped}px) translateZ(0)`;
-          // Fade backdrop proportionally
-          if (dockBackdrop) {
-            const progress = Math.min(clamped / DOCK_EXPANDED_HEIGHT(), 1);
-            dockBackdrop.style.opacity = String(1 - progress);
+        if (state.isExpanded && touchStartY > 0) {
+          touchCurrentY = e.touches[0].clientY;
+          const diff = touchCurrentY - touchStartY;
+          if (diff > 10) {
+            e.preventDefault();
           }
         }
-        dragState.lastY = y;
-        dragState.lastTime = Date.now();
       }, { passive: false });
 
       el.addEventListener('touchend', () => {
-        if (!dragState || dragState.mode !== 'close') { dragState = null; return; }
-        const diff = dragState.lastY - dragState.startY;
-        const elapsed = Date.now() - dragState.startTime;
-        const velocity = elapsed > 0 ? diff / elapsed : 0;
-        dock.classList.remove('wa-dock--dragging');
-        dock.style.transform = '';
-        if (dockBackdrop) dockBackdrop.style.opacity = '';
-
-        if (velocity > VELOCITY_THRESHOLD || diff > DOCK_EXPANDED_HEIGHT() * DISTANCE_RATIO_THRESHOLD) {
-          toggleDock();
-          vibrate(5);
+        if (touchStartY > 0 && touchCurrentY > 0) {
+          const diff = touchCurrentY - touchStartY;
+          if (diff > 60 && state.isExpanded) {
+            toggleDock();
+          }
         }
-        // else: snaps back via CSS transition (transform returns to translateY(0))
-        dragState = null;
+        touchStartY = 0;
+        touchCurrentY = 0;
       });
     });
 
-    // --- Swipe-up to open (collapsed dock drag) ---
+    // Swipe-up to open (when collapsed) - attach to entire dock for easier swiping
+    let collapsedTouchStartY = 0;
+    let collapsedTouchCurrentY = 0;
+    let isSwipingUp = false;
+
     dock.addEventListener('touchstart', e => {
-      if (state.isExpanded || state.items.length === 0) return;
-      const y = e.touches[0].clientY;
-      dragState = { startY: y, startTime: Date.now(), lastY: y, lastTime: Date.now(), isDragging: false, mode: 'open' };
+      if (!state.isExpanded) {
+        collapsedTouchStartY = e.touches[0].clientY;
+        isSwipingUp = false;
+      }
     }, { passive: true });
 
     dock.addEventListener('touchmove', e => {
-      if (!dragState || dragState.mode !== 'open') return;
-      const y = e.touches[0].clientY;
-      const diff = dragState.startY - y; // UP = positive
-      if (diff > 8) {
-        e.preventDefault();
-        if (!dragState.isDragging) {
-          dragState.isDragging = true;
-          dock.classList.add('wa-dock--dragging');
-        }
-        // Drag-follow: reduce the collapsed offset by drag distance
-        const maxTravel = DOCK_COLLAPSED_OFFSET();
-        const clamped = Math.min(diff, maxTravel);
-        dock.style.transform = `translateY(${maxTravel - clamped}px) translateZ(0)`;
-        // Show backdrop proportionally
-        if (dockBackdrop) {
-          const progress = Math.min(clamped / maxTravel, 1);
-          dockBackdrop.style.opacity = String(progress * 0.25); // max 0.25 opacity
-          if (progress > 0) dockBackdrop.classList.add('wa-dock-backdrop--visible');
+      if (!state.isExpanded && collapsedTouchStartY > 0) {
+        collapsedTouchCurrentY = e.touches[0].clientY;
+        const diff = collapsedTouchStartY - collapsedTouchCurrentY; // Swipe UP = positive diff
+        // If swiping up on dock, prevent page scroll
+        if (diff > 10) {
+          isSwipingUp = true;
+          e.preventDefault();
         }
       }
-      dragState.lastY = y;
-      dragState.lastTime = Date.now();
     }, { passive: false });
 
     dock.addEventListener('touchend', () => {
-      if (!dragState || dragState.mode !== 'open') { dragState = null; return; }
-      const diff = dragState.startY - dragState.lastY; // UP = positive
-      const elapsed = Date.now() - dragState.startTime;
-      const velocity = elapsed > 0 ? diff / elapsed : 0;
-      dock.classList.remove('wa-dock--dragging');
-      dock.style.transform = '';
-      if (dockBackdrop) dockBackdrop.style.opacity = '';
-
-      if (velocity > VELOCITY_THRESHOLD || diff > DOCK_COLLAPSED_OFFSET() * DISTANCE_RATIO_THRESHOLD) {
-        toggleDock();
-        vibrate(5);
-      } else {
-        if (dockBackdrop) dockBackdrop.classList.remove('wa-dock-backdrop--visible');
+      if (!state.isExpanded && collapsedTouchStartY > 0 && collapsedTouchCurrentY > 0) {
+        const diff = collapsedTouchStartY - collapsedTouchCurrentY; // Swipe UP = positive diff
+        if (diff > 30 && state.items.length > 0 && isSwipingUp) {
+          toggleDock();
+        }
       }
-      dragState = null;
+      collapsedTouchStartY = 0;
+      collapsedTouchCurrentY = 0;
+      isSwipingUp = false;
     });
 
     // Safety: Clean up any stuck overflow state on page load
@@ -4673,7 +4579,6 @@
         if (state.isMobile) {
           state.isExpanded = true;
           dock.classList.add('wa-dock--expanded');
-          if (dockBackdrop) dockBackdrop.classList.add('wa-dock-backdrop--visible');
           setBodyScroll(true);
         }
       }
@@ -4737,7 +4642,6 @@
             if (!state.isExpanded) {
               state.isExpanded = true;
               dock.classList.add('wa-dock--expanded');
-              if (dockBackdrop) dockBackdrop.classList.add('wa-dock-backdrop--visible');
               setBodyScroll(true);
             }
           } else {
@@ -4763,7 +4667,6 @@
     if (state.isMobile) {
       state.isExpanded = true;
       dock.classList.add('wa-dock--expanded');
-      if (dockBackdrop) dockBackdrop.classList.add('wa-dock-backdrop--visible');
       setBodyScroll(true);
     }
   };
