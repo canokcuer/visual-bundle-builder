@@ -2985,22 +2985,13 @@
     VIEW_W: 400,
     VIEW_H: 300,
 
-    // Find the best unselected node to recommend (most new synergies)
+    // Find the best unselected node — uses RECOMMENDATIONS table (same as ÖNERİLEN badge)
     getBestNextHandle(selectedHandles) {
-      const allHandles = Object.keys(this.POSITIONS);
-      const unselected = allHandles.filter(h => !selectedHandles.includes(h));
-      if (selectedHandles.length === 0 || unselected.length === 0) return null;
-
-      let best = null, bestCount = 0;
-      unselected.forEach(candidate => {
-        let count = 0;
-        selectedHandles.forEach(sel => {
-          const key = [candidate, sel].sort().join('+');
-          if (SYNERGY_CONNECTIONS[key]) count++;
-        });
-        if (count > bestCount) { bestCount = count; best = candidate; }
-      });
-      return bestCount > 0 ? best : null;
+      if (selectedHandles.length === 0) return null;
+      const recs = RECOMMENDATIONS[selectedHandles[0]] || [];
+      for (const r of recs) if (!selectedHandles.includes(r.handle)) return r.handle;
+      for (const h of Object.keys(SYNERGY_MAP)) if (!selectedHandles.includes(h)) return h;
+      return null;
     },
 
     render(container, selectedHandles) {
