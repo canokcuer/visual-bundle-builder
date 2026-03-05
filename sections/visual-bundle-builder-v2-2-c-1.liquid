@@ -787,6 +787,8 @@
     border-top: none;
     box-shadow: var(--wa-shadow-lg);
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     touch-action: pan-y;
   }
 
@@ -916,10 +918,7 @@
   .wa-dock__expanded {
     display: none;
     padding: 0 1rem 1.5rem;
-    overflow-y: auto;
     overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
   }
 
   .wa-dock--expanded .wa-dock__expanded { display: block; }
@@ -4531,7 +4530,8 @@
     }, { passive: true });
 
     dock.addEventListener('touchmove', e => {
-      if (!state.isExpanded && collapsedTouchStartY > 0) {
+      if (state.isExpanded) return; // Let Android scroll natively
+      if (collapsedTouchStartY > 0) {
         collapsedTouchCurrentY = e.touches[0].clientY;
         const diff = collapsedTouchStartY - collapsedTouchCurrentY; // Swipe UP = positive diff
         // If swiping up on dock, prevent page scroll
