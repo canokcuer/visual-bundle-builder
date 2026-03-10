@@ -3378,7 +3378,7 @@
       const qty = item.quantity || 1;
       const itemSub = item.price * qty;
       subtotal += itemSub;
-      let rate = qty >= 6 ? 0.30 : qty >= 3 ? 0.30 : bundleRate;
+      let rate = bundleRate;
       totalDiscount += Math.round(itemSub * rate);
     });
 
