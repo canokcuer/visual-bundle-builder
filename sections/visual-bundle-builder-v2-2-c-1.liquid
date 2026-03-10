@@ -2086,6 +2086,7 @@
     box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
     box-sizing: border-box;
     z-index: 1001;
+    touch-action: manipulation;
   }
 
   .wa-dock--expanded .wa-dock__checkout-footer {
@@ -2132,6 +2133,8 @@
     flex: 0 1 auto;
     min-width: 0;
     max-width: 50%;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .wa-dock__checkout-btn-text {
@@ -4420,6 +4423,19 @@
     dock.querySelector('.wa-dock__expand-btn').addEventListener('click', toggleDock);
     dock.querySelector('.wa-dock__close-btn').addEventListener('click', toggleDock);
     dock.querySelector('.wa-dock__checkout-btn').addEventListener('click', handleCheckout);
+    // Fallback: touchend on checkout btn — fires handleCheckout if browser swallows the click
+    (function() {
+      const dockBtn = dock.querySelector('.wa-dock__checkout-btn');
+      let touchMoved = false;
+      dockBtn.addEventListener('touchstart', () => { touchMoved = false; }, { passive: true });
+      dockBtn.addEventListener('touchmove', () => { touchMoved = true; }, { passive: true });
+      dockBtn.addEventListener('touchend', (e) => {
+        if (!touchMoved && !dockBtn.disabled) {
+          e.preventDefault();
+          handleCheckout();
+        }
+      });
+    })();
     sidebar.querySelector('.wa-sidebar__checkout-btn').addEventListener('click', handleCheckout);
 
     // Event delegation for items
