@@ -2766,8 +2766,8 @@
     'dailyglow+dreamglow+mindfuel': { title: 'CEO Paketi', benefit: 'Görünüm + Zeka + Enerji', detail: 'Profesyoneller için tasarlandı.' },
     'dailyglow+dreamglow+thechill': { title: 'Stress-Free Beauty', benefit: 'Stres Karşıtı Güzellik', detail: 'En popüler üçlümüz.' },
     'mindfuel+reset-button+thechill': { title: 'Zihinsel Berraklık', benefit: 'Arınma + Odak + Denge', detail: 'Temiz beden, berrak zihin.' },
-    'dailyglow+dreamglow+mindfuel+thechill': { title: 'Premium Wellness', benefit: '%25 İndirim', detail: 'Lüks bir yaşam tarzının temeli.' },
-    'dailyglow+dreamglow+mindfuel+reset-button+thechill': { title: 'The Cyrasoul Ritual', benefit: '%30 İndirim - TAM DONANIM', detail: 'Bütüncül iyilik hali için eksiksiz set.' }
+    'dailyglow+dreamglow+mindfuel+thechill': { title: 'Premium Wellness', benefit: '%33 İndirim', detail: 'Lüks bir yaşam tarzının temeli.' },
+    'dailyglow+dreamglow+mindfuel+reset-button+thechill': { title: 'The Cyrasoul Ritual', benefit: '%35 İndirim - TAM DONANIM', detail: 'Bütüncül iyilik hali için eksiksiz set.' }
   };
 
   const SINGLE_PRODUCT_BENEFITS = {
@@ -2803,10 +2803,10 @@
 
   const SYNERGY_CONFIG = {
     1: { percent: 20, text: 'Başlangıç', discount: 0 },
-    2: { percent: 40, text: '%5 İkili Güç', discount: 0.05 },
-    3: { percent: 60, text: '%20 Popüler', discount: 0.20 },
-    4: { percent: 80, text: '%25 Pro', discount: 0.25 },
-    5: { percent: 100, text: '%30 Efsane', discount: 0.30 }
+    2: { percent: 40, text: '%10 İkili Güç', discount: 0.10 },
+    3: { percent: 60, text: '%30 Popüler', discount: 0.30 },
+    4: { percent: 80, text: '%33 Pro', discount: 0.33 },
+    5: { percent: 100, text: '%35 Efsane', discount: 0.35 }
   };
 
   // ============================================
@@ -2814,10 +2814,10 @@
   // ============================================
   const ACHIEVEMENTS = {
     'first-step': { id: 'first-step', title: 'İlk Adım', emoji: '🌱', description: 'İlk ürününü ekleyerek wellness yolculuğuna başladınız!', icon: 'star', condition: s => s.items.length >= 1 },
-    'power-duo': { id: 'power-duo', title: 'Güçlü İkili', emoji: '⚡', description: 'İki ürün birlikte %5 sinerji indirimi kazandınız', icon: 'lightning', condition: s => s.items.length >= 2 },
-    'triple-threat': { id: 'triple-threat', title: 'Üçlü Kuvvet', emoji: '🔥', description: 'Üç ürünle ritüelinizi güçlendirdiniz. %20 indirim!', icon: 'fire', condition: s => s.items.length >= 3 },
-    'ritual-master': { id: 'ritual-master', title: 'Ritüel Ustası', emoji: '✨', description: 'Dört ürünle tam bir günlük ritüel oluşturuyorsunuz. %25 indirim!', icon: 'sparkle', condition: s => s.items.length >= 4 },
-    'wellness-architect': { id: 'wellness-architect', title: 'Wellness Architect', emoji: '🏆', description: 'Tüm 5 ürünü eklediniz! Maksimum %30 sinerji indirimi!', icon: 'trophy', condition: s => s.items.length >= 5 }
+    'power-duo': { id: 'power-duo', title: 'Güçlü İkili', emoji: '⚡', description: 'İki ürün birlikte %10 sinerji indirimi kazandınız', icon: 'lightning', condition: s => s.items.length >= 2 },
+    'triple-threat': { id: 'triple-threat', title: 'Üçlü Kuvvet', emoji: '🔥', description: 'Üç ürünle ritüelinizi güçlendirdiniz. %30 indirim!', icon: 'fire', condition: s => s.items.length >= 3 },
+    'ritual-master': { id: 'ritual-master', title: 'Ritüel Ustası', emoji: '✨', description: 'Dört ürünle tam bir günlük ritüel oluşturuyorsunuz. %33 indirim!', icon: 'sparkle', condition: s => s.items.length >= 4 },
+    'wellness-architect': { id: 'wellness-architect', title: 'Wellness Architect', emoji: '🏆', description: 'Tüm 5 ürünü eklediniz! Maksimum %35 sinerji indirimi!', icon: 'trophy', condition: s => s.items.length >= 5 }
   };
 
   const achievementState = { unlocked: new Set(), pending: [] };
@@ -3710,10 +3710,10 @@
             <div class="seg" style="left:75%"></div>
           </div>
           ${!isMini ? `<div class="labels">
-            <span class="lbl" style="left:25%">%5</span>
-            <span class="lbl" style="left:50%">%20</span>
-            <span class="lbl" style="left:75%">%25</span>
-            <span class="lbl-end">%30</span>
+            <span class="lbl" style="left:25%">%10</span>
+            <span class="lbl" style="left:50%">%30</span>
+            <span class="lbl" style="left:75%">%33</span>
+            <span class="lbl-end">%35</span>
           </div>` : ''}`;
 
         this._fill = this.shadowRoot.querySelector('.fill');
@@ -3749,10 +3749,10 @@
     if (existing) existing.remove();
 
     const TIER_THEMES = {
-      2: { gradient: 'linear-gradient(135deg,#22c55e,#16a34a)', emoji: '🌿', glow: 'rgba(34,197,94,0.3)', label: '%5 İndirim' },
-      3: { gradient: 'linear-gradient(135deg,#06b6d4,#0891b2)', emoji: '🌊', glow: 'rgba(6,182,212,0.3)', label: '%20 İndirim' },
-      4: { gradient: 'linear-gradient(135deg,#8b5cf6,#7c3aed)', emoji: '💎', glow: 'rgba(139,92,246,0.3)', label: '%25 İndirim' },
-      5: { gradient: 'linear-gradient(135deg,#f59e0b,#d97706)', emoji: '👑', glow: 'rgba(245,158,11,0.3)', label: 'MAX %30 İndirim' }
+      2: { gradient: 'linear-gradient(135deg,#22c55e,#16a34a)', emoji: '🌿', glow: 'rgba(34,197,94,0.3)', label: '%10 İndirim' },
+      3: { gradient: 'linear-gradient(135deg,#06b6d4,#0891b2)', emoji: '🌊', glow: 'rgba(6,182,212,0.3)', label: '%30 İndirim' },
+      4: { gradient: 'linear-gradient(135deg,#8b5cf6,#7c3aed)', emoji: '💎', glow: 'rgba(139,92,246,0.3)', label: '%33 İndirim' },
+      5: { gradient: 'linear-gradient(135deg,#f59e0b,#d97706)', emoji: '👑', glow: 'rgba(245,158,11,0.3)', label: 'MAX %35 İndirim' }
     };
     const t = TIER_THEMES[tier] || TIER_THEMES[2];
 
