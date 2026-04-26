@@ -110,10 +110,15 @@
     if (!raw) return map;
     raw.split(/\r?\n/).forEach(line => {
       const parts = line.split('|').map(s => (s || '').trim());
-      const [code, pct, label] = parts;
+      const [code, pct, label, eyebrow] = parts;
       if (code && pct && !isNaN(+pct) && +pct > 0 && +pct < 100) {
         const upper = code.toUpperCase();
-        map.set(upper, { code: upper, percent: +pct, label: label || upper });
+        map.set(upper, {
+          code: upper,
+          percent: +pct,
+          label: label || upper,
+          eyebrow: eyebrow || 'İNDİRİM AKTİF'
+        });
       }
     });
     return map;
@@ -162,7 +167,7 @@
       <div class="cyra-promo-banner__inner" style="background:linear-gradient(135deg,#16a34a 0%,#15803d 55%,#14532d 100%);animation:cyra-promo-pulse 2.4s ease-in-out infinite;">
         <span class="cyra-promo-banner__pct">%${promo.percent}</span>
         <span class="cyra-promo-banner__body">
-          <span class="cyra-promo-banner__eyebrow">İndirim Aktif</span>
+          <span class="cyra-promo-banner__eyebrow">${escapeHtml(promo.eyebrow)}</span>
           <span class="cyra-promo-banner__label">${escapeHtml(promo.label)}</span>
         </span>
         <span class="cyra-promo-banner__code">${escapeHtml(promo.code)}</span>
@@ -202,7 +207,7 @@
       "type": "textarea",
       "id": "promo_codes",
       "label": "Promo Kodları",
-      "info": "Her satıra bir kod: KOD|YUZDE|ETIKET (örn: ECE|15|ECE'ye Özel İndirim). Bundle Builder v3'teki listeyle senkron tut."
+      "info": "Her satıra bir kod: KOD|YUZDE|ETIKET|EYEBROW (4. alan opsiyonel; örn: ECE|15|neyemeliyizzz|GIDA MÜHENDİSİ ÖZEL İNDİRİM AKTİF). Bundle Builder v3'teki listeyle senkron tut."
     }
   ],
   "presets": [

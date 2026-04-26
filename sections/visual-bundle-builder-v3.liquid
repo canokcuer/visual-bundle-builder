@@ -2880,17 +2880,24 @@
 
   // ============================================
   // PROMO CODES (v3) — parsed from section setting
-  // Format per line: CODE|PERCENT|LABEL  (e.g. SAVE20|20|Hoş Geldin İndirimi)
+  // Format per line: CODE|PERCENT|LABEL|EYEBROW
+  //   EYEBROW is optional, defaults to "İNDİRİM AKTİF"
+  //   e.g. ECE|15|neyemeliyizzz|GIDA MÜHENDİSİ ÖZEL İNDİRİM AKTİF
   // ============================================
   function parsePromoCodes(raw) {
     const map = new Map();
     if (!raw) return map;
     raw.split(/\r?\n/).forEach(line => {
       const parts = line.split('|').map(s => (s || '').trim());
-      const [code, pct, label] = parts;
+      const [code, pct, label, eyebrow] = parts;
       if (code && pct && !isNaN(+pct) && +pct > 0 && +pct < 100) {
         const upper = code.toUpperCase();
-        map.set(upper, { code: upper, percent: +pct, label: label || upper });
+        map.set(upper, {
+          code: upper,
+          percent: +pct,
+          label: label || upper,
+          eyebrow: eyebrow || 'İNDİRİM AKTİF'
+        });
       }
     });
     return map;
@@ -3988,7 +3995,7 @@
       const cardHTML = `
         <span class="wa-promo-card-percent" style="background:rgba(255,255,255,0.18);color:#ffffff;">%${p.percent}</span>
         <span class="wa-promo-card-body">
-          <span class="wa-promo-card-eyebrow">İndirim Aktif</span>
+          <span class="wa-promo-card-eyebrow">${escapeHtml(p.eyebrow)}</span>
           <span class="wa-promo-card-label">${escapeHtml(p.label)}</span>
         </span>
         <span class="wa-promo-card-code" style="background:rgba(255,255,255,0.18);color:#ffffff;padding:5px 9px;border-radius:8px;">${escapeHtml(p.code)}</span>
@@ -4138,12 +4145,20 @@
     dock.querySelector('.wa-dock__price-row--discount').style.display = pricing.discount > 0 ? 'flex' : 'none';
     dock.querySelector('.wa-dock__checkout-btn').disabled = state.items.length === 0;
 
-    // Mobile discount badge
+    // Mobile discount badge — Pattern E (two pills when both tier + promo active)
     const mobileBadge = dock.querySelector('.wa-dock__checkout-discount-badge');
     if (mobileBadge) {
-      if (synergy.discount > 0) {
-        mobileBadge.textContent = `%${Math.round(synergy.discount * 100)} indirim`;
-        mobileBadge.style.cssText = 'display:inline-block;background:#22c55e;color:#fff;font-size:0.65rem;font-weight:700;padding:4px 8px;border-radius:100px;white-space:nowrap;flex-shrink:0;';
+      const tierPctM = Math.round(synergy.discount * 100);
+      const promoPctM = state.activePromo ? state.activePromo.percent : 0;
+      if (tierPctM > 0 || promoPctM > 0) {
+        const tierPillM = tierPctM > 0
+          ? `<span style="display:inline-flex;align-items:center;background:#22c55e;color:#fff;font-size:0.6rem;font-weight:600;padding:3px 7px;border-radius:100px;white-space:nowrap;">%${tierPctM} paket</span>`
+          : '';
+        const promoPillM = promoPctM > 0
+          ? `<span style="display:inline-flex;align-items:center;background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);color:#fff;font-size:0.6rem;font-weight:600;padding:3px 7px;border-radius:100px;white-space:nowrap;letter-spacing:0.02em;">+%${promoPctM} ${escapeHtml(state.activePromo.code)}</span>`
+          : '';
+        mobileBadge.innerHTML = tierPillM + (tierPillM && promoPillM ? '' : '') + promoPillM;
+        mobileBadge.style.cssText = 'display:inline-flex;align-items:center;gap:4px;flex-shrink:0;';
       } else {
         mobileBadge.style.display = 'none';
       }
@@ -4170,8 +4185,14 @@
       // Update step indicators
       updateStepIndicators(discountSteps.querySelector('wa-progress-bar'), tier);
 
-      // Update current discount text
-      discountSteps.querySelector('.wa-dock__discount-steps-current').textContent = currentPercent > 0 ? `%${currentPercent} indirim` : 'Başlayın';
+      // Update current discount text — append promo chip when active (Pattern A)
+      const currentEl = discountSteps.querySelector('.wa-dock__discount-steps-current');
+      const baseText = currentPercent > 0 ? `%${currentPercent} indirim` : 'Başlayın';
+      if (state.activePromo) {
+        currentEl.innerHTML = `<span style="color:#16a34a;font-weight:600;">${baseText}</span><span style="display:inline-flex;align-items:center;background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);color:#ffffff;font-size:0.6rem;font-weight:600;letter-spacing:0.02em;padding:2px 7px;border-radius:4px;margin-left:6px;vertical-align:middle;">+%${state.activePromo.percent} ${escapeHtml(state.activePromo.code)}</span>`;
+      } else {
+        currentEl.textContent = baseText;
+      }
 
       // Hint text based on tier
       const hintText = discountSteps.querySelector('.wa-dock__discount-hint-text');
@@ -4232,19 +4253,33 @@
 
     // Steps & Pricing
     updateStepIndicators(sidebar.querySelector('.wa-sidebar__synergy wa-progress-bar'), tier);
-    sidebar.querySelector('.wa-sidebar__synergy-text').textContent = synergy.text;
+    // Synergy text — append promo chip when active (Pattern A, desktop sidebar)
+    const synergyTextEl = sidebar.querySelector('.wa-sidebar__synergy-text');
+    if (state.activePromo) {
+      synergyTextEl.innerHTML = `${escapeHtml(synergy.text)}<span style="display:inline-flex;align-items:center;background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);color:#ffffff;font-size:0.6rem;font-weight:600;letter-spacing:0.02em;padding:2px 7px;border-radius:4px;margin-left:6px;vertical-align:middle;">+%${state.activePromo.percent} ${escapeHtml(state.activePromo.code)}</span>`;
+    } else {
+      synergyTextEl.textContent = synergy.text;
+    }
     sidebar.querySelector('.wa-sidebar__subtotal').textContent = formatMoney(pricing.subtotal);
     animateValue(sidebar.querySelector('.wa-sidebar__discount'), pricing.discount, '-');
     animateValue(sidebar.querySelector('.wa-sidebar__total'), pricing.total);
     sidebar.querySelector('.wa-sidebar__price-row--discount').style.display = pricing.discount > 0 ? 'flex' : 'none';
     sidebar.querySelector('.wa-sidebar__checkout-btn').disabled = state.items.length === 0;
 
-    // Desktop discount badge
+    // Desktop discount badge — Pattern E (two pills when both tier + promo active)
     const desktopBadge = sidebar.querySelector('.wa-sidebar__checkout-discount-badge');
     if (desktopBadge) {
-      if (synergy.discount > 0) {
-        desktopBadge.textContent = `%${Math.round(synergy.discount * 100)} indirim`;
-        desktopBadge.style.cssText = 'display:block;background:#22c55e;color:#fff;font-size:0.7rem;font-weight:700;padding:5px 12px;border-radius:100px;text-align:center;margin:0 auto 8px;width:fit-content;';
+      const tierPctD = Math.round(synergy.discount * 100);
+      const promoPctD = state.activePromo ? state.activePromo.percent : 0;
+      if (tierPctD > 0 || promoPctD > 0) {
+        const tierPillD = tierPctD > 0
+          ? `<span style="display:inline-flex;align-items:center;background:#22c55e;color:#fff;font-size:0.65rem;font-weight:600;padding:4px 10px;border-radius:100px;white-space:nowrap;">%${tierPctD} paket</span>`
+          : '';
+        const promoPillD = promoPctD > 0
+          ? `<span style="display:inline-flex;align-items:center;background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);color:#fff;font-size:0.65rem;font-weight:600;padding:4px 10px;border-radius:100px;white-space:nowrap;letter-spacing:0.02em;">+%${promoPctD} ${escapeHtml(state.activePromo.code)}</span>`
+          : '';
+        desktopBadge.innerHTML = tierPillD + promoPillD;
+        desktopBadge.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin:0 auto 8px;';
       } else {
         desktopBadge.style.display = 'none';
       }
@@ -4922,7 +4957,7 @@
       "type": "textarea",
       "id": "promo_codes",
       "label": "Promo Kodları",
-      "info": "Her satıra bir kod: KOD|YUZDE|ETIKET (örn: SAVE20|20|Hoş Geldin İndirimi). Sadece % indirimler desteklenir."
+      "info": "Her satıra bir kod: KOD|YUZDE|ETIKET|EYEBROW (4. alan opsiyonel; örn: ECE|15|neyemeliyizzz|GIDA MÜHENDİSİ ÖZEL İNDİRİM AKTİF). EYEBROW boşsa default 'İNDİRİM AKTİF'. Sadece % indirimler desteklenir."
     }
   ],
   "presets": [
