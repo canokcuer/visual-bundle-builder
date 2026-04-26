@@ -28,3 +28,4 @@ Thumbs.db
 # Cache
 .cache/
 /tmp/
+.cli-theme-ece-test/

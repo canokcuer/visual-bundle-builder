@@ -1,0 +1,176 @@
+{% comment %}
+  CYRASOUL - Promo Banner block (renders inside main-product.liquid)
+  Reads ?promo=CODE URL param + /cart.js fallback, shows an elegant
+  gradient card matching Bundle Builder v3's promo card style.
+
+  Usage: {%- when 'promo_banner' -%} {%- render 'promo-banner-block', block: block -%}
+  Block settings: promo_codes (textarea, KOD|YUZDE|ETIKET per line)
+{% endcomment %}
+
+<div
+  class="cyra-promo-block"
+  data-cyra-promo-block
+  data-block-id="{{ block.id }}"
+  hidden
+  role="status"
+  aria-live="polite"
+  {{ block.shopify_attributes }}
+></div>
+
+<style>
+  .cyra-promo-block { margin: 12px 0; box-sizing: border-box; }
+  .cyra-promo-block[hidden] { display: none !important; }
+  .cyra-promo-block__inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    color: #ffffff;
+    font-weight: 600;
+    box-sizing: border-box;
+  }
+  .cyra-promo-block__pct {
+    flex-shrink: 0;
+    min-width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: rgba(255,255,255,0.18);
+  }
+  .cyra-promo-block__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .cyra-promo-block__eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.9;
+  }
+  .cyra-promo-block__label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .cyra-promo-block__code {
+    flex-shrink: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.18);
+  }
+  @media (max-width: 480px) {
+    .cyra-promo-block { margin: 10px 0; }
+    .cyra-promo-block__inner { padding: 12px; gap: 10px; }
+    .cyra-promo-block__pct { min-width: 44px; height: 44px; font-size: 0.95rem; border-radius: 10px; }
+    .cyra-promo-block__label { font-size: 0.875rem; }
+  }
+  @keyframes cyra-promo-block-pulse {
+    0%, 100% { box-shadow: 0 4px 14px rgba(34,197,94,0.28), 0 0 0 0 rgba(34,197,94,0.0); }
+    50%      { box-shadow: 0 4px 14px rgba(34,197,94,0.28), 0 0 0 4px rgba(34,197,94,0.18); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cyra-promo-block__inner { animation: none !important; }
+  }
+</style>
+
+<script>
+(function() {
+  'use strict';
+  const PROMO_RAW = {{ block.settings.promo_codes | default: '' | json }};
+  const BLOCK_ID = {{ block.id | json }};
+
+  function parsePromos(raw) {
+    const map = new Map();
+    if (!raw) return map;
+    raw.split(/\r?\n/).forEach(line => {
+      const [code, pct, label] = line.split('|').map(s => (s || '').trim());
+      if (code && pct && !isNaN(+pct) && +pct > 0 && +pct < 100) {
+        const upper = code.toUpperCase();
+        map.set(upper, { code: upper, percent: +pct, label: label || upper });
+      }
+    });
+    return map;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[c]);
+  }
+
+  async function detectPromo(map) {
+    if (map.size === 0) return null;
+    try {
+      const param = new URLSearchParams(window.location.search).get('promo');
+      if (param) {
+        const hit = map.get(param.toUpperCase());
+        if (hit) return hit;
+      }
+    } catch (_) {}
+    try {
+      const res = await fetch('/cart.js');
+      if (!res.ok) return null;
+      const cart = await res.json();
+      const titles = []
+        .concat((cart.cart_level_discount_applications || []).map(d => d.title || ''))
+        .concat((cart.discount_codes || []).map(d => d.code || ''));
+      for (const t of titles) {
+        if (!t) continue;
+        const hit = map.get(String(t).toUpperCase());
+        if (hit) return hit;
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  function render(banner, promo) {
+    if (!promo) {
+      banner.innerHTML = '';
+      banner.setAttribute('hidden', '');
+      return;
+    }
+    banner.innerHTML = `
+      <div class="cyra-promo-block__inner" style="background:linear-gradient(135deg,#16a34a 0%,#15803d 55%,#14532d 100%);animation:cyra-promo-block-pulse 2.4s ease-in-out infinite;">
+        <span class="cyra-promo-block__pct">%${promo.percent}</span>
+        <span class="cyra-promo-block__body">
+          <span class="cyra-promo-block__eyebrow">İndirim Aktif</span>
+          <span class="cyra-promo-block__label">${escapeHtml(promo.label)}</span>
+        </span>
+        <span class="cyra-promo-block__code">${escapeHtml(promo.code)}</span>
+      </div>
+    `;
+    banner.removeAttribute('hidden');
+  }
+
+  async function init() {
+    const map = parsePromos(PROMO_RAW);
+    const banner = document.querySelector(`[data-cyra-promo-block][data-block-id="${BLOCK_ID}"]`);
+    if (!banner) return;
+    const promo = await detectPromo(map);
+    render(banner, promo);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
