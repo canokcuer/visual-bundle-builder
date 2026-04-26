@@ -922,6 +922,7 @@
     background: var(--wa-gray-100);
     color: var(--wa-gray-600);
     padding: 0.2rem 0.5rem;
+    white-space: nowrap;
     border-radius: 4px;
   }
 
@@ -4007,8 +4008,9 @@
       });
       chips.forEach(chip => {
         chip.textContent = `%${p.percent} ${p.code}`;
-        // Match the adjacent .wa-dock__synergy-badge shape (4px border-radius) for visual consistency
-        chip.style.cssText = 'display:inline-flex;align-items:center;background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);color:#ffffff;font-size:0.65rem;font-weight:600;letter-spacing:0.02em;padding:0.2rem 0.5rem;border-radius:4px;margin-left:6px;';
+        // Match the adjacent .wa-dock__synergy-badge shape (4px border-radius) for visual consistency.
+        // white-space:nowrap so the chip never breaks across two lines in cramped collapsed dock rows.
+        chip.style.cssText = 'display:inline-flex;align-items:center;background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);color:#ffffff;font-size:0.65rem;font-weight:600;letter-spacing:0.02em;padding:0.2rem 0.5rem;border-radius:4px;margin-left:6px;white-space:nowrap;';
         chip.removeAttribute('hidden');
       });
     } else {
@@ -4079,7 +4081,13 @@
     const totalQty = getTotalQuantity();
     dock.querySelector('.wa-dock__item-count').textContent = `${state.items.length} ürün${totalQty > state.items.length ? ` (${totalQty} adet)` : ''}`;
     const badge = dock.querySelector('.wa-dock__synergy-badge');
-    badge.textContent = synergy.text;
+    // When promo chip is also rendered next to it, shorten synergy text to just the % to fit one row
+    // (e.g. "%10 İkili Güç" → "%10"). Full descriptive text shows in expanded dock banner.
+    if (state.activePromo && synergy.discount > 0) {
+      badge.textContent = `%${Math.round(synergy.discount * 100)}`;
+    } else {
+      badge.textContent = synergy.text;
+    }
     badge.classList.toggle('wa-dock__synergy-badge--active', tier >= 2);
     animateValue(dock.querySelector('.wa-dock__mini-total'), pricing.total);
 
