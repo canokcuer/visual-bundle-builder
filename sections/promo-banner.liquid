@@ -1,0 +1,219 @@
+{% comment %}
+  ============================================
+  CYRASOUL - Promo Banner (standalone, v1)
+  Drop-in section for product / page / collection / index templates.
+  Reads ?promo=CODE URL param and shows an elegant promo card when the
+  code matches one configured in this section's settings.
+
+  Designed to be placed ABOVE the buy buttons / quantity selector on
+  product pages so customers arriving via a /discount/CODE link see
+  the active campaign immediately. Shares the same KOD|YUZDE|ETIKET
+  config format as Bundle Builder v3 for consistency.
+  ============================================
+{% endcomment %}
+
+<div
+  class="cyra-promo-banner cyra-promo-banner--{{ section.id }}"
+  data-cyra-promo
+  data-section-id="{{ section.id }}"
+  hidden
+  role="status"
+  aria-live="polite"
+></div>
+
+<style>
+  .cyra-promo-banner {
+    margin: 14px auto;
+    max-width: 1200px;
+    padding: 0 16px;
+    box-sizing: border-box;
+  }
+  .cyra-promo-banner[hidden] { display: none !important; }
+  .cyra-promo-banner__inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    color: #ffffff;
+    font-weight: 600;
+    box-sizing: border-box;
+  }
+  .cyra-promo-banner__pct {
+    flex-shrink: 0;
+    min-width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: rgba(255,255,255,0.18);
+  }
+  .cyra-promo-banner__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .cyra-promo-banner__eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.9;
+  }
+  .cyra-promo-banner__label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .cyra-promo-banner__code {
+    flex-shrink: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.18);
+  }
+  @media (max-width: 480px) {
+    .cyra-promo-banner { padding: 0 12px; margin: 10px auto; }
+    .cyra-promo-banner__inner { padding: 12px; gap: 10px; }
+    .cyra-promo-banner__pct { min-width: 44px; height: 44px; font-size: 0.95rem; border-radius: 10px; }
+    .cyra-promo-banner__label { font-size: 0.875rem; }
+  }
+  @keyframes cyra-promo-pulse {
+    0%, 100% { box-shadow: 0 4px 14px rgba(34,197,94,0.28), 0 0 0 0 rgba(34,197,94,0.0); }
+    50%      { box-shadow: 0 4px 14px rgba(34,197,94,0.28), 0 0 0 4px rgba(34,197,94,0.18); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cyra-promo-banner__inner { animation: none !important; }
+  }
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  const PROMO_RAW = {{ section.settings.promo_codes | default: '' | json }};
+  const SECTION_ID = {{ section.id | json }};
+
+  function parsePromos(raw) {
+    const map = new Map();
+    if (!raw) return map;
+    raw.split(/\r?\n/).forEach(line => {
+      const parts = line.split('|').map(s => (s || '').trim());
+      const [code, pct, label] = parts;
+      if (code && pct && !isNaN(+pct) && +pct > 0 && +pct < 100) {
+        const upper = code.toUpperCase();
+        map.set(upper, { code: upper, percent: +pct, label: label || upper });
+      }
+    });
+    return map;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[c]);
+  }
+
+  async function detectPromo(map) {
+    if (map.size === 0) return null;
+    // 1. URL param
+    try {
+      const param = new URLSearchParams(window.location.search).get('promo');
+      if (param) {
+        const hit = map.get(param.toUpperCase());
+        if (hit) return hit;
+      }
+    } catch (_) {}
+    // 2. /cart.js fallback (only fires once cart has line items)
+    try {
+      const res = await fetch('/cart.js');
+      if (!res.ok) return null;
+      const cart = await res.json();
+      const titles = []
+        .concat((cart.cart_level_discount_applications || []).map(d => d.title || ''))
+        .concat((cart.discount_codes || []).map(d => d.code || ''));
+      for (const t of titles) {
+        if (!t) continue;
+        const hit = map.get(String(t).toUpperCase());
+        if (hit) return hit;
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  function render(banner, promo) {
+    if (!promo) {
+      banner.innerHTML = '';
+      banner.setAttribute('hidden', '');
+      return;
+    }
+    banner.innerHTML = `
+      <div class="cyra-promo-banner__inner" style="background:linear-gradient(135deg,#16a34a 0%,#15803d 55%,#14532d 100%);animation:cyra-promo-pulse 2.4s ease-in-out infinite;">
+        <span class="cyra-promo-banner__pct">%${promo.percent}</span>
+        <span class="cyra-promo-banner__body">
+          <span class="cyra-promo-banner__eyebrow">İndirim Aktif</span>
+          <span class="cyra-promo-banner__label">${escapeHtml(promo.label)}</span>
+        </span>
+        <span class="cyra-promo-banner__code">${escapeHtml(promo.code)}</span>
+      </div>
+    `;
+    banner.removeAttribute('hidden');
+  }
+
+  async function init() {
+    const map = parsePromos(PROMO_RAW);
+    // Find the banner element belonging to THIS section instance only (sections may render multiple times)
+    const banner = document.querySelector(`[data-cyra-promo][data-section-id="${SECTION_ID}"]`);
+    if (!banner) return;
+    const promo = await detectPromo(map);
+    render(banner, promo);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Promo Banner",
+  "tag": "section",
+  "class": "cyra-section-promo-banner",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Standalone promo banner. Paylaşım linki: /discount/KOD?redirect=/products/handle%3Fpromo%3DKOD — banner ?promo= URL paramını okuyup eşleşen kodu kart olarak gösterir. Bundle Builder v3 ile aynı format."
+    },
+    {
+      "type": "textarea",
+      "id": "promo_codes",
+      "label": "Promo Kodları",
+      "info": "Her satıra bir kod: KOD|YUZDE|ETIKET (örn: ECE|15|ECE'ye Özel İndirim). Bundle Builder v3'teki listeyle senkron tut."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promo Banner",
+      "category": "Promotional"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product", "page", "index", "collection"]
+  }
+}
+{% endschema %}
