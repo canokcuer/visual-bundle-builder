@@ -20,12 +20,6 @@
     <p class="wa-header__subtitle">{{ section.settings.subtitle }}</p>
   </div>
 
-  <!-- Promo Banner (shown when ?promo= URL param matches a configured code) -->
-  <div class="wa-promo-banner" data-promo-banner hidden role="status" aria-live="polite">
-    <span class="wa-promo-banner__icon" aria-hidden="true">🎁</span>
-    <span class="wa-promo-banner__text"></span>
-  </div>
-
   <div class="wa-container">
     <!-- Product Grid -->
     <div class="wa-products" role="region" aria-label="Mevcut ürünler">
@@ -97,6 +91,9 @@
         <h3 class="wa-sidebar__title">Ritüel Kutunuz</h3>
         <span class="wa-sidebar__count">0 ürün</span>
       </div>
+
+      <!-- Promo Banner (v3) — shows when active campaign is detected -->
+      <div class="wa-promo-card" data-promo-banner hidden role="status" aria-live="polite"></div>
 
       <!-- Discount Steps (moved up like mobile) -->
       <div class="wa-sidebar__synergy">
@@ -223,6 +220,8 @@
         <div class="wa-dock__collapsed-info">
           <span class="wa-dock__item-count">0 ürün</span>
           <span class="wa-dock__synergy-badge">Başlayın</span>
+          <!-- Promo chip (v3) — compact variant for collapsed dock -->
+          <span class="wa-promo-chip" data-promo-chip hidden></span>
         </div>
       </div>
       <div class="wa-dock__collapsed-right">
@@ -253,6 +252,9 @@
           </svg>
         </button>
       </div>
+
+      <!-- Promo Banner (v3) — primary mobile placement, top of expanded dock -->
+      <div class="wa-promo-card" data-promo-banner hidden role="status" aria-live="polite"></div>
 
       <div class="wa-dock__savings-chip" style="display:none;"></div>
       <div class="wa-dock__items"></div>
@@ -462,17 +464,53 @@
     line-height: 1.5;
   }
 
-  /* Promo Banner — base layout only; colors/background applied inline by JS for theme-override resilience */
-  .wa-promo-banner {
-    max-width: 1200px;
-    margin: 0 auto 16px;
-    border-radius: 12px;
-    font-size: 0.875rem;
-    font-weight: 600;
+  /* Promo Card / Chip (v3) — base layout only; colors applied inline by JS for theme-override resilience */
+  .wa-promo-card[hidden], .wa-promo-chip[hidden] { display: none !important; }
+  .wa-promo-card-percent {
+    flex-shrink: 0;
+    min-width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
   }
-  .wa-promo-banner[hidden] { display: none !important; }
-  .wa-promo-banner__icon { font-size: 1.125rem; line-height: 1; }
-  .wa-promo-banner__text { line-height: 1.4; }
+  .wa-promo-card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .wa-promo-card-eyebrow {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.85;
+  }
+  .wa-promo-card-label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .wa-promo-card-code {
+    font-size: 0.7rem;
+    font-weight: 600;
+    opacity: 0.85;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    letter-spacing: 0.04em;
+  }
+  @keyframes wa-promo-pulse {
+    0%, 100% { box-shadow: 0 4px 14px rgba(34,197,94,0.28), 0 0 0 0 rgba(34,197,94,0.0); }
+    50%      { box-shadow: 0 4px 14px rgba(34,197,94,0.28), 0 0 0 4px rgba(34,197,94,0.18); }
+  }
 
   /* Container */
   .wa-container { max-width: 1200px; margin: 0 auto; }
@@ -3939,21 +3977,42 @@
     } catch (_) {}
   }
 
-  // Render the promo banner. Inline cssText defeats theme CSS overrides
+  // Render the promo card (inside cart cards) and compact chip (collapsed dock).
+  // Inline cssText defeats theme CSS overrides
   // (project memory: <style>-only color/background rules can be stripped by Shopify themes).
   function renderPromoBanner() {
-    const banner = document.querySelector('[data-promo-banner]');
-    if (!banner) return;
-    const textEl = banner.querySelector('.wa-promo-banner__text');
+    const cards = document.querySelectorAll('[data-promo-banner]');
+    const chips = document.querySelectorAll('[data-promo-chip]');
+
     if (state.activePromo) {
       const p = state.activePromo;
-      if (textEl) textEl.textContent = `${p.code} aktif — ekstra %${p.percent} indirim · ${p.label}`;
-      banner.style.cssText = 'display:flex;align-items:center;gap:10px;padding:12px 16px;margin:0 auto 16px;max-width:1200px;border-radius:12px;background:linear-gradient(135deg,#22c55e 0%,#16a34a 100%);color:#ffffff;font-weight:600;font-size:0.875rem;box-shadow:0 2px 8px rgba(34,197,94,0.25);';
-      banner.removeAttribute('hidden');
+      const cardHTML = `
+        <span class="wa-promo-card-percent" style="background:rgba(255,255,255,0.18);color:#ffffff;">%${p.percent}</span>
+        <span class="wa-promo-card-body">
+          <span class="wa-promo-card-eyebrow">İndirim Aktif</span>
+          <span class="wa-promo-card-label">${escapeHtml(p.label)}</span>
+        </span>
+        <span class="wa-promo-card-code" style="background:rgba(255,255,255,0.18);color:#ffffff;padding:5px 9px;border-radius:8px;">${escapeHtml(p.code)}</span>
+      `;
+      cards.forEach(card => {
+        card.innerHTML = cardHTML;
+        card.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px;margin:0 0 12px;border-radius:14px;background:linear-gradient(135deg,#16a34a 0%,#15803d 55%,#14532d 100%);color:#ffffff;font-weight:600;animation:wa-promo-pulse 2.4s ease-in-out infinite;';
+        card.removeAttribute('hidden');
+      });
+      chips.forEach(chip => {
+        chip.textContent = `%${p.percent} ${p.code}`;
+        chip.style.cssText = 'display:inline-flex;align-items:center;background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);color:#ffffff;font-size:0.65rem;font-weight:800;letter-spacing:0.04em;padding:3px 8px;border-radius:100px;margin-left:6px;box-shadow:0 1px 4px rgba(34,197,94,0.35);';
+        chip.removeAttribute('hidden');
+      });
     } else {
-      banner.setAttribute('hidden', '');
-      banner.style.cssText = '';
+      cards.forEach(card => { card.innerHTML = ''; card.style.cssText = ''; card.setAttribute('hidden', ''); });
+      chips.forEach(chip => { chip.textContent = ''; chip.style.cssText = ''; chip.setAttribute('hidden', ''); });
     }
+  }
+
+  // Tiny HTML-escape for label/code text inserted into innerHTML
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
   }
 
   // ============================================
