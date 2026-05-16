@@ -825,10 +825,16 @@
     background: var(--wa-white);
     border-top: 1px solid var(--wa-gray-200);
     z-index: 999;
-    transition: height 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+    transition: height 0.3s ease, transform 0.3s ease, opacity 0.3s ease, translate 0.3s ease;
     height: var(--wa-dock-height);
     overflow: hidden;
     box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+  }
+
+  /* Chrome iOS viewport offset — only on collapsed dock. The expanded dock
+     cannot use `translate` because it would create a containing block for the
+     fixed checkout footer, making the footer scroll with the sheet content. */
+  .wa-dock:not(.wa-dock--expanded):not(.wa-dock--empty) {
     translate: 0 calc(var(--wa-vv-offset-bottom, 0px) * -1);
   }
 
