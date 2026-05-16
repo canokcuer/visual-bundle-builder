@@ -829,6 +829,7 @@
     height: var(--wa-dock-height);
     overflow: hidden;
     box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    translate: 0 calc(var(--wa-vv-offset-bottom, 0px) * -1);
   }
 
   .wa-dock--empty {
@@ -2144,6 +2145,7 @@
     box-sizing: border-box;
     z-index: 1001;
     touch-action: manipulation;
+    translate: 0 calc(var(--wa-vv-offset-bottom, 0px) * -1);
   }
 
   .wa-dock--expanded .wa-dock__checkout-footer {
@@ -4918,6 +4920,29 @@
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
+})();
+
+(function chromeIOSDockOffset() {
+  if (!/CriOS\//.test(navigator.userAgent)) return;
+  if (!window.visualViewport) return;
+  function start() {
+    const root = document.getElementById('wellness-architect');
+    if (!root) return;
+    const vv = window.visualViewport;
+    function update() {
+      if (vv.scale > 1.001) {
+        root.style.setProperty('--wa-vv-offset-bottom', '0px');
+        return;
+      }
+      const offset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+      root.style.setProperty('--wa-vv-offset-bottom', offset + 'px');
+    }
+    vv.addEventListener('resize', update);
+    vv.addEventListener('scroll', update);
+    update();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
 })();
 </script>
 
